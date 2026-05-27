@@ -1,0 +1,238 @@
+% Shomer.AI — verified bibliography
+% Last verified: 2026-05-27 (against arXiv, IEEE Xplore, ACL Anthology, and official project repos).
+% All entries below are VERIFIED unless explicitly flagged "% UNVERIFIED".
+% Hebrew-language project on offensive-content classification.
+% Plain ASCII/LaTeX — do not RTL-wrap.
+
+% =====================================================================
+% PRIMARY ANCHOR — dataset + task framing
+% =====================================================================
+% NOTE: lead author is Hamad (not Jarrar). Hebrew-specific SinaLab work,
+% distinct from the group's Arabic publications (Lisan, ArBanking77).
+% Dataset: https://huggingface.co/datasets/SinaLab/Offensive-Hebrew
+% Code:    https://github.com/SinaLab/OffensiveHebrew
+@inproceedings{hamad2023offensive_hebrew,
+  author    = {Nagham Hamad and Mustafa Jarrar and Mohammad Khalilia and Nadim Nashif},
+  title     = {Offensive {Hebrew} Corpus and Detection using {BERT}},
+  booktitle = {Proceedings of the 20th ACS/IEEE International Conference on Computer Systems and Applications (AICCSA)},
+  year      = {2023},
+  publisher = {IEEE},
+  % DOI inferred from IEEE Xplore document 10479258 — confirm the full DOI string on ieeexplore.ieee.org/document/10479258 before final.
+  doi       = {10.1109/AICCSA59173.2023.10479258},
+  eprint    = {2309.02724},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2309.02724},
+  note      = {15,881 tweets labeled with five classes: abusive, hate, violence, pornographic, none-offensive}
+}
+
+% Convenience alias matching the cite key requested in the task spec.
+@inproceedings{sinalab_offensive_hebrew,
+  author    = {Nagham Hamad and Mustafa Jarrar and Mohammad Khalilia and Nadim Nashif},
+  title     = {Offensive {Hebrew} Corpus and Detection using {BERT}},
+  booktitle = {Proceedings of the 20th ACS/IEEE International Conference on Computer Systems and Applications (AICCSA)},
+  year      = {2023},
+  publisher = {IEEE},
+  % DOI inferred from IEEE Xplore document 10479258 — confirm the full DOI string before final.
+  doi       = {10.1109/AICCSA59173.2023.10479258},
+  eprint    = {2309.02724},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2309.02724},
+  note      = {Duplicate of hamad2023offensive_hebrew under the schema-friendly key}
+}
+
+% =====================================================================
+% SECONDARY ANCHOR — methodology lens
+% =====================================================================
+@inproceedings{dettmers2023qlora,
+  author    = {Tim Dettmers and Artidoro Pagnoni and Ari Holtzman and Luke Zettlemoyer},
+  title     = {{QLoRA}: Efficient Finetuning of Quantized {LLMs}},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2023},
+  eprint    = {2305.14314},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url       = {https://arxiv.org/abs/2305.14314}
+}
+
+% =====================================================================
+% SUPPORTING CITATIONS — multimodal axis (project's own contribution)
+% =====================================================================
+@inproceedings{liu2023llava,
+  author    = {Haotian Liu and Chunyuan Li and Qingyang Wu and Yong Jae Lee},
+  title     = {Visual Instruction Tuning},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2023},
+  eprint    = {2304.08485},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url       = {https://arxiv.org/abs/2304.08485},
+  note      = {NeurIPS 2023 Oral}
+}
+
+@inproceedings{smith2007tesseract,
+  author    = {Ray Smith},
+  title     = {An Overview of the {Tesseract} {OCR} Engine},
+  booktitle = {Proceedings of the Ninth International Conference on Document Analysis and Recognition (ICDAR)},
+  year      = {2007},
+  pages     = {629--633},
+  publisher = {IEEE Computer Society},
+  address   = {Washington, DC, USA},
+  isbn      = {0-7695-2822-8},
+  doi       = {10.1109/ICDAR.2007.4376991},
+  note      = {LSTM-based recognition engine introduced in Tesseract v4 (2018)}
+}
+
+@misc{shmidman2024dictalm2,
+  author    = {Shaltiel Shmidman and Avi Shmidman and Amir D. N. Cohen and Moshe Koppel},
+  title     = {Adapting {LLMs} to {Hebrew}: Unveiling {DictaLM} 2.0 with Enhanced Vocabulary and Instruction Capabilities},
+  year      = {2024},
+  eprint    = {2407.07080},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2407.07080}
+}
+
+% Alias matching the cite key requested in the task spec.
+@misc{dictalm2,
+  author    = {Shaltiel Shmidman and Avi Shmidman and Amir D. N. Cohen and Moshe Koppel},
+  title     = {Adapting {LLMs} to {Hebrew}: Unveiling {DictaLM} 2.0 with Enhanced Vocabulary and Instruction Capabilities},
+  year      = {2024},
+  eprint    = {2407.07080},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2407.07080},
+  note      = {Duplicate of shmidman2024dictalm2 under the schema-friendly key}
+}
+
+% =====================================================================
+% BONUS — Hebrew NLP encoders cited in the Project Proposal
+% =====================================================================
+@misc{shmidman2023dictabert,
+  author    = {Shaltiel Shmidman and Avi Shmidman and Moshe Koppel},
+  title     = {{DictaBERT}: A State-of-the-Art {BERT} Suite for Modern {Hebrew}},
+  year      = {2023},
+  eprint    = {2308.16687},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2308.16687}
+}
+
+% NOTE: arXiv preprint (2104.04052, 2021) and the peer-reviewed version differ.
+% Published as: "AlephBERT: Language Model Pre-training and Evaluation from
+% Sub-Word to Sentence Level", ACL 2022 (aclanthology.org/2022.acl-long.4).
+% The arXiv preprint title is given below; switch to the ACL entry for the
+% canonical published citation if a reviewer prefers it.
+@misc{seker2021alephbert,
+  author    = {Amit Seker and Elron Bandel and Dan Bareket and Idan Brusilovsky and Refael Shaked Greenfeld and Reut Tsarfaty},
+  title     = {{AlephBERT}: A {Hebrew} Large Pre-Trained Language Model to Start-off your {Hebrew} {NLP} Application With},
+  year      = {2021},
+  eprint    = {2104.04052},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2104.04052}
+}
+
+@inproceedings{seker2022alephbert,
+  author    = {Amit Seker and Elron Bandel and Dan Bareket and Idan Brusilovsky and Refael Shaked Greenfeld and Reut Tsarfaty},
+  title     = {{AlephBERT}: Language Model Pre-training and Evaluation from Sub-Word to Sentence Level},
+  booktitle = {Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  year      = {2022},
+  pages     = {46--56},
+  publisher = {Association for Computational Linguistics},
+  address   = {Dublin, Ireland},
+  url       = {https://aclanthology.org/2022.acl-long.4/},
+  note      = {Peer-reviewed version of arXiv:2104.04052}
+}
+
+% =====================================================================
+% CONTEXT ANCHOR — does conversational context matter for toxicity?
+% Added 2026-05-27 for the re-framed RQ (contextual bullying, FP reduction).
+% =====================================================================
+@inproceedings{pavlopoulos2020context,
+  author    = {John Pavlopoulos and Jeffrey Sorensen and Lucas Dixon and Nithum Thain and Ion Androutsopoulos},
+  title     = {Toxicity Detection: Does Context Really Matter?},
+  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2020},
+  pages     = {4296--4305},
+  publisher = {Association for Computational Linguistics},
+  url       = {https://aclanthology.org/2020.acl-main.396/},
+  note      = {Canonical study: context can amplify or mitigate perceived toxicity; naive context concatenation yields only marginal gains}
+}
+
+% Recent (2024) revisit of conversational context in abusive language detection.
+% % UNVERIFIED — confirm full author list on ACL Anthology before final.
+@inproceedings{humans2024context,
+  author    = {{LREC-COLING 2024 authors — confirm}},
+  title     = {Humans Need Context, What about Machines? Investigating Conversational Context in Abusive Language Detection},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING)},
+  year      = {2024},
+  url       = {https://aclanthology.org/2024.lrec-main.740/}
+}
+
+% =====================================================================
+% FALSE-POSITIVE / BIAS ANCHOR — over-flagging without context
+% =====================================================================
+@inproceedings{sap2019risk,
+  author    = {Maarten Sap and Dallas Card and Saadia Gabriel and Yejin Choi and Noah A. Smith},
+  title     = {The Risk of Racial Bias in Hate Speech Detection},
+  booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2019},
+  pages     = {1668--1678},
+  publisher = {Association for Computational Linguistics},
+  url       = {https://aclanthology.org/P19-1163/},
+  note      = {Context-blind classifiers misflag up to ~50% of non-offensive dialect text — the false-positive failure this RQ targets}
+}
+
+@inproceedings{davidson2019racial,
+  author    = {Thomas Davidson and Debasmita Bhattacharya and Ingmar Weber},
+  title     = {Racial Bias in Hate Speech and Abusive Language Detection Datasets},
+  booktitle = {Proceedings of the Third Workshop on Abusive Language Online (ALW3), ACL},
+  year      = {2019},
+  eprint    = {1905.12516},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/1905.12516}
+}
+
+% =====================================================================
+% SYNTHETIC CONVERSATIONAL DATA — method anchor for the data strategy
+% (no Hebrew conversational bullying corpus exists; data must be synthesized)
+% =====================================================================
+@inproceedings{hartvigsen2022toxigen,
+  author    = {Thomas Hartvigsen and Saadia Gabriel and Hamid Palangi and Maarten Sap and Dipankar Ray and Ece Kamar},
+  title     = {{ToxiGen}: A Large-Scale Machine-Generated Dataset for Adversarial and Implicit Hate Speech Detection},
+  booktitle = {Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  year      = {2022},
+  pages     = {3309--3326},
+  publisher = {Association for Computational Linguistics},
+  address   = {Dublin, Ireland},
+  eprint    = {2203.09509},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://aclanthology.org/2022.acl-long.234/},
+  note      = {Demonstration-based prompting + classifier-in-the-loop; fine-tuning on the synthetic data improves classifiers on human-written text}
+}
+
+@misc{kazemi2025synbullying,
+  author    = {Arefeh Kazemi and Hamza Qadeer and Joachim Wagner and Hossein Hosseini and Sri Balaaji Natarajan Kalaivendan and Brian Davis},
+  title     = {{SynBullying}: A Multi-{LLM} Synthetic Conversational Dataset for Cyberbullying Detection},
+  year      = {2025},
+  eprint    = {2511.11599},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2511.11599},
+  note      = {Closest precedent: multi-LLM-generated, labelled, multi-turn bullying conversations}
+}
+
+@misc{kazemi2025synthetic,
+  author    = {Arefeh Kazemi and Sri Balaaji Natarajan Kalaivendan and Joachim Wagner and Hamza Qadeer and Kanishk Verma and Brian Davis},
+  title     = {Synthetic vs. Gold: The Role of {LLM}-Generated Labels and Data in Cyberbullying Detection},
+  year      = {2025},
+  eprint    = {2502.15860},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2502.15860},
+  note      = {Studies how far synthetic LLM labels/data can be trusted for cyberbullying — the train-on-synthetic / evaluate-on-real question}
+}

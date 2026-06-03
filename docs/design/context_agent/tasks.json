@@ -1,0 +1,458 @@
+{
+  "module": "context_agent",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.3",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "CTX-IF-01",
+      "title": "Define ContextAgentProtocol and AgentInput/AgentResult schemas",
+      "description": "Create server/app/context_agent/protocol.py with ContextAgentProtocol (evaluate(AgentInput) -> AgentResult) and server/app/context_agent/schemas.py with all dataclasses: ConversationTurn, AgentInput, AgentResult, TokenUsage. The protocol must specify: must return within 5s, never raises on LLM failure, returns review_flag=True on failure. This blocks the triage A/B switch task.",
+      "module": "context_agent",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "ContextAgentProtocol exists in server/app/context_agent/protocol.py",
+        "AgentInput frozen dataclass has all 7 fields including conversation_id and trace_id",
+        "AgentResult frozen dataclass has all 12 fields including A/B field frontline_prediction",
+        "TokenUsage frozen dataclass exists with input_tokens, output_tokens, estimated_usd, model",
+        "isinstance(ContextAgent(...), ContextAgentProtocol) returns True"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Context Agent latency p99 < 3s", "DFPR >= 15pp"],
+      "related_files": [
+        "server/app/context_agent/protocol.py",
+        "server/app/context_agent/schemas.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "CTX-CFG-01",
+      "title": "Define ContextAgentSettings pydantic-settings with all env vars including secrets",
+      "description": "Create server/app/context_agent/config.py with ContextAgentSettings(BaseSettings). Must include all 13 env vars from the LLD: CONTEXT_AGENT_ENABLED, OPENAI_API_KEY (secret), ANTHROPIC_API_KEY (secret), primary_llm, fallback_llm, timeout_s, max_history_turns, audit_db_path, slang_lexicon_path, daily_token_budget, daily_usd_budget, token_prices_path. Secrets must be validated as non-empty strings on startup when context_agent_enabled=True.",
+      "module": "context_agent",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["CTX-IF-01"],
+      "acceptance_criteria": [
+        "All 13 env vars present with documented defaults",
+        "OPENAI_API_KEY and ANTHROPIC_API_KEY are marked as sensitive (no logging of values)",
+        "When CONTEXT_AGENT_ENABLED=True and OPENAI_API_KEY is empty, startup emits a WARNING (not error, for dev convenience)",
+        "daily_usd_budget default is 0.50 and daily_token_budget default is 100000"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Cost/interaction < $0.005"],
+      "related_files": [
+        "server/app/context_agent/config.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["config"]
+    },
+    {
+      "id": "CTX-LOG-01",
+      "title": "Wire structlog bound logger shomer.context_agent with required fields",
+      "description": "Configure structlog.get_logger('shomer.context_agent') in server/app/context_agent/agent.py. Implement the three documented log events: context_agent_complete (happy path), context_agent_fallback (timeout/LLM error), context_agent_budget_exhausted. context_agent_complete must include: trace_id, model_used, is_real_threat, latency_ms, tokens_in, tokens_out, cost_usd, context_used, tools_called.",
+      "module": "context_agent",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["CTX-IF-01"],
+      "acceptance_criteria": [
+        "context_agent_complete event includes all 9 required fields",
+        "context_agent_fallback includes: reason, timeout_s, model_attempted, fallback_applied, review_flag",
+        "context_agent_budget_exhausted includes: daily_usd_spent, daily_usd_budget, budget_reset_at",
+        "Token amounts are never logged at sensitive levels (no PII leak via message content)"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/context_agent/agent.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["logging"]
+    },
+    {
+      "id": "CTX-MET-01",
+      "title": "Define and register Prometheus metrics for the context_agent module",
+      "description": "Register all 8 context_agent metrics against shared REGISTRY: context_agent_requests_total (Counter, labels=[outcome]), context_agent_latency_seconds (Histogram), context_agent_threat_decision_total (Counter, labels=[decision]), context_agent_tokens_used_total (Counter, labels=[model, kind]), context_agent_usd_spent_total (Counter, labels=[model]), context_agent_budget_remaining_usd (Gauge), context_agent_tools_called_total (Counter, labels=[tool]), context_agent_error_total (Counter, labels=[error_type]). These metrics are the primary DFPR measurement infrastructure.",
+      "module": "context_agent",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["CTX-IF-01"],
+      "acceptance_criteria": [
+        "All 8 metrics registered against shared REGISTRY",
+        "context_agent_latency_seconds histogram has buckets covering 0.1s to 5s",
+        "context_agent_budget_remaining_usd Gauge is updated after every token usage record",
+        "context_agent_threat_decision_total{decision='not_threat'} increments when CA reverses a frontline offensive prediction"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Context Agent latency p99 < 3s", "Cost/interaction < $0.005"],
+      "related_files": [
+        "server/app/context_agent/agent.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "CTX-TKN-01",
+      "title": "Define TokenManagerProtocol with Allowed/DeniedBudgetExhausted return types",
+      "description": "Create the TokenManagerProtocol in server/app/context_agent/token_manager.py with before_call(model, estimated_input_tokens) -> BudgetDecision and after_call(model, actual_input, actual_output) -> None. Define the Allowed and DeniedBudgetExhausted frozen dataclasses. This protocol is the seam for testing ContextAgent without a real SQLite database.",
+      "module": "context_agent",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["CTX-IF-01"],
+      "acceptance_criteria": [
+        "TokenManagerProtocol exists in server/app/context_agent/token_manager.py",
+        "Allowed frozen dataclass has estimated_cost_usd field",
+        "DeniedBudgetExhausted has reason, current_usd, budget_usd, reset_at_utc fields",
+        "BudgetDecision = Union[Allowed, DeniedBudgetExhausted] type alias exists"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Cost/interaction < $0.005"],
+      "related_files": [
+        "server/app/context_agent/token_manager.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "CTX-TKN-02",
+      "title": "Implement token_prices.yaml price table and _estimate_cost() method",
+      "description": "Create server/app/context_agent/token_prices.yaml with per-model per-kind prices for gpt-4o-mini (input $0.15/1M, output $0.60/1M) and claude-haiku-4-5 (input $1.00/1M, output $5.00/1M). Implement _estimate_cost(model, input_t, output_t) in TokenManager that loads prices at construction and is used in both before_call and after_call.",
+      "module": "context_agent",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["CTX-TKN-01"],
+      "acceptance_criteria": [
+        "token_prices.yaml exists with correct prices for both models",
+        "_estimate_cost('gpt-4o-mini', 380, 42) returns approximately 0.000082 USD",
+        "Unknown model name returns 0.0 (not an exception)",
+        "Prices are loaded once at construction and cached (not re-read on every call)"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Cost/interaction < $0.005"],
+      "related_files": [
+        "server/app/context_agent/token_prices.yaml",
+        "server/app/context_agent/token_manager.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["token-manager"]
+    },
+    {
+      "id": "CTX-TKN-03",
+      "title": "Implement TokenManager SQLite schema and before_call/after_call logic",
+      "description": "Implement TokenManager class implementing TokenManagerProtocol. Create _ensure_schema() for the token_usage table. Implement before_call() with asyncio.Lock that checks daily_token_budget and daily_usd_budget against today's SQLite totals. Implement after_call() with UPSERT into token_usage and Prometheus counter updates. Both methods are restart-safe via SQLite persistence.",
+      "module": "context_agent",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["CTX-TKN-01", "CTX-TKN-02", "CTX-MET-01"],
+      "acceptance_criteria": [
+        "token_usage table created with UNIQUE(date_utc, model) constraint",
+        "before_call() with accumulated tokens near daily_token_budget returns DeniedBudgetExhausted",
+        "after_call() UPSERT increments existing row or inserts new row",
+        "asyncio.Lock prevents concurrent budget exhaustion race condition",
+        "After server restart, _daily_totals() reads accumulated usage from SQLite (not reset to zero)"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Cost/interaction < $0.005"],
+      "related_files": [
+        "server/app/context_agent/token_manager.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["token-manager", "sqlite"]
+    },
+    {
+      "id": "CTX-TKN-04",
+      "title": "Implement TokenManager budget-exhausted fallback in ContextAgent.evaluate()",
+      "description": "Wire TokenManager.before_call() into ContextAgent.evaluate() so that DeniedBudgetExhausted causes _budget_exhausted_result() to return AgentResult(source='frontline_only', review_flag=True, budget_exhausted=True, model_used='none'). This prevents over-spending the daily LLM budget while preserving the safety invariant (never silently suppress an alert).",
+      "module": "context_agent",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["CTX-TKN-03"],
+      "acceptance_criteria": [
+        "_budget_exhausted_result() returns AgentResult with source='frontline_only' and review_flag=True",
+        "context_agent_budget_exhausted log event is emitted with daily_usd_spent and budget_reset_at",
+        "context_agent_requests_total{outcome='budget_exhausted'} increments",
+        "Budget exhaustion does NOT suppress the parent alert (is_real_threat follows frontline_label)"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Cost/interaction < $0.005"],
+      "related_files": [
+        "server/app/context_agent/agent.py",
+        "server/app/context_agent/token_manager.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["token-manager", "fallback"]
+    },
+    {
+      "id": "CTX-TKN-05",
+      "title": "Implement TokenManager Prometheus metrics for token and cost tracking",
+      "description": "Add the three TokenManager-specific Prometheus metrics to the shared REGISTRY: context_agent_tokens_used_total (Counter, labels=[model, kind={input,output}]), context_agent_usd_spent_total (Counter, labels=[model]), context_agent_budget_remaining_usd (Gauge). Wire these into after_call() so every LLM invocation updates all three metrics atomically with the SQLite write.",
+      "module": "context_agent",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["CTX-TKN-03", "CTX-MET-01"],
+      "acceptance_criteria": [
+        "All 3 token manager metrics registered against shared REGISTRY",
+        "context_agent_tokens_used_total{model='gpt-4o-mini', kind='input'} increments by actual_input after each call",
+        "context_agent_budget_remaining_usd Gauge reflects daily_usd_budget minus today's total spend",
+        "Metrics are updated in the same asyncio.Lock block as the SQLite UPSERT"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Cost/interaction < $0.005"],
+      "related_files": [
+        "server/app/context_agent/token_manager.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["token-manager", "metrics"]
+    },
+    {
+      "id": "CTX-TOOLS-01",
+      "title": "Implement ToolRunner with read_conversation_history, lookup_slang, check_age_appropriateness",
+      "description": "Implement server/app/context_agent/tools.py with ToolRunner class. read_conversation_history() queries audit.db for the last N turns for a conversation_id using asyncio.to_thread. lookup_slang() loads slang_lexicon.json once at init and does an in-memory lookup. check_age_appropriateness() returns a static dict from a hardcoded age-sensitivity table. All tools are local-only with no LLM cost.",
+      "module": "context_agent",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["CTX-IF-01", "CTX-CFG-01"],
+      "acceptance_criteria": [
+        "read_conversation_history('conv_abc', n=5) returns list of ConversationTurn (up to 5)",
+        "lookup_slang('לוזר מטומטם') returns {matches: [{word: 'לוזר', ...}, {word: 'מטומטם', ...}]}",
+        "check_age_appropriateness(13) returns {sensitivity_level: 'moderate', notes: '...'}",
+        "Missing slang_lexicon.json at ToolRunner init raises FileNotFoundError (fail-fast)",
+        "read_conversation_history uses asyncio.to_thread to avoid blocking the event loop"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/context_agent/tools.py",
+        "server/data/slang_lexicon.json"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["tools"]
+    },
+    {
+      "id": "CTX-LLM-01",
+      "title": "Implement LlmRouter with GPT-4o-mini primary and Haiku 4.5 fallback",
+      "description": "Implement server/app/context_agent/llm_router.py with LlmRouter class. Primary: call openai.AsyncOpenAI chat.completions.create with model='gpt-4o-mini', response_format={'type': 'json_object'}, temperature=0.1, max_tokens=512. On any exception: fall back to anthropic.AsyncAnthropic messages.create with model='claude-haiku-4-5'. Extract TokenUsage from response.usage. If both fail, re-raise the exception.",
+      "module": "context_agent",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 5,
+      "depends_on": ["CTX-IF-01", "CTX-CFG-01", "CTX-TKN-01"],
+      "acceptance_criteria": [
+        "LlmRouter.reason() returns (raw_text: str, model_used: str, TokenUsage)",
+        "Primary GPT-4o-mini failure triggers Haiku 4.5 fallback with warning log",
+        "TokenUsage.model is 'gpt-4o-mini' when primary succeeds, 'haiku-4.5' when fallback used",
+        "Both LLMs failing re-raises the last exception (caught by ContextAgent._fallback_result)",
+        "Temperature=0.1 is set to reduce LLM output variability on classification reasoning"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Context Agent latency p99 < 3s"],
+      "related_files": [
+        "server/app/context_agent/llm_router.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["llm", "fallback", "ollama"]
+    },
+    {
+      "id": "CTX-PROMPT-01",
+      "title": "Implement Hebrew prompt template builder and JSON output parser",
+      "description": "Implement server/app/context_agent/prompt.py with build_user_prompt() that formats AgentInput + tool results into the documented Hebrew system+user prompt. Implement server/app/context_agent/output_parser.py with AgentLlmResponse Pydantic model and parse_agent_response() that validates JSON output; on failure returns safe default (is_real_threat=True, review_flag=True). Fail-safe: never silently suppress.",
+      "module": "context_agent",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["CTX-IF-01", "CTX-LLM-01"],
+      "acceptance_criteria": [
+        "build_user_prompt() includes: current_message, frontline result, history block, slang block, age profile",
+        "Prompt is in Hebrew with output schema documented in the system prompt",
+        "parse_agent_response() parses valid JSON into AgentLlmResponse",
+        "Invalid JSON -> parse_agent_response() returns AgentLlmResponse(is_real_threat=True, review_flag=True)",
+        "AgentLlmResponse.explanation validator rejects empty strings"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/context_agent/prompt.py",
+        "server/app/context_agent/output_parser.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["prompt"]
+    },
+    {
+      "id": "CTX-AGENT-01",
+      "title": "Implement ContextAgent main class wiring all sub-components with 5s timeout",
+      "description": "Implement server/app/context_agent/agent.py with ContextAgent class. Orchestrate: tool calls -> budget check -> asyncio.wait_for(llm_router.reason(), timeout=5.0) -> parse output -> after_call() token recording -> return AgentResult. Implement _fallback_result() (timeout/LLM error -> review_flag=True) and _budget_exhausted_result(). Record AgentResult to audit.db agent_traces table via asyncio.to_thread.",
+      "module": "context_agent",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 6,
+      "depends_on": ["CTX-TKN-04", "CTX-TOOLS-01", "CTX-LLM-01", "CTX-PROMPT-01", "CTX-LOG-01"],
+      "acceptance_criteria": [
+        "ContextAgent implements ContextAgentProtocol",
+        "evaluate() completes within 5.1s even when mocked LLM takes 4.9s",
+        "asyncio.TimeoutError -> _fallback_result() with review_flag=True and source='frontline_only'",
+        "AgentResult includes frontline_prediction from AgentInput.frontline_label (A/B measurement)",
+        "agent_traces table row inserted after every evaluate() call"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Context Agent latency p99 < 3s"],
+      "related_files": [
+        "server/app/context_agent/agent.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["agent"]
+    },
+    {
+      "id": "CTX-FAIL-01",
+      "title": "Implement context agent failure modes and safety invariant enforcement",
+      "description": "Ensure all LLD §8 failure modes are covered: GPT-4o-mini error -> Haiku fallback; both LLMs fail -> review_flag=True; 5s timeout -> review_flag=True; malformed JSON -> parse safe default (is_real_threat=True); budget exhausted -> frontline_only+review_flag; audit.db locked -> retry once then skip write; slang_lexicon missing -> fail-fast at boot. Safety invariant: the CA NEVER silently suppresses an alert.",
+      "module": "context_agent",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["CTX-AGENT-01"],
+      "acceptance_criteria": [
+        "Both LLMs mocked to fail -> AgentResult(source='frontline_only', review_flag=True)",
+        "asyncio.wait_for timeout -> AgentResult(review_flag=True) returned in < 5.5s",
+        "Malformed LLM JSON -> parse_agent_response returns is_real_threat=True (fail-safe)",
+        "audit.db write failure -> request succeeds (write is non-blocking, error is logged)",
+        "Safety invariant verified: no code path can return is_real_threat=False when an exception occurred"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Availability Context Agent >= 95%"],
+      "related_files": [
+        "server/app/context_agent/agent.py",
+        "server/app/context_agent/output_parser.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["fallback", "safety"]
+    },
+    {
+      "id": "CTX-CT-01",
+      "title": "Write ContextAgentProtocol contract test suite",
+      "description": "Write tests/contracts/test_context_agent_contract.py parameterized over ContextAgent and any future stub. Contract tests: evaluate() is async, returns AgentResult with all required fields, never raises, returns review_flag=True when LlmRouter is mocked to fail, completes within 5s, and frontline_prediction always matches AgentInput.frontline_label.",
+      "module": "context_agent",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["CTX-IF-01", "CTX-AGENT-01"],
+      "acceptance_criteria": [
+        "Contract test at tests/contracts/test_context_agent_contract.py",
+        "Contract verifies AgentResult has all 12 required fields",
+        "Contract verifies evaluate() completes in < 6s (with timeout mocked to 4.9s)",
+        "Contract verifies review_flag=True when LLM fails",
+        "Contract verifies frontline_prediction == AgentInput.frontline_label always"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/contracts/test_context_agent_contract.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "CTX-UT-01",
+      "title": "Unit tests for ContextAgent, LlmRouter, ToolRunner, TokenManager, and output parser",
+      "description": "Write unit tests covering: happy path CA evaluation with mocked LLM, GPT-4o-mini fallback to Haiku, timeout produces fallback result, budget exhausted produces fallback, malformed JSON produces safe default, tool runner lookups against fixture slang lexicon, TokenManager before_call denies when over budget, TokenManager after_call UPSERT.",
+      "module": "context_agent",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 6,
+      "depends_on": ["CTX-AGENT-01", "CTX-FAIL-01", "CTX-TKN-03"],
+      "acceptance_criteria": [
+        "Happy path: mocked LLM returns valid JSON -> AgentResult(source='context_aware')",
+        "GPT-4o-mini mock fails, Haiku mock succeeds -> model_used='haiku-4.5'",
+        "Both mocked LLMs fail -> review_flag=True",
+        "Mock LLM takes 6s -> asyncio.TimeoutError caught -> review_flag=True returned in < 5.5s",
+        "TokenManager before_call with accumulated > daily_token_budget -> DeniedBudgetExhausted",
+        "Malformed JSON -> is_real_threat=True from parse_agent_response"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/test_context_agent.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "CTX-IT-01",
+      "title": "Integration test context agent wired into FastAPI /classify endpoint",
+      "description": "Write integration test in server/tests/integration/test_ca_integration.py. POST /classify with mocked classifier returning confidence=0.55 (borderline) -> triage returns ESCALATE_TO_CA -> ContextAgent.evaluate() called with real ToolRunner and mocked LlmRouter. Verify AgentResult fields appear in audit log. Also test CONTEXT_AGENT_ENABLED=false skips CA entirely.",
+      "module": "context_agent",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["CTX-AGENT-01", "CTX-FAIL-01"],
+      "acceptance_criteria": [
+        "POST /classify with confidence=0.55 and CA enabled -> agent_traces row inserted",
+        "AgentResult.source='context_aware' in audit when mocked LLM succeeds",
+        "CONTEXT_AGENT_ENABLED=false: same request -> zero rows in agent_traces",
+        "CA timeout test: mocked LLM takes 6s -> response returned in < 6s with review_flag in response"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": ["Context Agent latency p99 < 3s"],
+      "related_files": [
+        "server/tests/integration/test_ca_integration.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "CTX-DOC-01",
+      "title": "Write README for the context_agent module under server/app/context_agent/",
+      "description": "Write server/app/context_agent/README.md with: module purpose (academic contribution), ContextAgentProtocol contract, LlmRouter fallback chain, TokenManager budget design, tool JSON schemas, A/B experiment setup (CONTEXT_AGENT_ENABLED), secrets management, and the agent_traces SQLite schema for Meeting 8 evaluation. Include the Meeting 8 A/B measurement SQL query.",
+      "module": "context_agent",
+      "type": "docs",
+      "priority": "P2",
+      "estimate_hours": 2,
+      "depends_on": ["CTX-AGENT-01"],
+      "acceptance_criteria": [
+        "README exists at server/app/context_agent/README.md",
+        "A/B experiment section explains CONTEXT_AGENT_ENABLED and the Meeting 8 procedure",
+        "token_prices.yaml format is documented with a note to verify prices before Meeting 8",
+        "Safety invariant (never silently suppress) is explicitly stated",
+        "Meeting 8 SQL query for DFPR computation is included"
+      ],
+      "related_prd_section": "§8.3",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/context_agent/README.md"
+      ],
+      "phase": "Phase 7",
+      "meeting": "6",
+      "labels": ["docs"]
+    }
+  ]
+}

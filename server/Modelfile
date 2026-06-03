@@ -1,0 +1,19 @@
+FROM ./offensive-hebrew.gguf
+
+# Adjust this TEMPLATE to match the base model's chat tokens.
+# Qwen2.5 / Qwen3 uses ChatML <|im_start|>/<|im_end|>; DictaLM-2 uses Mistral [INST]/[/INST].
+TEMPLATE """{{ if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+"""
+
+SYSTEM """You are a strict Hebrew offensive-language classifier. Always reply with valid JSON only, no prose. Schema: {"is_offensive": bool, "category": one of ["abusive","hate","violence","pornographic","non_offensive"], "confidence": float in [0,1]}."""
+
+PARAMETER temperature 0.1
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER num_ctx 1024
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|im_start|>"

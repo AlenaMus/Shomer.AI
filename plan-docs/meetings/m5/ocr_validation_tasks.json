@@ -1,0 +1,225 @@
+{
+  "project": "Shomer.AI",
+  "milestone": "M5 OCR Validation",
+  "owner": "Alona",
+  "due_date": "2026-06-04",
+  "created": "2026-05-31",
+  "goal": "Determine whether Tesseract (heb+eng) is viable for the chat-screenshot OCR path before investing 4 weeks in DictaBERT fine-tuning. Pass criterion: CER < 15% average across all styles.",
+  "tasks": [
+    {
+      "id": "T0",
+      "title": "Environment setup — Tesseract, Python deps, DictaBERT",
+      "description": "Install and verify all required tools on the Windows machine: Tesseract 5.x with heb and eng language packs, pytesseract Python wrapper, Pillow/Pillow-SIMD, sentence-transformers (for DictaBERT embeddings), jiwer (for CER/WER), matplotlib, pandas, numpy. Confirm Tesseract finds heb.traineddata. Run a 3-sentence smoke test (one Hebrew, one English, one mixed) and print OCR output. Document exact version pins.",
+      "deliverable": "scripts/ocr_validation/00_setup_check.py (prints version table + smoke-test output)",
+      "estimated_hours": 1.5,
+      "dependencies": [],
+      "status": "todo",
+      "acceptance_criteria": [
+        "tesseract --version shows 5.x",
+        "heb.traineddata found and loads without error",
+        "Smoke test: 3 images rendered and OCR'd; output printed to console",
+        "requirements-ocr-validation.txt committed with pinned versions"
+      ],
+      "tools": ["powershell", "pip", "tesseract", "pytesseract", "pillow", "sentence-transformers", "jiwer"]
+    },
+    {
+      "id": "T1",
+      "title": "Generate 1000 validation sentences (4 styles, 250 each)",
+      "description": "Write a Python script that generates 1000 Hebrew sentences in 4 style buckets (250 each): (A) clear formal Hebrew, (B) children's Hebrew with 10-15% errors typical of ages 8-14 (missing nun-sofit, shin/sin confusion, missing yod, casual spelling, teen slang), (C) Hebrew+English code-switching in Israeli teen WhatsApp style (e.g. 'אני so done היום'), (D) Hebrew with poor spelling — NATIVE Hebrew speakers (children OR adults) with phonetic / illiterate-style errors (25-35% error rate). Grammar is CORRECT (native speaker), but spelling is bad: systematic substitutions of similar-sounding letters (ש↔ס, ח↔כ, ק↔כ, ה↔א), missing final-form letters, word boundaries wrong, vowels missing. Example: 'באלי לאחול פיזה' = 'בא לי לאכול פיצה'. NOTE: this is NOT immigrant Hebrew (rejected — wrong demographic; our target is Israeli children, not new immigrants). Content domain: school life, social drama, peer interaction, gaming, feelings — NOT offensive content (this validation is about OCR, not classification). Save as data/ocr_validation/sentences.jsonl. Each record: {id, style, text, style_label}.",
+      "deliverable": "scripts/ocr_validation/01_generate_sentences.py + data/ocr_validation/sentences.jsonl (1000 records)",
+      "estimated_hours": 3.0,
+      "dependencies": ["T0"],
+      "status": "todo",
+      "acceptance_criteria": [
+        "sentences.jsonl contains exactly 1000 records",
+        "250 records per style (A/B/C/D)",
+        "Style B: spot-check confirms 10-15% error rate (manual review of 10 samples)",
+        "Style C: every record contains at least one English word inside Hebrew text",
+        "Style D: every record contains at least one recognizable non-native error pattern",
+        "No duplicate sentences (assert uniqueness in script)",
+        "All records are valid JSON lines",
+        "Generation is reproducible (fixed random seed documented in script)"
+      ],
+      "tools": ["python", "openai-api or anthropic-api (for LLM-assisted generation)", "json", "random"]
+    },
+    {
+      "id": "T2",
+      "title": "Render sentences as chat-bubble PNG images",
+      "description": "Write a Python script that renders each sentence as a PNG image that looks like a real WhatsApp/chat screenshot. Requirements: (1) Hebrew text must render RTL correctly — use Pillow with a Hebrew-capable font (David, Arial Unicode, or Segoe UI); (2) white chat bubble on WhatsApp-green (#ECE5DD) background, rounded corners; (3) mild post-processing: random JPEG compression (quality 72-88) + very slight Gaussian noise (sigma 0-1.5) to mimic a phone screenshot; (4) image size ~480x80-160px depending on text length; (5) save as PNG to data/ocr_validation/images/{style_label}/{id}.png. Organize in 4 subfolders (clear_hebrew / children_mistakes / code_switching / poor_spelling). Log any font-fallback warnings.",
+      "deliverable": "scripts/ocr_validation/02_render_images.py + data/ocr_validation/images/ (4 subfolders, 1000 PNG files)",
+      "estimated_hours": 3.5,
+      "dependencies": ["T1"],
+      "status": "todo",
+      "acceptance_criteria": [
+        "1000 PNG files exist, 250 per subfolder",
+        "Manual spot-check: Hebrew text renders RTL (not LTR mirrored) in at least 10 random samples",
+        "No broken/blank images (assert file size > 1KB for every PNG)",
+        "JPEG artifacts visible but text still legible at 100% zoom",
+        "Script reports font name actually used (no silent fallback to non-Hebrew font)",
+        "Images look plausibly like chat screenshots (not raw text on white)"
+      ],
+      "tools": ["python", "pillow", "numpy", "pathlib"]
+    },
+    {
+      "id": "T3",
+      "title": "Run Tesseract OCR on all 1000 images",
+      "description": "Write a Python script that runs pytesseract on every image in data/ocr_validation/images/, using lang='heb+eng' and PSM mode 6 (uniform block of text). Save results to data/ocr_validation/ocr_outputs.jsonl. Each record: {id, style, original_text, ocr_text, image_path}. Log failures (empty output, exception) separately. Print summary: total processed, total failures, avg output length by style. Expected runtime: ~15-20 min for 1000 images on Windows.",
+      "deliverable": "scripts/ocr_validation/03_run_ocr.py + data/ocr_validation/ocr_outputs.jsonl",
+      "estimated_hours": 2.0,
+      "dependencies": ["T2"],
+      "status": "todo",
+      "acceptance_criteria": [
+        "ocr_outputs.jsonl contains exactly 1000 records (failures recorded with ocr_text: null)",
+        "Failure rate logged: script prints 'X/1000 images produced empty OCR output'",
+        "Script does not crash on empty Tesseract output (graceful error handling)",
+        "Runtime logged (helps estimate cost of future larger runs)",
+        "lang='heb+eng' confirmed in script constants (not hard-coded lang='eng')"
+      ],
+      "tools": ["python", "pytesseract", "pillow", "tqdm", "json"]
+    },
+    {
+      "id": "T4",
+      "title": "Compute metrics: CER, WER, DictaBERT cosine similarity",
+      "description": "Write a Python script that reads ocr_outputs.jsonl and computes three metrics per record: (1) CER (Character Error Rate) = Levenshtein(original, ocr_output) / len(original) — use jiwer or python-Levenshtein; (2) WER (Word Error Rate) = word-level Levenshtein / word count of original — use jiwer; (3) DictaBERT cosine similarity = cosine distance between sentence-transformers embeddings of original vs ocr_output using dicta-il/dictabert (or a compatible Hebrew sentence encoder). Save per-record results to data/ocr_validation/metrics.csv with columns: id, style, cer, wer, dictabert_cosine_sim. Save per-style aggregate stats (mean, median, p90, p95, std) to data/ocr_validation/metrics_summary.csv.",
+      "deliverable": "scripts/ocr_validation/04_compute_metrics.py + data/ocr_validation/metrics.csv + data/ocr_validation/metrics_summary.csv",
+      "estimated_hours": 3.0,
+      "dependencies": ["T3"],
+      "status": "todo",
+      "acceptance_criteria": [
+        "metrics.csv has exactly 1000 rows (one per sentence)",
+        "CER values are in range [0, 1] — assert no values > 1.0 in script",
+        "WER values computed and non-negative",
+        "DictaBERT embeddings loaded successfully (model downloads automatically on first run)",
+        "metrics_summary.csv shows per-style breakdown with mean/median/p90/p95/std",
+        "Records with null ocr_text are handled: CER=1.0, WER=1.0, cosine_sim=0.0 (worst-case imputation, documented in script)"
+      ],
+      "tools": ["python", "jiwer", "sentence-transformers", "dicta-il/dictabert", "pandas", "numpy", "sklearn.metrics.pairwise"]
+    },
+    {
+      "id": "T5",
+      "title": "Produce analysis charts (histograms, bar chart, confusion matrix)",
+      "description": "Write a Python script that reads metrics.csv and metrics_summary.csv and produces 5 charts: (1) CER histogram per style (4 overlaid distributions, different colors); (2) DictaBERT cosine similarity histogram per style; (3) Bar chart: mean CER by style with error bars (std); (4) Bar chart: mean cosine distance (1-sim) by style; (5) Character confusion matrix: which source characters are most often substituted, deleted, or inserted by Tesseract — use a heatmap of the top-20 most-confused character pairs. Save all charts as PNG to data/ocr_validation/charts/. Add a short caption to each chart filename (e.g., 01_cer_histogram_by_style.png).",
+      "deliverable": "scripts/ocr_validation/05_analysis_charts.py + data/ocr_validation/charts/ (5 PNG files)",
+      "estimated_hours": 2.5,
+      "dependencies": ["T4"],
+      "status": "todo",
+      "acceptance_criteria": [
+        "All 5 charts exist in data/ocr_validation/charts/",
+        "CER histogram: x-axis labeled 'CER', 4 style distributions clearly distinguishable (legend present)",
+        "Bar chart: 15% CER threshold line drawn as a red dashed horizontal line (pass/fail visual reference)",
+        "Confusion matrix: top-20 character pairs shown, Hebrew characters render correctly on axis labels",
+        "All charts saved at >=150 DPI (readable in a PDF/presentation)",
+        "Charts have titles in English (for presentation to Dr. Segal)"
+      ],
+      "tools": ["python", "matplotlib", "seaborn", "pandas"]
+    },
+    {
+      "id": "T6",
+      "title": "Write Hebrew summary report (RTL .md)",
+      "description": "Write a Hebrew-language summary report (RTL markdown, wrapped in <div dir='rtl'>). Structure: (1) Background — why we validated OCR before fine-tuning; (2) Methodology — 4 styles, 1000 images, 3 metrics; (3) Results table — per-style CER/WER/cosine means; (4) Key finding — which style(s) pass CER < 15%, which fail; (5) Verdict — overall pass/fail for Tesseract; (6) Recommendation — stay with Tesseract / switch to EasyOCR / escalate to MLKit; (7) Next steps. Embed chart images using relative markdown image links. File: docs/ocr_validation_report.md. This file will be shown to Dr. Segal at Meeting 5.",
+      "deliverable": "docs/ocr_validation_report.md",
+      "estimated_hours": 2.0,
+      "dependencies": ["T5"],
+      "status": "todo",
+      "acceptance_criteria": [
+        "File opens in RTL (first line is <div dir='rtl'>, last line is </div>)",
+        "All 7 sections present",
+        "Results table is populated with real numbers from metrics_summary.csv",
+        "Each chart is embedded with a working relative image link",
+        "Verdict section clearly states PASS or FAIL against the 15% CER threshold",
+        "Recommendation section names the specific alternative (EasyOCR / MLKit) if Tesseract fails, with migration effort estimate",
+        "File is in Hebrew (not English)"
+      ],
+      "tools": ["markdown", "text-editor"]
+    },
+    {
+      "id": "T7",
+      "title": "Write OCR engine decision document (English .md)",
+      "description": "Write the architecture decision record for the OCR engine choice, following the project's standard decision format (Question / Choice / Why / Alternatives / Revisit). The choice is either 'Keep Tesseract' (if CER < 15% across all styles) or 'Migrate to EasyOCR' (if any style fails). Fill in real measured CER numbers from T4/T5. If Tesseract passes: close D-Arch-OCR with evidence. If Tesseract fails: document the migration plan (EasyOCR install, API-compatible drop-in, re-run T2-T5). File: plan-docs/decisions/ocr-engine-validation.decision.md.",
+      "deliverable": "plan-docs/decisions/ocr-engine-validation.decision.md",
+      "estimated_hours": 1.0,
+      "dependencies": ["T6"],
+      "status": "todo",
+      "acceptance_criteria": [
+        "File follows the standard decision format (D-id, Question, Choice, Why, Alternatives, Revisit)",
+        "Choice section cites real CER numbers (not placeholder values)",
+        "If Tesseract fails: Alternatives section includes a concrete EasyOCR migration plan with estimated effort",
+        "Revisit section references Meeting 8 gold-set evaluation as next checkpoint",
+        "File is in English (per project convention for decision docs)",
+        "File references this validation run: data/ocr_validation/ and docs/ocr_validation_report.md"
+      ],
+      "tools": ["markdown", "text-editor"]
+    }
+  ],
+  "timeline": {
+    "day_1_2026-05-31": {
+      "label": "Setup + Generation",
+      "tasks": ["T0", "T1"],
+      "checkpoint": "1000 sentences generated and saved to sentences.jsonl"
+    },
+    "day_2_2026-06-01": {
+      "label": "Image rendering + OCR run",
+      "tasks": ["T2", "T3"],
+      "checkpoint": "1000 PNG images exist; ocr_outputs.jsonl populated"
+    },
+    "day_3_2026-06-02": {
+      "label": "Metrics + Charts",
+      "tasks": ["T4", "T5"],
+      "checkpoint": "metrics.csv and 5 charts exist; CER verdict visible"
+    },
+    "day_4_2026-06-03": {
+      "label": "Reports + Decision doc (buffer day before meeting)",
+      "tasks": ["T6", "T7"],
+      "checkpoint": "Hebrew report and decision doc complete; ready for Dr. Segal"
+    }
+  },
+  "risks": [
+    {
+      "id": "R1",
+      "risk": "Hebrew font missing on Windows — Pillow renders boxes instead of Hebrew characters",
+      "probability": "medium",
+      "severity": "high",
+      "mitigation": "In T2, detect font availability and fail fast with a clear error. Fallback font list: David, Arial Unicode MS, Segoe UI, FreeSans. If none found, instruct user to download David CLM (used by the business plan LaTeX compile, already tested)."
+    },
+    {
+      "id": "R2",
+      "risk": "Tesseract heb.traineddata not installed — OCR silently returns English garbage",
+      "probability": "medium",
+      "severity": "high",
+      "mitigation": "T0 smoke test explicitly asserts heb.traineddata exists in TESSDATA_PREFIX. Script prints PATH and exits with error code 1 if missing. Install command documented in T0 script docstring."
+    },
+    {
+      "id": "R3",
+      "risk": "DictaBERT model download fails or is slow (>1GB) on first run",
+      "probability": "low",
+      "severity": "medium",
+      "mitigation": "T4 downloads model once and caches in HuggingFace cache. Script prints download progress. If model unreachable, fall back to TF-IDF cosine similarity as a proxy metric (documented as fallback in T4 script)."
+    },
+    {
+      "id": "R4",
+      "risk": "LLM-assisted sentence generation (T1) is slow or expensive",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Use GPT-4o-mini (cheapest tier). 1000 sentences at ~50 tokens each = ~50K tokens input + ~50K output = ~$0.05 total. If API is unavailable, T1 has a local rule-based fallback using predefined error-injection patterns."
+    },
+    {
+      "id": "R5",
+      "risk": "4 days is too tight — OCR run takes longer than expected on Windows",
+      "probability": "low",
+      "severity": "medium",
+      "mitigation": "T3 includes a progress bar (tqdm). Estimated 15-20 min for 1000 images. If Tesseract is slow, reduce to 500 images (125/style) for a faster first-pass result — minimum acceptable dataset per academic validation norms."
+    },
+    {
+      "id": "R6",
+      "risk": "CER result is ambiguous — some styles pass, some fail",
+      "probability": "high",
+      "severity": "low",
+      "mitigation": "Decision rule is per-style, not aggregate: if ANY style fails CER > 25%, recommend EasyOCR. If only style D (poor spelling — phonetic native illiterates) fails, Tesseract can be kept since this is an edge-case demographic (small fraction of Israeli children's chat traffic). T7 captures this nuance."
+    }
+  ],
+  "success_criteria": {
+    "minimum_viable": "CER computed for all 4 styles, charts produced, verdict documented in decision doc",
+    "target": "CER < 15% for styles A, B, C; < 25% for style D (poor spelling — phonetic native illiterates, edge-case demographic). Tesseract PASS verdict, project proceeds to DictaBERT fine-tuning.",
+    "fallback_plan": "If Tesseract fails: EasyOCR drop-in replacement — same API, ~2 hour swap. Re-run T3-T7 before Meeting 6."
+  }
+}

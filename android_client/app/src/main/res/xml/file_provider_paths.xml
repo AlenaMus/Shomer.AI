@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Folders FileProvider is allowed to expose to other apps via content://
+    URIs. `files-path name="captures" path="captures/"` exposes
+    /data/data/<pkg>/files/captures/ — where ClassifyScreen.newCaptureUri()
+    writes camera output. Nothing else is exposed.
+-->
+<paths>
+    <files-path name="captures" path="captures/" />
+</paths>

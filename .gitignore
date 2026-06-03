@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.python-version
+
+# ML artifacts
+training/outputs/
+training/data/*.jsonl
+training/data/raw/
+*.gguf
+*.bin
+*.safetensors
+merged/
+checkpoints/
+wandb/
+mlruns/
+
+# Android
+android_client/.gradle/
+android_client/build/
+android_client/app/build/
+android_client/local.properties
+android_client/.idea/
+android_client/captures/
+android_client/.cxx/
+*.iml
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+server/logs/
+
+# Audit DB (created at runtime by audit_log module)
+server/audit.db
+server/audit.db-journal
+server/audit.db-wal
+server/audit.db-shm
+
+# Reports (load_test, eval, etc. — generated outputs)
+reports/
+
+# Intermediate HTML artifacts from scripts/md_to_pdf.py (kept next to .md siblings)
+docs/**/*.html
+plan-docs/**/*.html
+
+# Claude Code per-machine state (settings, agent transcripts)
+.claude/
+
+# DictaBERT / model checkpoints under server/models/ (downloaded weights)
+server/models/
+
+# Local config / API keys
+server/.env

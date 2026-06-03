@@ -1,0 +1,288 @@
+{
+  "module": "triage",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §7.1, §7.3, §8.1, §8.3",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "TRIAGE-IF-01",
+      "title": "Define TriageRouter Protocol and TriageDecision enum",
+      "description": "Create server/app/triage/protocol.py with the @runtime_checkable TriageRouter Protocol exposing decide(result, child_id) -> TriageDecision, and extend server/app/schemas.py with the TriageDecision enum (SILENT, ALERT_DIRECT, ESCALATE_TO_CA, REVIEW_NEEDED) and ClassifierResult Pydantic model. These types must come first because the classifier and context_agent modules reference them.",
+      "module": "triage",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "TriageRouter Protocol exists in server/app/triage/protocol.py with @runtime_checkable",
+        "TriageDecision enum with 4 values exists in server/app/schemas.py",
+        "ClassifierResult Pydantic model exists in server/app/schemas.py with label, confidence, is_offensive, latency_ms, error fields",
+        "isinstance(TriageRouterImpl(...), TriageRouter) returns True at runtime",
+        "decide() contract: synchronous, never raises, completes in < 0.5ms"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": ["Frontline latency p99 < 100ms"],
+      "related_files": [
+        "server/app/triage/protocol.py",
+        "server/app/schemas.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "TRIAGE-CFG-01",
+      "title": "Define TriageSettings pydantic-settings model with all env vars",
+      "description": "Create server/app/triage/settings.py with TriageSettings(BaseSettings) covering: TRIAGE_BORDERLINE_LOW (0.3), TRIAGE_BORDERLINE_HIGH (0.7), CONTEXT_AGENT_ENABLED (True), TRIAGE_BASELINE_THRESHOLD (0.5), TRIAGE_ALWAYS_ESCALATE_LABELS ({'violence'}), TRIAGE_ALWAYS_ALERT_LABELS ({'pornographic'}). Include startup validation that borderline_low < borderline_high — server must fail-fast if misconfigured.",
+      "module": "triage",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["TRIAGE-IF-01"],
+      "acceptance_criteria": [
+        "TriageSettings exists with all 6 env vars",
+        "env_prefix='TRIAGE_' applied; CONTEXT_AGENT_ENABLED is an exception (no prefix) and is documented",
+        "Startup validation raises ValueError when borderline_low >= borderline_high",
+        "set[str] fields accept comma-separated env var values (e.g., TRIAGE_ALWAYS_ESCALATE_LABELS=violence,hate)"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/triage/settings.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "TRIAGE-LOG-01",
+      "title": "Wire structlog bound logger shomer.triage with required fields",
+      "description": "Configure structlog.get_logger('shomer.triage') in server/app/triage/router.py. Every call to decide() must emit one structured log event with: trace_id (inherited from structlog context var), module='triage', event, label, confidence, decision, context_agent_enabled, label_override (bool). The three documented example log events must be implemented: triage.decide, triage.label_override_escalate, triage.decide.exception.",
+      "module": "triage",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["TRIAGE-IF-01"],
+      "acceptance_criteria": [
+        "Logger is obtained with structlog.get_logger('shomer.triage')",
+        "triage.decide event includes: label, confidence, decision, context_agent_enabled, label_override",
+        "triage.label_override_escalate event includes: label, confidence",
+        "triage.decide.exception event includes: error, result repr",
+        "Logs inherit trace_id from structlog context var (no explicit passing required)"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/triage/router.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["logging"]
+    },
+    {
+      "id": "TRIAGE-MET-01",
+      "title": "Define and register Prometheus metrics for the triage module",
+      "description": "Register triage_decisions_total (Counter, labels=['decision']), triage_input_confidence (Histogram, buckets 0.1–1.0), and triage_label_overrides_total (Counter, labels=['label', 'override_type']) against the shared REGISTRY. triage_decisions_total enables monitoring of the CA escalation rate (target ~15% of borderline traffic).",
+      "module": "triage",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["TRIAGE-IF-01"],
+      "acceptance_criteria": [
+        "All 3 metrics registered against shared REGISTRY from server/app/metrics.py",
+        "triage_decisions_total increments on every decide() call with correct decision label",
+        "triage_input_confidence histogram is updated on every call",
+        "After 10 classify requests, GET /metrics includes triage_decisions_total with sum=10"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": ["Frontline latency p99 < 100ms"],
+      "related_files": [
+        "server/app/triage/router.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "TRIAGE-ROUTER-01",
+      "title": "Implement TriageRouterImpl with threshold routing and label overrides",
+      "description": "Implement server/app/triage/router.py with TriageRouterImpl class. Core logic: (1) result.error=True -> REVIEW_NEEDED; (2) label in always_escalate_labels -> ESCALATE_TO_CA (or ALERT_DIRECT if CA disabled); (3) label in always_alert_labels -> ALERT_DIRECT; (4) confidence <= borderline_low -> SILENT; (5) confidence >= borderline_high -> ALERT_DIRECT; (6) borderline zone + CA enabled -> ESCALATE_TO_CA; (7) borderline zone + CA disabled -> ALERT_DIRECT/SILENT by baseline_threshold. All exceptions caught -> REVIEW_NEEDED.",
+      "module": "triage",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["TRIAGE-IF-01", "TRIAGE-CFG-01", "TRIAGE-LOG-01", "TRIAGE-MET-01"],
+      "acceptance_criteria": [
+        "confidence=0.29, label=abusive, CA=on -> SILENT",
+        "confidence=0.55, label=abusive, CA=on -> ESCALATE_TO_CA",
+        "confidence=0.71, label=abusive, CA=on -> ALERT_DIRECT",
+        "confidence=0.55, label=violence, CA=on -> ESCALATE_TO_CA (label override)",
+        "confidence=0.55, label=violence, CA=off -> ALERT_DIRECT (override + CA disabled)",
+        "confidence=0.55, label=pornographic, CA=on -> ALERT_DIRECT (always_alert override)",
+        "result.error=True -> REVIEW_NEEDED regardless of confidence",
+        "Any exception inside decide() returns REVIEW_NEEDED and logs triage.decide.exception"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": ["Frontline latency p99 < 100ms"],
+      "related_files": [
+        "server/app/triage/router.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["triage", "a-b-switch"]
+    },
+    {
+      "id": "TRIAGE-SWITCH-01",
+      "title": "Implement A/B context-blind baseline switch via CONTEXT_AGENT_ENABLED",
+      "description": "Ensure the CONTEXT_AGENT_ENABLED=false path in TriageRouterImpl is fully exercised and auditable. When CA is disabled, the triage_decision audit field must still record 'alert_direct' or 'silent', and context_agent_enabled=false must be written to the request state audit dict. This is the clean A/B split required by PRD §6 and the research question measurement design.",
+      "module": "triage",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["TRIAGE-ROUTER-01", "CTX-IF-01"],
+      "acceptance_criteria": [
+        "CONTEXT_AGENT_ENABLED=false: borderline case returns ALERT_DIRECT or SILENT (never ESCALATE_TO_CA)",
+        "request.state.audit['context_agent_enabled'] is False when CA is disabled",
+        "request.state.audit['triage_decision'] is written on every decide() call",
+        "request.state.audit['triage_label_override'] is True when a label override fired",
+        "Zero calls to context_agent.evaluate() when CA is disabled (verifiable via mock)"
+      ],
+      "related_prd_section": "§6",
+      "related_nfr": ["DFPR >= 15pp"],
+      "related_files": [
+        "server/app/triage/router.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "7",
+      "labels": ["a-b-switch", "research"]
+    },
+    {
+      "id": "TRIAGE-CT-01",
+      "title": "Write TriageRouter Protocol contract test suite",
+      "description": "Write tests/contracts/test_triage_router_contract.py that asserts any TriageRouter implementation satisfies the contract: decide() is synchronous, never raises, returns a TriageDecision value, and completes in < 1ms. Parameterize over both TriageRouterImpl and any future RemoteTriageRouter stub.",
+      "module": "triage",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["TRIAGE-IF-01", "TRIAGE-ROUTER-01"],
+      "acceptance_criteria": [
+        "Contract test file at tests/contracts/test_triage_router_contract.py",
+        "Tests verify decide() never raises even on malformed ClassifierResult input",
+        "Tests verify return value is always a TriageDecision member",
+        "TriageRouterImpl passes all contract tests",
+        "Timing assertion: decide() completes in < 5ms (generous threshold for CI)"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/contracts/test_triage_router_contract.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "TRIAGE-UT-01",
+      "title": "Unit tests for TriageRouterImpl decision logic",
+      "description": "Write parametrized unit tests in tests/unit/triage/test_decision_rules.py covering all documented decision matrix combinations. Include tests for error path, label overrides, A/B baseline path, and settings validation failure. These tests must not require any network or file I/O.",
+      "module": "triage",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["TRIAGE-ROUTER-01", "TRIAGE-SWITCH-01"],
+      "acceptance_criteria": [
+        "All 7 parametrized decision cases from the LLD pass",
+        "Settings validation test: borderline_low >= borderline_high raises ValueError at construction",
+        "A/B baseline tests: 3 confidence levels with CA=off produce correct outcomes",
+        "Error path: result.error=True always returns REVIEW_NEEDED",
+        "Exception handling: passing None as ClassifierResult returns REVIEW_NEEDED"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/unit/triage/test_decision_rules.py",
+        "server/tests/unit/triage/test_label_overrides.py",
+        "server/tests/unit/triage/test_ab_baseline.py",
+        "server/tests/unit/triage/test_error_path.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "TRIAGE-IT-01",
+      "title": "Integration test triage wired into FastAPI /classify endpoint",
+      "description": "Write integration test in server/tests/integration/test_classify_triage.py that sends text requests to /classify and verifies the triage_decision field in the audit log matches the expected decision for known confidence levels. Use a mocked classifier that returns fixed confidence values to exercise all four triage paths without a real model.",
+      "module": "triage",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["TRIAGE-ROUTER-01", "CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "Integration test sends 4 requests with mocked classifier confidences: 0.1 (silent), 0.55 (escalate/direct by CA flag), 0.9 (alert_direct), error case",
+        "audit_log records triage_decision='silent' for confidence 0.1",
+        "CONTEXT_AGENT_ENABLED=false test verifies zero CA calls",
+        "All integration tests pass against a TestClient FastAPI instance"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/integration/test_classify_triage.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "TRIAGE-FAIL-01",
+      "title": "Implement triage failure modes: error input, exception safety, settings validation",
+      "description": "Ensure all failure modes from LLD §8 are implemented: result.error=True returns REVIEW_NEEDED; result.confidence=None caught and returns REVIEW_NEEDED; unknown label routes through threshold logic as fallback; any exception inside decide() is caught by the outer try/except and returns REVIEW_NEEDED. Server startup must fail fast if borderline_low >= borderline_high.",
+      "module": "triage",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["TRIAGE-ROUTER-01"],
+      "acceptance_criteria": [
+        "result.error=True produces REVIEW_NEEDED with log event triage.classifier_error",
+        "result.confidence=None is caught; produces REVIEW_NEEDED with log event triage.decide.exception",
+        "Unknown label (not in Category enum) falls through to threshold routing",
+        "Server startup raises ValueError and logs triage.settings_invalid when borderline_low >= borderline_high",
+        "triage_decisions_total{decision='review_needed'} increments on every REVIEW_NEEDED outcome"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/triage/router.py",
+        "server/app/triage/settings.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["fallback", "error-handling"]
+    },
+    {
+      "id": "TRIAGE-DOC-01",
+      "title": "Write README for the triage module under server/app/triage/",
+      "description": "Write server/app/triage/README.md with: module purpose (deterministic gate, no LLM), decision rules table, A/B switch instructions (CONTEXT_AGENT_ENABLED), label override table, env var reference, and per-child sensitivity extension note. Include the decision flow diagram from the LLD.",
+      "module": "triage",
+      "type": "docs",
+      "priority": "P2",
+      "estimate_hours": 1,
+      "depends_on": ["TRIAGE-ROUTER-01"],
+      "acceptance_criteria": [
+        "README exists at server/app/triage/README.md",
+        "Decision rules table covers all 4 TriageDecision values with confidence ranges",
+        "A/B switch instructions explain how to set CONTEXT_AGENT_ENABLED=false for the Meeting 8 baseline",
+        "Env var table lists all 6 TriageSettings variables"
+      ],
+      "related_prd_section": "§7.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/triage/README.md"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["docs"]
+    }
+  ]
+}

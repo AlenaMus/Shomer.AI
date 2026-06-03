@@ -1,0 +1,287 @@
+{
+  "module": "gatekeeper",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.7, §9",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "GK-IF-01",
+      "title": "Define RateLimitStore Protocol as extraction seam for in-memory vs Redis backends",
+      "description": "Create server/app/gateway.py with the RateLimitStore Protocol (is_allowed, increment methods). This protocol is the seam for swapping the in-memory slowapi store for a Redis-backed store in Phase 9. The protocol must come before any concrete implementation so tests can inject a fake store.",
+      "module": "gatekeeper",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": [],
+      "acceptance_criteria": [
+        "RateLimitStore Protocol exists in server/app/gateway.py",
+        "Protocol has async is_allowed(key: str) -> bool and async increment(key: str, window_s: int) -> int",
+        "slowapi Limiter satisfies the protocol in-process",
+        "A FakeRateLimitStore test double can be trivially created for unit tests"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": ["Gateway overhead < 5ms p99"],
+      "related_files": [
+        "server/app/gateway.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "GK-CFG-01",
+      "title": "Define GatekeeperSettings pydantic-settings model with all env vars",
+      "description": "Add GatekeeperSettings(BaseSettings) to server/app/gateway.py with all 8 documented env vars: RATE_LIMIT_PER_MINUTE (100), RATE_LIMIT_STORE_URL (''), MAX_BODY_BYTES (10485760), CLIENT_RECV_TIMEOUT_S (30.0), METRICS_ENDPOINT ('/metrics'), METRICS_LATENCY_BUCKETS, LOG_LEVEL ('INFO'), LOG_FORMAT ('json'). Include a GatekeeperSettings.from_env() class method used in main.py.",
+      "module": "gatekeeper",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["GK-IF-01"],
+      "acceptance_criteria": [
+        "All 8 env vars are present with correct types and documented defaults",
+        "METRICS_LATENCY_BUCKETS parses comma-separated float string to list[float]",
+        "GatekeeperSettings.from_env() returns a valid instance with no .env file present",
+        "MAX_BODY_BYTES default is exactly 10485760 (10MB)"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/gateway.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "GK-LOG-01",
+      "title": "Wire structlog bound logger shomer.gateway with trace_id propagation",
+      "description": "Implement TraceIdMiddleware in server/app/gateway.py that generates a UUID4 trace_id per request, binds it into structlog context vars (structlog.contextvars.bind_contextvars), and adds X-Trace-ID to the response header. Implement the three documented log events: request_allowed, rate_limit_exceeded, payload_rejected. All downstream modules inherit trace_id automatically.",
+      "module": "gatekeeper",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["GK-IF-01"],
+      "acceptance_criteria": [
+        "TraceIdMiddleware generates UUID4 on every request",
+        "structlog context var trace_id is set before any downstream code runs",
+        "X-Trace-ID response header is present on all responses including 4xx",
+        "structlog.contextvars.clear_contextvars() is called after response",
+        "request_allowed event includes: trace_id, client_ip, method, path, size_bytes",
+        "rate_limit_exceeded event includes: trace_id, client_ip, method, path, limit, retry_after_s"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": ["Gateway overhead < 5ms p99"],
+      "related_files": [
+        "server/app/gateway.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["logging", "trace-id"]
+    },
+    {
+      "id": "GK-MET-01",
+      "title": "Define and register Prometheus metrics for the gatekeeper module",
+      "description": "Implement build_metrics_instrumentator() in server/app/gateway.py using prometheus-fastapi-instrumentator with shomer_ prefix and custom latency buckets. Register additional custom metrics against the shared REGISTRY: shomer_gateway_rate_limit_total (Counter), shomer_gateway_payload_rejected_total (Counter), shomer_gateway_overhead_seconds (Histogram), shomer_gateway_active_requests (Gauge). Wire /metrics endpoint.",
+      "module": "gatekeeper",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["GK-IF-01", "GK-CFG-01"],
+      "acceptance_criteria": [
+        "shomer_http_requests_total Counter with labels method, handler, status is present at /metrics",
+        "shomer_http_request_duration_seconds Histogram covers buckets 0.01 to 5.0s",
+        "shomer_gateway_overhead_seconds is a separate histogram measuring middleware-only overhead",
+        "GET /metrics returns 200 with Prometheus text format",
+        "shomer_gateway_rate_limit_total increments when a 429 is returned"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": ["Gateway overhead < 5ms p99", "Frontline latency p99 < 100ms"],
+      "related_files": [
+        "server/app/gateway.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "GK-MIDDLEWARE-01",
+      "title": "Implement RequestSizeMiddleware and RequestTimeoutMiddleware",
+      "description": "Implement RequestSizeMiddleware in server/app/gateway.py that checks Content-Length header against max_body_bytes and returns structured 413 JSON with trace_id. Implement RequestTimeoutMiddleware using asyncio.wait_for around call_next() that returns structured 408 JSON with trace_id on timeout. Both must follow the documented error response schema with error, detail, trace_id fields.",
+      "module": "gatekeeper",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["GK-IF-01", "GK-CFG-01", "GK-LOG-01"],
+      "acceptance_criteria": [
+        "Request with Content-Length > 10MB returns 413 JSON with error='payload_too_large' and trace_id",
+        "RequestTimeoutMiddleware returns 408 JSON with error='request_timeout' and trace_id when handler exceeds timeout",
+        "413 and 408 responses include X-Trace-ID header",
+        "chunked upload (no Content-Length) skips size check and logs a warning"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/gateway.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["middleware"]
+    },
+    {
+      "id": "GK-RATELIMIT-01",
+      "title": "Implement slowapi rate limiter with structured 429 response and register_gateway()",
+      "description": "Implement build_limiter() returning slowapi.Limiter with in-memory store and 100/minute per-IP default. Implement _rate_limit_handler that returns structured 429 JSON with retry_after_seconds and trace_id. Implement register_gateway(app, settings) as the single entry point that installs all middleware components in the correct reverse-LIFO order documented in the LLD.",
+      "module": "gatekeeper",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["GK-IF-01", "GK-CFG-01", "GK-LOG-01", "GK-MET-01", "GK-MIDDLEWARE-01"],
+      "acceptance_criteria": [
+        "101st request per minute from same IP returns 429 with retry_after_seconds",
+        "429 response body has error='rate_limit_exceeded', retry_after_seconds, trace_id",
+        "Retry-After HTTP header is set on 429 response",
+        "register_gateway() is a single call in main.py that installs all components",
+        "Middleware execution order matches the LLD: TraceId -> SizeLimit -> RateLimit -> Prometheus (outer to inner on request)"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": ["Gateway overhead < 5ms p99"],
+      "related_files": [
+        "server/app/gateway.py",
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["rate-limit", "middleware"]
+    },
+    {
+      "id": "GK-FAIL-01",
+      "title": "Implement gatekeeper fail-open and graceful degradation modes",
+      "description": "Implement all failure modes from LLD §8: slowapi store exception -> fail-open (allow request through + log warning), TraceIdMiddleware structlog failure -> catch and continue with a random trace_id fallback, prometheus_fastapi_instrumentator init failure -> log error and skip /metrics registration (app starts without /metrics), gateway.py import error -> re-raise (server fails to start).",
+      "module": "gatekeeper",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["GK-RATELIMIT-01"],
+      "acceptance_criteria": [
+        "Monkey-patched slowapi store that raises exception -> request passes through with warning log",
+        "TraceIdMiddleware structlog failure -> request continues with a fallback trace_id in log",
+        "Prometheus instrumentator init failure -> server starts, /metrics returns 404",
+        "gateway.py ImportError -> server fails to start with clear error message"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/gateway.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["fallback", "fail-open"]
+    },
+    {
+      "id": "GK-CT-01",
+      "title": "Write gatekeeper middleware contract tests",
+      "description": "Write tests/unit/gatekeeper/test_overhead.py that verifies all middleware components satisfy their contracts: every response has X-Trace-ID header, every request emits a structured log line with required fields, 413 and 429 responses have the documented JSON body schema, and middleware overhead < 5ms p99 on a no-op handler.",
+      "module": "gatekeeper",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["GK-IF-01", "GK-RATELIMIT-01"],
+      "acceptance_criteria": [
+        "Every response has X-Trace-ID header (tested with 10 requests)",
+        "413 response body matches schema: {error, detail, max_bytes, trace_id}",
+        "429 response body matches schema: {error, detail, retry_after_seconds, trace_id}",
+        "Middleware overhead benchmark: 1000 requests to an empty handler, assert p99 < 20ms in test environment",
+        "rate_limit_exceeded log event contains all required fields"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": ["Gateway overhead < 5ms p99"],
+      "related_files": [
+        "server/tests/unit/gatekeeper/test_overhead.py",
+        "server/tests/unit/gatekeeper/test_traceid.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "GK-UT-01",
+      "title": "Unit tests for rate limiter, size limit, and timeout middleware",
+      "description": "Write unit tests in server/tests/test_gatekeeper_*.py files covering: rate limit enforcement at exactly 101 requests, fail-open on store exception, 413 on Content-Length > 10MB, 408 on slow handler, and trace_id present on every response. Use TestClient with overridden settings.",
+      "module": "gatekeeper",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["GK-RATELIMIT-01", "GK-FAIL-01"],
+      "acceptance_criteria": [
+        "101st request in 1-minute window returns 429 (tests/test_gatekeeper_rate_limit.py)",
+        "Store exception -> all requests return 200 (tests/test_gatekeeper_failopen.py)",
+        "Content-Length > 10MB header -> 413 (tests/test_gatekeeper_size_limit.py)",
+        "Handler sleep > timeout_s -> 408 (tests/test_gatekeeper_timeout.py)",
+        "Every response includes X-Trace-ID (tests/test_gatekeeper_traceid.py)"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/test_gatekeeper_rate_limit.py",
+        "server/tests/test_gatekeeper_failopen.py",
+        "server/tests/test_gatekeeper_size_limit.py",
+        "server/tests/test_gatekeeper_timeout.py",
+        "server/tests/test_gatekeeper_traceid.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "GK-IT-01",
+      "title": "Integration test gatekeeper wired into full FastAPI server",
+      "description": "Write integration test in server/tests/test_gatekeeper_metrics.py that starts the full FastAPI app (including gatekeeper), sends requests, and verifies GET /metrics returns Prometheus text format with the expected metric families. Also test that the X-Trace-ID from the request response matches the trace_id in the server log.",
+      "module": "gatekeeper",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["GK-RATELIMIT-01"],
+      "acceptance_criteria": [
+        "GET /metrics returns 200 with Content-Type: text/plain; version=0.0.4",
+        "shomer_http_requests_total appears in /metrics output after POST /classify",
+        "X-Trace-ID response header value appears in structured logs for the same request",
+        "Test passes against a TestClient FastAPI instance (no real server needed)"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/test_gatekeeper_metrics.py",
+        "server/tests/test_gatekeeper_logging.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "GK-DOC-01",
+      "title": "Write README for the gatekeeper module and add requirements to server/requirements.txt",
+      "description": "Write server/app/gatekeeper/README.md (or gateway.py inline docs) summarizing the middleware stack, execution order, fail-open philosophy, and all env vars. Also update server/requirements.txt with the 5 new dependencies: slowapi==0.1.9, structlog==24.4.0, python-json-logger==2.0.7, prometheus-fastapi-instrumentator==7.0.0, prometheus-client==0.20.0.",
+      "module": "gatekeeper",
+      "type": "docs",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["GK-RATELIMIT-01"],
+      "acceptance_criteria": [
+        "server/requirements.txt includes all 5 new gatekeeper dependencies with pinned versions",
+        "Documentation explains the LIFO middleware registration order",
+        "Fail-open philosophy is documented with the rationale (LAN server, not security boundary)",
+        "All 8 GatekeeperSettings env vars are listed with defaults"
+      ],
+      "related_prd_section": "§8.7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/gateway.py",
+        "server/requirements.txt"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["docs"]
+    }
+  ]
+}

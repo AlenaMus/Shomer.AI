@@ -1,0 +1,390 @@
+{
+  "module": "audit_log",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.5, §9 (privacy), §10 (Meeting 8 ΔFPR)",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "AUDIT-IF-01",
+      "title": "Define AuditStore Protocol and all dataclasses (AuditId, AgentTraceId, ConversationTurn, AuditRow, HealthStatus)",
+      "description": "Create server/app/audit_log/protocol.py with the @runtime_checkable AuditStore Protocol and all supporting dataclasses. This is the foundational interface seam. Every other audit task, plus CTX-TOOLS-01 (read_history), ALERTS-DB-01 (alert recording), and SERVER-LIFESPAN-01 (composition root injection) all block on this task. The Protocol must define all nine methods: record_classification, record_agent_trace, record_alert, record_conversation_turn, read_conversation_history, query_for_evaluation, set_gold_label, cleanup_expired, health.",
+      "module": "audit_log",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": [],
+      "acceptance_criteria": [
+        "AuditStore Protocol exists in server/app/audit_log/protocol.py with @runtime_checkable decorator",
+        "All nine methods are declared with correct async/sync signatures: record_classification (async -> AuditId), record_agent_trace (async -> AgentTraceId), record_alert (async -> None), record_conversation_turn (async -> None), read_conversation_history (async -> list[ConversationTurn]), query_for_evaluation (sync -> AsyncIterator[AuditRow]), set_gold_label (async -> None), cleanup_expired (async -> int), health (async -> HealthStatus)",
+        "ConversationTurn, AuditRow, HealthStatus dataclasses are frozen and have all fields documented in LLD §2",
+        "isinstance(InMemoryAuditStore(), AuditStore) returns True at runtime",
+        "protocol.py imports cleanly with no circular dependencies; no concrete adapter class is imported"
+      ],
+      "related_prd_section": "§8.5",
+      "related_nfr": ["Privacy: retention 7 days", "Audit 100% coverage"],
+      "related_files": [
+        "server/app/audit_log/protocol.py",
+        "server/app/audit_log/__init__.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["protocol", "interface"],
+      "cross_module_blocks": ["CTX-TOOLS-01", "SERVER-LIFESPAN-01", "ALERTS-DB-01"]
+    },
+    {
+      "id": "AUDIT-CFG-01",
+      "title": "Define AuditLogSettings pydantic-settings model with all env vars",
+      "description": "Create server/app/audit_log/config.py with AuditLogSettings(BaseSettings) capturing all audit configuration: AUDIT_DB_PATH, AUDIT_RETENTION_DAYS, AUDIT_RETENTION_SWEEP_INTERVAL_HOURS, AUDIT_MAX_DB_SIZE_MB, AUDIT_VACUUM_ON_RETENTION, AUDIT_WRITE_TIMEOUT_MS. Settings must load from .env with production-safe defaults as documented in LLD §9. Add all six keys to server/.env.example.",
+      "module": "audit_log",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["AUDIT-IF-01"],
+      "acceptance_criteria": [
+        "AuditLogSettings class exists in server/app/audit_log/config.py with env_prefix='AUDIT_'",
+        "All six env vars are declared with correct types and defaults: db_path='./audit.db', retention_days=7, retention_sweep_interval_hours=1.0, max_db_size_mb=500, vacuum_on_retention=True, write_timeout_ms=5000",
+        "Loading from an empty .env produces valid defaults with no exceptions",
+        "All six keys added to server/.env.example with inline comments",
+        "Setting AUDIT_DB_PATH=':memory:' is accepted (used by InMemoryAuditStore tests)"
+      ],
+      "related_prd_section": "§8.5, §9",
+      "related_nfr": ["Privacy: retention 7 days"],
+      "related_files": [
+        "server/app/audit_log/config.py",
+        "server/.env.example"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "AUDIT-LOG-01",
+      "title": "Wire structlog bound logger shomer.audit_log with required fields and canonical event names",
+      "description": "Configure the module-level structlog logger in server/app/audit_log/sqlite_store.py tagged 'shomer.audit_log'. Every write must emit at minimum: trace_id (inherited from contextvars), event (one of the 8 canonical event names from LLD §6.1), audit_id or None, write_latency_ms. Add all 8 documented example log events: record_classification, record_agent_trace, record_alert, record_conversation_turn, audit_retention_sweep_complete, gold_label_set, audit_disk_warning, audit_write_error.",
+      "module": "audit_log",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["AUDIT-IF-01"],
+      "acceptance_criteria": [
+        "Logger is obtained with structlog.get_logger('shomer.audit_log')",
+        "record_classification event emits: trace_id, event, audit_id, write_latency_ms, classifier_label, triage_decision",
+        "record_agent_trace event emits: trace_id, event, audit_id, write_latency_ms, llm_provider, tokens_total",
+        "audit_retention_sweep_complete event emits: rows_deleted, sweep_duration_ms, tables_swept=4",
+        "audit_write_error event emits: trace_id, reason, attempt number",
+        "audit_disk_warning event emits: db_size_bytes, threshold_mb"
+      ],
+      "related_prd_section": "§8.5",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/audit_log/sqlite_store.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["logging"]
+    },
+    {
+      "id": "AUDIT-MET-01",
+      "title": "Define and register Prometheus metrics for the audit_log module",
+      "description": "Register all audit_log Prometheus metrics using the shared REGISTRY from server/app/metrics.py: audit_writes_total (Counter, label record_type), audit_write_latency_seconds (Histogram, label record_type, buckets 0.001–0.1), audit_retention_rows_deleted_total (Counter), audit_db_size_bytes (Gauge), audit_gold_labeled_total (Counter), audit_db_write_errors_total (Counter, label reason). The write_latency_seconds histogram must be configured to prove p99 < 10ms.",
+      "module": "audit_log",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["AUDIT-IF-01"],
+      "acceptance_criteria": [
+        "All 6 metrics registered against the shared REGISTRY from server/app/metrics.py",
+        "audit_write_latency_seconds histogram has buckets covering 0.001s to 0.1s range (proving p99 < 10ms)",
+        "audit_writes_total has label record_type with values: classification, agent_trace, alert, conversation_turn",
+        "audit_db_write_errors_total has label reason with values: sqlite_locked, disk_full, schema_mismatch, retention_sweep",
+        "After one record_classification call, GET /metrics returns all 6 metric families in Prometheus text format"
+      ],
+      "related_prd_section": "§8.5",
+      "related_nfr": ["Write latency p99 < 10ms"],
+      "related_files": [
+        "server/app/audit_log/sqlite_store.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "AUDIT-SCHEMA-01",
+      "title": "Write the 5-table SQLite schema, Mermaid ER diagram, and migration 001_init.sql",
+      "description": "Create server/app/audit_log/migrations/001_init.sql with the complete DDL for all five tables: classifications (25 columns), agent_traces (19 columns), alerts (14 columns), conversations (6 columns), gold_set_metadata (6 columns). Every column must have a one-line comment, correct type, nullability constraint, and CHECK constraint where applicable. All indexes documented in LLD §5.1 must be created. The schema must be idempotent (IF NOT EXISTS on every statement). This task is the source of truth that REPLACES the schema sketches in server/design.md §5.1 and context_agent/design.md §5.1.",
+      "module": "audit_log",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["AUDIT-IF-01", "AUDIT-CFG-01"],
+      "acceptance_criteria": [
+        "migrations/001_init.sql exists and is valid SQLite DDL (sqlite3 CLI: .read 001_init.sql produces zero errors)",
+        "classifications table has all 25 columns from LLD §5.1 with correct CHECK constraints on classifier_label (5-value enum: abusive, hate, violence, pornographic, non_offensive), triage_decision (4-value enum), gold_label (6-value enum + NULL)",
+        "agent_traces table has REFERENCES classifications(id) ON DELETE CASCADE foreign key",
+        "conversations table has CHECK (role IN ('child_outbound', 'child_inbound'))",
+        "All 10 indexes from LLD §5.1 are created including the partial index on gold_label WHERE gold_label IS NOT NULL",
+        "Running the migration twice on the same DB produces no errors (all statements use IF NOT EXISTS)",
+        "SqliteAuditStore.init() runs the migration file and creates a WAL-mode connection (PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL)"
+      ],
+      "related_prd_section": "§8.5, §10",
+      "related_nfr": ["Privacy: retention 7 days", "Audit 100% coverage"],
+      "related_files": [
+        "server/app/audit_log/migrations/001_init.sql",
+        "server/app/audit_log/sqlite_store.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["sqlite", "schema", "migration"],
+      "cross_module_blocks": ["AUDIT-RETENTION-01", "AUDIT-EVAL-01", "AUDIT-GOLD-01"]
+    },
+    {
+      "id": "AUDIT-RETENTION-01",
+      "title": "Implement RetentionSweeper background task with 7-day DELETE logic and WAL checkpoint",
+      "description": "Implement server/app/audit_log/retention.py with the RetentionSweeper class. The sweeper runs as an asyncio background task launched from lifespan(). It loops every AUDIT_RETENTION_SWEEP_INTERVAL_HOURS hours. On each tick it calls AuditStore.cleanup_expired(retention_days) which issues DELETE FROM <table> WHERE created_at < datetime('now', '-? days') on all four time-stamped tables: classifications, agent_traces, alerts, conversations. After the sweep it optionally runs PRAGMA wal_checkpoint(PASSIVE) if AUDIT_VACUUM_ON_RETENTION=true. On any exception: log ERROR, increment metric, continue loop.",
+      "module": "audit_log",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-LOG-01", "AUDIT-MET-01"],
+      "acceptance_criteria": [
+        "RetentionSweeper class exists in server/app/audit_log/retention.py with start() and stop() async methods",
+        "cleanup_expired(7) deletes rows older than exactly 7 days from all four tables (classifications, agent_traces, alerts, conversations)",
+        "cleanup_expired() returns total rows deleted as int (sum across all tables)",
+        "After exception in sweep: task loop continues; next sweep runs at next interval without restart",
+        "audit_retention_rows_deleted_total counter increments by the returned int after each sweep",
+        "audit_retention_sweep_complete log event emits rows_deleted and sweep_duration_ms",
+        "WAL checkpoint runs after sweep when AUDIT_VACUUM_ON_RETENTION=true"
+      ],
+      "related_prd_section": "§8.5, §9",
+      "related_nfr": ["Privacy: retention 7 days", "Retention sweep < 5s"],
+      "related_files": [
+        "server/app/audit_log/retention.py",
+        "server/app/audit_log/sqlite_store.py",
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["sqlite", "retention", "background-task"]
+    },
+    {
+      "id": "AUDIT-CONVO-01",
+      "title": "Implement conversations table write and read_conversation_history API for Context Agent",
+      "description": "Implement record_conversation_turn() and read_conversation_history() in SqliteAuditStore. record_conversation_turn() inserts one row into the conversations table and auto-increments turn_index per child_id using MAX(turn_index)+1. read_conversation_history(child_id, last_n_turns=5) issues SELECT ... ORDER BY turn_index DESC LIMIT n and returns a list[ConversationTurn] sorted oldest-first (reversed in Python). This resolves review.md G-01 open question Q4 — the Context Agent's read_history tool reads from this table, not from the agent_traces table which only stores borderline cases.",
+      "module": "audit_log",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-IF-01"],
+      "acceptance_criteria": [
+        "record_conversation_turn() inserts a row into conversations with correct child_id, turn_index (auto-incremented per child_id), role, text, created_at",
+        "turn_index is monotonically increasing per child_id even under concurrent writes (uses MAX(turn_index)+1 inside a transaction)",
+        "read_conversation_history(child_id, last_n_turns=5) returns the 5 most recent turns for the given child_id in chronological order (oldest first)",
+        "read_conversation_history returns an empty list (not an error) when child_id has no history",
+        "context_agent ToolRunner.read_history() can call this method via the injected AuditStore Protocol without importing SqliteAuditStore"
+      ],
+      "related_prd_section": "§8.3 (Context Agent read_history tool), §8.5",
+      "related_nfr": ["Context Agent latency p99 < 3s"],
+      "related_files": [
+        "server/app/audit_log/sqlite_store.py",
+        "server/app/context_agent/tools.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["sqlite", "conversations", "context-agent"],
+      "cross_module_blocks": ["CTX-TOOLS-01"]
+    },
+    {
+      "id": "AUDIT-GOLD-01",
+      "title": "Implement gold-label annotation methods and gold_set_metadata table management",
+      "description": "Implement set_gold_label() in SqliteAuditStore. The method updates gold_label, gold_annotator_id, gold_annotated_at, and gold_notes columns in the classifications table. Validate that the provided label is one of the canonical six values (abusive, hate, violence, pornographic, non_offensive, ambiguous). Increment audit_gold_labeled_total Prometheus counter on success. Also implement a create_gold_set() helper that inserts a row into gold_set_metadata and an update_gold_set_iaa() method that records the computed Cohen's kappa. These methods power the Meeting 8 annotation workflow.",
+      "module": "audit_log",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-MET-01"],
+      "acceptance_criteria": [
+        "set_gold_label(audit_id, label, annotator_id) updates the four gold columns in classifications atomically",
+        "set_gold_label raises ValueError if label is not in ('abusive','hate','violence','pornographic','non_offensive','ambiguous')",
+        "set_gold_label raises LookupError if audit_id does not exist",
+        "audit_gold_labeled_total counter increments by 1 on each successful annotation",
+        "gold_label_set log event emits audit_id, label, annotator_id",
+        "create_gold_set(name, description) inserts a row into gold_set_metadata; raises ValueError if name already exists",
+        "update_gold_set_iaa(name, kappa) updates iaa_kappa for the named gold set"
+      ],
+      "related_prd_section": "§10 (IAA kappa >= 0.6 KPI)",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/audit_log/sqlite_store.py",
+        "server/app/audit_log/migrations/001_init.sql"
+      ],
+      "phase": "Phase 4",
+      "meeting": "8",
+      "labels": ["gold-label", "annotation", "evaluation"]
+    },
+    {
+      "id": "AUDIT-EVAL-01",
+      "title": "Implement query_for_evaluation() AsyncIterator streaming A/B comparison rows for Meeting 8",
+      "description": "Implement query_for_evaluation() in SqliteAuditStore as an async generator. The method issues the A/B ΔFPR query from LLD §5.3: LEFT JOIN classifications with agent_traces on classification_id, filtered by date_range and optionally by context_agent_enabled and gold_labeled_only. The generator yields AuditRow dataclass instances one at a time so the caller can stream 150+ rows without loading them all into memory. This is the primary data pipeline for the Meeting 8 evaluation script.",
+      "module": "audit_log",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-GOLD-01"],
+      "acceptance_criteria": [
+        "query_for_evaluation() is declared as 'async def ... -> AsyncIterator[AuditRow]' and works with 'async for row in audit.query_for_evaluation(...):'",
+        "Filtering by gold_labeled_only=True returns only rows where gold_label IS NOT NULL",
+        "Filtering by context_agent_enabled=True returns only rows from the context-aware condition",
+        "Filtering by context_agent_enabled=False returns only rows from the context-blind baseline condition",
+        "AuditRow.frontline_only_decision is populated from classifications.frontline_only_decision (not from agent_traces)",
+        "AuditRow.is_real_threat is populated from agent_traces.is_real_threat via LEFT JOIN (None if no CA invocation)",
+        "With 150 rows in the DB, the generator streams all 150 without loading them simultaneously into memory (uses fetchmany or async cursor iteration)"
+      ],
+      "related_prd_section": "§10 (ΔFPR >= 15pp KPI, Recall non-inferior KPI)",
+      "related_nfr": ["ΔFPR >= 15pp measurement"],
+      "related_files": [
+        "server/app/audit_log/sqlite_store.py",
+        "server/app/audit_log/protocol.py"
+      ],
+      "phase": "Phase 4",
+      "meeting": "8",
+      "labels": ["evaluation", "a-b-test", "delta-fpr"]
+    },
+    {
+      "id": "AUDIT-CT-01",
+      "title": "Write AuditStore Protocol contract test suite parametrized over every adapter",
+      "description": "Write server/app/audit_log/tests/test_contract.py that asserts every AuditStore adapter satisfies the Protocol contract. Parametrize over: SqliteAuditStore (file-based), SqliteAuditStore (':memory:'), InMemoryAuditStore, NullAuditStore. For each adapter verify: record_classification returns an AuditId string; read_conversation_history returns a list[ConversationTurn]; cleanup_expired returns an int; health() returns a HealthStatus with a writable field; NullAuditStore.health() returns writable=False; isinstance check passes. Also verify that calling record_classification twice with the same trace_id raises on SqliteAuditStore (UNIQUE constraint) but is a no-op on NullAuditStore.",
+      "module": "audit_log",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["AUDIT-IF-01", "AUDIT-SCHEMA-01"],
+      "acceptance_criteria": [
+        "Contract test file exists at server/app/audit_log/tests/test_contract.py",
+        "Tests are parametrized with at least 4 adapter instances (SqliteAuditStore file, SqliteAuditStore memory, InMemoryAuditStore, NullAuditStore)",
+        "All adapters pass: record_classification -> AuditId str, read_conversation_history -> list, cleanup_expired -> int, health() -> HealthStatus",
+        "isinstance(adapter, AuditStore) returns True for all parametrized adapters",
+        "NullAuditStore.health() returns HealthStatus(writable=False)",
+        "Running pytest server/app/audit_log/tests/test_contract.py passes with zero failures"
+      ],
+      "related_prd_section": "§8.5",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/audit_log/tests/test_contract.py",
+        "server/app/audit_log/memory_store.py",
+        "server/app/audit_log/null_store.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "AUDIT-UT-01",
+      "title": "Unit tests for SqliteAuditStore — writes, reads, retention math, and constraint violations",
+      "description": "Write server/app/audit_log/tests/test_sqlite_store.py covering: happy-path record_classification + read-back; duplicate trace_id raises IntegrityError; read_conversation_history returns last-N in chronological order; retention math (rows at T-6d survive, rows at T-8d are deleted, T-7d boundary correct); set_gold_label validates label enum; query_for_evaluation returns only gold-labeled rows when gold_labeled_only=True. Use an in-memory SQLite DB (AUDIT_DB_PATH=':memory:') — no disk I/O required.",
+      "module": "audit_log",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-CONVO-01", "AUDIT-GOLD-01", "AUDIT-EVAL-01"],
+      "acceptance_criteria": [
+        "Tests use ':memory:' SQLite path — no disk files created during test run",
+        "record_classification → read classifications table → all columns match input",
+        "Inserting a duplicate trace_id raises sqlite3.IntegrityError",
+        "Insert 10 turns; read_conversation_history(last_n_turns=5) returns 5 most recent in ascending turn_index order",
+        "Retention: insert rows at -6d, -7d, -8d; cleanup_expired(7) deletes -8d row; -6d row survives; -7d boundary is correct",
+        "set_gold_label with invalid label raises ValueError",
+        "query_for_evaluation(gold_labeled_only=True) returns only rows with gold_label IS NOT NULL",
+        "All tests pass with pytest server/app/audit_log/tests/test_sqlite_store.py"
+      ],
+      "related_prd_section": "§8.5, §9, §10",
+      "related_nfr": ["Privacy: retention 7 days"],
+      "related_files": [
+        "server/app/audit_log/tests/test_sqlite_store.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "unit", "sqlite", "retention"]
+    },
+    {
+      "id": "AUDIT-IT-01",
+      "title": "Integration test: gatekeeper trace_id lands in classifications row end-to-end",
+      "description": "Write server/app/audit_log/tests/test_integration.py that starts the full FastAPI application (TestClient or httpx AsyncClient) and POSTs to /classify with a known X-Trace-ID header value. After the response, query the real (on-disk or in-memory) audit.db and assert that a row exists in classifications with trace_id matching the sent header. Also verify that the A/B field context_agent_enabled is correctly snapshotted per the CONTEXT_AGENT_ENABLED env var at request time. This test closes review.md G-01's requirement for the trace_id propagation path to be tested end-to-end.",
+      "module": "audit_log",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-RETENTION-01", "AUDIT-CONVO-01"],
+      "acceptance_criteria": [
+        "Test POSTs to /classify with X-Trace-ID: test-uuid-1234 header",
+        "After response, SELECT trace_id FROM classifications WHERE trace_id='test-uuid-1234' returns exactly one row",
+        "classifications row has correct classifier_label, triage_decision, and context_agent_enabled values",
+        "Test with CONTEXT_AGENT_ENABLED=false: context_agent_enabled column is 0 in the row",
+        "Test with CONTEXT_AGENT_ENABLED=true and borderline input: agent_traces table has a row with matching classification_id",
+        "All tests pass with pytest server/app/audit_log/tests/test_integration.py"
+      ],
+      "related_prd_section": "§8.5, §9",
+      "related_nfr": ["Audit 100% coverage"],
+      "related_files": [
+        "server/app/audit_log/tests/test_integration.py",
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "integration", "trace-id"]
+    },
+    {
+      "id": "AUDIT-FAIL-01",
+      "title": "Implement failure-mode fallbacks per LLD §8 (locked DB, disk full, schema migration failure)",
+      "description": "Implement the four failure modes documented in LLD §8 inside SqliteAuditStore and the lifespan() composition root. (1) SQLite locked: exponential backoff retry 3× (50ms / 150ms / 450ms); on 3rd failure log ERROR and drop write — classification response is still returned. (2) Disk full: lifespan() catches OperationalError on the next write attempt; switches app.state.audit from SqliteAuditStore to NullAuditStore; /health returns degraded. (3) Schema migration failure on startup: init() raises — let it propagate so lifespan() fails and the server does not start (fail-fast). (4) Retention sweep error: log ERROR, increment metric, continue loop.",
+      "module": "audit_log",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-LOG-01", "AUDIT-MET-01", "AUDIT-RETENTION-01"],
+      "acceptance_criteria": [
+        "Simulating sqlite3.OperationalError('database is locked') on first write attempt: SqliteAuditStore retries with 50ms backoff and succeeds on retry",
+        "Simulating 3 consecutive lock errors: classification response is returned normally; audit row is missing; audit_db_write_errors_total{reason='sqlite_locked'} increments by 3",
+        "Simulating disk-full OperationalError: app.state.audit is replaced with NullAuditStore; /health returns {'status': 'degraded', 'audit_log_writable': false}",
+        "Simulating corrupt migration (DROP TABLE classifications before init()): SqliteAuditStore.init() raises; server startup fails with a CRITICAL log line; server does not accept requests",
+        "Simulating exception in RetentionSweeper._run_loop(): loop continues; next sweep fires at next interval; audit_db_write_errors_total{reason='retention_sweep'} increments"
+      ],
+      "related_prd_section": "§8.5, §9",
+      "related_nfr": ["Availability frontline >= 99%"],
+      "related_files": [
+        "server/app/audit_log/sqlite_store.py",
+        "server/app/audit_log/null_store.py",
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["fallback", "error-handling", "sqlite"]
+    },
+    {
+      "id": "AUDIT-DOC-01",
+      "title": "Write README for the audit_log module under server/app/audit_log/",
+      "description": "Write server/app/audit_log/README.md summarizing the LLD for in-code reference: module purpose, AuditStore Protocol contract (all 9 methods), table descriptions (one sentence per table), retention policy explanation, gold-label annotation workflow for Meeting 8, env var reference (6 variables), WAL mode rationale, failure-mode summary table, and adapter swap example (SQLite -> Postgres one-liner). Keep under 250 lines. Reference docs/design/audit_log/design.md for full specification.",
+      "module": "audit_log",
+      "type": "docs",
+      "priority": "P2",
+      "estimate_hours": 1,
+      "depends_on": ["AUDIT-SCHEMA-01", "AUDIT-RETENTION-01"],
+      "acceptance_criteria": [
+        "README exists at server/app/audit_log/README.md",
+        "Documents all 9 AuditStore Protocol methods with their return types",
+        "Lists all 5 tables with one-sentence descriptions",
+        "Includes the adapter swap example (SqliteAuditStore -> PostgresAuditStore one-liner in lifespan())",
+        "Lists all 6 AUDIT_* env vars with defaults",
+        "Includes the failure-mode table from LLD §8 (4 rows)"
+      ],
+      "related_prd_section": "§8.5",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/audit_log/README.md"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["docs"]
+    }
+  ]
+}

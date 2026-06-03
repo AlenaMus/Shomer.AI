@@ -1,0 +1,410 @@
+{
+  "module": "android_client",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.6, §8.4, §3",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "ANDROID-IF-01",
+      "title": "Define ClassificationSource interface as internal seam for SDK injection",
+      "description": "Create android_client/app/src/main/java/com/shomer/client/data/ClassificationSource.kt with the ClassificationSource interface (classifyText, classifyImage, health suspend functions). ChildClassifyViewModel must depend only on this interface, not on ShomerClient directly. Production wiring binds ShomerClientAdapter; tests inject FakeClassificationSource. This follows the user directive for strong OOP isolation.",
+      "module": "android_client",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["SDK-IF-01"],
+      "acceptance_criteria": [
+        "ClassificationSource interface exists with 3 suspend methods matching ShomerClient signatures",
+        "ChildClassifyViewModel compiles with ClassificationSource as its only dependency (not ShomerClient)",
+        "ShomerClientAdapter implements ClassificationSource",
+        "FakeClassificationSource can be created in test files with 5 lines of code"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/data/ClassificationSource.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "ANDROID-CFG-01",
+      "title": "Define Android client config via DataStore and BuildConfig keys",
+      "description": "Document all 8 config values from the LLD in the SettingsRepository DataStore: serverUrl, connectTimeoutMs, readTimeoutMs, imageReadTimeoutMs, imageMaxEdgePx, imageJpegQuality, fcmSenderId, alertRetentionDays. BuildConfig keys provide defaults; DataStore overrides at runtime for user-editable settings (serverUrl only). Ensure google-services.json is in app/src/parent/ and gitignored.",
+      "module": "android_client",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["ANDROID-IF-01"],
+      "acceptance_criteria": [
+        "All 8 config values documented with defaults in SettingsRepository or BuildConfig",
+        "serverUrl is DataStore-persisted and user-editable via SettingsScreen",
+        "Other values are BuildConfig constants (not user-editable at runtime)",
+        "google-services.json path is documented in README; .gitignore excludes it"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/data/SettingsRepository.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "ANDROID-LOG-01",
+      "title": "Wire Timber logger with structured JSON release tree and shomer.<module> tag pattern",
+      "description": "Configure Timber in MainActivity.onCreate(): DebugTree for debug builds, a custom JsonTree for release builds that emits JSON with trace_id, module, event, flavor fields. Implement the three documented log events: classify_success, classify_success (context_used=true), classify_error (NetworkError). Logger tag pattern: shomer.child.classify, shomer.parent.dashboard, shomer.fcm.",
+      "module": "android_client",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["ANDROID-IF-01"],
+      "acceptance_criteria": [
+        "Timber.DebugTree planted in debug builds only",
+        "Release build log events include: trace_id, module, event, flavor",
+        "classify_success event includes: label, confidence, latency_ms",
+        "classify_error event includes: error_type, message",
+        "No request text content is logged (privacy)"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["Privacy: no PII to LLM"],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/MainActivity.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["logging"]
+    },
+    {
+      "id": "ANDROID-MET-01",
+      "title": "Define Android performance metrics with AtomicLong counters and Firebase traces",
+      "description": "Implement all 5 Android metrics from the LLD: shomer_android_classify_total (AtomicLong counter), shomer_android_classify_latency_ms (Firebase Performance trace), shomer_android_network_error_total (AtomicLong counter), shomer_android_fcm_received_total (AtomicLong counter, parent flavor only), shomer_android_image_compress_ms (Firebase Performance trace). Wire into ChildClassifyViewModel and ShomerFcmService.",
+      "module": "android_client",
+      "type": "infra",
+      "priority": "P2",
+      "estimate_hours": 3,
+      "depends_on": ["ANDROID-IF-01"],
+      "acceptance_criteria": [
+        "shomer_android_classify_total increments on every classify call with flavor and input_type labels",
+        "shomer_android_classify_latency_ms trace covers the full SDK call duration",
+        "shomer_android_image_compress_ms trace is started before compress and stopped after",
+        "shomer_android_fcm_received_total increments in ShomerFcmService.onMessageReceived()"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/viewmodel/ChildClassifyViewModel.kt",
+        "android_client/app/src/main/java/com/shomer/client/service/ShomerFcmService.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["metrics"]
+    },
+    {
+      "id": "ANDROID-FLAVORS-01",
+      "title": "Configure product flavors (child vs parent) with separate applicationIds and manifests",
+      "description": "Configure android_client/app/build.gradle with two product flavors: child (applicationId com.shomer.child) and parent (applicationId com.shomer.parent). Create separate manifest entries: parent manifest requests POST_NOTIFICATIONS and includes FCM service; child manifest requests CAMERA. Separate src/child/ and src/parent/ source sets with flavor-specific entry points.",
+      "module": "android_client",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["ANDROID-IF-01"],
+      "acceptance_criteria": [
+        "gradle build produces app-child-release.apk and app-parent-release.apk as separate artifacts",
+        "child applicationId is com.shomer.child; parent is com.shomer.parent",
+        "Parent manifest includes android.permission.POST_NOTIFICATIONS and FCM service declaration",
+        "Child manifest includes android.permission.CAMERA; does not include FCM service",
+        "Parent flavor APK does not contain ChildClassifyScreen code; child APK does not contain DashboardScreen code"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/build.gradle",
+        "android_client/app/src/child/AndroidManifest.xml",
+        "android_client/app/src/parent/AndroidManifest.xml"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["build", "flavors"]
+    },
+    {
+      "id": "ANDROID-DI-01",
+      "title": "Implement Hilt AppModule providing ShomerClient and binding ClassificationSource",
+      "description": "Create android_client/app/src/main/java/com/shomer/client/di/AppModule.kt as a Hilt @Module. Provide: ShomerClient built from SettingsRepository.serverUrl; ShomerClientAdapter binding ClassificationSource to ShomerClient; AlertRepository as a singleton. Wire Hilt into MainApplication. The DI module is the only place that knows about ShomerClient (ViewModels see only interfaces).",
+      "module": "android_client",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["ANDROID-IF-01", "ANDROID-CFG-01", "SDK-CLIENT-01"],
+      "acceptance_criteria": [
+        "AppModule.kt provides ShomerClient, ClassificationSource, AlertRepository",
+        "ChildClassifyViewModel receives ClassificationSource (not ShomerClient) via @Inject",
+        "ShomerClient is a singleton (not recreated on ViewModel recreation)",
+        "Hilt application component initializes without errors on app startup"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/di/AppModule.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["di", "hilt"]
+    },
+    {
+      "id": "ANDROID-CHILD-VM-01",
+      "title": "Implement ChildClassifyViewModel with image compression and SDK calls",
+      "description": "Create android_client/app/src/child/java/com/shomer/client/viewmodel/ChildClassifyViewModel.kt. Implement classifyText() and classifyImage(): loadAndCompress(uri) -> ByteArray (max 1600px, JPEG 80), call ClassificationSource.classifyText/classifyImage, map ShomerResult to ChildUiState. Emit SuccessText, SuccessImage, Loading, Idle, Error states. Wire metrics.",
+      "module": "android_client",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 5,
+      "depends_on": ["ANDROID-IF-01", "ANDROID-DI-01", "ANDROID-LOG-01"],
+      "acceptance_criteria": [
+        "classifyImage(uri) compresses image to max 1600px edge, JPEG quality 80 before SDK call",
+        "ShomerResult.Success -> ChildUiState.SuccessText or SuccessImage with correct ClassificationResult",
+        "ShomerResult.Failure(NetworkError) -> ChildUiState.Error('Cannot reach server')",
+        "Loading state emitted before SDK call; final state emitted after",
+        "Image compression runs on IO dispatcher (not Main)"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/viewmodel/ChildClassifyViewModel.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["viewmodel", "child"]
+    },
+    {
+      "id": "ANDROID-FCM-01",
+      "title": "Implement ShomerFcmService to receive push alerts and write to Room",
+      "description": "Create android_client/app/src/parent/java/com/shomer/client/service/ShomerFcmService.kt extending FirebaseMessagingService. onMessageReceived(): deserialize FCM data payload to AlertItem; call alertDao.insert(); show system notification via NotificationCompat. onNewToken(): write new FCM token to DataStore (SettingsRepository.fcmToken). Malformed payload must be logged and skipped without crashing.",
+      "module": "android_client",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 5,
+      "depends_on": ["ALERTS-IF-01", "ANDROID-DI-01", "ANDROID-LOG-01"],
+      "acceptance_criteria": [
+        "onMessageReceived() deserializes FCM data payload to AlertItem using the documented JSON field names",
+        "AlertItem is inserted into Room alerts table",
+        "System notification is shown with correct title and body",
+        "Malformed JSON payload: log warning, skip insert, no crash",
+        "onNewToken() writes new token to SettingsRepository DataStore"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": ["Notification latency p99 < 2s"],
+      "related_files": [
+        "android_client/app/src/parent/java/com/shomer/client/service/ShomerFcmService.kt"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["fcm", "push"]
+    },
+    {
+      "id": "ANDROID-PARENT-VM-01",
+      "title": "Implement ParentDashboardViewModel reading from Room AlertRepository",
+      "description": "Create android_client/app/src/parent/java/com/shomer/client/viewmodel/ParentDashboardViewModel.kt. State: Flow<DashboardUiState> from Room AlertRepository. refresh() calls ClassificationSource.health(). dismissAlert(id) calls alertDao.dismiss(). When Room emits a new row (FCM insert), DashboardScreen recomposes automatically. Wire alertRetentionDays purge via AlertRepository.purgeOldDismissed() on init.",
+      "module": "android_client",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["ANDROID-FCM-01", "ANDROID-DI-01"],
+      "acceptance_criteria": [
+        "DashboardUiState.Ready(alerts, serverHealthy) emitted after successful health check",
+        "New FCM-inserted Row in Room causes StateFlow to emit updated Ready state",
+        "dismissAlert(id) sets dismissedAt timestamp in Room",
+        "purgeOldDismissed() removes rows where dismissedAt < (now - 7 days) on ViewModel init",
+        "DashboardUiState.Error emitted when server health check fails"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/src/parent/java/com/shomer/client/viewmodel/ParentDashboardViewModel.kt"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["viewmodel", "parent", "dashboard"]
+    },
+    {
+      "id": "ANDROID-SCREENS-01",
+      "title": "Implement DashboardScreen, HistoryScreen, and AlertDetailScreen Composables (parent flavor)",
+      "description": "Create the three new parent-flavor Composable screens: DashboardScreen (alert list with review badge), HistoryScreen (paginated AlertItem list), AlertDetailScreen (full explanation, quote, contextUsed badge). All screens are stateless Composables taking UiState + intent lambdas from ParentDashboardViewModel. Include the 'Needs Human Review' yellow badge for reviewFlag=true alerts.",
+      "module": "android_client",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 6,
+      "depends_on": ["ANDROID-PARENT-VM-01"],
+      "acceptance_criteria": [
+        "DashboardScreen renders a LazyColumn of AlertItem cards",
+        "AlertItem card with reviewFlag=true shows a yellow 'Needs Human Review' badge",
+        "AlertDetailScreen shows: label, severity, explanation, quote, contextUsed indicator",
+        "All screens are @Composable functions with no business logic",
+        "HistoryScreen uses paging (at minimum a simple offset query)"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/src/parent/java/com/shomer/client/ui/DashboardScreen.kt",
+        "android_client/app/src/parent/java/com/shomer/client/ui/HistoryScreen.kt",
+        "android_client/app/src/parent/java/com/shomer/client/ui/AlertDetailScreen.kt"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["ui", "parent"]
+    },
+    {
+      "id": "ANDROID-SETTINGS-VM-01",
+      "title": "Implement SettingsViewModel and wire SettingsScreen to SDK test connection",
+      "description": "Create android_client/app/src/main/java/com/shomer/client/viewmodel/SettingsViewModel.kt. Expose SettingsUiState(serverUrl, connectionStatus). Implement: updateServerUrl() updates in-memory state, save() persists to DataStore, testConnection() calls ClassificationSource.health() and maps result to ConnectionStatus enum (Untested, Testing, Ok, Failed).",
+      "module": "android_client",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["ANDROID-IF-01", "ANDROID-DI-01", "SDK-CLIENT-01"],
+      "acceptance_criteria": [
+        "testConnection() emits ConnectionStatus.Testing then Ok or Failed",
+        "save() persists serverUrl to DataStore; new ShomerClient is built from new URL",
+        "SettingsScreen displays the ConnectionStatus with appropriate visual indicator",
+        "Existing SettingsScreen.kt is wired to the new SettingsViewModel (replaces direct SettingsRepository usage)"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/viewmodel/SettingsViewModel.kt",
+        "android_client/app/src/main/java/com/shomer/client/ui/SettingsScreen.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["viewmodel", "settings"]
+    },
+    {
+      "id": "ANDROID-FAIL-01",
+      "title": "Implement Android offline mode, permission denial UX, and image decode failure fallbacks",
+      "description": "Implement all failure modes from LLD §8: server unreachable -> ChildUiState.Error + parent 'Server offline' banner; CAMERA permission denied -> show rationale dialog, disable camera button; corrupt image decode -> ChildUiState.Error('Could not decode image'); FCM malformed payload -> log warning, skip insert. Ensure no crashes on any of these paths.",
+      "module": "android_client",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["ANDROID-CHILD-VM-01", "ANDROID-FCM-01"],
+      "acceptance_criteria": [
+        "ShomerError.NetworkError -> ChildUiState.Error('Cannot reach server') with no crash",
+        "CAMERA permission denied -> rationale dialog shown on second denial",
+        "BitmapFactory.decodeStream returns null -> ChildUiState.Error('Could not decode image')",
+        "FCM payload JSON parse error -> log 'malformed_fcm_payload' warning, skip insert, no crash",
+        "reviewFlag=true in ClassificationResult -> parent sees 'Needs Human Review' badge"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["Availability >= 99%"],
+      "related_files": [
+        "android_client/app/src/main/java/com/shomer/client/viewmodel/ChildClassifyViewModel.kt",
+        "android_client/app/src/parent/java/com/shomer/client/service/ShomerFcmService.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["fallback", "offline"]
+    },
+    {
+      "id": "ANDROID-CT-01",
+      "title": "Write ClassificationSource contract tests with FakeClassificationSource",
+      "description": "Write unit tests in android_client/app/src/test verifying ChildClassifyViewModel correctly handles all ClassificationSource return types via FakeClassificationSource. Test the interface contract: Success maps to SuccessText/SuccessImage, Failure(NetworkError) maps to Error, Failure(RateLimitError) maps to Error with appropriate message.",
+      "module": "android_client",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["ANDROID-IF-01", "ANDROID-CHILD-VM-01"],
+      "acceptance_criteria": [
+        "FakeClassificationSource returns pre-configured results without network calls",
+        "Success(ClassificationResult) -> ChildUiState.SuccessText with correct label",
+        "Failure(NetworkError) -> ChildUiState.Error",
+        "Failure(RateLimitError) -> ChildUiState.Error with 'too many requests' message",
+        "All contract tests pass with Robolectric without requiring an emulator"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/src/test/java/com/shomer/client/ClassifyViewModelIntegrationTest.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "ANDROID-UT-01",
+      "title": "Unit tests for ViewModels, SettingsRepository, and offline behavior",
+      "description": "Write unit tests with Robolectric and MockWebServer covering: ChildClassifyViewModel offline behavior (MockWebServer closed -> Error state), SettingsViewModel save+testConnection flow, AlertRepository purgeOldDismissed() removes old rows, and image compression stays under 500ms. No emulator required.",
+      "module": "android_client",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["ANDROID-CHILD-VM-01", "ANDROID-SETTINGS-VM-01", "ANDROID-FAIL-01"],
+      "acceptance_criteria": [
+        "ChildClassifyViewModelOfflineTest: MockWebServer closed -> Error state emitted",
+        "SettingsViewModel: save() then testConnection() uses new URL",
+        "AlertRepository: purgeOldDismissed() removes rows with dismissedAt > 7 days",
+        "Image compression test: 3 image sizes, all compress in < 500ms",
+        "All tests run without a physical device or emulator"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "android_client/app/src/test/java/com/shomer/client/ChildClassifyViewModelOfflineTest.kt",
+        "android_client/app/src/test/java/com/shomer/client/OfflineBehaviorTest.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "ANDROID-IT-01",
+      "title": "Instrumented integration tests for FCM-to-UI latency and camera permission flow",
+      "description": "Write Android instrumented tests in androidTest/ covering: FCM message injection -> Room insert -> Dashboard UI update (measure latency), camera permission denial -> rationale dialog, and end-to-end classify -> result card display. These require an emulator or physical device with API 24+.",
+      "module": "android_client",
+      "type": "test",
+      "priority": "P2",
+      "estimate_hours": 4,
+      "depends_on": ["ANDROID-FCM-01", "ANDROID-SCREENS-01", "ANDROID-FAIL-01"],
+      "acceptance_criteria": [
+        "ParentFcmToUiLatencyTest: inject FCM message -> Room insert -> Flow emit -> UI recompose, measure total < 2s",
+        "CameraPermissionFlowTest: deny camera -> no crash; second tap -> rationale dialog",
+        "ChildClassifyScreenTest: enter text -> classify -> ResultCard shows label",
+        "Tests target minSdk 24 and pass on an API 30+ emulator"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": ["Notification latency p99 < 2s"],
+      "related_files": [
+        "android_client/app/src/androidTest/java/com/shomer/client/ParentFcmToUiLatencyTest.kt",
+        "android_client/app/src/androidTest/java/com/shomer/client/CameraPermissionFlowTest.kt"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["test", "integration", "instrumented"]
+    },
+    {
+      "id": "ANDROID-DOC-01",
+      "title": "Write android_client README covering both flavors, DI setup, and network security config",
+      "description": "Write android_client/README.md documenting: child vs parent flavor differences, build commands for each APK, Hilt DI setup, network_security_config.xml cleartext HTTP rules, google-services.json placement for parent flavor, and how to run unit tests without an emulator. Include the package rename plan (com.dima.offensivehebrew -> com.shomer.client).",
+      "module": "android_client",
+      "type": "docs",
+      "priority": "P2",
+      "estimate_hours": 1,
+      "depends_on": ["ANDROID-FLAVORS-01", "ANDROID-DI-01"],
+      "acceptance_criteria": [
+        "README documents both gradle build commands: assembleChildRelease and assembleParentRelease",
+        "Network security config cleartext rules are documented with the LAN IP ranges",
+        "Package rename plan is documented with the recommended timing (before Meeting 5)",
+        "Hilt setup section mentions the AppModule.kt file and what it provides"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/README.md"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["docs"]
+    }
+  ]
+}

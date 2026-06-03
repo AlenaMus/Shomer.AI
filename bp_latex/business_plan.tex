@@ -1,0 +1,543 @@
+% =====================================================================
+%  Shomer.AI — Business Plan (Hebrew, RTL)
+%  ---------------------------------------------------------------------
+%  COMPILE WITH:  XeLaTeX  (NOT pdfLaTeX, NOT LuaLaTeX is required but
+%                 XeLaTeX is the tested target)
+%
+%  ON OVERLEAF:
+%    1. Upload this single .tex file (it is self-contained, no images).
+%    2. Menu  ->  Settings  ->  Compiler  ->  set to "XeLaTeX".
+%    3. Compile. Nothing else to install.
+%
+%  HEBREW FONT NOTE:
+%    The main Hebrew font is set to "David CLM" (Culmus family), which
+%    ships with the TeX Live distribution that Overleaf uses, so it
+%    compiles with ZERO setup. If your local/other TeX Live does NOT
+%    have the Culmus fonts, change the \setmainfont line below to one of
+%    these fallbacks (all are TeX-Live-bundled Hebrew faces):
+%        "Frank Ruehl CLM"   (Culmus, serif)
+%        "Nachlieli CLM"     (Culmus, sans)
+%        "Miriam CLM"        (Culmus)
+%    If none of the Culmus fonts are found, install the "culmus" package
+%    (TeX Live: tlmgr install culmus / Debian: apt-get install culmus).
+%
+%  Packages used: polyglossia + bidi + fontspec (the canonical Overleaf
+%  Hebrew XeLaTeX stack). longtable for the wide comparison tables.
+% =====================================================================
+
+\documentclass[11pt]{article}
+
+\usepackage{fontspec}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.3cm}
+
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{enumitem}
+\usepackage{amsmath}
+
+% IMPORTANT load-order note: hyperref is loaded BEFORE polyglossia.
+% polyglossia pulls in the `bidi` package for Hebrew, and `bidi` MUST be the
+% last package loaded (after hyperref). Loading polyglossia first triggers a
+% hyperref<->bidi runaway ("TeX capacity exceeded" with \url inside footnotes).
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=black}
+
+% Light header colour for tables.
+\definecolor{hdr}{RGB}{222,235,247}
+\definecolor{ltgray}{RGB}{244,244,244}
+
+% --- Languages + fonts (polyglossia LAST: it loads bidi) ---------------
+\usepackage{polyglossia}
+\setdefaultlanguage{hebrew}
+\setotherlanguage{english}
+
+% Hebrew main font with an automatic fallback chain so this compiles on
+% BOTH Overleaf (Culmus "David CLM") AND a stock Windows + MiKTeX setup
+% (the built-in Windows "David" font), with no manual edits required.
+% \IfFontExistsTF is provided by fontspec; it picks the first font present.
+\IfFontExistsTF{David CLM}
+  {\setmainfont{David CLM}[Script=Hebrew]}      % Overleaf / TeX Live (Culmus)
+  {\IfFontExistsTF{David}
+    {\setmainfont{David}[Script=Hebrew]}        % Windows built-in Hebrew font
+    {\IfFontExistsTF{Frank Ruehl CLM}
+      {\setmainfont{Frank Ruehl CLM}[Script=Hebrew]}
+      {\setmainfont{Arial}[Script=Hebrew]}}}     % last-resort: Arial has Hebrew
+% Latin/English run inside RTL text (numbers, technical terms, $-prices).
+\newfontfamily\englishfont{Latin Modern Roman}
+% Monospace font (used by \url in footnotes). polyglossia requires the mono
+% font to cover the Hebrew script, so pick a Hebrew-capable one: Miriam Mono
+% CLM on Overleaf/TeX Live, Courier New on Windows; both also have Latin.
+\IfFontExistsTF{Miriam Mono CLM}
+  {\setmonofont{Miriam Mono CLM}[Script=Hebrew]}
+  {\IfFontExistsTF{Courier New}
+    {\setmonofont{Courier New}[Script=Hebrew]}
+    {\setmonofont{Latin Modern Mono}}}
+
+% A helper so Latin terms/numbers render LTR cleanly inside Hebrew text.
+\newcommand{\en}[1]{\textenglish{#1}}
+% Make \en expand to plain text inside PDF bookmarks (silences hyperref warning).
+\pdfstringdefDisableCommands{\def\en#1{#1}}
+% David CLM lacks the bullet glyph; render itemize bullets via the Latin font.
+\renewcommand{\labelitemi}{\en{\textbullet}}
+
+\title{\textbf{Shomer.AI — תכנית עסקית}}
+\author{פרויקט גמר \en{\textperiodcentered} קורס מומחי AI \en{\textperiodcentered} מנחה: ד"ר יורם סגל}
+\date{מפגש 3 \en{\textperiodcentered} מאי 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\textit{מערכת \en{AI} רב-מודאלית בעברית להגנה על ילדים מפני בריונות, איומים, תכנים מיניים ומצוקה רגשית מקוונת.}
+\end{center}
+
+\vspace{0.4cm}
+\hrule
+\vspace{0.6cm}
+
+% =====================================================================
+% 1. EXECUTIVE SUMMARY
+% =====================================================================
+\section{תקציר מנהלים (\en{Executive Summary})}
+
+\textbf{הבעיה.} ילדים ובני נוער דוברי עברית חשופים יום-יום לבריונות מקוונת, איומים, תכנים מיניים לא רצויים ושיח אובדני. הכלים הקיימים בשוק בנויים בעיקר לאנגלית, מבוססים מילות-מפתח שטחיות, ואינם מבינים את ההקשר התרבותי-לשוני הישראלי — מה שמוביל להצפת התראות-שווא (\en{Alert Fatigue}) ולנטישת המוצר תוך ימים.
+
+\textbf{הפתרון.} \en{Shomer.AI} הוא ``שומר דיגיטלי שקט'' להורים: מסווג חזית (\en{frontline classifier}) מהיר וזול המאתר סיכון בעברית, ומעליו \textbf{סוכן הקשר} (\en{Context Agent}) מבוסס \en{LLM} שמאמת כל התראה לפני שהיא נשלחת — וכך חותך את אחוז ההתראות-שווא. כל התראה להורה מלווה בהסבר, ציטוט וסוג הסיכון (\en{Explainable AI}). המערכת רב-מודאלית: טקסט \textbf{וגם} תמונות.
+
+\textbf{המשתמש.} הורים לילדים בגילי כ-6--16 בישראל; בהמשך — יועצים חינוכיים וארגוני בטיחות ילדים.
+
+\textbf{הערך.} פתרון \textbf{עברית-ראשון} שפותר את בעיית ההקשר של המתחרים, במבנה עלות היברידי: סיווג מקומי בעלות זניחה, וקריאה ל-\en{LLM} חיצוני יקר \textbf{רק} על מקרי-הגבול (כ-\en{10--20\%} מהתעבורה) — יתרון עלות מבני מול מתחרים מבוססי-ענן.
+
+% =====================================================================
+% 2. MARKET (TAM/SAM/SOM)
+% =====================================================================
+\section{שוק (\en{TAM / SAM / SOM})}
+
+קהל היעד: הורים לילדים בגילי כ-6--16 בישראל. להלן פירוק \en{TAM/SAM/SOM}; כל מספר מלווה בהערת-מקור, ומספרים שטרם אומתו מסומנים \en{[}למקור\en{]}.
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}p{4.0cm}|>{\raggedright\arraybackslash}p{8.5cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{שכבה} & \textbf{היקף} & \textbf{הסבר ומקור} \\
+\hline
+\endhead
+
+\textbf{\en{TAM}} &
+שוק ה-\en{Parental Control} העולמי \mbox{$\approx$ \en{\$1.55--1.74B}} (\en{2025--2026}), \en{CAGR} $\approx$ \en{9.8\%--12.3\%} &
+שוק התוכנה הגלובלי להגנת ילדים. אומדנים שונים בין חברות מחקר: \en{\$1.55B} ב-\en{2025}\footnote{\en{Global Growth Insights}, \textit{Parental Control Software Market} (2025): שווי שוק $\approx$ \en{\$1.55B} ב-\en{2025}, \en{\$1.74B} ב-\en{2026}, \en{CAGR} $\approx$ \en{12.25\%}. \url{https://www.globalgrowthinsights.com/market-reports/parental-control-software-market-124665}} עד \en{\$1.7B}\footnote{\en{Future Market Insights} (2025): $\approx$ \en{\$1.7B} ב-\en{2025}, \en{CAGR} $\approx$ \en{9.8\%}. \url{https://www.futuremarketinsights.com/reports/parental-control-software-market}. נתון ההצעה המקורי ($\approx$\en{\$1.6B}, \en{CAGR 9.4\%}) תואם את טווח האומדנים הללו.} \\
+\hline
+
+\rowcolor{ltgray}
+\textbf{\en{SAM}} &
+$\approx$ \en{1.5M} בתי-אב דוברי-עברית עם ילדים בגיל הרלוונטי בישראל &
+בישראל $\approx$ \en{2.25M} משפחות, וכמחציתן הן זוג הורים עם ילד אחד לפחות עד גיל \en{17}\footnote{הלשכה המרכזית לסטטיסטיקה (הלמ"ס), נתוני משפחות \en{2022}: $\approx$ \en{2.25M} משפחות בישראל; כ-\en{50\%} מהן זוג הורים עם ילד/ים עד גיל \en{17}. סיכום: \en{JNS}, \url{https://www.jns.org/2-25-million-families-in-israel-average-of-3-69-members-each/}.} — מה שמעמיד את ההצעה של $\approx$\en{1.5M} בתי-אב בטווח סביר. \textbf{הפילוח המדויק לגילאי 6--16 בעלי סמארטפון טעון אימות \en{[}למקור\en{]}.} \\
+\hline
+
+\textbf{\en{SOM}} &
+שנה ראשונה: \en{5,000} משתמשים פעילים, \en{ARPU} $\approx$ ₪40/חודש &
+יעד חדירה ריאלי לשנה הראשונה — תרחיש להמחשה לפי הצעת הפרויקט\footnote{\en{Shomer.AI Project Proposal}, סעיף \en{2.3}. \en{SOM}: \en{5,000} משתמשים, \en{ARPU} ₪\en{40}/חודש. יעד פנימי — \textbf{טעון אימות} מול נתוני חדירה בשוק הישראלי \en{[}למקור\en{]}.} \\
+\hline
+\end{longtable}
+
+\textbf{הערה מתודולוגית:} מספרי \en{TAM} (גודל שוק עולמי) ו-\en{SAM} (משפחות בישראל) מבוססי-מקור; מספר ה-\en{SOM} הוא יעד עסקי פנימי להמחשה, לא תחזית מאומתת.
+
+% =====================================================================
+% 3. COMPETITORS
+% =====================================================================
+\section{מתחרים (\en{Competitors})}
+
+שוק ה-\en{Parental Control} רווי, אך רוב השחקנים פותרים את הבעיה חלקית: אנגלית-בלבד, מבוסס מילות-מפתח, או ``קופסה שחורה'' ללא הסבר. להלן ניתוח חמשת המתחרים המרכזיים.
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{\en{Bark} (ארה"ב)} — מובילת השוק. \en{AI} לסריקת טקסט/תמונות/וידאו ב-\en{30+} פלטפורמות; כיסוי רחב מאוד. \textit{חולשה:} אנגלית בלבד — לא מזהה סיכון בעברית; התראות-שווא ברגישות גבוהה.
+  \item \textbf{\en{Qustodio} (ספרד)} — פילטור אתרים, זמן-מסך, מיקום. \textit{חולשה:} \en{AI} שטחי מבוסס מילות-מפתח, ללא ניואנס תרבותי ישראלי.
+  \item \textbf{\en{Canopy} (ארה"ב)} — ראייה ממוחשבת בזמן-אמת לחסימת תוכן מיני. \textit{חולשה:} ממוקד עירום בלבד, לא בבריונות או שיח רגשי.
+  \item \textbf{\en{Keepers} (ישראל)} — \en{NLP} מבוסס \en{IBM Watson} לניתוח מצב רגשי. \textit{חולשה:} לפי הצהרת ה-\en{CEO} — סלנג מקומי הוא אתגר שלא נפתר; לא מנצל \en{LLM}-ים מודרניים.
+  \item \textbf{\en{Bosco} (ישראל)} — ניתוח דפוסי התנהגות (לא תוכן). \textit{חולשה:} אינדיקציה איטית — מאתר תסמינים \textit{אחרי} הפגיעה.
+\end{itemize}
+
+\subsection*{טבלת \en{Price-vs-Value}}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}p{3.2cm}|>{\raggedright\arraybackslash}p{4.8cm}|>{\raggedright\arraybackslash}p{4.5cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{מתחרה} & \textbf{מחיר (מאומת)} & \textbf{ערך / חוזקה} & \textbf{חולשה מרכזית} \\
+\hline
+\endhead
+
+\en{Bark} &
+\en{\$29}/שנה (מכשיר 1); \en{\$95.90}/שנה (3)\footnote{\en{Canopy} blog, \textit{Qustodio vs Bark (2026)}; \en{SafeWise} (2026). \url{https://canopy.us/blog/qustodio-vs-bark-parental-control-comparison/}} &
+כיסוי רחב מאוד, סריקה רב-מודאלית, דיוק גבוה במחקרים &
+אנגלית בלבד; אין עברית; התראות-שווא \\
+\hline
+
+\rowcolor{ltgray}
+\en{Qustodio} &
+חינמי / \en{\$54.95}/שנה (5) / \en{\$99.95}/שנה\footnote{\en{Qustodio} pricing דרך \en{Canopy/SafeWise} (2026). \url{https://www.safewise.com/resources/parental-control-filters-buyers-guide/}} &
+כיסוי קרוס-פלטפורמה, דשבורד מקיף &
+\en{AI} מבוסס מילות-מפתח; ללא הקשר ישראלי \\
+\hline
+
+\en{Canopy} &
+\en{\$7.99}/חודש (3 מכשירים, חיוב שנתי)\footnote{\en{Canopy} pricing page; \en{SafetyDetectives} (2026): \en{\$7.99}/חודש (3 מכשירים) עד \en{\$9.99}/חודש (10). \url{https://canopy.us/pricing/}} &
+חסימת תוכן מיני בזמן-אמת, פולשני פחות &
+ממוקד עירום בלבד; לא בריונות/שיח \\
+\hline
+
+\rowcolor{ltgray}
+\en{Keepers} &
+ניסיון 14 יום; מנוי חודשי/שנתי \en{[}למקור\en{]}\footnote{\en{Keepers Child Safety}: ניסיון חינם 14 יום מאומת; \textbf{מחיר חודשי מדויק טעון אימות \en{[}למקור\en{]}}.} &
+ניתוח רגשי, מודעות לפרטיות, רב-לשוני &
+סלנג ישראלי בעייתי (הצהרת \en{CEO}); ללא \en{LLM} מודרני \\
+\hline
+
+\en{Bosco} &
+\en{[}למקור\en{]}\footnote{\en{Bosco} (ישראל): \textbf{תמחור ציבורי טעון אימות \en{[}למקור\en{]}}.} &
+מגן-פרטיות, חכם פסיכולוגית (דפוסי התנהגות) &
+אינדיקציה איטית — מאתר אחרי הפגיעה \\
+\hline
+
+\rowcolor{hdr}
+\textbf{\en{Shomer.AI}} &
+\textbf{מנוי הורה $\approx$ ₪\en{40}/חודש (תרחיש \en{SOM})} &
+\textbf{עברית-ראשון, סוכן-הקשר, רב-מודאלי, \en{Explainable}} &
+מוצר חדש — ללא נתח שוק קיים \\
+\hline
+\end{longtable}
+
+\textit{מפת ה-\en{Price-vs-Value} בקצרה:} \en{Bark} ו-\en{Canopy} בקצה ה``ערך גבוה / מחיר גבוה''; \en{Qustodio} ב``ערך-בינוני / מחיר-נמוך''. \en{Shomer.AI} ממקם עצמו ב\textbf{ערך גבוה ומחיר תחרותי} בזכות מבנה העלות ההיברידי (סעיף 6), עם ה\textbf{ערך הייחודי} של עברית-ראשון שאף מתחרה אינו מספק.
+
+% =====================================================================
+% 4. USP
+% =====================================================================
+\section{ייחוד תחרותי (\en{USP})}
+
+\begin{quote}
+\textbf{ה-\en{USP} במשפט אחד:}\\[2pt]
+\textit{\en{Shomer.AI} היא מערכת ההגנה היחידה על ילדים שהיא \textbf{עברית-ראשון}, מבצעת את הסיווג \textbf{מקומית על המכשיר} (ללא תלות בענן לסיווג), ו\textbf{רב-מודאלית} (טקסט + תמונה) — ומשתמשת בסוכן-הקשר מבוסס-\en{LLM} כדי לחתוך התראות-שווא ולהסביר כל התראה.}
+\end{quote}
+
+ארבעת עמודי הייחוד:
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{עברית-ראשון.} \en{Bark} עובד באנגלית בלבד; \en{Keepers} מודה שסלנג ישראלי לא נפתר. \en{Shomer.AI} מאומן על עברית (\en{OffensiveHebrew}) + שכבת \en{Synthetic Data} של סלנג נוער עכשווי.
+  \item \textbf{על-המכשיר (\en{on-device}).} הסיווג רץ ב-\en{LLM} מקומי — אין שליחת כל הודעה לענן, יתרון פרטיות \textbf{ועלות} כאחד.
+  \item \textbf{רב-מודאלי.} טקסט \textbf{וגם} תמונות (זיהוי תוכן מיני/אלימות) — מעבר לפתרונות טקסט-בלבד.
+  \item \textbf{הקשר + הסבר.} סוכן-הקשר מאמת לפני התראה (פותר את בעיית ה-\en{False Positives}), וכל התראה מלווה בהסבר וציטוט (לא ``קופסה שחורה'').
+\end{enumerate}
+
+% =====================================================================
+% 5. REVENUE MODEL — Updated 2026-05-30 (pricing ₪29.90 instead of ₪40)
+% =====================================================================
+\section{מודל הכנסות (\en{Revenue Model}) — מעודכן}
+
+מודל \textbf{\en{Freemium}}:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{שכבת \en{Free} בסיסית} — סיווג חזית בלבד (ללא \en{Context Agent}), עד \en{5} התראות ביום. מטרתה אימוץ והפצה אורגנית.
+  \item \textbf{מנוי הורה בתשלום (\en{Premium})} — סוכן ההקשר המלא, התראות חכמות עם הסבר וציטוט, \en{OCR} לצילומי מסך, דשבורד הורה, היסטוריה והפניה למשאבי-סיוע.
+\end{itemize}
+
+\subsection*{ניתוח \en{3} תרחישי תמחור}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{2.4cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{2.4cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{תרחיש} & \textbf{מחיר חודשי} & \textbf{מיקום תחרותי} & \textbf{משתמשים שנה 1} & \textbf{הכנסה שנתית} \\
+\hline
+\endhead
+
+\en{A} — חודר אגרסיבי & ₪\en{19.90} ($\approx$\en{\$5.50}) & זול מ-\en{Keepers}, מתחת ל-\en{Canopy} & $\sim$\en{8,000} & ₪\en{1.91M} \\
+\hline
+\rowcolor{ltgray}
+\en{B} — \textbf{מומלץ} & \textbf{₪\en{29.90}} ($\approx$\en{\$8.30}) & תואם \en{Bosco}, פרמיה מעל \en{Keepers} & $\sim$\en{5,000} & \textbf{₪\en{1.79M}} \\
+\hline
+\en{C} — פרמיום & ₪\en{39.90} & יקר מ-\en{Canopy} ו-\en{Bosco} & $\sim$\en{3,500} & ₪\en{1.68M} \\
+\hline
+\end{longtable}
+
+\textbf{הבחירה: תרחיש \en{B} (₪\en{29.90}/חודש).} מקסם הכנסה צפויה תוך מיקום תחרותי בריא — לא להגזים מול מתחרים ישראלים. תרחיש \en{A} מותיר ערך על השולחן; תרחיש \en{C} מסכן נתח שוק.
+
+\subsection*{תרחיש \en{SOM} להמחשה (שנה ראשונה, ₪\en{29.90})}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5.0cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{5.0cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{פרמטר} & \textbf{ערך} & \textbf{הערה} \\
+\hline
+\endhead
+משתמשים משלמים & \en{5,000} & יעד חדירה (סעיף 2) \\ \hline
+\rowcolor{ltgray}
+\en{ARPU} & ₪\en{29.90} / חודש & תמחור מומלץ (תרחיש \en{B}) \\ \hline
+הכנסה חודשית (ברוטו) & ₪\en{149,500} & ₪\en{29.90} $\times$ \en{5,000} \\ \hline
+\rowcolor{ltgray}
+הכנסה שנתית (ברוטו) & ₪\en{1,794,000} & ₪\en{149,500} $\times$ \en{12} \\ \hline
+שולי-תרומה צפויים & $\sim$\en{99\%} & עלות משתנה $\sim$₪\en{0.27}/משתמש (סעיף 6) \\ \hline
+\end{longtable}
+
+% =====================================================================
+% 6. COST STRUCTURE — Updated 2026-05-30 (GPT-4o-mini primary, 7.7× cheaper)
+% =====================================================================
+\section{מבנה עלויות — מודל ענן (\en{GPT-4o-mini})}
+
+\subsection*{הנוסחה}
+\begin{center}
+\textenglish{\textbf{Variable Cost} = users $\times$ calls $\times$ tokens $\times$ price $\times$ multiplier}
+\end{center}
+כאשר \en{agent\_multiplier} $\approx$ \en{2} (תכנון + \en{tool calls} + \en{retries}).
+
+\subsection*{היתרון המבני של הארכיטקטורה שנבחרה}
+
+\textbf{הסיווג בחזית רץ ב-\en{DictaBERT-base} מקומי על \en{CPU}} — עלות-טוקן $\approx$ \en{\$0}. עבור $\sim$\en{85\%} מההודעות אין כל עלות ענן. העלות נוצרת רק מ-\en{15\%} מקרי-גבול שעולים ל-\en{GPT-4o-mini}.\footnote{\en{Shomer.AI Project Proposal}, סעיף \en{13.2}: ``\en{LLM} רק על מקרי גבול (\en{10--20\%} מהתעבורה)''; דרישה לא-פונקציונלית (סעיף \en{11.3}): עלות \en{< \$0.005} לאינטראקציה.}
+
+\subsection*{חישוב מפורט עם נתוני \en{SOM}}
+
+\begin{itemize}[leftmargin=*]
+  \item \en{5,000} משתמשים $\times$ \en{30} הודעות/יום $\times$ \en{30} ימים $\Rightarrow$ $\sim$\en{4.5M} הודעות/חודש
+  \item סיווג מקומי על כל ההודעות: $\sim$\en{\$0}
+  \item \en{15\%} ל-\en{Context Agent}: $\sim$\en{675K} קריאות/חודש
+  \item \en{1,000} טוקנים/קריאה $\times$ \en{multiplier 2}
+  \item מודל: \textbf{\en{GPT-4o-mini}} (\en{\$0.15} קלט / \en{\$0.60} פלט ל-\en{1M})\footnote{\en{OpenAI GPT-4o-mini}, מאי \en{2026}. \url{https://openai.com/api/pricing/}}
+\end{itemize}
+
+\textbf{חישוב לקריאה:}
+\begin{center}
+\textenglish{(700 $\times$ \$0.15 + 300 $\times$ \$0.60) / 1M $\times$ 2 = \$0.00057/call}
+\end{center}
+
+\textbf{עלות חודשית כוללת:}
+\begin{center}
+\textenglish{675,000 $\times$ \$0.00057 $\approx$ \$385/month} $\approx$ \textbf{₪\en{1,386}/חודש}
+\end{center}
+
+\textbf{עלות לאינטראקציה (מפוזרת על כל \en{4.5M}):} $\sim$\en{\$0.0000855} $\approx$ ₪\en{0.0003} — \textbf{פי \en{58} מתחת ליעד \en{\$0.005}}.
+
+\subsection*{השוואה: \en{GPT-4o-mini} מול \en{Haiku 4.5} (\en{fallback})}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4.5cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{מודל} & \textbf{עלות/קריאה} & \textbf{חודשי \en{SOM}} & \textbf{שנתי \en{SOM}} \\
+\hline
+\endhead
+\textbf{\en{GPT-4o-mini}} (\en{primary}) & \en{\$0.00057} & \textbf{\en{\$385}} (₪\en{1,386}) & \en{\$4,620} (₪\en{16,632}) \\ \hline
+\rowcolor{ltgray}
+\en{Claude Haiku 4.5} (\en{fallback}) & \en{\$0.0044} & \en{\$2,970} (₪\en{10,692}) & \en{\$35,640} (₪\en{128,304}) \\ \hline
+\end{longtable}
+
+\textbf{אסטרטגיית \en{test-cheap-first}:} מתחילים ב-\en{GPT-4o-mini}; אם מפגש 8 יראה שזה לא מספיק — עוברים ל-\en{Haiku}, ועדיין מתחת לתקציב.
+
+\subsection*{עלויות תשתית קבועות}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{6.0cm}|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{5.0cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{פריט} & \textbf{עלות חודשית} & \textbf{הערה} \\
+\hline
+\endhead
+שרת ענן בסיסי (\en{FastAPI + DictaBERT}) & ₪\en{200} ($\sim$\en{\$55}) & \en{DigitalOcean/Hetzner}, \en{4 vCPU + 8GB} \\ \hline
+\rowcolor{ltgray}
+\en{FCM} (\en{push notifications}) & ₪\en{0} & חינם ל-\en{5K} משתמשים \\ \hline
+אחסון לוגים (\en{Audit Log}) & ₪\en{50} & \en{SQLite} + גיבוי \en{S3} \\ \hline
+\rowcolor{ltgray}
+ניטור + תקשורת & ₪\en{150} & \en{Sentry / Better Stack} \\ \hline
+\textbf{סה"כ קבוע} & \textbf{$\sim$₪\en{400}/חודש} & \\ \hline
+\end{longtable}
+
+\subsection*{עלות סופית למשתמש ב-\en{SOM}}
+
+\begin{center}
+\begin{tabular}{rl}
+עלות משתנה: & ₪\en{1,386} / \en{5,000} = ₪\en{0.28}/משתמש/חודש \\
+עלות קבועה: & ₪\en{400} / \en{5,000} = ₪\en{0.08}/משתמש/חודש \\
+\hline
+\textbf{סה"כ עלות:} & \textbf{$\sim$₪\en{0.36}/משתמש/חודש} \\
+\end{tabular}
+\end{center}
+
+\textbf{שולי-תרומה (\en{Contribution Margin}):} \en{ARPU} (₪\en{29.90}) $-$ עלות (₪\en{0.36}) = \textbf{₪\en{29.54}/משתמש = \en{98.8\%} \en{margin}}.
+
+% =====================================================================
+% 7. LOCAL SERVER ALTERNATIVE — NEW 2026-05-30
+% =====================================================================
+\section{אלטרנטיבה: שרת מקומי (\en{\$50K})}
+
+עבור גדילה משמעותית או דרישות פרטיות מוגברות (בתי ספר, \en{B2B}), קיימת אלטרנטיבה: שרת חזק מקומי שמריץ גם את ה-\en{Context Agent} \textbf{מקומית} (\en{DictaLM 2.0} דרך \en{Ollama} במקום \en{GPT-4o-mini}).
+
+\subsection*{תצורת חומרה מוצעת}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{6.5cm}|>{\raggedright\arraybackslash}p{3.0cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{רכיב} & \textbf{מפרט} & \textbf{עלות (\en{USD})} \\
+\hline
+\endhead
+\en{GPU} & \en{NVIDIA H100 80GB} (או \en{2}$\times$\en{A100}) & \en{\$30,000} \\ \hline
+\rowcolor{ltgray}
+\en{CPU} & \en{AMD Threadripper / Xeon} (\en{32 cores}) & \en{\$4,000} \\ \hline
+\en{RAM} & \en{256GB ECC} & \en{\$2,500} \\ \hline
+\rowcolor{ltgray}
+\en{Storage} & \en{4TB NVMe} + \en{16TB HDD} & \en{\$2,500} \\ \hline
+מארז + ספק כוח \en{1600W} & \en{Server-grade} & \en{\$2,000} \\ \hline
+\rowcolor{ltgray}
+\en{Networking + Cooling} & רשת \en{10G} + קירור & \en{\$3,000} \\ \hline
+תוכנה + \en{leftover} & \en{Ubuntu} + \en{spare parts} & \en{\$6,000} \\ \hline
+\textbf{סה"כ חד-פעמי} & & \textbf{$\sim$\en{\$50,000}} (₪\en{180,000}) \\ \hline
+\end{longtable}
+
+\subsection*{עלויות תפעול חודשיות}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4.0cm}|>{\raggedright\arraybackslash}p{5.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{פריט} & \textbf{חישוב} & \textbf{עלות חודשית} \\
+\hline
+\endhead
+פחת חומרה & \en{\$50K} $/$ \en{60} חודש (\en{5} שנים) & \en{\$833} (₪\en{3,000}) \\ \hline
+\rowcolor{ltgray}
+חשמל — שרת & \en{1kW} ממוצע $\times$ \en{720h} $\times$ \en{\$0.15/kWh} & \en{\$108} (₪\en{389}) \\ \hline
+חשמל — קירור & \en{30\%} מהשרת = \en{300W} $\times$ \en{720} & \en{\$32} (₪\en{115}) \\ \hline
+\rowcolor{ltgray}
+תחזוקה + חלפים & $\sim$\en{\$50}/חודש & \en{\$50} (₪\en{180}) \\ \hline
+אינטרנט \en{business-grade} & סיב \en{1Gbps} + \en{IP} סטטי & \en{\$80} (₪\en{288}) \\ \hline
+\rowcolor{ltgray}
+\textbf{סה"כ חודשי} & & \textbf{$\sim$\en{\$1,103}} (₪\en{3,972}) \\ \hline
+\end{longtable}
+
+\subsection*{קיבולת — כמה משתמשים שרת אחד יכול לשרת?}
+
+\begin{itemize}[leftmargin=*]
+  \item \en{DictaBERT} (\en{frontline}): \en{CPU-bound}, מסוגל ל-\en{5,000}+ \en{req/sec} — מתאים ל-\en{100K}+ משתמשים
+  \item \en{OCR} (\en{Tesseract}): $\sim$\en{50} תמונות/שנייה — לא צוואר בקבוק
+  \item \en{Context Agent} (\en{DictaLM 2.0} על \en{H100}): $\sim$\en{5-8s}/קריאה $\rightarrow$ \en{8-12 calls/min/GPU}
+  \item \textbf{צוואר הבקבוק האמיתי = ה-\en{Context Agent}.} השרת תוכנן ל-$\sim$\en{10K-15K} משתמשים בנוחות
+\end{itemize}
+
+\subsection*{השוואה: ענן מול שרת מקומי בסקיילים שונים}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.0cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{משתמשים} & \textbf{ענן/חודש} & \textbf{מקומי/חודש} & \textbf{זול} & \textbf{חיסכון שנתי} \\
+\hline
+\endhead
+\en{5,000} & ₪\en{1,386} & ₪\en{3,972} & ענן & ₪\en{31K} ענן \\ \hline
+\rowcolor{ltgray}
+\en{10,000} & ₪\en{2,772} & ₪\en{3,972} & ענן & ₪\en{14K} ענן \\ \hline
+\textbf{\en{13,000} (\en{breakeven})} & \textbf{₪\en{3,604}} & \textbf{₪\en{3,972}} & \textbf{שווה} & $<$₪\en{5K} \\ \hline
+\rowcolor{ltgray}
+\en{20,000} & ₪\en{5,544} & ₪\en{3,972} & \textbf{מקומי} & ₪\en{19K} מקומי \\ \hline
+\en{50,000} & ₪\en{13,860} & ₪\en{3,972} & \textbf{מקומי} & ₪\en{119K} מקומי \\ \hline
+\rowcolor{ltgray}
+\en{100,000} & ₪\en{27,720} & ₪\en{7,944} (\en{2} שרתים) & \textbf{מקומי} & ₪\en{237K} מקומי \\ \hline
+\end{longtable}
+
+\subsection*{נקודת שבירה ו-\en{ROI}}
+
+\textbf{נקודת שבירה:} $\sim$\en{13,000} משתמשים פעילים.
+
+\textbf{\en{ROI} על השקעת \en{\$50K} (₪\en{180K}):}
+\begin{itemize}[leftmargin=*]
+  \item ב-\en{30K} משתמשים: חיסכון ₪\en{50K}/שנה $\rightarrow$ \textbf{\en{payback} $\sim$\en{3.6} שנים}
+  \item ב-\en{50K} משתמשים: חיסכון ₪\en{119K}/שנה $\rightarrow$ \textbf{\en{payback} $\sim$\en{1.5} שנים}
+  \item ב-\en{100K} משתמשים: חיסכון ₪\en{237K}/שנה $\rightarrow$ \textbf{\en{payback} $\sim$\en{9} חודשים}
+\end{itemize}
+
+\subsection*{המלצה אסטרטגית}
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{שנה 1 (\en{0--5K}):} ענן בלבד (\en{GPT-4o-mini})
+  \item \textbf{שנה 2 (\en{5K--13K}):} ענן עיקרי + פיילוט שרת מקומי
+  \item \textbf{שנה 3+ (\en{13K+}):} שרת מקומי ראשי + ענן \en{fallback}
+  \item \textbf{גם בתי ספר / \en{B2B}:} שרת מקומי מההתחלה — ה-\en{USP} של \en{``data stays in Israel''} שווה הרבה
+\end{itemize}
+
+% =====================================================================
+% 8. PROFITABILITY SUMMARY — NEW 2026-05-30
+% =====================================================================
+\section{סיכום רווחיות (\en{Profitability Summary})}
+
+\subsection*{שאלה 1: מה תהיה העלות החודשית של המוצר?}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{4.5cm}|>{\raggedright\arraybackslash}p{4.0cm}|>{\raggedright\arraybackslash}p{2.5cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{\en{Scale}} & \textbf{תשתית} & \textbf{עלות חודשית} & \textbf{למשתמש} \\
+\hline
+\endhead
+\en{SOM} (\en{5K}) & ענן + שרת בסיסי & ₪\en{1,786} & ₪\en{0.36} \\ \hline
+\rowcolor{ltgray}
+\en{10K} & ענן + שרת משודרג & ₪\en{3,200} & ₪\en{0.32} \\ \hline
+\en{30K} & מעבר לשרת מקומי & ₪\en{3,972} (קבוע) & ₪\en{0.13} \\ \hline
+\rowcolor{ltgray}
+\en{100K} & \en{2} שרתים מקומיים & ₪\en{7,944} & ₪\en{0.08} \\ \hline
+\end{longtable}
+
+\subsection*{שאלה 2: כמה לגבות כדי לקבל רווח מקסימלי?}
+
+\textbf{₪\en{29.90}/חודש.} מצדיק:
+\begin{itemize}[leftmargin=*]
+  \item תחרותי: זהה ל-\en{Bosco}, פרמיה מעל \en{Keepers}, מתחת ל-\en{Bark} משפחתי
+  \item מצדיק ערך: פרמיה מעל \en{Canopy} (\en{\$7.99} $\approx$ ₪\en{29}) זניחה ומוצדקת ע"י עברית-\en{first}
+  \item לא יקרים: ב-\en{3} פעמים זול יותר מ-\en{Bark} משפחתי
+\end{itemize}
+
+\subsection*{שאלה 3: ענן או שרת מקומי?}
+
+\begin{center}
+\begin{tabular}{rl}
+שנה 1 (\en{0--13K}): & ענן (\en{GPT-4o-mini}) \\
+שנה 2 (פיילוט): & ענן עיקרי + שרת מקומי בפיילוט \\
+שנה 3+ (\en{13K+}): & שרת מקומי ראשי + ענן \en{fallback} \\
+\end{tabular}
+\end{center}
+
+\subsection*{תרחיש רווח לשנה ראשונה (₪\en{29.90}, \en{5K}, ענן)}
+
+\begin{center}
+\begin{tabular}{rl}
+הכנסה שנתית: & ₪\en{1,794,000} \\
+תשתית (משתנה + קבוע): & $-$₪\en{21,000} \\
+שיווק (\en{40\%}): & $-$₪\en{717,600} \\
+תמיכה (\en{1} איש): & $-$₪\en{180,000} \\
+פיתוח (\en{1 dev}): & $-$₪\en{360,000} \\
+יועצים + שונות: & $-$₪\en{100,000} \\
+\hline
+\textbf{\en{EBITDA} שנה 1:} & \textbf{$\sim$₪\en{415,400}} ($\sim$\en{23\%} \en{margin}) \\
+\end{tabular}
+\end{center}
+
+\textbf{שנה 2 (₪\en{29.90}, \en{15K}, מעבר למקומי):} \en{EBITDA} $\sim$₪\en{2.88M} ($\sim$\en{53\%}) — \textbf{נקודת המעבר לרווחיות בריאה.}
+
+% =====================================================================
+% 9. FINANCIAL RISKS — NEW 2026-05-30
+% =====================================================================
+\section{סיכונים פיננסיים}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4.0cm}|>{\raggedright\arraybackslash}p{1.8cm}|>{\raggedright\arraybackslash}p{1.8cm}|>{\raggedright\arraybackslash}p{6.5cm}|}
+\hline
+\rowcolor{hdr}
+\textbf{סיכון} & \textbf{סבירות} & \textbf{חומרה} & \textbf{מיטיגציה} \\
+\hline
+\endhead
+מחירי \en{OpenAI} יעלו \en{50\%+} & בינונית & בינונית & החלפה ל-\en{Haiku/Gemini Flash}; בסקייל — מעבר למקומי \\ \hline
+\rowcolor{ltgray}
+\en{conversion} ל-\en{Premium} $<$ \en{20\%} & גבוהה & גבוהה & \en{freemium} אגרסיבי; שיפור \en{UX} של \en{onboarding} \\ \hline
+\en{Churn} מ-\en{FP rate} & בינונית & קריטית & ניטור \en{FP} ב-\en{production}; אם גבוה — מעבר ל-\en{Haiku} \\ \hline
+\rowcolor{ltgray}
+תחרות חדשה תיכנס לעברית & בינונית & גבוהה & הגנה ע"י איכות עליונה — הסיכון העיקרי \en{Keepers/Bosco} \\ \hline
+\en{GDPR} / רגולציה ישראלית & בינונית & גבוהה & \en{retention 7} ימים; ללא \en{PII} בענן \\ \hline
+\rowcolor{ltgray}
+השקעת \en{\$50K} לא חוזרת & נמוכה & בינונית & החלטה דחויה עד \en{13K+} משתמשים בטוחים \\ \hline
+\end{longtable}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.3cm}
+\begin{center}
+\small \textit{מסמך זה הוא טיוטה למפגש \en{4} (\en{31/05/2026}). עודכן \en{2026-05-30}: תמחור ירד מ-₪\en{40} ל-₪\en{29.90}; \en{\S6} שוכתב עם \en{GPT-4o-mini} (זול פי \en{7.7} מ-\en{Haiku}); \en{\S7-9} חדשים: שרת מקומי, רווחיות, סיכונים. מספרים המסומנים \en{[}למקור\en{]} דורשים השלמה לפני הגרסה הסופית.}
+\end{center}
+
+\end{document}

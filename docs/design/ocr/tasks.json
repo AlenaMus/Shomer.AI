@@ -1,0 +1,307 @@
+{
+  "module": "ocr",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.2",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "OCR-IF-01",
+      "title": "Define ImageProcessor Protocol and OcrResult output schema",
+      "description": "Create server/app/image_backends/base.py with the @runtime_checkable ImageProcessor Protocol (async process() method) and server/app/image_backends/schemas.py with the frozen OcrResult dataclass. This is the foundational interface seam that every OCR adapter must implement and that all callers depend on.",
+      "module": "ocr",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": [],
+      "acceptance_criteria": [
+        "ImageProcessor Protocol exists in server/app/image_backends/base.py with @runtime_checkable decorator",
+        "OcrResult dataclass is frozen and contains all fields: extracted_text, confidence, lang_detected, bbox_count, image_unreadable, backend, strategy",
+        "isinstance(concrete_backend, ImageProcessor) returns True at runtime",
+        "schemas.py imports cleanly with no circular dependencies"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": ["Latency p99 < 2s"],
+      "related_files": [
+        "server/app/image_backends/base.py",
+        "server/app/image_backends/schemas.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "OCR-CFG-01",
+      "title": "Define OcrSettings pydantic-settings model with all env vars",
+      "description": "Create or extend server/app/config.py with OcrSettings(BaseSettings) capturing all Tesseract configuration: TESSERACT_CMD, TESSERACT_LANG, OCR_DPI, OCR_THRESHOLD_BLOCK_SIZE, OCR_THRESHOLD_C, OCR_MIN_CONFIDENCE, OCR_MAX_IMAGE_BYTES. Settings must load from .env and have production-safe defaults.",
+      "module": "ocr",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["OCR-IF-01"],
+      "acceptance_criteria": [
+        "OcrSettings class exists with all 7 env vars documented in the LLD",
+        "Defaults are production-safe (tesseract_lang='heb+eng', ocr_dpi=300, ocr_threshold_block_size=31)",
+        "Loading from an empty .env produces valid defaults with no exceptions",
+        "TESSERACT_CMD accepts None to use PATH lookup"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/config.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "OCR-LOG-01",
+      "title": "Wire structlog bound logger shomer.ocr with required fields",
+      "description": "Configure the module-level structlog logger in server/app/image_backends/ocr.py tagged 'shomer.ocr'. Every OCR invocation must emit at minimum: trace_id (inherited from context var), module='ocr', event, latency_ms. Add the three documented example log events: ocr_success, ocr_no_text, ocr_tesseract_unavailable.",
+      "module": "ocr",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["OCR-IF-01"],
+      "acceptance_criteria": [
+        "Logger is obtained with structlog.get_logger('shomer.ocr')",
+        "ocr_success event emits: trace_id, module, event, latency_ms, bbox_count, confidence, lang_detected, text_length",
+        "ocr_no_text event emits: trace_id, module, event, latency_ms, bbox_count=0, image_unreadable=true",
+        "ocr_tesseract_unavailable event emits: trace_id, error, fallback, tesseract_cmd"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/image_backends/ocr.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["logging"]
+    },
+    {
+      "id": "OCR-MET-01",
+      "title": "Define and register Prometheus metrics for the OCR module",
+      "description": "Register all OCR Prometheus metrics using the shared REGISTRY from server/app/metrics.py: ocr_requests_total (Counter), ocr_latency_seconds (Histogram), ocr_confidence_score (Histogram), ocr_bbox_count (Histogram), ocr_image_unreadable_total (Counter), ocr_text_length_chars (Histogram). The latency histogram must prove p99 < 2s per PRD §8.2.",
+      "module": "ocr",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["OCR-IF-01"],
+      "acceptance_criteria": [
+        "All 6 metrics registered against the shared REGISTRY",
+        "ocr_latency_seconds histogram has buckets covering 0.1s to 3.0s range",
+        "ocr_requests_total has label outcome={success, no_text, error}",
+        "After one OCR call, GET /metrics returns all 6 metric families in Prometheus text format"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": ["Latency p99 < 2s"],
+      "related_files": [
+        "server/app/image_backends/ocr.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "OCR-PREPROC-01",
+      "title": "Implement ImagePreprocessor static class with resize, grayscale, and adaptive threshold",
+      "description": "Implement the ImagePreprocessor helper class inside server/app/image_backends/ocr.py with a static run() method that performs: resize to TARGET_HEIGHT=1200px maintaining aspect ratio, convert to grayscale, apply cv2.adaptiveThreshold(ADAPTIVE_THRESH_GAUSSIAN_C, block_size=31, C=10). This class is stateless and has no external I/O.",
+      "module": "ocr",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["OCR-IF-01", "OCR-CFG-01"],
+      "acceptance_criteria": [
+        "ImagePreprocessor.run() accepts a PIL.Image and returns a PIL.Image",
+        "Output image is grayscale (mode 'L') and has adaptive threshold applied",
+        "Images taller than TARGET_HEIGHT are resized; images shorter than MIN_HEIGHT=400 are not upscaled",
+        "Input a 1920x1080 JPEG; output is 1200px height with aspect ratio preserved",
+        "No PIL or cv2 GUI windows are opened (headless operation)"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": ["Latency p99 < 2s"],
+      "related_files": [
+        "server/app/image_backends/ocr.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["ocr", "preprocessing"]
+    },
+    {
+      "id": "OCR-TESS-01",
+      "title": "Implement TesseractRunner wrapper with heb+eng config and confidence extraction",
+      "description": "Implement TesseractRunner class in server/app/image_backends/ocr.py. It must call pytesseract.image_to_data with config '--psm 6 -c preserve_interword_spaces=1' and lang='heb+eng', filter words with confidence >= 0, compute mean word confidence, detect scripts in extracted text, and return (text, mean_confidence, lang_list, bbox_count).",
+      "module": "ocr",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["OCR-IF-01", "OCR-CFG-01", "OCR-PREPROC-01"],
+      "acceptance_criteria": [
+        "TesseractRunner.run() returns a 4-tuple: (str, float, list[str], int)",
+        "Returns ('', 0.0, [], 0) when Tesseract finds no text bounding boxes",
+        "mean_confidence is in range [0.0, 1.0]",
+        "lang_detected contains 'heb' when Hebrew script characters are present",
+        "TesseractNotFoundError is propagated (not swallowed) when binary is missing"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": ["Latency p99 < 2s"],
+      "related_files": [
+        "server/app/image_backends/ocr.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["ocr", "tesseract"]
+    },
+    {
+      "id": "OCR-BACKEND-01",
+      "title": "Refactor OcrBackend to implement ImageProcessor Protocol (extraction-only)",
+      "description": "Refactor server/app/image_backends/ocr.py: OcrBackend must implement the ImageProcessor Protocol and call only ImagePreprocessor then TesseractRunner. Remove the direct call to classify_text() that currently exists. The backend returns OcrResult only; the strategy router is responsible for passing extracted text to the classifier. This decoupling is required for isolated testing.",
+      "module": "ocr",
+      "type": "refactor",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["OCR-IF-01", "OCR-PREPROC-01", "OCR-TESS-01", "OCR-CFG-01"],
+      "acceptance_criteria": [
+        "OcrBackend implements ImageProcessor Protocol (passes isinstance check)",
+        "OcrBackend.process() returns OcrResult with all 7 fields populated",
+        "OcrBackend imports zero symbols from classifier.py or any other server module",
+        "strategy router (strategies.py) remains the integration point between OCR and classifier",
+        "Existing integration tests for /classify-image still pass after refactor"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": ["Latency p99 < 2s"],
+      "related_files": [
+        "server/app/image_backends/ocr.py",
+        "server/app/image_backends/strategies.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["ocr", "refactor"]
+    },
+    {
+      "id": "OCR-FAIL-01",
+      "title": "Implement OCR failure modes and fallback signal propagation",
+      "description": "Implement all failure modes documented in LLD §8: TesseractNotFoundError caught in strategies.py._try_ocr(), PIL.UnidentifiedImageError propagated as HTTP 422, empty-text OcrResult with image_unreadable=True, and MemoryError during preprocessing caught and returned as OcrResult(image_unreadable=True, error='preprocessing_oom'). Each failure mode must log the appropriate structured event.",
+      "module": "ocr",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["OCR-BACKEND-01", "OCR-LOG-01", "OCR-MET-01"],
+      "acceptance_criteria": [
+        "TesseractNotFoundError in strategies.py._try_ocr() returns None so Pipeline falls through to VisionBackend",
+        "PIL.UnidentifiedImageError causes HTTP 422 response with {detail: 'image_unreadable'}",
+        "bbox_count==0 sets image_unreadable=True in OcrResult",
+        "MemoryError during preprocessing returns OcrResult(image_unreadable=True, error='preprocessing_oom')",
+        "ocr_image_unreadable_total counter increments on every image_unreadable=True result"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/image_backends/ocr.py",
+        "server/app/image_backends/strategies.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["fallback", "error-handling"]
+    },
+    {
+      "id": "OCR-CT-01",
+      "title": "Write ImageProcessor Protocol contract test suite",
+      "description": "Write tests/contracts/test_image_processor_contract.py that asserts every ImageProcessor adapter satisfies the Protocol contract: process() is async, accepts (bytes, str|None), returns an OcrResult with all required fields, never raises on empty bytes input, and sets image_unreadable=True when no text is found. This suite must be parameterized so new backends can be registered automatically.",
+      "module": "ocr",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["OCR-IF-01", "OCR-BACKEND-01"],
+      "acceptance_criteria": [
+        "Contract test file exists at tests/contracts/test_image_processor_contract.py",
+        "Tests are parameterized with a list of concrete adapter classes",
+        "OcrBackend passes all contract tests",
+        "A minimal stub ImageProcessor implementation also passes all contract tests",
+        "Running pytest on the contract file passes with zero failures"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/contracts/test_image_processor_contract.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "OCR-UT-01",
+      "title": "Unit tests for OcrBackend adapter",
+      "description": "Write unit tests in server/tests/test_ocr.py covering: happy path with a synthetic chat screenshot, empty image returns image_unreadable=True, OcrResult fields are correctly populated, ImagePreprocessor produces a grayscale thresholded image, and TesseractRunner returns correct structure. Use fixture images from a tests/fixtures/ folder rather than calling a real Tesseract binary.",
+      "module": "ocr",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["OCR-BACKEND-01", "OCR-FAIL-01"],
+      "acceptance_criteria": [
+        "Tests cover: success path, no-text path, bad MIME type path, oversized image path",
+        "ImagePreprocessor unit test verifies output image is mode 'L' (grayscale)",
+        "TesseractRunner is mocked; tests do not require Tesseract binary to be installed",
+        "All tests pass with pytest server/tests/test_ocr.py",
+        "Test coverage for ocr.py >= 80%"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/test_ocr.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "OCR-IT-01",
+      "title": "Integration test OCR wired into FastAPI /classify-image endpoint",
+      "description": "Write integration test in server/tests/test_ocr_integration.py that POSTs a real JPEG chat screenshot to /classify-image and verifies the OCR result flows through to a ClassifyImageResponse. The test uses a local Tesseract installation and asserts that extracted_text is non-empty and category is populated. Also test the unreadable image path returns image_unreadable=True.",
+      "module": "ocr",
+      "type": "test",
+      "priority": "P2",
+      "estimate_hours": 3,
+      "depends_on": ["OCR-BACKEND-01", "OCR-FAIL-01", "CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "Test sends a real Hebrew chat screenshot JPEG and receives a 200 ClassifyImageResponse",
+        "Response contains extracted_text with Hebrew characters",
+        "Test for a solid-color JPEG returns image_unreadable=true in response",
+        "Test for a JPEG > 10MB returns HTTP 413",
+        "Tests are skippable when TESSERACT_CMD is not set (for CI without Tesseract)"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": ["Latency p99 < 2s"],
+      "related_files": [
+        "server/tests/test_ocr_integration.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "OCR-DOC-01",
+      "title": "Write README for the OCR module under server/app/image_backends/",
+      "description": "Write server/app/image_backends/README.md summarizing the LLD for in-code reference: module purpose, ImageProcessor Protocol contract, OcrResult schema, preprocessing pipeline diagram, Tesseract installation instructions for Windows (winget) and WSL2 (apt), env var reference, and known failure modes. Keep it under 200 lines.",
+      "module": "ocr",
+      "type": "docs",
+      "priority": "P2",
+      "estimate_hours": 1,
+      "depends_on": ["OCR-BACKEND-01"],
+      "acceptance_criteria": [
+        "README exists at server/app/image_backends/README.md",
+        "Documents Tesseract installation for both Windows and WSL2",
+        "Lists all 7 OcrSettings env vars with defaults",
+        "Includes the image_unreadable fallback decision table from the LLD"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/image_backends/README.md"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["docs"]
+    }
+  ]
+}

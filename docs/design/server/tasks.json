@@ -1,0 +1,525 @@
+{
+  "module": "server",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §7, §8, §9, §10",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "SERVER-IF-01",
+      "title": "Define AuditLog Protocol and shared Prometheus REGISTRY module",
+      "description": "Create server/app/audit_log/protocol.py with AuditLog Protocol (init, write_audit, is_writable, close async methods). Create server/app/metrics.py with a single shared CollectorRegistry instance and metrics_app ASGI app. Every module must import REGISTRY from this file rather than using the default registry. This prevents duplicate metric registration errors when modules are imported.",
+      "module": "server",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": [],
+      "acceptance_criteria": [
+        "AuditLog Protocol exists in server/app/audit_log/protocol.py",
+        "server/app/metrics.py exports REGISTRY = CollectorRegistry() and metrics_app",
+        "At least one module (gatekeeper) imports REGISTRY from metrics.py without errors",
+        "No duplicate metric registration error when all modules are imported together"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/audit_log/protocol.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["protocol", "interface", "metrics"]
+    },
+    {
+      "id": "SERVER-CFG-01",
+      "title": "Define ServerSettings root pydantic-settings model composing all sub-settings",
+      "description": "Create server/app/settings.py with ServerSettings(BaseSettings) as the root config: app_title, app_version, debug, audit_db_path, audit_log_dir, slang_db_path, ollama_url, model_name, vision_model_name. ServerSettings does not duplicate sub-module settings; each module loads its own Settings from env. Create server/.env.example with all documented env vars from LLD §9.2.",
+      "module": "server",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["SERVER-IF-01"],
+      "acceptance_criteria": [
+        "ServerSettings exists with all 8 root-level env vars",
+        "server/.env.example contains all documented env vars with placeholder values",
+        "Loading ServerSettings from empty .env produces valid defaults",
+        ".env.example is committed to git; .env is gitignored"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/settings.py",
+        "server/.env.example"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "SERVER-LOG-01",
+      "title": "Configure shared structlog pipeline in main.py with contextvars and JSON renderer",
+      "description": "Configure structlog in server/app/main.py at import time (before other imports) with the documented processor chain: merge_contextvars, add_log_level, add_logger_name, TimeStamper(fmt='iso'), JSONRenderer. This shared pipeline enables all modules to use structlog.get_logger() and automatically inherit trace_id from the context var set by TraceIdMiddleware.",
+      "module": "server",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["SERVER-IF-01", "GK-LOG-01"],
+      "acceptance_criteria": [
+        "structlog.configure() is called once in main.py before any module import",
+        "Any module calling structlog.get_logger('shomer.x').info('test') produces JSON output",
+        "trace_id from TraceIdMiddleware appears in all log lines for a request",
+        "LOG_FORMAT=console produces human-readable output in development mode"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["logging"]
+    },
+    {
+      "id": "SERVER-MET-01",
+      "title": "Mount shared /metrics endpoint and document NFR ownership matrix",
+      "description": "Wire metrics_app from server/app/metrics.py onto the FastAPI app at /metrics. Verify that all module metrics (gatekeeper, classifier, ocr, triage, context_agent, alerts) appear at /metrics endpoint. Create a tests/integration/test_metrics_endpoint.py that GETs /metrics and asserts the Prometheus text format contains all expected metric family names.",
+      "module": "server",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["SERVER-IF-01", "GK-MET-01", "CLASSIFIER-MET-01", "OCR-MET-01", "TRIAGE-MET-01", "CTX-MET-01", "ALERTS-MET-01"],
+      "acceptance_criteria": [
+        "GET /metrics returns 200 with Content-Type text/plain",
+        "Response includes: shomer_http_requests_total, classifier_requests_total, ocr_requests_total, triage_decisions_total, context_agent_requests_total, alert_send_success_total",
+        "No duplicate metric name errors in server log on startup",
+        "test_metrics_endpoint.py passes against TestClient"
+      ],
+      "related_prd_section": "§9",
+      "related_nfr": ["Frontline latency p99 < 100ms", "Context Agent latency p99 < 3s"],
+      "related_files": [
+        "server/app/main.py",
+        "server/app/metrics.py",
+        "server/tests/integration/test_metrics_endpoint.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "SERVER-LIFESPAN-01",
+      "title": "Implement lifespan() async context manager with correct module initialization order",
+      "description": "Implement the lifespan() context manager in server/app/main.py following the strict initialization order: AuditLog -> SlangLexicon -> Classifier -> OCR -> TriageRouter -> ContextAgent -> Firebase -> NotificationService. Store all singletons on app.state. Implement graceful shutdown: flush retry queue, close HTTP client, close SQLite. Health check gates: /health returns 'ok' only after all modules initialize.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 5,
+      "depends_on": ["SERVER-CFG-01", "SERVER-LOG-01", "CLASSIFIER-IF-01", "OCR-IF-01", "TRIAGE-IF-01", "CTX-IF-01", "ALERTS-IF-01"],
+      "acceptance_criteria": [
+        "lifespan() initializes all 8 singletons in the documented order",
+        "Startup failure in any module propagates and prevents server from starting",
+        "app.state.audit_log, .classifier, .ocr, .triage_router, .context_agent, .notification_service all set after lifespan startup",
+        "Graceful shutdown: retry queue drain is called; HTTP clients are closed",
+        "/health returns {status: 'ok'} only after lifespan completes successfully"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": ["Availability frontline >= 99%"],
+      "related_files": [
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["di", "lifespan"]
+    },
+    {
+      "id": "SERVER-DEPS-01",
+      "title": "Implement dependencies.py with FastAPI Depends functions for each module",
+      "description": "Create server/app/dependencies.py with get_triage_router(), get_notification_service(), get_audit_log(), get_classifier(), get_ocr(), get_context_agent() functions that read from request.app.state. Each function returns the Protocol type (not the concrete class). Wire these into the /classify, /classify-image, /health route handlers.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["SERVER-LIFESPAN-01"],
+      "acceptance_criteria": [
+        "All 6 Depends functions exist in server/app/dependencies.py",
+        "Route handler type annotations use Protocol types (e.g., TriageRouter not TriageRouterImpl)",
+        "Test: inject a FakeTriageRouter via app.state.triage_router -> route handler uses the fake",
+        "dependencies.py has no circular imports"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/dependencies.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["di"]
+    },
+    {
+      "id": "SERVER-CLASSIFY-01",
+      "title": "Implement /classify request handler with full module pipeline",
+      "description": "Refactor the /classify endpoint handler in server/app/main.py to use the new module chain: drain retry queue -> classify(text) -> triage.decide() -> if ESCALATE_TO_CA: context_agent.evaluate() -> if alert needed: notification_service.send_alert() -> audit_log.write_audit(). Handle all triage decision paths. Return ClassifyResponse with review_flag when applicable.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 6,
+      "depends_on": ["SERVER-DEPS-01", "TRIAGE-ROUTER-01", "CTX-AGENT-01", "ALERTS-FCM-01"],
+      "acceptance_criteria": [
+        "SILENT path: returns ClassifyResponse with is_offensive=False, no alert sent",
+        "ALERT_DIRECT path: sends alert, returns ClassifyResponse with is_offensive=True",
+        "ESCALATE_TO_CA path: calls context_agent.evaluate(), uses AgentResult.is_real_threat for alert decision",
+        "REVIEW_NEEDED path: sends alert with review_flag=True in response",
+        "audit_log.write_audit() called on every request regardless of outcome"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["endpoint"]
+    },
+    {
+      "id": "SERVER-CLASSIFY-IMAGE-01",
+      "title": "Implement /classify-image request handler with OCR -> classifier pipeline",
+      "description": "Refactor the /classify-image endpoint handler in server/app/main.py: extract bytes from multipart -> ocr.extract_text() -> if image_unreadable: return ClassifyImageResponse(image_unreadable=True) -> else: classify(extracted_text) -> same triage/CA/alert pipeline as /classify. Return ClassifyImageResponse with extracted_text field.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["SERVER-CLASSIFY-01", "OCR-BACKEND-01"],
+      "acceptance_criteria": [
+        "POST /classify-image with readable Hebrew screenshot -> ClassifyImageResponse with extracted_text",
+        "POST /classify-image with unreadable image -> ClassifyImageResponse(image_unreadable=True)",
+        "POST /classify-image > 10MB -> 413 from Gatekeeper (not from the handler)",
+        "extracted_text is passed to the same classify/triage/CA pipeline as /classify"
+      ],
+      "related_prd_section": "§8.2",
+      "related_nfr": ["Latency p99 < 2s"],
+      "related_files": [
+        "server/app/main.py"
+      ],
+      "phase": "Phase 2",
+      "meeting": "5",
+      "labels": ["endpoint"]
+    },
+    {
+      "id": "SERVER-HEALTH-01",
+      "title": "Implement /health endpoint with per-module sub-status and liveness/readiness distinction",
+      "description": "Implement /health endpoint in server/app/main.py returning HealthResponse with: overall status (ok/degraded), ollama_reachable, audit_log_writable, alerts sub-status (ok/degraded + queued_alerts count). Support ?probe=liveness (always 200) and ?probe=readiness (200 only if classifier reachable). This endpoint is polled by the Android SDK on startup.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["SERVER-DEPS-01"],
+      "acceptance_criteria": [
+        "GET /health returns {status: 'ok', ollama_reachable: true, audit_log_writable: true, alerts: {status: 'ok'}} when all healthy",
+        "GET /health with queued_alerts > 0 returns {alerts: {status: 'degraded', queued_alerts: N}}",
+        "GET /health?probe=liveness always returns 200",
+        "GET /health?probe=readiness returns 503 when classifier is unreachable",
+        "Response time < 500ms (does not block on slow classifier)"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": ["Availability frontline >= 99%"],
+      "related_files": [
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["endpoint", "health"]
+    },
+    {
+      "id": "SERVER-AUDIT-01",
+      "title": "Implement SQLiteAuditLog writing to audit.db with 7-day retention",
+      "description": "Create server/app/audit_log/sqlite_log.py with SQLiteAuditLog implementing AuditLog Protocol. Create requests and alert_history tables from LLD §5.1 schema. Implement write_audit() for requests table. Implement init() that runs CREATE TABLE IF NOT EXISTS and prunes rows older than 7 days. Non-blocking: write_audit() uses asyncio.to_thread for SQLite calls.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 5,
+      "depends_on": ["SERVER-IF-01", "SERVER-CFG-01"],
+      "acceptance_criteria": [
+        "requests table created with all 17 columns and 2 indexes",
+        "write_audit() inserts one row per classify request",
+        "init() prunes rows where ts < (now - AUDIT_RETENTION_DAYS)",
+        "asyncio.to_thread used for all sqlite3 blocking calls",
+        "is_writable() returns False if SQLite file is on a read-only filesystem"
+      ],
+      "related_prd_section": "§8.5",
+      "related_nfr": ["Audit log 100%"],
+      "related_files": [
+        "server/app/audit_log/sqlite_log.py",
+        "server/app/audit_log/settings.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["database", "sqlite", "audit"]
+    },
+    {
+      "id": "SERVER-PIPELINE-01",
+      "title": "Implement shared HTTP session pool and register it in lifespan()",
+      "description": "Create a single httpx.AsyncClient with limits (max_connections=20, max_keepalive_connections=10) in lifespan() stored as app.state.http_client. OllamaClient and LlmRouter must receive this client as a constructor argument (not create their own). Close the client in lifespan shutdown. This prevents connection pool exhaustion under load.",
+      "module": "server",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["SERVER-LIFESPAN-01"],
+      "acceptance_criteria": [
+        "Single httpx.AsyncClient created in lifespan() and stored on app.state.http_client",
+        "OllamaClient constructor accepts an httpx.AsyncClient argument",
+        "LlmRouter (openai/anthropic) uses the shared client where possible",
+        "aclose() called on http_client in lifespan shutdown",
+        "Load test: 50 concurrent /classify requests without 'connection pool exhausted' error"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "server/app/main.py",
+        "server/app/ollama_client.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["http", "performance"]
+    },
+    {
+      "id": "SERVER-DOCKER-01",
+      "title": "Write Dockerfile and docker-compose.yml for local development with Ollama and Prometheus",
+      "description": "Write server/Dockerfile installing Tesseract OCR with heb+eng language packs. Write docker-compose.yml with services: server (built from Dockerfile), ollama (ollama/ollama:latest), and prometheus+grafana under a 'monitoring' profile. Volume mounts: server/logs/, server/audit.db, server/data/. Include docker-compose.yml instructions for Firebase service account mount.",
+      "module": "server",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["SERVER-CFG-01"],
+      "acceptance_criteria": [
+        "docker build -f server/Dockerfile . succeeds without errors",
+        "docker-compose up starts server on port 8000 and ollama on port 11434",
+        "GET http://localhost:8000/health returns {status: 'ok'} after compose up",
+        "Volume mounts persist audit.db and logs/ between container restarts",
+        "docker-compose --profile monitoring up starts prometheus on port 9090"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/Dockerfile",
+        "docker-compose.yml"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["infra", "docker"]
+    },
+    {
+      "id": "SERVER-FAIL-01",
+      "title": "Implement server graceful degradation: all module failures return review_needed not 500",
+      "description": "Implement the graceful degradation contract from LLD §8: when classifier fails -> REVIEW_NEEDED path (not HTTP 500); when OCR fails -> image_unreadable response; when triage raises -> REVIEW_NEEDED; when CA fails -> frontline-only+review_flag; when FCM fails -> queued. The server NEVER returns 500 to clients for internal module failures that have fallbacks. Implement global exception handler for unhandled exceptions.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["SERVER-CLASSIFY-01", "CLASSIFIER-FAIL-01", "OCR-FAIL-01", "TRIAGE-FAIL-01", "CTX-FAIL-01", "ALERTS-FAIL-01"],
+      "acceptance_criteria": [
+        "Mocked classifier failure -> /classify returns 200 with is_offensive=True, review_flag=True (not 500)",
+        "Mocked Tesseract failure -> /classify-image returns 200 with image_unreadable=True",
+        "Mocked CA timeout -> /classify returns 200 with review_flag=True in context-aware mode",
+        "Mocked FCM failure -> /classify returns 200 (alert queued); /health shows degraded",
+        "FastAPI global exception handler catches unhandled exceptions and returns 500 with trace_id"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": ["Availability frontline >= 99%"],
+      "related_files": [
+        "server/app/main.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["fallback", "error-handling"]
+    },
+    {
+      "id": "SERVER-CT-01",
+      "title": "Write server-level contract tests verifying all modules are injectable via Depends",
+      "description": "Write server/tests/contracts/test_server_contracts.py that verifies the FastAPI Depends injection contract: each route handler can accept a fake implementation of each module Protocol via override of app.state. Test that /classify, /classify-image, and /health work correctly with fake implementations of all 6 module Protocols.",
+      "module": "server",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["SERVER-DEPS-01", "SERVER-CLASSIFY-01"],
+      "acceptance_criteria": [
+        "All 6 module Protocols can be replaced via app.state in tests without monkey-patching",
+        "FakeTriageRouter injected -> /classify returns correct response based on fake decision",
+        "FakeNotificationService injected -> verify send_alert() was called on alert paths",
+        "FakeAuditLog injected -> verify write_audit() was called with correct fields"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/contracts/test_server_contracts.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "SERVER-UT-01",
+      "title": "Unit tests for server route handlers with all module Protocols mocked",
+      "description": "Write unit tests in server/tests/test_routes.py using FastAPI TestClient with all modules faked. Cover: /classify text with all 4 triage decisions, /classify-image with readable and unreadable image, /health ok and degraded, /model/info returns correct schema. No real Ollama, Tesseract, or LLM calls.",
+      "module": "server",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 5,
+      "depends_on": ["SERVER-CLASSIFY-01", "SERVER-CLASSIFY-IMAGE-01", "SERVER-HEALTH-01"],
+      "acceptance_criteria": [
+        "SILENT triage decision -> /classify returns is_offensive=False, no alert in FakeNotificationService",
+        "ALERT_DIRECT triage decision -> FakeNotificationService.send_alert() called once",
+        "ESCALATE_TO_CA decision -> FakeContextAgent.evaluate() called once",
+        "/classify-image with image_unreadable OcrResult -> ClassifyImageResponse(image_unreadable=True)",
+        "/health with FakeNotificationService.health_status()={'degraded'} -> {status: 'degraded'}"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/test_routes.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "SERVER-IT-01",
+      "title": "Integration tests for full /classify pipeline including audit log and rate limit",
+      "description": "Write server/tests/integration/ tests covering: test_classify_latency.py (1000 requests, assert p99 < 100ms with real DictaBERT); test_audit_completeness.py (N requests -> N JSONL rows written); test_ab_switch.py (CONTEXT_AGENT_ENABLED=false -> zero CA calls); test_rate_limit.py (>100 req/min -> 429); test_fallback_chain.py (GPT-4o-mini down -> Haiku -> frontline-only). Require GK-IF-01 for rate limit test.",
+      "module": "server",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 8,
+      "depends_on": ["SERVER-CLASSIFY-01", "SERVER-AUDIT-01", "GK-RATELIMIT-01"],
+      "acceptance_criteria": [
+        "test_audit_completeness.py: 10 /classify requests -> 10 rows in audit.db requests table",
+        "test_ab_switch.py: CONTEXT_AGENT_ENABLED=false, 10 borderline requests -> 0 agent_traces rows",
+        "test_rate_limit.py: 101 requests in 1 minute -> 101st returns 429",
+        "test_fallback_chain.py: GPT-4o-mini mocked to fail -> Haiku called -> agent_traces.model_used='haiku-4.5'",
+        "test_e2e_latency.py: 100 /classify requests with real (fast mock) classifier, assert p99 X-Response-Time < 5s"
+      ],
+      "related_prd_section": "§9",
+      "related_nfr": ["Frontline latency p99 < 100ms", "e2e latency p99 < 5s"],
+      "related_files": [
+        "server/tests/integration/test_audit_completeness.py",
+        "server/tests/integration/test_ab_switch.py",
+        "server/tests/integration/test_rate_limit.py",
+        "server/tests/integration/test_fallback_chain.py",
+        "server/tests/integration/test_e2e_latency.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "7",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "SERVER-DOC-01",
+      "title": "Write server README documenting startup, env vars, module migration plan, and Prometheus setup",
+      "description": "Write server/README.md (update existing) documenting: startup order, all env vars organized by module, legacy file migration plan (which old files will be replaced by which new modules), Prometheus scrape config for docker-compose, Docker deployment, and WSL2 training notes. Include the NFR ownership matrix from the LLD.",
+      "module": "server",
+      "type": "docs",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["SERVER-LIFESPAN-01"],
+      "acceptance_criteria": [
+        "README lists all env vars organized by module with defaults",
+        "Migration plan table shows which legacy file each new module replaces",
+        "Prometheus scrape config snippet for scraping localhost:8000/metrics is included",
+        "NFR ownership matrix from LLD §6c is included",
+        "WSL2 training steps reference the training/ directory"
+      ],
+      "related_prd_section": "§7",
+      "related_nfr": [],
+      "related_files": [
+        "server/README.md"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["docs"]
+    },
+    {
+      "id": "SERVER-DEV-CLI-01",
+      "title": "Python dev client at scripts/dev_client.py (HTTP debug tool, no Kotlin toolchain required)",
+      "description": "Create scripts/dev_client.py — a Python httpx-based CLI that hits the FastAPI server directly (no SDK dependency). Subcommands: classify, classify-image, health, info, demo, replay. Purpose: quick server-side debugging that does not require running the Kotlin :sdk-cli, useful when iterating on the server during Phase 1–7. Also serves as a reference client for any future TypeScript SDK port. The replay subcommand reads an audit_log trace_id, re-issues the original request, and diffs the new vs historical output (regression test).",
+      "module": "server",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["SERVER-CLASSIFY-01", "SERVER-HEALTH-01"],
+      "acceptance_criteria": [
+        "python scripts/dev_client.py --help prints subcommands: classify, classify-image, health, info, demo, replay",
+        "classify subcommand POSTs to /classify and pretty-prints result with rich.Table",
+        "classify-image subcommand uploads multipart form-data and prints extracted_text + classification",
+        "demo subcommand runs scripts/golden_inputs.jsonl through the server and prints PASS/FAIL summary (must match Kotlin CLI demo structurally for parity testing)",
+        "replay <trace_id> reads server/audit.db via the AuditStore Protocol, finds the row, re-issues the same input, diffs the new vs historical output",
+        "All subcommands honor --server URL and --json output flags",
+        "Module is importable as a library (from scripts.dev_client import classify) for pytest fixtures"
+      ],
+      "related_prd_section": "§8.5, §8.6",
+      "related_nfr": [],
+      "related_files": [
+        "scripts/dev_client.py",
+        "scripts/golden_inputs.jsonl",
+        "scripts/README.md"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["devtool", "cli", "python", "debug"]
+    },
+    {
+      "id": "SERVER-DEV-INSPECT-01",
+      "title": "Audit log inspector at scripts/inspect_audit.py (SQLite query + pretty-print)",
+      "description": "Create scripts/inspect_audit.py — a SQLite-aware CLI that reads server/audit.db read-only and exposes investigation subcommands. Used during dev to verify the audit_log module is recording correctly, during evaluation prep to slice data for Meeting 8, and during debugging to trace a single request end-to-end. Subcommands: tail (last N classifications), find <trace_id> (full trace including agent_traces + alerts), agent-trace <trace_id> (just the Context Agent reasoning), stats (rollup by triage_decision and label per hour), slice --child_id X --since DATE, export --format csv|jsonl (consumable by Meeting 8 evaluation harness). Read-only — never mutates the DB. Honors AUDIT_DB_PATH env var.",
+      "module": "server",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["AUDIT-SCHEMA-01"],
+      "acceptance_criteria": [
+        "tail -n 10 prints last 10 classifications with all key fields as a rich.Table",
+        "find <trace_id> joins classifications + agent_traces + alerts and prints the full audit trail",
+        "stats --since YYYY-MM-DD prints a rollup table: triage_decision counts per label per day",
+        "export --format jsonl --out X.jsonl produces output consumable by Meeting 8 evaluation scripts",
+        "Tool opens audit.db read-only (sqlite3.connect('file:audit.db?mode=ro', uri=True)) — verified by attempted-write smoke test that fails as expected",
+        "All subcommands honor AUDIT_DB_PATH env var (default ./audit.db)"
+      ],
+      "related_prd_section": "§8.5, §10 Meeting 8 ΔFPR",
+      "related_nfr": [],
+      "related_files": [
+        "scripts/inspect_audit.py",
+        "scripts/README.md"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["devtool", "audit", "python", "debug", "evaluation"]
+    },
+    {
+      "id": "SERVER-DEV-LOAD-01",
+      "title": "Load test script at scripts/load_test.py (NFR validation for Meeting 8)",
+      "description": "Create scripts/load_test.py — a locust-or-httpx-based load tester that drives the server with configurable concurrency and traffic mix (text-only, image-only, mixed) and emits a Markdown report. Validates PRD §9 NFR rows: frontline p99 < 100ms, Context Agent p99 < 3s, end-to-end p99 < 5s. Default scenario: 50% non_offensive, 30% borderline, 20% offensive, drawn from scripts/golden_inputs.jsonl. Output: a Markdown report at reports/load_test_YYYY-MM-DD.md with histograms, p50/p95/p99 per endpoint, error rate, and a PASS/FAIL row per NFR target.",
+      "module": "server",
+      "type": "test",
+      "priority": "P2",
+      "estimate_hours": 5,
+      "depends_on": ["SERVER-CLASSIFY-01", "SERVER-MET-01"],
+      "acceptance_criteria": [
+        "python scripts/load_test.py --rps 10 --duration 60s --scenario default produces a Markdown report under reports/",
+        "Report includes p50/p95/p99 per endpoint and a histogram",
+        "Report has a PASS/FAIL row per NFR: frontline p99 < 100ms, Context Agent p99 < 3s, end-to-end p99 < 5s",
+        "--scenario custom.jsonl uses a user-provided traffic mix",
+        "Tool reads /metrics during the run to cross-verify server-side p99 vs client-observed p99",
+        "Stops early if error rate > 5% over a 30s window (do not waste time on a broken server)"
+      ],
+      "related_prd_section": "§9 (NFRs)",
+      "related_nfr": [
+        "Latency frontline p99 < 100ms",
+        "Latency Context Agent p99 < 3s",
+        "Latency end-to-end p99 < 5s"
+      ],
+      "related_files": [
+        "scripts/load_test.py",
+        "scripts/README.md",
+        "reports/.gitkeep"
+      ],
+      "phase": "Phase 6",
+      "meeting": "8",
+      "labels": ["devtool", "performance", "python", "nfr", "meeting-8"]
+    }
+  ]
+}

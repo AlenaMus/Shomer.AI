@@ -1,0 +1,427 @@
+{
+  "module": "sdk",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.6",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "SDK-IF-01",
+      "title": "Define ShomerEndpoint internal Protocol and public ShomerResult/ShomerError sealed hierarchy",
+      "description": "Create server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/ShomerResult.kt with ShomerResult sealed class (Success, Failure) and ShomerError sealed class (NetworkError, ServerError, RateLimitError, ValidationError, TimeoutError, ParseError). Create internal/EndpointProtocol.kt with ShomerEndpoint<I,O> interface. This is the interface seam that blocks all Android client tasks.",
+      "module": "sdk",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": [],
+      "acceptance_criteria": [
+        "ShomerResult.kt exists with Success<T> and Failure sealed subclasses",
+        "ShomerError.kt has all 6 error subclasses with correct fields",
+        "ShomerResult.getOrNull() returns value or null; errorOrNull() returns error or null",
+        "ShomerEndpoint<I, O> interface exists with suspend execute(input: I): ShomerResult<O>",
+        "All types compile cleanly with Kotlin 1.9+"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/ShomerResult.kt",
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/EndpointProtocol.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "SDK-CFG-01",
+      "title": "Define SdkConfig data class with all configurable parameters",
+      "description": "Create server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/SdkConfig.kt with SdkConfig data class: baseUrl, connectTimeoutMs (10000), readTimeoutMs (60000), imageReadTimeoutMs (180000), maxRetries (3), initialBackoffMs (1000), sdkVersion (injected by Gradle from BuildConfig). The sdkVersion is sent as a User-Agent header on every request.",
+      "module": "sdk",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["SDK-IF-01"],
+      "acceptance_criteria": [
+        "SdkConfig data class exists with all 7 fields and correct defaults",
+        "sdkVersion is a non-empty String",
+        "SdkConfig is immutable (data class with val fields)",
+        "Default baseUrl is 'http://10.0.2.2:8000/' (Android emulator)"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/SdkConfig.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "SDK-LOG-01",
+      "title": "Wire SLF4J logger shomer.sdk with structured fields on every request",
+      "description": "Create server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/logging/SdkLogger.kt using SLF4J API tagged 'shomer.sdk'. Every request must emit at least one of the three documented log events: request_success, request_retry, request_failed. Required fields: trace_id (from TraceIdInterceptor), module='shomer.sdk', event, endpoint, attempt, latency_ms or backoff_ms.",
+      "module": "sdk",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["SDK-IF-01"],
+      "acceptance_criteria": [
+        "SdkLogger.kt uses SLF4J API (not Android Log directly)",
+        "request_success event includes: trace_id, endpoint, attempt, http_status, latency_ms",
+        "request_retry event includes: trace_id, endpoint, attempt, error_type, backoff_ms",
+        "request_failed event includes: trace_id, endpoint, attempt, error_type, message",
+        "Log lines do not include the request text content (privacy)"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["Privacy: no PII to LLM"],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/logging/SdkLogger.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["logging"]
+    },
+    {
+      "id": "SDK-MET-01",
+      "title": "Define MetricsCallback interface and SDK counter metrics",
+      "description": "Create server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/MetricsCallback.kt interface with onRequestCompleted() and onRequestFailed() methods. Define the 4 SDK metrics (shomer_sdk_requests_total, shomer_sdk_request_latency_ms, shomer_sdk_retry_total, shomer_sdk_error_total) as documented fields. Default implementation is a no-op. Android callers inject a FirebaseMetricsCallback.",
+      "module": "sdk",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["SDK-IF-01"],
+      "acceptance_criteria": [
+        "MetricsCallback interface has onRequestCompleted(endpoint, attempt, latencyMs, httpStatus) and onRequestFailed(endpoint, attempts, errorType)",
+        "NoOpMetricsCallback implementation exists as the default",
+        "ShomerClient constructor accepts an optional MetricsCallback parameter",
+        "Metric names match the documented shomer_sdk_* pattern"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s", "Availability >= 99%"],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/MetricsCallback.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["metrics"]
+    },
+    {
+      "id": "SDK-MODELS-01",
+      "title": "Define ClassificationResult, HealthResult, ModelInfoResult data classes",
+      "description": "Create server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/models/Models.kt with ClassificationResult, HealthResult, ModelInfoResult data classes. ClassificationResult must mirror server/app/schemas.py including all nullable Phase 6-7 fields (contextUsed, reasoningTrace, reviewFlag). Use Moshi @JsonClass(generateAdapter=true). JSON field names must match server snake_case output.",
+      "module": "sdk",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["SDK-IF-01"],
+      "acceptance_criteria": [
+        "ClassificationResult has all fields from the LLD including nullable contextUsed and reasoningTrace",
+        "HealthResult has status, ollamaReachable, model fields",
+        "ModelInfoResult has model, base, labels fields",
+        "Moshi deserialization of unknown fields does not throw (lenient = true pattern)",
+        "isOffensive maps from server JSON field is_offensive (snake_case to camelCase)"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/models/Models.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["models"]
+    },
+    {
+      "id": "SDK-HTTP-01",
+      "title": "Implement RetryInterceptor, TraceIdInterceptor, and HttpEngine OkHttp factory",
+      "description": "Create server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/RetryInterceptor.kt with exponential backoff (1s/2s/4s, 3 attempts, retry on NetworkError or 5xx only, never retry 4xx). Create TraceIdInterceptor.kt that generates UUID4 trace_id per request and adds X-Trace-ID header. Create HttpEngine.kt that builds OkHttpClient with both interceptors and SdkConfig timeouts.",
+      "module": "sdk",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 5,
+      "depends_on": ["SDK-IF-01", "SDK-CFG-01", "SDK-LOG-01"],
+      "acceptance_criteria": [
+        "RetryInterceptor retries on NetworkError (IOException) and HTTP 5xx up to maxRetries",
+        "RetryInterceptor does NOT retry HTTP 4xx (including 429)",
+        "TraceIdInterceptor generates a new UUID4 on every request",
+        "TraceIdInterceptor stores trace_id in OkHttp tag for logger access",
+        "HttpEngine builds OkHttpClient with correct connect and read timeouts from SdkConfig"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s", "Availability >= 99%"],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/RetryInterceptor.kt",
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/TraceIdInterceptor.kt",
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/HttpEngine.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["http", "retry"]
+    },
+    {
+      "id": "SDK-ENDPOINTS-01",
+      "title": "Implement ClassifyEndpoint, ClassifyImageEndpoint, HealthEndpoint, ModelInfoEndpoint",
+      "description": "Create the four endpoint classes in server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/, each implementing ShomerEndpoint<I,O>. ClassifyEndpoint: POST /classify {text}. ClassifyImageEndpoint: POST /classify-image multipart body. HealthEndpoint: GET /health. ModelInfoEndpoint: GET /model/info. Map HTTP error codes to ShomerError subclasses per the LLD failure mode table.",
+      "module": "sdk",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 5,
+      "depends_on": ["SDK-IF-01", "SDK-HTTP-01", "SDK-MODELS-01"],
+      "acceptance_criteria": [
+        "HTTP 429 -> ShomerError.RateLimitError(retryAfterSeconds from Retry-After header)",
+        "HTTP 413 -> ShomerError.ServerError(413, ...)",
+        "HTTP 422 -> ShomerError.ValidationError(detail from response body)",
+        "HTTP 5xx -> ShomerError.ServerError after 3 retries exhausted",
+        "IOException -> ShomerError.NetworkError after 3 retries exhausted",
+        "Moshi JsonDataException -> ShomerError.ParseError (no retry)"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/ClassifyEndpoint.kt",
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/ClassifyImageEndpoint.kt",
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/HealthEndpoint.kt",
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/internal/ModelInfoEndpoint.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["http", "adapter"]
+    },
+    {
+      "id": "SDK-CLIENT-01",
+      "title": "Implement ShomerClient public entry point delegating to endpoint classes",
+      "description": "Create server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/ShomerClient.kt. Public API: classify(text), classify(imageBytes, mimeType), health(), modelInfo(), close(). Client validates input (text.isNotBlank(), text.length <= 4000) before calling endpoints. Delegates to each *Endpoint class. Exposes close() to release OkHttp resources.",
+      "module": "sdk",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 3,
+      "depends_on": ["SDK-ENDPOINTS-01", "SDK-MET-01"],
+      "acceptance_criteria": [
+        "ShomerClient compiles as an Android library module (.aar)",
+        "classify('') returns ShomerResult.Failure(ShomerError.ValidationError) without a network call",
+        "classify(text > 4000 chars) returns ShomerResult.Failure(ShomerError.ValidationError)",
+        "close() calls okHttpClient.dispatcher.executorService.shutdown()",
+        "All 4 public methods are suspend functions"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/kotlin/src/main/kotlin/com/shomer/sdk/ShomerClient.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["client"]
+    },
+    {
+      "id": "SDK-FAIL-01",
+      "title": "Implement SDK fallback: compile failure falls back to android_client ApiService.kt",
+      "description": "Document in server/sdk/README.md the fallback procedure if the SDK cannot be imported (compile error, dependency conflict): Android client falls back to its existing ApiService.kt HTTP layer as a temporary measure. This fallback is the SDK compile failure scenario from the LLD. Also document the 429 no-auto-retry behavior and how callers should handle RateLimitError.",
+      "module": "sdk",
+      "type": "feature",
+      "priority": "P2",
+      "estimate_hours": 1,
+      "depends_on": ["SDK-CLIENT-01"],
+      "acceptance_criteria": [
+        "server/sdk/README.md documents the compile-failure fallback to ApiService.kt",
+        "RateLimitError.retryAfterSeconds is documented as caller-managed (no SDK auto-retry)",
+        "SDK version scheme (semver 1.x.x -> 2.0.0 for breaking changes) is documented",
+        "SDK changelog format is established in server/sdk/CHANGELOG.md"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/README.md",
+        "server/sdk/CHANGELOG.md"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["fallback", "docs"]
+    },
+    {
+      "id": "SDK-CT-01",
+      "title": "Write ShomerEndpoint contract test suite using MockWebServer",
+      "description": "Write server/sdk/kotlin/src/test/kotlin/com/shomer/sdk/ShomerClientTest.kt using OkHttp MockWebServer to test all endpoint classes against the Protocol contract: each returns ShomerResult.Success on 200, ShomerResult.Failure on each error code, retry fires on 5xx but not 4xx, and the correct ShomerError subtype is returned for each HTTP status.",
+      "module": "sdk",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["SDK-IF-01", "SDK-CLIENT-01"],
+      "acceptance_criteria": [
+        "MockWebServer returns 200 -> ShomerResult.Success with ClassificationResult",
+        "MockWebServer returns 429 -> ShomerResult.Failure(RateLimitError)",
+        "MockWebServer returns 500 twice then 200 -> Success after 2 retries",
+        "MockWebServer returns 422 -> Failure(ValidationError) with no retry",
+        "MockWebServer disconnects -> Failure(NetworkError) after 3 retries"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/kotlin/src/test/kotlin/com/shomer/sdk/ShomerClientTest.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "SDK-UT-01",
+      "title": "Unit tests for RetryInterceptor, ShomerError mapping, and SdkLogger privacy",
+      "description": "Write unit tests in server/sdk/kotlin/src/test/kotlin/com/shomer/sdk/ covering: RetryInterceptor backoff timing (1s/2s/4s), 4xx not retried, 5xx retried up to maxRetries, correct ShomerError subtype for each HTTP status code, and SdkLogger privacy test (verify text content is absent from INFO log lines).",
+      "module": "sdk",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["SDK-HTTP-01", "SDK-ENDPOINTS-01", "SDK-LOG-01"],
+      "acceptance_criteria": [
+        "RetryInterceptorTest: 5xx triggers retry with 1s backoff on attempt 1",
+        "RetryInterceptorTest: 4xx (404) is not retried",
+        "ShomerErrorMappingTest: all 6 HTTP status codes map to correct ShomerError subclass",
+        "SdkLoggerPrivacyTest: classify('sensitive text') -> INFO logs do not contain 'sensitive text'",
+        "All tests pass with ./gradlew :sdk:kotlin:test"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": ["Privacy: no PII to LLM"],
+      "related_files": [
+        "server/sdk/kotlin/src/test/kotlin/com/shomer/sdk/RetryInterceptorTest.kt",
+        "server/sdk/kotlin/src/test/kotlin/com/shomer/sdk/ShomerErrorMappingTest.kt",
+        "server/sdk/kotlin/src/test/kotlin/com/shomer/sdk/SdkLoggerPrivacyTest.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "SDK-IT-01",
+      "title": "Integration test SDK wired into Android client module",
+      "description": "Write android_client integration tests verifying that ChildClassifyViewModel uses ShomerClient (SDK) rather than the legacy ApiService. Test that classify() and health() are called through the SDK and that ShomerResult types flow to ChildUiState correctly. Use a MockWebServer as the fake server.",
+      "module": "sdk",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["SDK-CLIENT-01", "ANDROID-DI-01"],
+      "acceptance_criteria": [
+        "ChildClassifyViewModel calls sdk.classify() not ApiService directly",
+        "ShomerResult.Success -> ChildUiState.SuccessText with correct label and confidence",
+        "ShomerResult.Failure(NetworkError) -> ChildUiState.Error('Cannot reach server')",
+        "Zero references to the legacy ApiService.kt in ChildClassifyViewModel after migration"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "android_client/app/src/test/java/com/shomer/client/ClassifyViewModelIntegrationTest.kt"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "SDK-DOC-01",
+      "title": "Expand server/sdk/README.md from placeholder to full API reference",
+      "description": "Expand the existing server/sdk/README.md placeholder into a full API reference documenting: ShomerClient public API, SdkConfig all fields, ShomerResult/ShomerError usage with Kotlin examples, retry behavior, trace_id propagation, versioning scheme, compile-failure fallback, and the OpenAPI migration path (Phase 9).",
+      "module": "sdk",
+      "type": "docs",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["SDK-CLIENT-01"],
+      "acceptance_criteria": [
+        "README is no longer a placeholder (removes the 'placeholder' marker)",
+        "Kotlin usage example for classify(text) with result handling is present",
+        "Retry policy table (1s/2s/4s, no retry on 4xx) is documented",
+        "Version scheme (semver, 1.0.0 for MVP) is documented",
+        "Future OpenAPI migration path is described in a dedicated section"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/README.md"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["docs"]
+    },
+    {
+      "id": "SDK-CLI-01",
+      "title": "Create Kotlin :sdk-cli Gradle subproject wrapping the SDK (terminal runner)",
+      "description": "Add server/sdk/kotlin-cli/ as a new Gradle subproject under the SDK that produces a runnable fat-jar (shomer-cli.jar) using clikt for CLI parsing. The subproject DEPENDS ON the :sdk module — it does not reimplement HTTP. Entry point: com.shomer.cli.Main. Foundation for SDK-CLI-02 (subcommands) and SDK-CLI-03 (batch mode). Proves the SDK works outside Android — academic value for Meeting 4 architecture defense and developer convenience for server testing without a real client.",
+      "module": "sdk",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["SDK-CLIENT-01"],
+      "acceptance_criteria": [
+        "server/sdk/kotlin-cli/build.gradle.kts exists with implementation(project(':sdk')) dependency",
+        "com.github.ajalt.clikt:clikt and com.squareup.moshi:moshi-kotlin are pulled in",
+        "./gradlew :sdk-cli:fatJar produces a runnable jar at sdk-cli/build/libs/shomer-cli.jar",
+        "java -jar shomer-cli.jar --help prints usage with the 5 subcommands (classify, classify-image, health, info, demo, batch)",
+        "Exit codes are defined: 0 success, 1 classified-with-error or server-error, 2 network/IO, 3 invalid input/parse",
+        "Zero re-implementation of HTTP — every call goes through ShomerClient from the :sdk module"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/kotlin-cli/build.gradle.kts",
+        "server/sdk/kotlin-cli/src/main/kotlin/com/shomer/cli/Main.kt",
+        "server/sdk/kotlin-cli/README.md",
+        "settings.gradle.kts"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["cli", "demo", "devtool", "kotlin"]
+    },
+    {
+      "id": "SDK-CLI-02",
+      "title": "Implement 5 SDK CLI subcommands: classify, classify-image, health, info, demo",
+      "description": "Implement the user-facing subcommands on top of SDK-CLI-01. Each calls the matching ShomerClient method and pretty-prints the result. Global flags: --server URL (default http://localhost:8000), --timeout N, --verbose/--trace (prints trace_id, request, response, timings), --json (machine-readable). The demo subcommand runs a curated golden set of 8–10 Hebrew inputs spanning all 5 categories and prints a colored summary — designed for the Meeting 4 live demo and for smoke-testing after every deploy.",
+      "module": "sdk",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 5,
+      "depends_on": ["SDK-CLI-01"],
+      "acceptance_criteria": [
+        "shomer-cli classify \"שלום עולם\" prints a structured result (category, confidence, latency, trace_id)",
+        "shomer-cli classify-image path/to/screenshot.png works with absolute and relative paths; MIME inferred from extension",
+        "shomer-cli health exits 0 when /health is ok and 1 when degraded",
+        "shomer-cli info prints model name and the 5-label list",
+        "shomer-cli demo runs the curated golden set in src/main/resources/golden_inputs.jsonl and prints PASS/FAIL per row plus a summary table",
+        "--verbose/--trace shows trace_id, full request body, full response, per-call latency_ms breakdown",
+        "--json emits a single line of valid JSON per call (no ANSI) and disables pretty-printing"
+      ],
+      "related_prd_section": "§8.6",
+      "related_nfr": [],
+      "related_files": [
+        "server/sdk/kotlin-cli/src/main/kotlin/com/shomer/cli/commands/ClassifyCommand.kt",
+        "server/sdk/kotlin-cli/src/main/kotlin/com/shomer/cli/commands/ClassifyImageCommand.kt",
+        "server/sdk/kotlin-cli/src/main/kotlin/com/shomer/cli/commands/HealthCommand.kt",
+        "server/sdk/kotlin-cli/src/main/kotlin/com/shomer/cli/commands/InfoCommand.kt",
+        "server/sdk/kotlin-cli/src/main/kotlin/com/shomer/cli/commands/DemoCommand.kt",
+        "server/sdk/kotlin-cli/src/main/resources/golden_inputs.jsonl"
+      ],
+      "phase": "Phase 5",
+      "meeting": "5",
+      "labels": ["cli", "demo", "devtool", "kotlin"]
+    },
+    {
+      "id": "SDK-CLI-03",
+      "title": "Implement SDK CLI batch mode for gold-set runs (Meeting 8 evaluation)",
+      "description": "shomer-cli batch input.jsonl --out results.jsonl reads one input per line ({text|image_path, gold_label}), calls /classify with bounded concurrency (--parallel N, default 4), and writes annotated results. Used for: (a) running the Meeting 8 gold set through context-blind vs context-aware configurations to compute ΔFPR, (b) regression testing after model swaps, (c) batch demos of server capability. Failures (network, parse) are written as result rows with an error field — the batch never aborts mid-run.",
+      "module": "sdk",
+      "type": "feature",
+      "priority": "P2",
+      "estimate_hours": 4,
+      "depends_on": ["SDK-CLI-02"],
+      "acceptance_criteria": [
+        "shomer-cli batch examples/gold_set.jsonl --out results.jsonl produces one result line per input line (no rows lost)",
+        "--parallel 8 actually runs up to 8 in-flight requests concurrently (verified via server-side rate-limit log)",
+        "Each result row contains: input, classifier_label, triage_decision, context_used, prob_offensive, latency_ms, trace_id, gold_label, match",
+        "Network/parse errors land as {error: \"...\"} on that row; batch continues to completion",
+        "A final summary line is written to stdout: total, success, error, accuracy if gold_label provided, p50/p95/p99 latency",
+        "Batch mode honors --server / --timeout / --json global flags from SDK-CLI-02"
+      ],
+      "related_prd_section": "§8.6, §10 (Meeting 8 ΔFPR)",
+      "related_nfr": ["e2e latency p99 < 5s"],
+      "related_files": [
+        "server/sdk/kotlin-cli/src/main/kotlin/com/shomer/cli/commands/BatchCommand.kt",
+        "server/sdk/kotlin-cli/examples/gold_set_template.jsonl"
+      ],
+      "phase": "Phase 6",
+      "meeting": "8",
+      "labels": ["cli", "batch", "evaluation", "kotlin", "meeting-8"]
+    }
+  ]
+}

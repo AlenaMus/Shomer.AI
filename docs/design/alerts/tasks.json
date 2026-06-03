@@ -1,0 +1,336 @@
+{
+  "module": "alerts",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.4, §9",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "ALERTS-IF-01",
+      "title": "Define NotificationService Protocol with AlertRequest and AlertResult schemas",
+      "description": "Create server/app/alerts/protocol.py with the @runtime_checkable NotificationService Protocol (send_alert, get_alert_history methods). Add AlertRequest and AlertResult Pydantic models to server/app/schemas.py. AlertRequest must include child_id, parent_fcm_token, message_id, label, severity, explanation, quote, child_name, source, trace_id. This interface blocks the Android FCM receiver design since the push payload shape mirrors AlertRequest.",
+      "module": "alerts",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "NotificationService Protocol exists in server/app/alerts/protocol.py with @runtime_checkable",
+        "AlertRequest Pydantic model has all 10 documented fields with correct constraints",
+        "AlertResult Pydantic model has all 8 documented fields",
+        "isinstance(FCMNotificationService(...), NotificationService) returns True",
+        "send_alert() is async; get_alert_history() is async"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": ["Notification latency p99 < 2s"],
+      "related_files": [
+        "server/app/alerts/protocol.py",
+        "server/app/schemas.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["protocol", "interface", "fcm"]
+    },
+    {
+      "id": "ALERTS-CFG-01",
+      "title": "Define AlertSettings pydantic-settings model with all env vars",
+      "description": "Create server/app/alerts/settings.py with AlertSettings(BaseSettings) covering: FCM_SERVICE_ACCOUNT_PATH (None), FCM_CHANNEL_ID ('shomer_alerts'), ALERTS_MAX_RETRY_ATTEMPTS (3), ALERTS_RETRY_BASE_SECONDS (1.0), ALERTS_RATE_LIMIT_MAX (3), ALERTS_RATE_LIMIT_WINDOW_S (60), ALERTS_QUEUE_MAX_SIZE (100). Note: FCM_SERVICE_ACCOUNT_PATH uses FCM_ prefix by exception.",
+      "module": "alerts",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["ALERTS-IF-01"],
+      "acceptance_criteria": [
+        "AlertSettings exists with all 7 env vars",
+        "FCM_SERVICE_ACCOUNT_PATH=None is a valid state (graceful no-op when FCM not configured)",
+        "ALERTS_ env prefix applied correctly; FCM_ exception documented",
+        "Default max_retry_attempts=3 and retry_base_seconds=1.0 match exponential backoff: 1s/2s/4s"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/alerts/settings.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["config"]
+    },
+    {
+      "id": "ALERTS-LOG-01",
+      "title": "Wire structlog bound logger shomer.alerts with required fields",
+      "description": "Configure structlog.get_logger('shomer.alerts') in server/app/alerts/service.py. Every send_alert() call must emit at least one of: alerts.sent (success), alerts.rate_limited (suppressed), alerts.send_attempt_failed (retry), alerts.send_failed_queued (all retries exhausted). Required fields on every event: trace_id, alert_id, child_id, label, severity.",
+      "module": "alerts",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["ALERTS-IF-01"],
+      "acceptance_criteria": [
+        "alerts.sent event includes: trace_id, alert_id, child_id, label, severity, attempt, latency_ms",
+        "alerts.rate_limited event includes: trace_id, alert_id, child_id",
+        "alerts.send_failed_queued event includes: trace_id, alert_id, child_id, error",
+        "Logs inherit trace_id from structlog context var"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/alerts/service.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["logging"]
+    },
+    {
+      "id": "ALERTS-MET-01",
+      "title": "Define and register Prometheus metrics for the alerts module",
+      "description": "Register all 5 alerts metrics using the shared REGISTRY: alert_send_latency_seconds (Histogram with buckets to 5s), alert_send_failures_total (Counter, labels=[reason]), alert_send_success_total (Counter), alert_rate_limited_total (Counter), alert_queue_depth (Gauge). The latency histogram is the primary evidence for the p99 < 2s NFR.",
+      "module": "alerts",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["ALERTS-IF-01"],
+      "acceptance_criteria": [
+        "All 5 metrics registered against shared REGISTRY",
+        "alert_send_latency_seconds has buckets: 0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 5.0",
+        "alert_queue_depth Gauge is updated when items are added/removed from LocalRetryQueue",
+        "GET /metrics includes alert_send_success_total after a successful FCM send"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": ["Notification latency p99 < 2s"],
+      "related_files": [
+        "server/app/alerts/service.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "ALERTS-RATELIMITER-01",
+      "title": "Implement InMemoryRateLimiter with sliding window per child_id",
+      "description": "Implement server/app/alerts/rate_limiter.py with InMemoryRateLimiter: sliding window using deque of timestamps, thread-safe with threading.Lock, max_alerts=3 per window_seconds=60 per child_id. allow() returns True and records timestamp if under limit; False if over limit. Memory bound: O(N * active_children).",
+      "module": "alerts",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": ["ALERTS-IF-01", "ALERTS-CFG-01"],
+      "acceptance_criteria": [
+        "allow('child_abc') returns True for first 3 calls within 60s",
+        "allow('child_abc') returns False on 4th call within the same 60s window",
+        "After 60s the window resets and allow() returns True again",
+        "Thread-safe: concurrent allow() calls do not corrupt the deque",
+        "alert_rate_limited_total increments on every False return"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": ["Alert Fatigue churn < 3/day"],
+      "related_files": [
+        "server/app/alerts/rate_limiter.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["rate-limit"]
+    },
+    {
+      "id": "ALERTS-QUEUE-01",
+      "title": "Implement LocalRetryQueue with bounded deque and drain semantics",
+      "description": "Implement server/app/alerts/retry_queue.py with LocalRetryQueue: deque(maxlen=queue_max_size=100) of AlertRequest objects. enqueue() appends; when full, oldest is dropped (deque maxlen behavior). drain() returns all items and clears the queue. size() returns current depth. The /classify handler calls drain() at the start of each request to retry queued failed alerts.",
+      "module": "alerts",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["ALERTS-IF-01", "ALERTS-CFG-01"],
+      "acceptance_criteria": [
+        "enqueue() beyond maxlen drops the oldest item (deque maxlen behavior)",
+        "drain() returns all items and leaves the queue empty",
+        "size() returns the current number of queued items",
+        "alert_queue_depth Gauge reflects size() after every enqueue/drain"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/alerts/retry_queue.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["queue"]
+    },
+    {
+      "id": "ALERTS-FCM-01",
+      "title": "Implement FCMNotificationService with idempotency key and exponential backoff retry",
+      "description": "Implement server/app/alerts/service.py with FCMNotificationService. Includes: _compute_alert_id() SHA-256 idempotency key (child_id:message_id:label), _build_fcm_message() with Hebrew title/body and deep-link data, _send_with_retry() with 3-attempt exponential backoff (1s/2s/4s), and init_firebase() for service account initialization. Must gracefully degrade when FCM is not configured.",
+      "module": "alerts",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 6,
+      "depends_on": ["ALERTS-IF-01", "ALERTS-CFG-01", "ALERTS-LOG-01", "ALERTS-MET-01", "ALERTS-RATELIMITER-01", "ALERTS-QUEUE-01"],
+      "acceptance_criteria": [
+        "FCMNotificationService implements NotificationService Protocol",
+        "_compute_alert_id() returns same value for same inputs regardless of retry attempt",
+        "FCM message data payload includes: alert_id, child_id, message_id, label, severity, quote, source, trace_id, deep_link",
+        "3 failed FCM attempts -> request queued with queued=True in AlertResult",
+        "FCM_SERVICE_ACCOUNT_PATH=None -> send_alert returns AlertResult(sent=False, error='firebase not initialized') without crashing"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": ["Notification latency p99 < 2s"],
+      "related_files": [
+        "server/app/alerts/service.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["fcm", "adapter"]
+    },
+    {
+      "id": "ALERTS-FAIL-01",
+      "title": "Implement alerts failure modes: FCM down, bad token, queue overflow, /health degraded status",
+      "description": "Implement all failure modes from LLD §8: FCM down -> retry queue + AlertResult(queued=True); Firebase not initialized -> graceful no-op; rate limit -> AlertResult(rate_limited=True); queue overflow (> 100) -> oldest dropped; Firebase not initialized sets alerts_degraded=true in /health response. Implement get_alert_history() returning empty list placeholder for Meeting 7.",
+      "module": "alerts",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["ALERTS-FCM-01"],
+      "acceptance_criteria": [
+        "Mock FCM to fail 3 times -> AlertResult(sent=False, queued=True)",
+        "retry_queue.size() > 0 -> /health returns {alerts: {status: 'degraded', queued_alerts: N}}",
+        "AlertRequest with invalid FCM token -> HTTP 422 before send_alert is called",
+        "Queue at maxlen -> 101st enqueue drops oldest without exception",
+        "get_alert_history() returns empty list (placeholder)"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/alerts/service.py",
+        "server/app/alerts/retry_queue.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["fallback", "error-handling"]
+    },
+    {
+      "id": "ALERTS-CT-01",
+      "title": "Write NotificationService Protocol contract test suite",
+      "description": "Write tests/contracts/test_notification_service_contract.py that asserts FCMNotificationService (and any future SMS/webhook adapter) satisfies the Protocol: send_alert() is async, never raises, returns AlertResult with all required fields, idempotency key is deterministic, and rate_limited=True is returned when allow() returns False.",
+      "module": "alerts",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["ALERTS-IF-01", "ALERTS-FCM-01"],
+      "acceptance_criteria": [
+        "Contract test at tests/contracts/test_notification_service_contract.py",
+        "FCMNotificationService with mocked firebase_admin passes all contract tests",
+        "Contract verifies AlertResult.alert_id is the same for same AlertRequest inputs",
+        "Contract verifies send_alert() never raises on any input",
+        "Contract verifies rate_limited=True when rate limiter denies"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/contracts/test_notification_service_contract.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["test", "contract", "fcm"]
+    },
+    {
+      "id": "ALERTS-UT-01",
+      "title": "Unit tests for FCM service, rate limiter, retry queue, and idempotency",
+      "description": "Write unit tests in server/tests/unit/alerts/ covering: idempotency key determinism, rate limiter sliding window, retry queue enqueue/drain/overflow, FCM send success with mock firebase_admin, FCM send failure -> queued result, Firebase not initialized -> graceful no-op result.",
+      "module": "alerts",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["ALERTS-FCM-01", "ALERTS-FAIL-01"],
+      "acceptance_criteria": [
+        "test_idempotency.py: same 3 inputs -> same alert_id hex string",
+        "test_rate_limiter.py: allow() True for N, False after, True again after window",
+        "test_retry_queue.py: enqueue+drain roundtrip, maxlen overflow behavior",
+        "test_send_success.py: mock firebase_admin.messaging.send -> AlertResult(sent=True)",
+        "test_send_failure.py: mock send to fail 3× -> AlertResult(sent=False, queued=True)"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/unit/alerts/test_idempotency.py",
+        "server/tests/unit/alerts/test_rate_limiter.py",
+        "server/tests/unit/alerts/test_retry_queue.py",
+        "server/tests/unit/alerts/test_send_success.py",
+        "server/tests/unit/alerts/test_send_failure.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "ALERTS-IT-01",
+      "title": "Integration test alerts pipeline wired into FastAPI /classify endpoint",
+      "description": "Write integration test in server/tests/integration/test_alert_pipeline.py. Test the full path: POST /classify with mocked classifier returning confident offensive result -> triage returns ALERT_DIRECT -> alerts.send_alert() called -> AlertResult recorded in audit. Also test degraded mode: FCM fails -> /health shows degraded; queued alert retried on next /classify request.",
+      "module": "alerts",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["ALERTS-FCM-01", "ALERTS-FAIL-01"],
+      "acceptance_criteria": [
+        "POST /classify with mocked offensive classifier + mocked FCM send -> AlertResult(sent=True) in audit",
+        "FCM mocked to fail -> retry_queue.size() == 1",
+        "Second POST /classify -> drain() called -> retry attempted",
+        "/health with queued_alerts > 0 returns {status: 'degraded'}"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": ["Notification latency p99 < 2s"],
+      "related_files": [
+        "server/tests/integration/test_alert_pipeline.py",
+        "server/tests/integration/test_degraded_mode.py"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "ALERTS-DB-01",
+      "title": "Create alert_history SQLite table and wire get_alert_history() query",
+      "description": "Create the alert_history table in server/audit.db (schema from LLD §5) and implement the get_alert_history() method in FCMNotificationService to query alerts by child_id ordered by timestamp DESC with a limit. Write audit record on every send_alert() call. This enables the parent dashboard history endpoint.",
+      "module": "alerts",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["ALERTS-FCM-01"],
+      "acceptance_criteria": [
+        "alert_history table created with all 14 columns and the child_id+timestamp index",
+        "Every send_alert() call inserts a row into alert_history",
+        "get_alert_history('child_abc', limit=10) returns up to 10 AlertResult objects ordered by timestamp DESC",
+        "7-day retention: rows older than 7 days are deleted in lifespan() startup task"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/alerts/service.py",
+        "server/audit.db"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["database", "sqlite"]
+    },
+    {
+      "id": "ALERTS-DOC-01",
+      "title": "Write README for the alerts module under server/app/alerts/",
+      "description": "Write server/app/alerts/README.md summarizing: module purpose, NotificationService Protocol contract, FCM payload schema, idempotency key design, rate limiter parameters, retry queue behavior, /health degraded mode, and secrets management instructions (FCM service account JSON must never be committed).",
+      "module": "alerts",
+      "type": "docs",
+      "priority": "P2",
+      "estimate_hours": 1,
+      "depends_on": ["ALERTS-FCM-01"],
+      "acceptance_criteria": [
+        "README exists at server/app/alerts/README.md",
+        "FCM payload data fields are documented with their Android receiver counterpart",
+        "Secrets warning: FCM_SERVICE_ACCOUNT_PATH must never be committed to git",
+        "Rate limiter defaults and rationale (3/min to prevent alert fatigue) are explained",
+        "Local dev setup without Firebase is documented (FCM_SERVICE_ACCOUNT_PATH empty)"
+      ],
+      "related_prd_section": "§8.4",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/alerts/README.md"
+      ],
+      "phase": "Phase 7",
+      "meeting": "7",
+      "labels": ["docs"]
+    }
+  ]
+}

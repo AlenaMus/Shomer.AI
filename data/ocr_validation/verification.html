@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="he"><head><meta charset="utf-8"><title>OCR Verification — Shomer.AI</title>
+<style>
+body { font-family: David, Arial, sans-serif; max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+h1 { border-bottom: 3px solid #2c5f8a; color: #1f3f5f; }
+table { border-collapse: collapse; width: 100%; margin-top: 1em; }
+th { background: #2c5f8a; color: white; padding: 10px; text-align: center; font-weight: bold; }
+td { border-bottom: 1px solid #ddd; vertical-align: middle; }
+tr:hover { background: rgba(0,0,0,0.03) !important; }
+.legend { margin-top: 1em; padding: 10px; background: #f8f9fa; border-radius: 5px; font-size: 10pt; }
+</style></head><body>
+<h1>OCR Verification — 40 records</h1>
+<div class="legend">
+    <strong>Styles:</strong>
+    <span style="background:#d4edda;padding:2px 8px">A clear</span>
+    <span style="background:#fff3cd;padding:2px 8px">B children</span>
+    <span style="background:#cce5ff;padding:2px 8px">C code-switch</span>
+    <span style="background:#f8d7da;padding:2px 8px">D poor-spelling</span>
+    &nbsp;|&nbsp;
+    <strong>Match badge:</strong>
+    <span style="background:#28a745;color:white;padding:2px 6px">good ≥95%</span>
+    <span style="background:#ffc107;color:white;padding:2px 6px">ok 80–95%</span>
+    <span style="background:#dc3545;color:white;padding:2px 6px">poor &lt;80%</span>
+</div>
+<table>
+    <thead><tr>
+        <th>Style</th><th>ID</th><th>Image</th>
+        <th style="text-align:right">Original (RTL)</th>
+        <th style="text-align:right">OCR output (RTL)</th>
+        <th>Conf</th><th>Match</th>
+    </tr></thead>
+    <tbody>
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_001</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_001.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">היום למדנו על הגיאוגרפיה של ישראל בשיעור מולדת.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">היום למדנו על הגיאוגרפיה של ישראל בשיעור מולדת.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_002</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_002.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אמא ביקשה ממני להכין שיעורי בית לפני שאצא לחברים.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אמא ביקשה ממני להכין שיעורי בית לפני שאצא לחברים.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_003</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_003.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">בסוף השבוע נסענו לחוף הים עם המשפחה כולה.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">בסוף השבוע נסענו לחוף הים oY‏ המשפחה כולה.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.88</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">94% ok</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_004</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_004.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">המורה הסבירה לנו על ההיסטוריה של ירושלים בכיתה.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">המורה הסבירה לנו על ההיסטוריה של ירושלים בכיתה.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_005</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_005.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אחותי הקטנה אוהבת לצייר ולשחק בבובות בחדר שלה.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אחותי הקטנה אוהבת לצייר ולשחק בבובות בחדר שלה.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_006</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_006.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">נכנסתי לחדר השינה והבחנתי שאבא כבר חזר מהעבודה.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">נכנסתי לחדר השינה והבחנתי שאבא כבר WN‏ מהעבודה.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">94% ok</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_007</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_007.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">הקבוצה שלנו ניצחה במשחק הכדורסל ארבעים שלושים שש.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">הקבוצה שלנו ניצחה במשחק הכדורסל ארבעים שלושים שש.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_008</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_008.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אנחנו לומדים מתמטיקה ואנגלית במשך שש שעות בכל יום.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אנחנו לומדים מתמטיקה ואנגלית במשך שש שעות בכל DY‏</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.91</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">93% ok</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_009</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_009.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">המורה החדש מאוד נחמד ומסביר את החומר בצורה ברורה.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">המורה החדש מאוד נחמד ומסביר את החומר בצורה ברורה.</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.91</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#d4edda">
+            <td style="font-weight:bold;text-align:center;padding:8px;">A</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">A_010</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/clear_hebrew/A_010.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">בקיץ אנחנו מתכננים לטוס לאיטליה ולבקר ברומא ובמילאנו.</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">בקי אנחנו מתכננים לטוס לאיטליה ולבקר ברומא ובמילאנו</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.80</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">98% good</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_001</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_001.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אנחנו הלכנו לגנ ציבורי ושחקנו כדורגל בשביל מלא זמן</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אנחנו הלכנו לגנ ציבורי ושחקנו כדורגל בשביל מלא Yor‏</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.85</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">93% ok</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_002</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_002.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אחי כזה אש היום בכיתא חחח לא מאמינה שאמרת את זה</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אחי כזה אש היום בכיתא חחח לא מאמינה שאמרת את זה</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.91</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_003</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_003.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אבא קנה לי משחק חדש שאני ממש רציטי הרבה זמנ</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אבא קנה לי משחק WIN‏ שאני ממש רציטי הרבה זמנ</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.90</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">92% ok</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_004</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_004.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">המורא בכיטה כעסה כי הילדים דיברו ולא הקשיבו לה</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">המורא בכיטה כעסה כי הילדים דיברו ולא הקשיבו לה</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.93</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_005</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_005.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">ביטה הסטיברסט שלי גועלי קצת ואני לא אוכלת לסעוד שמ</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">ביטה הסטיברסט שלי גועלי קצת ואני לא אוכלת לסעוד שמ</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_006</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_006.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אמא אמרא לי לא לאחר לבית הספר אבל איחרתי בכ זאט</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אמא אמרא לי לא לאחר לבית הספר אבל איחרתי בכ זאט</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.93</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_007</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_007.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">השיעור היה ממש משעמ ואני כמעט נרדמטי באמצא</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">השיעור היה ממש משעמ IN)‏ כמעט נרדמטי באמצא</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.83</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">90% ok</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_008</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_008.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">החברה שלי כעט כועסת עלי בלי שום סיבא רגישונית</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">החברה שלי כעט כועסת עלי בלי שום סיבא רגישונית</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.93</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_009</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_009.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">הלכנו לבריכא עם החברות וזה היה כזה כיפ אש</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">הלכנו לבריכא Oy‏ החברות וזה היה TID‏ כיפ אש</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.89</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">86% ok</span></td>
+        </tr>
+        
+        <tr style="background:#fff3cd">
+            <td style="font-weight:bold;text-align:center;padding:8px;">B</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">B_010</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/children_mistakes/B_010.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אבא הביא לי גלידה אחרי שעשיתי שיעורי בית כמו ילדה טובא</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אבא הביא לי גלידה אחרי שעשיתי שיעורי בית כמו ילדה טובא</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.93</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_001</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_001.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אני so done עם בית הספר היום literally לא יכולה</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אני DY so done‏ בית הספר היום literally‏ לא יכולה</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.91</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">92% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_002</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_002.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">ה-vibe היום היה ממש מוזר ash מי הזמין אותה?</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">vibe-n‏ היום היה ממש מוזר ash‏ מי הומין אותהי</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.75</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">89% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_003</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_003.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">התגלגלתי מצחוק מהמשעמ בשיעור היה ממש funny אתה יודע</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">התגלגלתי מצחוק מהמשעמ בשיעור היה funny won‏ אתה יודע</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.93</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">91% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_004</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_004.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">הסרט היה כזה boring שנרדמתי באמצא, omg איך זה אפסרי</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">הסרט היה boring NID‏ שנרדמתי באמצא, PN omg‏ זה אפסרי</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.85</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">83% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_005</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_005.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">ה-text שלך היה ממש cute אבל לא ידעתי איך לענות לך</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">ה-+אסז שלך היה cute WON‏ אבל לא ידעתי איך לענות לך</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.83</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">83% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_006</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_006.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אני so excited לטיול שבת אנחנו holdable למלא דברים</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אני so excited‏ לטיול שבת אנחנו 10188016 למלא דברים</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.90</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">83% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_007</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_007.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אחותי כל הזמן on her phone ואמא מתעצבנת עליה בטירוף</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אחותי כל הומן on her phone‏ ואמא מתעצבנת עליה בטירוף</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.86</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">97% good</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_008</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_008.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">ה-outfit שלה היום היה ממש fire כל הבנות הסתכלו</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">outfit-n‏ שלה היום היה ממש fire‏ כל הבנות הסתכלו</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.90</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">94% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_009</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_009.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אני need ללכת לקנות חולצה חדשה ל-event בסוף שבוע</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אני need‏ ללכת לקנות חולצה חדשה event-9‏ בסוף שבוע</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.91</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">94% ok</span></td>
+        </tr>
+        
+        <tr style="background:#cce5ff">
+            <td style="font-weight:bold;text-align:center;padding:8px;">C</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">C_010</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/code_switching/C_010.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">המורה הוא כזה strict אבל basically צודק ברוב הדברים</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">המורה strict MID NIN‏ אבל PN basically‏ ברוב הדברים</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.84</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#dc3545;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">75% poor</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_001</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_001.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">באלי לאחול פיזה אבל אין באית</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">באלי לאחול פיוה אבל אין באית</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">96% good</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_002</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_002.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">מא אמרט אטמול בבת הסעפר על המורא שלך</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">מא אמרט אטמול בבת הסעפר על המורא שלך</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.93</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_003</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_003.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">ספא קנא לי משחק חדס בחנוט הזוט אטמול</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">ספא NIP‏ לי משחק חדס בחנוט VII‏ אטמול</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.89</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#dc3545;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">79% poor</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_004</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_004.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אני חוסב אוטה דווקא נחמדא ולא מבינא למא רבטם</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אני חוסב אוטה דווקא נחמדא ולא מבינא למא רבטם</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_005</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_005.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אמא תעסי לי קפא בבקסא אני ממס עיף עכסיו</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אמא תעסי לי קפא בבקסא אני ממס עיף עכסיו</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.93</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_006</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_006.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">טפסיק לדבר אליי אטה ממס לוסר ולא מבין כלום</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">טפסיק לדבר אליי VAN TON‏ לוסר ולא pI‏ כלום</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.84</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#dc3545;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">76% poor</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_007</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_007.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">אכלטי ארוחט ערב כעט אני סבעא מאוד תודא לאמא</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">אכלטי ארוחט ערב כעט IN‏ סבעא מאוד תודא NONI‏</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.88</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#ffc107;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">83% ok</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_008</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_008.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">פגסטי חבר שלסום בכניון והוא קנא בגדים חדסים</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">פנסטי חבר שלסום בכניון והוא קנא בגדים חדסים</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.87</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">98% good</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_009</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_009.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">מורי ההסטוריא היא כאן עכסיו מסביר על המלכמא הסניא</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">מורי ההסטוריא היא כאן עכסיו מסביר על המלכמא הסניא</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.90</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        
+        <tr style="background:#f8d7da">
+            <td style="font-weight:bold;text-align:center;padding:8px;">D</td>
+            <td style="padding:8px;font-size:9pt;color:#666;">D_010</td>
+            <td style="padding:8px;text-align:center;"><img src="images/images/poor_spelling/D_010.png" style="max-height:60px;border:1px solid #ccc"></td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;">האכ סלי עוסא סיעורי בית בכדר ואמא מקיסא לו ספרים</td>
+            <td style="padding:8px;font-size:11pt;line-height:1.6;direction:rtl;background:#fff;">האכ סלי עוסא סיעורי בית בכדר ואמא מקיסא לו ספרים</td>
+            <td style="padding:8px;text-align:center;font-size:9pt;">0.92</td>
+            <td style="padding:8px;text-align:center;"><span style="background:#28a745;color:white;padding:2px 6px;border-radius:3px;font-size:10pt">100% good</span></td>
+        </tr>
+        </tbody>
+</table>
+</body></html>

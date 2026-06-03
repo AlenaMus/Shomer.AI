@@ -1,0 +1,17 @@
+# Run inside WSL2 Ubuntu with CUDA 12.x and Python 3.11.
+# Install order matters: torch first (matches CUDA), then unsloth on top.
+
+torch>=2.4.0
+transformers>=4.45.0
+peft>=0.13.0
+trl>=0.11.0
+datasets>=3.0.0
+accelerate>=1.0.0
+bitsandbytes>=0.44.0
+unsloth>=2024.10
+scikit-learn>=1.5.0
+pyyaml>=6.0
+tqdm>=4.66.0
+huggingface-hub>=0.25.0
+sentencepiece>=0.2.0
+protobuf>=4.25.0

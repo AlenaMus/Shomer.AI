@@ -1,0 +1,335 @@
+{
+  "module": "classifier",
+  "module_design_doc": "design.md",
+  "prd_reference": "PRD §8.1",
+  "generated_at": "2026-05-31",
+  "tasks": [
+    {
+      "id": "CLASSIFIER-IF-01",
+      "title": "Define TextClassifier Protocol and ClassificationResult schema",
+      "description": "Create server/app/classifier_protocol.py with the TextClassifier Protocol (classify(text) -> ClassificationResult, is_alive() -> bool, model_version property) and extend server/app/schemas.py with the frozen ClassificationResult dataclass (label, confidence, model_version, latency_ms, is_borderline, raw_confidence). This is the seam that decouples the Ollama and HuggingFace adapters from callers.",
+      "module": "classifier",
+      "type": "interface",
+      "priority": "P0",
+      "estimate_hours": 2,
+      "depends_on": [],
+      "acceptance_criteria": [
+        "TextClassifier Protocol exists in server/app/classifier_protocol.py",
+        "ClassificationResult is a frozen dataclass with all 6 fields",
+        "Category Literal type alias covers all 5 SinaLab labels including 'non_offensive'",
+        "isinstance(OllamaClassifier(...), TextClassifier) returns True",
+        "Importing classifier_protocol has no circular dependency with schemas.py"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Frontline latency p99 < 100ms", "Accuracy macro-F1 >= 0.78"],
+      "related_files": [
+        "server/app/classifier_protocol.py",
+        "server/app/schemas.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["protocol", "interface"]
+    },
+    {
+      "id": "CLASSIFIER-CFG-01",
+      "title": "Define ClassifierSettings pydantic-settings model with all env vars",
+      "description": "Add ClassifierSettings(BaseSettings) to server/app/config.py or a new server/app/classifier/settings.py. Must cover: CLASSIFIER_MODEL_VERSION, OLLAMA_BASE_URL, OLLAMA_MODEL, CLASSIFIER_TIMEOUT_S, BORDERLINE_LOW, BORDERLINE_HIGH, CALIBRATION_METHOD, CALIBRATION_PKL_PATH, DICTABERT_MODEL_PATH. Include model version validation logic to reject unknown version strings at startup.",
+      "module": "classifier",
+      "type": "infra",
+      "priority": "P0",
+      "estimate_hours": 1,
+      "depends_on": ["CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "All 9 env vars documented in the LLD are present with correct types and defaults",
+        "Default CLASSIFIER_MODEL_VERSION='v1.0-standin' to preserve current server behavior",
+        "BORDERLINE_LOW=0.3 and BORDERLINE_HIGH=0.7 defaults are present",
+        "Unknown CLASSIFIER_MODEL_VERSION raises ValueError at startup"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/config.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["config"]
+    },
+    {
+      "id": "CLASSIFIER-LOG-01",
+      "title": "Wire structlog bound logger shomer.classifier with required fields",
+      "description": "Configure structlog.get_logger('shomer.classifier') in server/app/classifier.py (and in the new HuggingFaceClassifier). Every classify() call must log the three documented events: classification_complete, classification_borderline, classification_error. Required fields: trace_id, module, event, label, confidence, latency_ms, model_version.",
+      "module": "classifier",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 1,
+      "depends_on": ["CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "classification_complete event includes: label, confidence, raw_confidence, is_borderline, latency_ms, model_version",
+        "classification_borderline event includes: label, confidence, is_borderline=true, escalated_to='context_agent'",
+        "classification_error event includes: error, error_detail, fallback",
+        "Logs inherit trace_id from structlog context var"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/classifier.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["logging"]
+    },
+    {
+      "id": "CLASSIFIER-MET-01",
+      "title": "Define and register Prometheus metrics for the classifier module",
+      "description": "Register all 6 classifier metrics using the shared REGISTRY: classifier_requests_total (Counter, labels=[label, model_version, outcome]), classifier_latency_seconds (Histogram), classifier_confidence_score (Histogram, labels=[label, calibrated]), classifier_borderline_total (Counter, labels=[label]), classifier_error_total (Counter, labels=[error_type]), classifier_calibration_enabled (Gauge, labels=[method]). The latency histogram must prove p99 < 100ms per PRD §8.1.",
+      "module": "classifier",
+      "type": "infra",
+      "priority": "P1",
+      "estimate_hours": 2,
+      "depends_on": ["CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "All 6 metrics registered against shared REGISTRY",
+        "classifier_latency_seconds histogram has sub-100ms buckets (0.01, 0.025, 0.05, 0.075, 0.1, 0.25)",
+        "classifier_borderline_total increments when is_borderline=True",
+        "GET /metrics returns classifier_requests_total after any classify call"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Frontline latency p99 < 100ms"],
+      "related_files": [
+        "server/app/classifier.py",
+        "server/app/metrics.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["metrics", "prometheus"]
+    },
+    {
+      "id": "CLASSIFIER-OLLAMA-01",
+      "title": "Wrap existing classify_text() function in OllamaClassifier implementing TextClassifier Protocol",
+      "description": "Refactor server/app/classifier.py to create OllamaClassifier class that wraps the existing classify_text() function and implements the TextClassifier Protocol. Add _maybe_truncate() for inputs > 2048 chars. Wire ConfidenceCalibrator (pass-through when method='none'). Preserve backward compatibility: the classify_text() module-level function remains importable during the transition.",
+      "module": "classifier",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 4,
+      "depends_on": ["CLASSIFIER-IF-01", "CLASSIFIER-CFG-01", "CLASSIFIER-LOG-01", "CLASSIFIER-MET-01"],
+      "acceptance_criteria": [
+        "OllamaClassifier implements TextClassifier Protocol (passes isinstance check)",
+        "classify() returns ClassificationResult with all 6 fields populated",
+        "is_alive() calls Ollama health check and returns bool",
+        "Text > 2048 chars is truncated with a warning log, not rejected",
+        "Existing server tests for /classify still pass after refactor",
+        "classify_text() module-level function remains callable for backward compatibility"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Frontline latency p99 < 100ms"],
+      "related_files": [
+        "server/app/classifier.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["ollama", "adapter"]
+    },
+    {
+      "id": "CLASSIFIER-CALIBRATION-01",
+      "title": "Implement ConfidenceCalibrator with temperature and isotonic methods",
+      "description": "Create server/app/calibration.py with ConfidenceCalibrator class supporting three modes: 'none' (identity), 'temperature' (temperature scaling), 'isotonic' (sklearn IsotonicRegression loaded from pkl). The calibrator must load from a .pkl file at construction and return raw_conf unchanged when the file is absent. This is critical for making the borderline zone (0.3-0.7) statistically meaningful.",
+      "module": "classifier",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["CLASSIFIER-IF-01", "CLASSIFIER-CFG-01"],
+      "acceptance_criteria": [
+        "ConfidenceCalibrator exists in server/app/calibration.py",
+        "method='none' returns raw_conf unchanged",
+        "method='isotonic' loads from pkl_path and applies sklearn IsotonicRegression",
+        "Missing pkl file at pkl_path produces no exception (returns raw_conf)",
+        "transform() output is always in [0.0, 1.0]"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Accuracy macro-F1 >= 0.78"],
+      "related_files": [
+        "server/app/calibration.py"
+      ],
+      "phase": "Phase 3",
+      "meeting": "5",
+      "labels": ["calibration", "ml"]
+    },
+    {
+      "id": "CLASSIFIER-DICTABERT-01",
+      "title": "Implement HuggingFaceClassifier using DictaBERT-base for sequence classification",
+      "description": "Create server/app/classifier.py HuggingFaceClassifier class implementing TextClassifier Protocol. Load AutoModelForSequenceClassification from DICTABERT_MODEL_PATH with 5 labels. Run forward pass with AutoTokenizer, max_length=128, truncation=True. Compute calibrated confidence from softmax output. model_version returns 'v1.1-dictabert'. Target p99 < 100ms on CPU.",
+      "module": "classifier",
+      "type": "adapter",
+      "priority": "P0",
+      "estimate_hours": 6,
+      "depends_on": ["CLASSIFIER-IF-01", "CLASSIFIER-CFG-01", "CLASSIFIER-CALIBRATION-01"],
+      "acceptance_criteria": [
+        "HuggingFaceClassifier implements TextClassifier Protocol",
+        "Loads model from DICTABERT_MODEL_PATH at construction; fails fast with OSError if path missing",
+        "classify() returns ClassificationResult with label from the 5-class label set",
+        "model_version returns 'v1.1-dictabert'",
+        "p99 latency < 100ms verified by running 200 inferences on sample texts",
+        "is_alive() returns True if model is loaded and forward pass succeeds"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Frontline latency p99 < 100ms", "Accuracy macro-F1 >= 0.78"],
+      "related_files": [
+        "server/app/classifier.py",
+        "training/train_dictabert.py"
+      ],
+      "phase": "Phase 3",
+      "meeting": "5",
+      "labels": ["dictabert", "huggingface", "ml"]
+    },
+    {
+      "id": "CLASSIFIER-TRAIN-01",
+      "title": "Write train_dictabert.py training script for DictaBERT sequence classification",
+      "description": "Create training/train_dictabert.py using HuggingFace Trainer with AutoModelForSequenceClassification(dicta-il/dictabert, num_labels=5). Implement the hyperparameter baseline from the LLD: lr=2e-5, batch=32, epochs=5, warmup_ratio=0.1, weight_decay=0.01, lr_scheduler=cosine, eval_strategy=epoch, metric_for_best=macro_f1, bf16=True, seed=42. Include class-weight balancing for SinaLab imbalance.",
+      "module": "classifier",
+      "type": "feature",
+      "priority": "P0",
+      "estimate_hours": 8,
+      "depends_on": ["CLASSIFIER-IF-01"],
+      "acceptance_criteria": [
+        "training/train_dictabert.py runs end-to-end in WSL2 on RTX 5080",
+        "Outputs model checkpoint to outputs/dictabert-offensive/",
+        "Trains on data/train.jsonl and evaluates on data/validation.jsonl each epoch",
+        "Best checkpoint is selected by macro_f1 metric",
+        "Training completes without OOM on 16GB VRAM"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Accuracy macro-F1 >= 0.78"],
+      "related_files": [
+        "training/train_dictabert.py",
+        "training/configs/train_dictabert.yaml"
+      ],
+      "phase": "Phase 3",
+      "meeting": "5",
+      "labels": ["training", "ml", "dictabert"]
+    },
+    {
+      "id": "CLASSIFIER-FAIL-01",
+      "title": "Implement classifier failure modes: Ollama down, malformed JSON, model missing",
+      "description": "Implement all failure modes from LLD §8: Ollama unreachable -> return ClassificationResult(label='non_offensive', confidence=0.5, error=True) with review_flag; malformed JSON in model output -> regex fallback then default to 'non_offensive'; model not found in Ollama -> fail-fast at startup; DictaBERT checkpoint missing -> fail-fast at startup.",
+      "module": "classifier",
+      "type": "feature",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["CLASSIFIER-OLLAMA-01", "CLASSIFIER-DICTABERT-01"],
+      "acceptance_criteria": [
+        "httpx.ConnectError on Ollama returns ClassificationResult with error=True and confidence=0.5",
+        "Malformed JSON triggers regex fallback in parse_model_output(); if regex fails returns non_offensive",
+        "Ollama model not found (HTTP 404) at startup raises and prevents server from starting",
+        "DictaBERT OSError at startup raises and prevents server from starting",
+        "classification_error log event emits with error, error_detail, fallback fields"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Availability frontline >= 99%"],
+      "related_files": [
+        "server/app/classifier.py",
+        "server/app/prompt.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["fallback", "error-handling"]
+    },
+    {
+      "id": "CLASSIFIER-CT-01",
+      "title": "Write TextClassifier Protocol contract test suite",
+      "description": "Write tests/contracts/test_text_classifier_contract.py parameterized over OllamaClassifier and HuggingFaceClassifier. Assert: classify() returns ClassificationResult with all required fields, confidence is in [0.0, 1.0], is_borderline is consistent with confidence and thresholds, is_alive() returns bool, model_version is non-empty string. Include contract assertion that both adapters return the same shape for the same text.",
+      "module": "classifier",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["CLASSIFIER-IF-01", "CLASSIFIER-OLLAMA-01"],
+      "acceptance_criteria": [
+        "Contract test at tests/contracts/test_text_classifier_contract.py",
+        "Both OllamaClassifier and HuggingFaceClassifier are registered as test adapters",
+        "Contract verifies label is in the 5-value Category set",
+        "Contract verifies confidence is in [0.0, 1.0]",
+        "Contract verifies is_alive() returns a bool (not None)"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/contracts/test_text_classifier_contract.py"
+      ],
+      "phase": "Phase 3",
+      "meeting": "5",
+      "labels": ["test", "contract"]
+    },
+    {
+      "id": "CLASSIFIER-UT-01",
+      "title": "Unit tests for OllamaClassifier and HuggingFaceClassifier adapters",
+      "description": "Write unit tests in server/tests/test_classifier.py covering: happy path text classification, borderline detection (is_borderline=True for confidence in [0.3, 0.7]), truncation behavior for long text, Ollama error fallback, calibration pass-through (method='none'), and legacy-label normalization (the parse_model_output() defensive path: legacy 'none-offensive' (hyphen) is rewritten to canonical 'non_offensive' (underscore), see review.md G-02). OllamaClient is mocked via MockWebServer.",
+      "module": "classifier",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 4,
+      "depends_on": ["CLASSIFIER-OLLAMA-01", "CLASSIFIER-FAIL-01", "CLASSIFIER-CALIBRATION-01"],
+      "acceptance_criteria": [
+        "Tests cover: abusive label with confidence 0.88 (not borderline), confidence 0.55 (borderline)",
+        "Text > 2048 chars is truncated; classification still returns a result",
+        "OllamaClient mocked to raise ConnectError -> error=True in result",
+        "Calibration method='none' returns raw_confidence unchanged",
+        "Legacy-label normalization: model returns 'none-offensive' (hyphen, e.g. from a stand-in model trained on older data) -> stored as canonical 'non_offensive' (underscore)"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/tests/test_classifier.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "unit"]
+    },
+    {
+      "id": "CLASSIFIER-IT-01",
+      "title": "Integration test classifier wired into FastAPI /classify endpoint",
+      "description": "Write integration test in server/tests/test_classifier_integration.py using FastAPI TestClient. Test: POST /classify with Hebrew text returns 200 ClassifyResponse; borderline confidence triggers is_borderline=True; error from classifier returns review_flag in response; GET /model/info returns model name and labels.",
+      "module": "classifier",
+      "type": "test",
+      "priority": "P1",
+      "estimate_hours": 3,
+      "depends_on": ["CLASSIFIER-OLLAMA-01", "CLASSIFIER-FAIL-01"],
+      "acceptance_criteria": [
+        "POST /classify {text: 'שלום'} returns 200 with category field",
+        "Mocked classifier returning confidence=0.55 causes context_agent call path (when CA enabled)",
+        "Mocked classifier returning error=True causes review_flag=True in response",
+        "GET /model/info returns {model, labels: ['abusive', 'hate', 'violence', 'pornographic', 'non_offensive']}"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": ["Frontline latency p99 < 100ms"],
+      "related_files": [
+        "server/tests/test_classifier_integration.py"
+      ],
+      "phase": "Phase 1",
+      "meeting": "5",
+      "labels": ["test", "integration"]
+    },
+    {
+      "id": "CLASSIFIER-DOC-01",
+      "title": "Write README for the classifier module under server/app/",
+      "description": "Write server/app/classifier/README.md (or extend existing inline comments) with: module purpose, TextClassifier Protocol contract, two adapters (Ollama stand-in vs DictaBERT), calibration design, borderline zone definition, label schema with SinaLab mapping table, and training pipeline summary. Reference training/train_dictabert.py.",
+      "module": "classifier",
+      "type": "docs",
+      "priority": "P2",
+      "estimate_hours": 1,
+      "depends_on": ["CLASSIFIER-DICTABERT-01"],
+      "acceptance_criteria": [
+        "README exists and documents both classifier adapters",
+        "SinaLab 5-label mapping table is included",
+        "Borderline zone thresholds are explained with rationale",
+        "Training instructions reference WSL2 and the RTX 5080 GPU"
+      ],
+      "related_prd_section": "§8.1",
+      "related_nfr": [],
+      "related_files": [
+        "server/app/classifier/README.md"
+      ],
+      "phase": "Phase 3",
+      "meeting": "5",
+      "labels": ["docs"]
+    }
+  ]
+}

@@ -124,6 +124,8 @@ def main():
             "id": r["id"],
             "style_label": r["style_label"],
             "style": r["style"],
+            "offensive": r.get("offensive", False),
+            "category": r.get("category", "none"),
             "cer": c,
             "cer_raw": c_raw,
             "wer": w,

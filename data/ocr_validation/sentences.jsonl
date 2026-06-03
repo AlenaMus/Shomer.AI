@@ -1,40 +1,1040 @@
-{"id": "A_001", "style": "clear_hebrew", "text": "היום למדנו על הגיאוגרפיה של ישראל בשיעור מולדת.", "style_label": "A"}
-{"id": "A_002", "style": "clear_hebrew", "text": "אמא ביקשה ממני להכין שיעורי בית לפני שאצא לחברים.", "style_label": "A"}
-{"id": "A_003", "style": "clear_hebrew", "text": "בסוף השבוע נסענו לחוף הים עם המשפחה כולה.", "style_label": "A"}
-{"id": "A_004", "style": "clear_hebrew", "text": "המורה הסבירה לנו על ההיסטוריה של ירושלים בכיתה.", "style_label": "A"}
-{"id": "A_005", "style": "clear_hebrew", "text": "אחותי הקטנה אוהבת לצייר ולשחק בבובות בחדר שלה.", "style_label": "A"}
-{"id": "A_006", "style": "clear_hebrew", "text": "נכנסתי לחדר השינה והבחנתי שאבא כבר חזר מהעבודה.", "style_label": "A"}
-{"id": "A_007", "style": "clear_hebrew", "text": "הקבוצה שלנו ניצחה במשחק הכדורסל ארבעים שלושים שש.", "style_label": "A"}
-{"id": "A_008", "style": "clear_hebrew", "text": "אנחנו לומדים מתמטיקה ואנגלית במשך שש שעות בכל יום.", "style_label": "A"}
-{"id": "A_009", "style": "clear_hebrew", "text": "המורה החדש מאוד נחמד ומסביר את החומר בצורה ברורה.", "style_label": "A"}
-{"id": "A_010", "style": "clear_hebrew", "text": "בקיץ אנחנו מתכננים לטוס לאיטליה ולבקר ברומא ובמילאנו.", "style_label": "A"}
-{"id": "B_001", "style": "children_mistakes", "text": "אנחנו הלכנו לגנ ציבורי ושחקנו כדורגל בשביל מלא זמן", "style_label": "B"}
-{"id": "B_002", "style": "children_mistakes", "text": "אחי כזה אש היום בכיתא חחח לא מאמינה שאמרת את זה", "style_label": "B"}
-{"id": "B_003", "style": "children_mistakes", "text": "אבא קנה לי משחק חדש שאני ממש רציטי הרבה זמנ", "style_label": "B"}
-{"id": "B_004", "style": "children_mistakes", "text": "המורא בכיטה כעסה כי הילדים דיברו ולא הקשיבו לה", "style_label": "B"}
-{"id": "B_005", "style": "children_mistakes", "text": "ביטה הסטיברסט שלי גועלי קצת ואני לא אוכלת לסעוד שמ", "style_label": "B"}
-{"id": "B_006", "style": "children_mistakes", "text": "אמא אמרא לי לא לאחר לבית הספר אבל איחרתי בכ זאט", "style_label": "B"}
-{"id": "B_007", "style": "children_mistakes", "text": "השיעור היה ממש משעמ ואני כמעט נרדמטי באמצא", "style_label": "B"}
-{"id": "B_008", "style": "children_mistakes", "text": "החברה שלי כעט כועסת עלי בלי שום סיבא רגישונית", "style_label": "B"}
-{"id": "B_009", "style": "children_mistakes", "text": "הלכנו לבריכא עם החברות וזה היה כזה כיפ אש", "style_label": "B"}
-{"id": "B_010", "style": "children_mistakes", "text": "אבא הביא לי גלידה אחרי שעשיתי שיעורי בית כמו ילדה טובא", "style_label": "B"}
-{"id": "C_001", "style": "code_switching", "text": "אני so done עם בית הספר היום literally לא יכולה", "style_label": "C"}
-{"id": "C_002", "style": "code_switching", "text": "ה-vibe היום היה ממש מוזר ash מי הזמין אותה?", "style_label": "C"}
-{"id": "C_003", "style": "code_switching", "text": "התגלגלתי מצחוק מהמשעמ בשיעור היה ממש funny אתה יודע", "style_label": "C"}
-{"id": "C_004", "style": "code_switching", "text": "הסרט היה כזה boring שנרדמתי באמצא, omg איך זה אפסרי", "style_label": "C"}
-{"id": "C_005", "style": "code_switching", "text": "ה-text שלך היה ממש cute אבל לא ידעתי איך לענות לך", "style_label": "C"}
-{"id": "C_006", "style": "code_switching", "text": "אני so excited לטיול שבת אנחנו holdable למלא דברים", "style_label": "C"}
-{"id": "C_007", "style": "code_switching", "text": "אחותי כל הזמן on her phone ואמא מתעצבנת עליה בטירוף", "style_label": "C"}
-{"id": "C_008", "style": "code_switching", "text": "ה-outfit שלה היום היה ממש fire כל הבנות הסתכלו", "style_label": "C"}
-{"id": "C_009", "style": "code_switching", "text": "אני need ללכת לקנות חולצה חדשה ל-event בסוף שבוע", "style_label": "C"}
-{"id": "C_010", "style": "code_switching", "text": "המורה הוא כזה strict אבל basically צודק ברוב הדברים", "style_label": "C"}
-{"id": "D_001", "style": "poor_spelling", "text": "באלי לאחול פיזה אבל אין באית", "style_label": "D"}
-{"id": "D_002", "style": "poor_spelling", "text": "מא אמרט אטמול בבת הסעפר על המורא שלך", "style_label": "D"}
-{"id": "D_003", "style": "poor_spelling", "text": "ספא קנא לי משחק חדס בחנוט הזוט אטמול", "style_label": "D"}
-{"id": "D_004", "style": "poor_spelling", "text": "אני חוסב אוטה דווקא נחמדא ולא מבינא למא רבטם", "style_label": "D"}
-{"id": "D_005", "style": "poor_spelling", "text": "אמא תעסי לי קפא בבקסא אני ממס עיף עכסיו", "style_label": "D"}
-{"id": "D_006", "style": "poor_spelling", "text": "טפסיק לדבר אליי אטה ממס לוסר ולא מבין כלום", "style_label": "D"}
-{"id": "D_007", "style": "poor_spelling", "text": "אכלטי ארוחט ערב כעט אני סבעא מאוד תודא לאמא", "style_label": "D"}
-{"id": "D_008", "style": "poor_spelling", "text": "פגסטי חבר שלסום בכניון והוא קנא בגדים חדסים", "style_label": "D"}
-{"id": "D_009", "style": "poor_spelling", "text": "מורי ההסטוריא היא כאן עכסיו מסביר על המלכמא הסניא", "style_label": "D"}
-{"id": "D_010", "style": "poor_spelling", "text": "האכ סלי עוסא סיעורי בית בכדר ואמא מקיסא לו ספרים", "style_label": "D"}
+{"id": "A_none_001", "style": "clear_hebrew", "style_label": "A", "text": "היום למדנו על תולדות מדינת ישראל בשיעור היסטוריה.", "offensive": false, "category": "none"}
+{"id": "A_none_002", "style": "clear_hebrew", "style_label": "A", "text": "אחותי הגדולה עזרה לי להכין את עבודת החקר במדעים.", "offensive": false, "category": "none"}
+{"id": "A_none_003", "style": "clear_hebrew", "style_label": "A", "text": "בסוף השבוע נפגשנו עם כל בני המשפחה לארוחת צהריים חגיגית.", "offensive": false, "category": "none"}
+{"id": "A_none_004", "style": "clear_hebrew", "style_label": "A", "text": "חברי הטוב ביותר ואני שיחקנו במשחקי קופסה עד שעות הערב המאוחרות.", "offensive": false, "category": "none"}
+{"id": "A_none_005", "style": "clear_hebrew", "style_label": "A", "text": "הרגשתי התרגשות רבה לקראת הטיול השנתי לחרמון.", "offensive": false, "category": "none"}
+{"id": "A_none_006", "style": "clear_hebrew", "style_label": "A", "text": "המורה שיבחה אותי על ההתמדה והשקדנות בלימודים.", "offensive": false, "category": "none"}
+{"id": "A_none_007", "style": "clear_hebrew", "style_label": "A", "text": "אבי לקח אותי לפארק לשחק כדורגל אחר הצהריים.", "offensive": false, "category": "none"}
+{"id": "A_none_008", "style": "clear_hebrew", "style_label": "A", "text": "היה לי יום מוצלח מאוד, מלא חוויות נעימות ושיחות מעניינות.", "offensive": false, "category": "none"}
+{"id": "A_none_009", "style": "clear_hebrew", "style_label": "A", "text": "אנחנו מתכננים ביקור במוזיאון המדע בשבוע הבא עם הכיתה.", "offensive": false, "category": "none"}
+{"id": "A_none_010", "style": "clear_hebrew", "style_label": "A", "text": "סבתא לימדה אותי מתכון סודי לעוגת שוקולד טעימה.", "offensive": false, "category": "none"}
+{"id": "A_none_011", "style": "clear_hebrew", "style_label": "A", "text": "שיחה עם חבר קרוב תמיד מרוממת את נפשי.", "offensive": false, "category": "none"}
+{"id": "A_none_012", "style": "clear_hebrew", "style_label": "A", "text": "חשוב לשמור על עקרונות הגינות בזמן משחק.", "offensive": false, "category": "none"}
+{"id": "A_none_013", "style": "clear_hebrew", "style_label": "A", "text": "אני אוהב את הרגעים השקטים שבהם אני קורא ספר מרתק.", "offensive": false, "category": "none"}
+{"id": "A_none_014", "style": "clear_hebrew", "style_label": "A", "text": "הורים מעניקים לילדיהם חום, אהבה ותמיכה בלתי מסויגת.", "offensive": false, "category": "none"}
+{"id": "A_none_015", "style": "clear_hebrew", "style_label": "A", "text": "אסיפת ההורים עברה בהצלחה, והורי קיבלו משוב חיובי.", "offensive": false, "category": "none"}
+{"id": "A_none_016", "style": "clear_hebrew", "style_label": "A", "text": "ילדי השכונה שיחקו מחבואים עד השקיעה.", "offensive": false, "category": "none"}
+{"id": "A_none_017", "style": "clear_hebrew", "style_label": "A", "text": "ליבי התמלא שמחה למראה הפרחים הראשונים באביב.", "offensive": false, "category": "none"}
+{"id": "A_none_018", "style": "clear_hebrew", "style_label": "A", "text": "סדר יום קבוע מסייע לי להתמודד עם המטלות השונות.", "offensive": false, "category": "none"}
+{"id": "A_none_019", "style": "clear_hebrew", "style_label": "A", "text": "אחי הקטן צייר ציור יפהפה ונתן לי אותו במתנה.", "offensive": false, "category": "none"}
+{"id": "A_none_020", "style": "clear_hebrew", "style_label": "A", "text": "אנו מקפידים לאכול יחד ארוחת ערב משפחתית בכל יום.", "offensive": false, "category": "none"}
+{"id": "A_none_021", "style": "clear_hebrew", "style_label": "A", "text": "המבחן במתמטיקה היה מאתגר, אך הרגשתי שהצלחתי בו.", "offensive": false, "category": "none"}
+{"id": "A_none_022", "style": "clear_hebrew", "style_label": "A", "text": "נפגשתי עם חבריי הטובים בבית הקפה השכונתי.", "offensive": false, "category": "none"}
+{"id": "A_none_023", "style": "clear_hebrew", "style_label": "A", "text": "השקיעה בחוף הים היתה מרהיבה ועוררה השראה.", "offensive": false, "category": "none"}
+{"id": "A_none_024", "style": "clear_hebrew", "style_label": "A", "text": "תמיד נעים לחזור הביתה אחרי יום לימודים ארוך.", "offensive": false, "category": "none"}
+{"id": "A_none_025", "style": "clear_hebrew", "style_label": "A", "text": "דמות המורה מהווה מודל לחיקוי עבור התלמידים.", "offensive": false, "category": "none"}
+{"id": "A_none_026", "style": "clear_hebrew", "style_label": "A", "text": "אנו משתדלים להקדיש זמן איכות לכל אחד מבני המשפחה.", "offensive": false, "category": "none"}
+{"id": "A_none_027", "style": "clear_hebrew", "style_label": "A", "text": "שמחת הניצחון במשחק היתה גדולה, אך גם ידענו להפסיד בכבוד.", "offensive": false, "category": "none"}
+{"id": "A_none_028", "style": "clear_hebrew", "style_label": "A", "text": "התרגילים בחוברת העבודה עזרו לי להבין את החומר טוב יותר.", "offensive": false, "category": "none"}
+{"id": "A_none_029", "style": "clear_hebrew", "style_label": "A", "text": "שיחה מעמיקה עם הורים מספקת הבנה ותמיכה.", "offensive": false, "category": "none"}
+{"id": "A_none_030", "style": "clear_hebrew", "style_label": "A", "text": "אני אוהב את תחושת השקט והרוגע כאשר אני יוצא לטבע.", "offensive": false, "category": "none"}
+{"id": "A_none_031", "style": "clear_hebrew", "style_label": "A", "text": "יום ההולדת של סבא היה אירוע מרגש ומשמח לכולם.", "offensive": false, "category": "none"}
+{"id": "A_none_032", "style": "clear_hebrew", "style_label": "A", "text": "שיעורי הספורט מועילים לבריאות הגוף ומצב הרוח.", "offensive": false, "category": "none"}
+{"id": "A_none_033", "style": "clear_hebrew", "style_label": "A", "text": "פגישה עם חברים ותיקים תמיד מעלה זיכרונות יפים.", "offensive": false, "category": "none"}
+{"id": "A_none_034", "style": "clear_hebrew", "style_label": "A", "text": "ההצגה הבית ספרית היתה מוצלחת מאוד וזכתה לתשואות רבות.", "offensive": false, "category": "none"}
+{"id": "A_none_035", "style": "clear_hebrew", "style_label": "A", "text": "הכנת שיעורים באופן סדיר תורמת להצלחה בלימודים.", "offensive": false, "category": "none"}
+{"id": "A_none_036", "style": "clear_hebrew", "style_label": "A", "text": "סקרנות היא כוח מניע בלמידה ובגילוי עולמות חדשים.", "offensive": false, "category": "none"}
+{"id": "A_none_037", "style": "clear_hebrew", "style_label": "A", "text": "אנו מברכים על שיתוף הפעולה בין ההורים לצוות בית הספר.", "offensive": false, "category": "none"}
+{"id": "A_none_038", "style": "clear_hebrew", "style_label": "A", "text": "הכלב המשפחתי שמח מאוד כאשר אנו חוזרים הביתה.", "offensive": false, "category": "none"}
+{"id": "A_none_039", "style": "clear_hebrew", "style_label": "A", "text": "משחקי חשיבה מפתחים את יכולות הריכוז והחשיבה האסטרטגית.", "offensive": false, "category": "none"}
+{"id": "A_none_040", "style": "clear_hebrew", "style_label": "A", "text": "תחושת האחווה בין התלמידים בכיתה היתה ניכרת ומרגשת.", "offensive": false, "category": "none"}
+{"id": "A_none_041", "style": "clear_hebrew", "style_label": "A", "text": "אמא תמיד דואגת שיהיה לי כל מה שאני צריך ללימודים.", "offensive": false, "category": "none"}
+{"id": "A_none_042", "style": "clear_hebrew", "style_label": "A", "text": "שיחת טלפון עם חברה רחוקה שימחה אותי מאוד.", "offensive": false, "category": "none"}
+{"id": "A_none_043", "style": "clear_hebrew", "style_label": "A", "text": "הפרויקט הקבוצתי דרש שיתוף פעולה והקשבה הדדית.", "offensive": false, "category": "none"}
+{"id": "A_none_044", "style": "clear_hebrew", "style_label": "A", "text": "אנו יוצאים לטיול משפחתי לים המלח בחופשת הפסח.", "offensive": false, "category": "none"}
+{"id": "A_none_045", "style": "clear_hebrew", "style_label": "A", "text": "הקשבה פעילה לדברי הזולת היא מפתח למערכות יחסים טובות.", "offensive": false, "category": "none"}
+{"id": "A_none_046", "style": "clear_hebrew", "style_label": "A", "text": "אני אוהב לפתור חידות היגיון מאתגרות בזמני הפנוי.", "offensive": false, "category": "none"}
+{"id": "A_none_047", "style": "clear_hebrew", "style_label": "A", "text": "אבא עזר לי לבנות דגם מורכב של מטוס.", "offensive": false, "category": "none"}
+{"id": "A_none_048", "style": "clear_hebrew", "style_label": "A", "text": "ציפיתי בכיליון עיניים ליום ההולדת שלי השנה.", "offensive": false, "category": "none"}
+{"id": "A_none_049", "style": "clear_hebrew", "style_label": "A", "text": "ארוחת שישי בערב עם כל המשפחה היא מסורת אהובה.", "offensive": false, "category": "none"}
+{"id": "A_none_050", "style": "clear_hebrew", "style_label": "A", "text": "שיעור האמנות בבית הספר תמיד מאפשר ביטוי עצמי יצירתי.", "offensive": false, "category": "none"}
+{"id": "A_none_051", "style": "clear_hebrew", "style_label": "A", "text": "השמש זרחה הבוקר באור נעים ומחמם.", "offensive": false, "category": "none"}
+{"id": "A_none_052", "style": "clear_hebrew", "style_label": "A", "text": "הילדים שיחקו בחצר הגן בשמחה ובמרץ רב.", "offensive": false, "category": "none"}
+{"id": "A_none_053", "style": "clear_hebrew", "style_label": "A", "text": "אבי עזר לי להכין את הדגם למשימה בשיעור מדעים.", "offensive": false, "category": "none"}
+{"id": "A_none_054", "style": "clear_hebrew", "style_label": "A", "text": "במהלך השיעור הקשבנו לדברי המורה בתשומת לב.", "offensive": false, "category": "none"}
+{"id": "A_none_055", "style": "clear_hebrew", "style_label": "A", "text": "חבריי ואני תכננו מפגש משותף לסוף השבוע.", "offensive": false, "category": "none"}
+{"id": "A_none_056", "style": "clear_hebrew", "style_label": "A", "text": "הספרייה העירונית פתחה את שעריה לקראת הערב.", "offensive": false, "category": "none"}
+{"id": "A_none_057", "style": "clear_hebrew", "style_label": "A", "text": "אמי הכינה עוגה טעימה לכבוד יום ההולדת.", "offensive": false, "category": "none"}
+{"id": "A_none_058", "style": "clear_hebrew", "style_label": "A", "text": "הרגשתי התרגשות לקראת הטיול השנתי המתוכנן.", "offensive": false, "category": "none"}
+{"id": "A_none_059", "style": "clear_hebrew", "style_label": "A", "text": "הצבעים בציור שיצרנו היו בהירים ומלאי חיים.", "offensive": false, "category": "none"}
+{"id": "A_none_060", "style": "clear_hebrew", "style_label": "A", "text": "שעת אחר הצהריים הייתה רגועה ושקטה בבית.", "offensive": false, "category": "none"}
+{"id": "A_none_061", "style": "clear_hebrew", "style_label": "A", "text": "למדנו פרק חדש בהיסטוריה של ארצנו.", "offensive": false, "category": "none"}
+{"id": "A_none_062", "style": "clear_hebrew", "style_label": "A", "text": "שחקני הקבוצה התאמנו במרץ לקראת המשחק החשוב.", "offensive": false, "category": "none"}
+{"id": "A_none_063", "style": "clear_hebrew", "style_label": "A", "text": "סבתי סיפרה סיפורים מרתקים על ימי ילדותה.", "offensive": false, "category": "none"}
+{"id": "A_none_064", "style": "clear_hebrew", "style_label": "A", "text": "הילדים אספו צדפים יפים לאורך חוף הים.", "offensive": false, "category": "none"}
+{"id": "A_none_065", "style": "clear_hebrew", "style_label": "A", "text": "אחי הקטן צחק בקול כששיחקנו יחד.", "offensive": false, "category": "none"}
+{"id": "A_none_066", "style": "clear_hebrew", "style_label": "A", "text": "הערב נצפה בסרט משפחתי מהנה.", "offensive": false, "category": "none"}
+{"id": "A_none_067", "style": "clear_hebrew", "style_label": "A", "text": "ניסיתי לפתור את חידת ההיגיון המאתגרת.", "offensive": false, "category": "none"}
+{"id": "A_none_068", "style": "clear_hebrew", "style_label": "A", "text": "הפרחים בגינה פרחו בצבעים עזים וריחניים.", "offensive": false, "category": "none"}
+{"id": "A_none_069", "style": "clear_hebrew", "style_label": "A", "text": "הרגשתי סיפוק רב עם סיום המשימה.", "offensive": false, "category": "none"}
+{"id": "A_none_070", "style": "clear_hebrew", "style_label": "A", "text": "החברים התאספו סביב השולחן למשחק קלפים.", "offensive": false, "category": "none"}
+{"id": "A_none_071", "style": "clear_hebrew", "style_label": "A", "text": "המורה שיבחה את העבודה שהגשתי בכיתה.", "offensive": false, "category": "none"}
+{"id": "A_none_072", "style": "clear_hebrew", "style_label": "A", "text": "נסענו לבקר את בני הדודים המתגוררים בעיר אחרת.", "offensive": false, "category": "none"}
+{"id": "A_none_073", "style": "clear_hebrew", "style_label": "A", "text": "בבוקר קמנו מוקדם כדי לצאת לטיול רגלי.", "offensive": false, "category": "none"}
+{"id": "A_none_074", "style": "clear_hebrew", "style_label": "A", "text": "הציפורים צייצו מחוץ לחלון בנעימות.", "offensive": false, "category": "none"}
+{"id": "A_none_075", "style": "clear_hebrew", "style_label": "A", "text": "חשתי שמחה עמוקה בלב על ההצלחה.", "offensive": false, "category": "none"}
+{"id": "A_none_076", "style": "clear_hebrew", "style_label": "A", "text": "הכנו יחד ארוחת ערב משפחתית.", "offensive": false, "category": "none"}
+{"id": "A_none_077", "style": "clear_hebrew", "style_label": "A", "text": "התלמידים עבדו בקבוצות על פרויקט גמר.", "offensive": false, "category": "none"}
+{"id": "A_none_078", "style": "clear_hebrew", "style_label": "A", "text": "שיחקנו כדורגל במגרש השכונתי עד רדת החשיכה.", "offensive": false, "category": "none"}
+{"id": "A_none_079", "style": "clear_hebrew", "style_label": "A", "text": "ההורים עודדו אותי להמשיך לנסות למרות הקושי.", "offensive": false, "category": "none"}
+{"id": "A_none_080", "style": "clear_hebrew", "style_label": "A", "text": "למדנו על המחזוריות בטבע בשיעור מדעים.", "offensive": false, "category": "none"}
+{"id": "A_none_081", "style": "clear_hebrew", "style_label": "A", "text": "בילינו את אחר הצהריים בקריאת ספרים מעניינים.", "offensive": false, "category": "none"}
+{"id": "A_none_082", "style": "clear_hebrew", "style_label": "A", "text": "החברות שוחחו על תוכניותיהן לחופשה הקרובה.", "offensive": false, "category": "none"}
+{"id": "A_none_083", "style": "clear_hebrew", "style_label": "A", "text": "הירח הבהיר האיר את הלילה בשלווה.", "offensive": false, "category": "none"}
+{"id": "A_none_084", "style": "clear_hebrew", "style_label": "A", "text": "ציירתי תמונה של הנוף הנשקף מחלוני.", "offensive": false, "category": "none"}
+{"id": "A_none_085", "style": "clear_hebrew", "style_label": "A", "text": "התרגשתי לקבל ציון גבוה במבחן המתמטיקה.", "offensive": false, "category": "none"}
+{"id": "A_none_086", "style": "clear_hebrew", "style_label": "A", "text": "סייעתי לאחותי הקטנה להרכיב פאזל גדול.", "offensive": false, "category": "none"}
+{"id": "A_none_087", "style": "clear_hebrew", "style_label": "A", "text": "יצאנו לטיול באופניים בשביל הירוק.", "offensive": false, "category": "none"}
+{"id": "A_none_088", "style": "clear_hebrew", "style_label": "A", "text": "הכלב שלנו רץ בשמחה ברחבי הגינה.", "offensive": false, "category": "none"}
+{"id": "A_none_089", "style": "clear_hebrew", "style_label": "A", "text": "שיתפתי את חבריי ברעיונותיי החדשים.", "offensive": false, "category": "none"}
+{"id": "A_none_090", "style": "clear_hebrew", "style_label": "A", "text": "בערב ישבנו יחד וצפינו בתוכנית טלוויזיה.", "offensive": false, "category": "none"}
+{"id": "A_none_091", "style": "clear_hebrew", "style_label": "A", "text": "הפסקת עשר הייתה הזדמנות טובה לנוח ולשוחח.", "offensive": false, "category": "none"}
+{"id": "A_none_092", "style": "clear_hebrew", "style_label": "A", "text": "למדנו על חשיבותה של שמירת הסביבה.", "offensive": false, "category": "none"}
+{"id": "A_none_093", "style": "clear_hebrew", "style_label": "A", "text": "הילדים בנו מגדל חול גבוה ומרהיב בחוף.", "offensive": false, "category": "none"}
+{"id": "A_none_094", "style": "clear_hebrew", "style_label": "A", "text": "אמא הקריאה לנו סיפור לפני השינה.", "offensive": false, "category": "none"}
+{"id": "A_none_095", "style": "clear_hebrew", "style_label": "A", "text": "הרגשתי תחושת רוגע ושלווה לאחר יום עמוס.", "offensive": false, "category": "none"}
+{"id": "A_none_096", "style": "clear_hebrew", "style_label": "A", "text": "תכננו את היום הבא בפירוט ובקפדנות.", "offensive": false, "category": "none"}
+{"id": "A_none_097", "style": "clear_hebrew", "style_label": "A", "text": "החברים התחלפו ביניהם במשחקי קופסה שונים.", "offensive": false, "category": "none"}
+{"id": "A_none_098", "style": "clear_hebrew", "style_label": "A", "text": "השלמתי את כל שיעורי הבית מבעוד מועד.", "offensive": false, "category": "none"}
+{"id": "A_none_099", "style": "clear_hebrew", "style_label": "A", "text": "הסתכלתי לשמיים וראיתי עננים בצורות מעניינות.", "offensive": false, "category": "none"}
+{"id": "A_none_100", "style": "clear_hebrew", "style_label": "A", "text": "אנו מקווים ליהנות מאוד בחופשה הקרובה.", "offensive": false, "category": "none"}
+{"id": "A_none_101", "style": "clear_hebrew", "style_label": "A", "text": "הילדים שיחקו בכדורגל בחצר בית הספר בהפסקה הגדולה.", "offensive": false, "category": "none"}
+{"id": "A_none_102", "style": "clear_hebrew", "style_label": "A", "text": "אחותי הגדולה עזרה לי להבין את חומר הלימוד לקראת המבחן.", "offensive": false, "category": "none"}
+{"id": "A_none_103", "style": "clear_hebrew", "style_label": "A", "text": "אנו נוהגים לאכול יחד ארוחת ערב משפחתית בכל יום.", "offensive": false, "category": "none"}
+{"id": "A_none_104", "style": "clear_hebrew", "style_label": "A", "text": "החברות התכנסו אחר הצהריים כדי לשוחח ולצחוק.", "offensive": false, "category": "none"}
+{"id": "A_none_105", "style": "clear_hebrew", "style_label": "A", "text": "היום למדנו על מחזור המים בטבע בשיעור מדעים.", "offensive": false, "category": "none"}
+{"id": "A_none_106", "style": "clear_hebrew", "style_label": "A", "text": "סבא סיפר לנו סיפורים מרתקים מימי ילדותו הרחוקים.", "offensive": false, "category": "none"}
+{"id": "A_none_107", "style": "clear_hebrew", "style_label": "A", "text": "התרגשתי מאוד לקראת הטיול השנתי המתוכנן לשבוע הבא.", "offensive": false, "category": "none"}
+{"id": "A_none_108", "style": "clear_hebrew", "style_label": "A", "text": "בזמן הפנוי אני אוהב לקרוא ספרים בספרייה העירונית.", "offensive": false, "category": "none"}
+{"id": "A_none_109", "style": "clear_hebrew", "style_label": "A", "text": "הוריה של רינה הגיעו לאסוף אותה ממפגש החברים.", "offensive": false, "category": "none"}
+{"id": "A_none_110", "style": "clear_hebrew", "style_label": "A", "text": "הצוות פעל בשיתוף פעולה מלא להשלמת המשימה הקבוצתית.", "offensive": false, "category": "none"}
+{"id": "A_none_111", "style": "clear_hebrew", "style_label": "A", "text": "אכלנו ארוחת צהריים משביעה בפיקניק ביער.", "offensive": false, "category": "none"}
+{"id": "A_none_112", "style": "clear_hebrew", "style_label": "A", "text": "חשוב לשמור על כללי המשחק כדי שהכול יתנהל בהוגנות.", "offensive": false, "category": "none"}
+{"id": "A_none_113", "style": "clear_hebrew", "style_label": "A", "text": "המחנכת הסבירה בסבלנות את הנושא החדש לתלמידים.", "offensive": false, "category": "none"}
+{"id": "A_none_114", "style": "clear_hebrew", "style_label": "A", "text": "חבריי ואני תכננו ביקור במוזיאון לאמנות בסוף השבוע.", "offensive": false, "category": "none"}
+{"id": "A_none_115", "style": "clear_hebrew", "style_label": "A", "text": "השמחה הייתה רבה כאשר הקבוצה שלנו ניצחה בתחרות.", "offensive": false, "category": "none"}
+{"id": "A_none_116", "style": "clear_hebrew", "style_label": "A", "text": "הילד הרגיש גאווה גדולה לאחר שהצליח לפתור את החידה המורכבת.", "offensive": false, "category": "none"}
+{"id": "A_none_117", "style": "clear_hebrew", "style_label": "A", "text": "הוריי עודדו אותי תמיד ללמוד ולהתפתח בתחומים שונים.", "offensive": false, "category": "none"}
+{"id": "A_none_118", "style": "clear_hebrew", "style_label": "A", "text": "אנו מתכוננים לחגוג את יום ההולדת של אחי הקטן בשבוע הבא.", "offensive": false, "category": "none"}
+{"id": "A_none_119", "style": "clear_hebrew", "style_label": "A", "text": "האווירה בכיתה הייתה רגועה ונעימה במהלך השיעור.", "offensive": false, "category": "none"}
+{"id": "A_none_120", "style": "clear_hebrew", "style_label": "A", "text": "הילדים בילו שעות ארוכות בבניית מגדל קוביות מרשים.", "offensive": false, "category": "none"}
+{"id": "A_none_121", "style": "clear_hebrew", "style_label": "A", "text": "חשיבותה של חברות אמת באה לידי ביטוי ברגעים קשים.", "offensive": false, "category": "none"}
+{"id": "A_none_122", "style": "clear_hebrew", "style_label": "A", "text": "אמי לימדה אותי לאפות עוגה לכבוד השבת.", "offensive": false, "category": "none"}
+{"id": "A_none_123", "style": "clear_hebrew", "style_label": "A", "text": "בבוקר קמתי בתחושת התרגשות לקראת היום החדש.", "offensive": false, "category": "none"}
+{"id": "A_none_124", "style": "clear_hebrew", "style_label": "A", "text": "התלמידים הגישו את עבודותיהם במועד שנקבע מראש.", "offensive": false, "category": "none"}
+{"id": "A_none_125", "style": "clear_hebrew", "style_label": "A", "text": "הצחוק התגלגל בבית כאשר כל המשפחה התאספה יחד.", "offensive": false, "category": "none"}
+{"id": "A_abusive_001", "style": "clear_hebrew", "style_label": "A", "text": "שכלך לוקה בחסר באופן תמידי.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_002", "style": "clear_hebrew", "style_label": "A", "text": "קיומך חסר כל משמעות עבורנו.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_003", "style": "clear_hebrew", "style_label": "A", "text": "מעשיך מבישים וראויים לבוז.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_004", "style": "clear_hebrew", "style_label": "A", "text": "דעותיך חסרות כל ערך ורלוונטיות.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_005", "style": "clear_hebrew", "style_label": "A", "text": "מראך החיצוני דוחה ומעורר סלידה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_006", "style": "clear_hebrew", "style_label": "A", "text": "אתה מהווה בושה למשפחתך ולסביבתך.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_007", "style": "clear_hebrew", "style_label": "A", "text": "אינך דובר אמת לעולם.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_008", "style": "clear_hebrew", "style_label": "A", "text": "עליך להישמע ולציית ללא ערעור.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_009", "style": "clear_hebrew", "style_label": "A", "text": "יכולותיך מוגבלות עד מאוד ואינן מספקות.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_010", "style": "clear_hebrew", "style_label": "A", "text": "מי ייתן ולא תצלח דרכך לעולם.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_011", "style": "clear_hebrew", "style_label": "A", "text": "נוכחותך אינה רצויה במקום זה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_012", "style": "clear_hebrew", "style_label": "A", "text": "אישיותך מעוררת שאט נפש וסלידה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_013", "style": "clear_hebrew", "style_label": "A", "text": "אתה ידוע בעצלותך המופרזת והמזיקה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_014", "style": "clear_hebrew", "style_label": "A", "text": "כישלונך הוא עובדה שאין להכחישה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_015", "style": "clear_hebrew", "style_label": "A", "text": "קולך אינו נעים לאוזן ומציק.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_016", "style": "clear_hebrew", "style_label": "A", "text": "אתה אדם שפל ונבזה מכל בחינה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_017", "style": "clear_hebrew", "style_label": "A", "text": "רמת חשיבתך נמוכה באופן מדאיג.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_018", "style": "clear_hebrew", "style_label": "A", "text": "מעשיך מוכיחים שאתה חסר מוסר בסיסי.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_019", "style": "clear_hebrew", "style_label": "A", "text": "עליך לשתוק מיד ולא להשמיע קול.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_020", "style": "clear_hebrew", "style_label": "A", "text": "דבריך אינם אלא הבל וריק.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_021", "style": "clear_hebrew", "style_label": "A", "text": "ערכך כפרט הוא אפסי לחלוטין.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_022", "style": "clear_hebrew", "style_label": "A", "text": "פחדנותך ניכרת בכל צעד ושעל.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_023", "style": "clear_hebrew", "style_label": "A", "text": "רעיונותיך מגוחכים ואינם ראויים להתייחסות.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_024", "style": "clear_hebrew", "style_label": "A", "text": "אתה מהווה מטרד בלתי נסבל.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_025", "style": "clear_hebrew", "style_label": "A", "text": "כישרונך אינו קיים כלל ועיקר.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_026", "style": "clear_hebrew", "style_label": "A", "text": "יהי רע לך בכל אשר תפנה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_027", "style": "clear_hebrew", "style_label": "A", "text": "אתה אדם חסר מצפון לחלוטין.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_028", "style": "clear_hebrew", "style_label": "A", "text": "היית מעדיף אילו לא היית קיים.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_029", "style": "clear_hebrew", "style_label": "A", "text": "אנוכיותך אינה יודעת גבולות.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_030", "style": "clear_hebrew", "style_label": "A", "text": "מעמדך בחברה שפל במיוחד.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_031", "style": "clear_hebrew", "style_label": "A", "text": "התנהגותך אינה מכבדת אף אדם.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_032", "style": "clear_hebrew", "style_label": "A", "text": "הבנתך מוגבלת באופן מעורר רחמים.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_033", "style": "clear_hebrew", "style_label": "A", "text": "לעולם לא תצליח להשיג דבר משמעותי.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_034", "style": "clear_hebrew", "style_label": "A", "text": "נאמנותך מוטלת בספק רב.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_035", "style": "clear_hebrew", "style_label": "A", "text": "הופעתך החיצונית מעוררת דחייה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_036", "style": "clear_hebrew", "style_label": "A", "text": "אתה אדם רע מכל בחינה אפשרית.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_037", "style": "clear_hebrew", "style_label": "A", "text": "עלייך לציית ללא עוררין.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_038", "style": "clear_hebrew", "style_label": "A", "text": "רגשותיך אינם מעניינים איש.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_039", "style": "clear_hebrew", "style_label": "A", "text": "היית נטל על כולם מאז ומעולם.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_040", "style": "clear_hebrew", "style_label": "A", "text": "דבריך מלאים שקרים והטעיות.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_041", "style": "clear_hebrew", "style_label": "A", "text": "כוונותיך זדוניות ורעות במיוחד.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_042", "style": "clear_hebrew", "style_label": "A", "text": "כישלונותיך הם תעודת זהותך.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_043", "style": "clear_hebrew", "style_label": "A", "text": "כל מאמציך עולים בתוהו.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_044", "style": "clear_hebrew", "style_label": "A", "text": "אתה אדם חסר עמוד שדרה.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_045", "style": "clear_hebrew", "style_label": "A", "text": "הנני דורש ממך שתיקה מוחלטת.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_046", "style": "clear_hebrew", "style_label": "A", "text": "אינך ראוי לכבוד עצמי.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_047", "style": "clear_hebrew", "style_label": "A", "text": "עקרונותיך המוסריים אינם קיימים.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_048", "style": "clear_hebrew", "style_label": "A", "text": "אתה מנסה לתמרן את כולם.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_049", "style": "clear_hebrew", "style_label": "A", "text": "טיפשותך ניכרת לעין כל.", "offensive": true, "category": "abusive"}
+{"id": "A_abusive_050", "style": "clear_hebrew", "style_label": "A", "text": "עליך להיעלם מחיינו במהרה.", "offensive": true, "category": "abusive"}
+{"id": "A_hate_001", "style": "clear_hebrew", "style_label": "A", "text": "אנשים ממוצא מסוים נוטים להיות פחות חרוצים בעבודתם.", "offensive": true, "category": "hate"}
+{"id": "A_hate_002", "style": "clear_hebrew", "style_label": "A", "text": "הגירה בלתי מבוקרת פוגעת במרקם החברתי של המדינה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_003", "style": "clear_hebrew", "style_label": "A", "text": "לא כדאי לסמוך על מי שאינו חלק מהקבוצה שלנו במובהק.", "offensive": true, "category": "hate"}
+{"id": "A_hate_004", "style": "clear_hebrew", "style_label": "A", "text": "תרבויות מסוימות אינן מתאימות לאורח החיים המודרני כפי שאנו מכירים.", "offensive": true, "category": "hate"}
+{"id": "A_hate_005", "style": "clear_hebrew", "style_label": "A", "text": "הם תמיד מתלוננים על כל דבר קטן וחסר חשיבות.", "offensive": true, "category": "hate"}
+{"id": "A_hate_006", "style": "clear_hebrew", "style_label": "A", "text": "מוטב כי כל אדם יישאר בארצו ולא ינדוד למקומות אחרים.", "offensive": true, "category": "hate"}
+{"id": "A_hate_007", "style": "clear_hebrew", "style_label": "A", "text": "יש להעדיף עובדים בעלי רקע דומה לשלנו במקום העבודה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_008", "style": "clear_hebrew", "style_label": "A", "text": "הם אינם מבינים את מורכבות המצב כיוון שאינם מכאן כלל.", "offensive": true, "category": "hate"}
+{"id": "A_hate_009", "style": "clear_hebrew", "style_label": "A", "text": "אמונות דתיות מסוימות מונעות קידמה ופיתוח חברתי.", "offensive": true, "category": "hate"}
+{"id": "A_hate_010", "style": "clear_hebrew", "style_label": "A", "text": "כל הדתות אינן אלא אמונות תפלות ומיושנות מן העבר הרחוק.", "offensive": true, "category": "hate"}
+{"id": "A_hate_011", "style": "clear_hebrew", "style_label": "A", "text": "ישנם דתיים שאינם מכבדים את החוקים המקובלים בחברה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_012", "style": "clear_hebrew", "style_label": "A", "text": "הם מנסים לכפות עלינו את דרך חייהם הדתית והשונה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_013", "style": "clear_hebrew", "style_label": "A", "text": "ההשפעה של מוסדות דת אינה בריאה לחברה חופשית ופתוחה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_014", "style": "clear_hebrew", "style_label": "A", "text": "למה הם מתלבשים ככה? זה נראה מוזר ולא מתאים לסביבה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_015", "style": "clear_hebrew", "style_label": "A", "text": "אין סיכוי שמישהו מאמין יוכל להיות אובייקטיבי בשיפוטו.", "offensive": true, "category": "hate"}
+{"id": "A_hate_016", "style": "clear_hebrew", "style_label": "A", "text": "נשים אינן מתאימות לתפקידי ניהול בכירים הדורשים קשיחות.", "offensive": true, "category": "hate"}
+{"id": "A_hate_017", "style": "clear_hebrew", "style_label": "A", "text": "גברים אמורים להיות חזקים ולא להביע רגשות בפרהסיה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_018", "style": "clear_hebrew", "style_label": "A", "text": "עדיף שבנות יעסקו במקצועות רכים יותר ולא בהנדסה קשה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_019", "style": "clear_hebrew", "style_label": "A", "text": "יש גברים שחושבים שנשים נועדו רק לטיפול בבית ובילדים.", "offensive": true, "category": "hate"}
+{"id": "A_hate_020", "style": "clear_hebrew", "style_label": "A", "text": "בנים לא צריכים לבכות, זה לא מראה על גבריות אמיתית.", "offensive": true, "category": "hate"}
+{"id": "A_hate_021", "style": "clear_hebrew", "style_label": "A", "text": "היא בטח קיבלה את התפקיד בגלל שהיא אישה ולא בזכות כישוריה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_022", "style": "clear_hebrew", "style_label": "A", "text": "הגברים תמיד מנסים לשלוט בכל דבר, זו טבעם המולד.", "offensive": true, "category": "hate"}
+{"id": "A_hate_023", "style": "clear_hebrew", "style_label": "A", "text": "ההתנהגות שלהם אינה טבעית ואינה מקובלת בחברה מתוקנת.", "offensive": true, "category": "hate"}
+{"id": "A_hate_024", "style": "clear_hebrew", "style_label": "A", "text": "לאנשים כאלה אסור להקים משפחה ולגדל ילדים תמימים.", "offensive": true, "category": "hate"}
+{"id": "A_hate_025", "style": "clear_hebrew", "style_label": "A", "text": "הנטייה הזו היא רק אופנה חולפת שנוצרה לאחרונה ללא סיבה.", "offensive": true, "category": "hate"}
+{"id": "A_hate_026", "style": "clear_hebrew", "style_label": "A", "text": "ילדים צריכים מודל של אבא ואמא, לא משהו אחר שאינו ברור.", "offensive": true, "category": "hate"}
+{"id": "A_hate_027", "style": "clear_hebrew", "style_label": "A", "text": "הם מבולבלים ולא יודעים מה הם רוצים מעצמם ומהם יעדיהם.", "offensive": true, "category": "hate"}
+{"id": "A_hate_028", "style": "clear_hebrew", "style_label": "A", "text": "יש להם סדר יום נסתר שפוגע בערכי המשפחה המסורתיים.", "offensive": true, "category": "hate"}
+{"id": "A_hate_029", "style": "clear_hebrew", "style_label": "A", "text": "הם מנסים לשנות את הנורמות החברתיות המקובלות עלינו.", "offensive": true, "category": "hate"}
+{"id": "A_hate_030", "style": "clear_hebrew", "style_label": "A", "text": "זה לא הגיוני, זו פשוט בחירה מוזרה ולא מוסברת בהיגיון.", "offensive": true, "category": "hate"}
+{"id": "A_violence_001", "style": "clear_hebrew", "style_label": "A", "text": "אני אדאג שתצטער על כל מילה שאמרת.", "offensive": true, "category": "violence"}
+{"id": "A_violence_002", "style": "clear_hebrew", "style_label": "A", "text": "החיים שלך עומדים להפוך לסיוט אמיתי.", "offensive": true, "category": "violence"}
+{"id": "A_violence_003", "style": "clear_hebrew", "style_label": "A", "text": "אתה לא מבין עם מי בדיוק הסתבכת.", "offensive": true, "category": "violence"}
+{"id": "A_violence_004", "style": "clear_hebrew", "style_label": "A", "text": "אני אכאיב לך באופן שלא תצליח לשכוח.", "offensive": true, "category": "violence"}
+{"id": "A_violence_005", "style": "clear_hebrew", "style_label": "A", "text": "תפסיק את מעשיך לאלתר, אחרת תשלם ביוקר.", "offensive": true, "category": "violence"}
+{"id": "A_violence_006", "style": "clear_hebrew", "style_label": "A", "text": "לא כדאי לך לבחון את גבולותיי בשום אופן.", "offensive": true, "category": "violence"}
+{"id": "A_violence_007", "style": "clear_hebrew", "style_label": "A", "text": "אני אפרסם את כל סודותיך המביכים ברבים.", "offensive": true, "category": "violence"}
+{"id": "A_violence_008", "style": "clear_hebrew", "style_label": "A", "text": "אתה תצטער על היום שבו פגשת אותי.", "offensive": true, "category": "violence"}
+{"id": "A_violence_009", "style": "clear_hebrew", "style_label": "A", "text": "אל תעז להתקרב אליי שוב לעולם.", "offensive": true, "category": "violence"}
+{"id": "A_violence_010", "style": "clear_hebrew", "style_label": "A", "text": "התגובה שלי תהיה קשה מנשוא ובלתי נשכחת.", "offensive": true, "category": "violence"}
+{"id": "A_violence_011", "style": "clear_hebrew", "style_label": "A", "text": "אני אגרום לך לבכות על כל צעד שגוי שעשית.", "offensive": true, "category": "violence"}
+{"id": "A_violence_012", "style": "clear_hebrew", "style_label": "A", "text": "כל מילה שתאמר מעתה תפעל לרעתך באופן מוחלט.", "offensive": true, "category": "violence"}
+{"id": "A_violence_013", "style": "clear_hebrew", "style_label": "A", "text": "אתה עומד לשלם מחיר כבד על התנהגותך.", "offensive": true, "category": "violence"}
+{"id": "A_violence_014", "style": "clear_hebrew", "style_label": "A", "text": "אני אהרוס לך כל מה שיקר לך בחיים.", "offensive": true, "category": "violence"}
+{"id": "A_violence_015", "style": "clear_hebrew", "style_label": "A", "text": "הפסק את פעולותיך מיד, או שתסבול מתוצאות חמורות.", "offensive": true, "category": "violence"}
+{"id": "A_violence_016", "style": "clear_hebrew", "style_label": "A", "text": "אני אראה לך מי באמת שולט כאן.", "offensive": true, "category": "violence"}
+{"id": "A_violence_017", "style": "clear_hebrew", "style_label": "A", "text": "התוצאות של המעשים שלך יהיו בלתי הפיכות.", "offensive": true, "category": "violence"}
+{"id": "A_violence_018", "style": "clear_hebrew", "style_label": "A", "text": "אל תחשוב שתוכל להתחמק מעונש.", "offensive": true, "category": "violence"}
+{"id": "A_violence_019", "style": "clear_hebrew", "style_label": "A", "text": "אני אדאג שלא תראה יותר יום של שלווה.", "offensive": true, "category": "violence"}
+{"id": "A_violence_020", "style": "clear_hebrew", "style_label": "A", "text": "אף אחד לא ירצה לדבר איתך אחרי שאגלה את האמת.", "offensive": true, "category": "violence"}
+{"id": "A_violence_021", "style": "clear_hebrew", "style_label": "A", "text": "הכאב שתרגיש יהיה רק ההתחלה של סבלך.", "offensive": true, "category": "violence"}
+{"id": "A_violence_022", "style": "clear_hebrew", "style_label": "A", "text": "אני אשתמש בכל המידע שיש לי נגדך.", "offensive": true, "category": "violence"}
+{"id": "A_violence_023", "style": "clear_hebrew", "style_label": "A", "text": "אתה תצטער על מעשיך עד עמקי נשמתך.", "offensive": true, "category": "violence"}
+{"id": "A_violence_024", "style": "clear_hebrew", "style_label": "A", "text": "אני לא אהסס לפגוע בך בכל דרך אפשרית.", "offensive": true, "category": "violence"}
+{"id": "A_violence_025", "style": "clear_hebrew", "style_label": "A", "text": "אל תבחן את סבלנותי, היא עלולה לאזול במהרה.", "offensive": true, "category": "violence"}
+{"id": "A_violence_026", "style": "clear_hebrew", "style_label": "A", "text": "אתה עומד להפוך לבדיחה של כל מי שמכיר אותך.", "offensive": true, "category": "violence"}
+{"id": "A_violence_027", "style": "clear_hebrew", "style_label": "A", "text": "אני אדאג שתלמד את הלקח שלך בדרך הקשה ביותר.", "offensive": true, "category": "violence"}
+{"id": "A_violence_028", "style": "clear_hebrew", "style_label": "A", "text": "כל ניסיון התנגדות מצידך יגרור תגובה חריפה.", "offensive": true, "category": "violence"}
+{"id": "A_violence_029", "style": "clear_hebrew", "style_label": "A", "text": "אל תחשוב שמישהו יאמין לסיפורים שלך.", "offensive": true, "category": "violence"}
+{"id": "A_violence_030", "style": "clear_hebrew", "style_label": "A", "text": "אני אגרום לך להתחרט על הרגע שבו נולדת.", "offensive": true, "category": "violence"}
+{"id": "A_pornographic_001", "style": "clear_hebrew", "style_label": "A", "text": "הייתי רוצה להכיר אותך באופן אישי יותר מכל אחד אחר.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_002", "style": "clear_hebrew", "style_label": "A", "text": "יש לך משהו מיוחד שמאוד מושך את תשומת ליבי.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_003", "style": "clear_hebrew", "style_label": "A", "text": "בוא ניפגש לבד, בלי שאף אחד יפריע לנו.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_004", "style": "clear_hebrew", "style_label": "A", "text": "אתה נראה לי חמוד כל כך, הייתי רוצה לחבק אותך חזק.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_005", "style": "clear_hebrew", "style_label": "A", "text": "אף אחד לא צריך לדעת על הדברים שאנחנו עושים ביחד.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_006", "style": "clear_hebrew", "style_label": "A", "text": "היית רוצה לראות סרטון מיוחד שאף אחד אחר לא ראה?", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_007", "style": "clear_hebrew", "style_label": "A", "text": "ספר לי סודות פרטיים שאתה לא מספר לאף אחד.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_008", "style": "clear_hebrew", "style_label": "A", "text": "אני יכול ללמד אותך דברים חדשים שיהיו רק שלנו.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_009", "style": "clear_hebrew", "style_label": "A", "text": "הגוף שלך כל כך יפה, היית רוצה שאראה לך כמה?", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_010", "style": "clear_hebrew", "style_label": "A", "text": "מה את לובשת עכשיו? ספרי לי בפרטי.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_011", "style": "clear_hebrew", "style_label": "A", "text": "היית רוצה לבוא אליי הביתה, שנוכל להיות רק שנינו?", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_012", "style": "clear_hebrew", "style_label": "A", "text": "יש לי מתנה מיוחדת בשבילך, אבל היא רק אם תשמור סוד.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_013", "style": "clear_hebrew", "style_label": "A", "text": "אתה נראה כל כך בוגר ומבין עניין.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_014", "style": "clear_hebrew", "style_label": "A", "text": "אני אוהב לדבר איתך על דברים אישיים.", "offensive": true, "category": "pornographic"}
+{"id": "A_pornographic_015", "style": "clear_hebrew", "style_label": "A", "text": "היית רוצה להרגיש משהו שונה ומרגש?", "offensive": true, "category": "pornographic"}
+{"id": "B_none_001", "style": "children_mistakes", "style_label": "B", "text": "היום היה יומ ממש כיפ בבית הספאר עם כל החברמ.", "offensive": false, "category": "none"}
+{"id": "B_none_002", "style": "children_mistakes", "style_label": "B", "text": "אמא אמרה לי שהיא תקנה לנו גלידה אחר כך, יאי!", "offensive": false, "category": "none"}
+{"id": "B_none_003", "style": "children_mistakes", "style_label": "B", "text": "שיחקנו כדורסל בהפסקה וקלעתי כזה סל מדהים.", "offensive": false, "category": "none"}
+{"id": "B_none_004", "style": "children_mistakes", "style_label": "B", "text": "יש לי מבחנ במתמטיקה מחר ואני כזה לחוצה על זה.", "offensive": false, "category": "none"}
+{"id": "B_none_005", "style": "children_mistakes", "style_label": "B", "text": "ראיתי אתמול סרט מגניב בטלוזיה עד מאוחר.", "offensive": false, "category": "none"}
+{"id": "B_none_006", "style": "children_mistakes", "style_label": "B", "text": "חבר שלי אמר לי סוד חשוב וזה סמח אותי שהוא סומך עליי.", "offensive": false, "category": "none"}
+{"id": "B_none_007", "style": "children_mistakes", "style_label": "B", "text": "הלכנו לגינ הציבורי בערב ופגשנו שם עוד לדמ.", "offensive": false, "category": "none"}
+{"id": "B_none_008", "style": "children_mistakes", "style_label": "B", "text": "אחי הגדול כזה אש במשחקי וידאו, אינ לו מתחרמ.", "offensive": false, "category": "none"}
+{"id": "B_none_009", "style": "children_mistakes", "style_label": "B", "text": "המורה שלנו אמרה שאנחנו צריכים להגיש עבודה בעוד שבוע.", "offensive": false, "category": "none"}
+{"id": "B_none_010", "style": "children_mistakes", "style_label": "B", "text": "קניתי מדבקות חדשות ליומן שלי והן מהממות.", "offensive": false, "category": "none"}
+{"id": "B_none_011", "style": "children_mistakes", "style_label": "B", "text": "אבא שלי לימד אותי איך להכינ פנקייקים היום בבוקר.", "offensive": false, "category": "none"}
+{"id": "B_none_012", "style": "children_mistakes", "style_label": "B", "text": "הייתי כזה עייפה אחרי בית הספר שרציתי רק לישונ.", "offensive": false, "category": "none"}
+{"id": "B_none_013", "style": "children_mistakes", "style_label": "B", "text": "אני ממש אוהבת לשחק עם הבובה החדשה שקבלת ליומ הולדת.", "offensive": false, "category": "none"}
+{"id": "B_none_014", "style": "children_mistakes", "style_label": "B", "text": "יש כל כך הרבה חברות טובות בכיתא שלי וזה כיפ.", "offensive": false, "category": "none"}
+{"id": "B_none_015", "style": "children_mistakes", "style_label": "B", "text": "עשינו פרויקט על חיות ביחד והיה לנו ממס מהנה.", "offensive": false, "category": "none"}
+{"id": "B_none_016", "style": "children_mistakes", "style_label": "B", "text": "אכלנו ארוחת ערב טעימה עם כל המשפחה בחצר.", "offensive": false, "category": "none"}
+{"id": "B_none_017", "style": "children_mistakes", "style_label": "B", "text": "החתול שלי אוהב לישונ על הספה ואז הוא כזה חמוד.", "offensive": false, "category": "none"}
+{"id": "B_none_018", "style": "children_mistakes", "style_label": "B", "text": "בבוקר ראיתי ציפורים עפות מהחלונ של החדר.", "offensive": false, "category": "none"}
+{"id": "B_none_019", "style": "children_mistakes", "style_label": "B", "text": "אני רוצה ללמוד לנגנ בגיטרה מתישהו.", "offensive": false, "category": "none"}
+{"id": "B_none_020", "style": "children_mistakes", "style_label": "B", "text": "התאמנת על ריצה לקראת המרוץ שבבית הספר.", "offensive": false, "category": "none"}
+{"id": "B_none_021", "style": "children_mistakes", "style_label": "B", "text": "חחח המורה אמרה בדיחה מצחיקה וכולם צחקו.", "offensive": false, "category": "none"}
+{"id": "B_none_022", "style": "children_mistakes", "style_label": "B", "text": "קבלתי מכתב מחבר שממש רחוק ואני סמחה.", "offensive": false, "category": "none"}
+{"id": "B_none_023", "style": "children_mistakes", "style_label": "B", "text": "יש לי הרגשה שאוליי נקבל ציון טוב במבחנ.", "offensive": false, "category": "none"}
+{"id": "B_none_024", "style": "children_mistakes", "style_label": "B", "text": "אתמול ירד גשמ והיה כזה קר בחוץ.", "offensive": false, "category": "none"}
+{"id": "B_none_025", "style": "children_mistakes", "style_label": "B", "text": "אני אוהבת לקרוא ספרים מעניינים לפני השינה.", "offensive": false, "category": "none"}
+{"id": "B_none_026", "style": "children_mistakes", "style_label": "B", "text": "הלכתי לסופרמרקט עם אבא וקנינו דברים טעיממ.", "offensive": false, "category": "none"}
+{"id": "B_none_027", "style": "children_mistakes", "style_label": "B", "text": "חברה שלי באה לישונ אצלי בסוף השבוע, אש!", "offensive": false, "category": "none"}
+{"id": "B_none_028", "style": "children_mistakes", "style_label": "B", "text": "אני קצת מפחדת מהכלב הגדול של השכנם.", "offensive": false, "category": "none"}
+{"id": "B_none_029", "style": "children_mistakes", "style_label": "B", "text": "ציירתי ציור יפה של נוף עם עצים ופרחים.", "offensive": false, "category": "none"}
+{"id": "B_none_030", "style": "children_mistakes", "style_label": "B", "text": "המשחק החדש שלי ממס כיפ וקשה להפסיק לשחק בו.", "offensive": false, "category": "none"}
+{"id": "B_none_031", "style": "children_mistakes", "style_label": "B", "text": "אמא שלי עשתה לי צמע בשיער ואני מרגישה נסיכה.", "offensive": false, "category": "none"}
+{"id": "B_none_032", "style": "children_mistakes", "style_label": "B", "text": "אנחנו מתכוננים לטיול שנתי עם כל הכיתא.", "offensive": false, "category": "none"}
+{"id": "B_none_033", "style": "children_mistakes", "style_label": "B", "text": "ראיתי פרפר צבעוני עף ליד החלונ שלי.", "offensive": false, "category": "none"}
+{"id": "B_none_034", "style": "children_mistakes", "style_label": "B", "text": "אבא אמר לי שאסור לשחק עם האוכל בזמנ ארוחה.", "offensive": false, "category": "none"}
+{"id": "B_none_035", "style": "children_mistakes", "style_label": "B", "text": "אני רוצה ללמוד לרכב על אופניים בלי עזרה.", "offensive": false, "category": "none"}
+{"id": "B_none_036", "style": "children_mistakes", "style_label": "B", "text": "חבר שלי הביא לי סוכריה ענקית וחלכנו אותה.", "offensive": false, "category": "none"}
+{"id": "B_none_037", "style": "children_mistakes", "style_label": "B", "text": "היום בערב נשחק משחק קופסה כולנו בחב.", "offensive": false, "category": "none"}
+{"id": "B_none_038", "style": "children_mistakes", "style_label": "B", "text": "הרגשתי קצת עצובה היום אבל עכשיו כבר יותר טוב.", "offensive": false, "category": "none"}
+{"id": "B_none_039", "style": "children_mistakes", "style_label": "B", "text": "המורה אמרה לנו שאסור לרוץ במסדרונ.", "offensive": false, "category": "none"}
+{"id": "B_none_040", "style": "children_mistakes", "style_label": "B", "text": "אכלתי שניצל ופירה לארוחת צהרים וזה היה ממס טעים.", "offensive": false, "category": "none"}
+{"id": "B_none_041", "style": "children_mistakes", "style_label": "B", "text": "היינו בבריכה ושחינו מלא זמן, היה מהממם.", "offensive": false, "category": "none"}
+{"id": "B_none_042", "style": "children_mistakes", "style_label": "B", "text": "קניתי עפרונות צבעוניים חדשים ואני ממס רוצה לציר.", "offensive": false, "category": "none"}
+{"id": "B_none_043", "style": "children_mistakes", "style_label": "B", "text": "שיחקנו מחבואים בחצר והייתי הסופרת כזה.", "offensive": false, "category": "none"}
+{"id": "B_none_044", "style": "children_mistakes", "style_label": "B", "text": "אחי אמר שיש לו רעיונ אדיר למסיבה הבאה.", "offensive": false, "category": "none"}
+{"id": "B_none_045", "style": "children_mistakes", "style_label": "B", "text": "אני אוהבת לטייל בטבע ולגלות מקומות חדשים.", "offensive": false, "category": "none"}
+{"id": "B_none_046", "style": "children_mistakes", "style_label": "B", "text": "היה לי סעור ספורט היום וקפצנו על טרמפולינה.", "offensive": false, "category": "none"}
+{"id": "B_none_047", "style": "children_mistakes", "style_label": "B", "text": "אמא עזרה לי עם הסעורי בית המסובכים במתמטיקה.", "offensive": false, "category": "none"}
+{"id": "B_none_048", "style": "children_mistakes", "style_label": "B", "text": "חבר שלי הביא לי במתנה בובת דובון קטנ.", "offensive": false, "category": "none"}
+{"id": "B_none_049", "style": "children_mistakes", "style_label": "B", "text": "אנחנו הולכים לראות הצגת ילדים בחופש הגדול.", "offensive": false, "category": "none"}
+{"id": "B_none_050", "style": "children_mistakes", "style_label": "B", "text": "הכלב שלי אוהב לרוץ אחרי כדור וזה ממס מצחיק.", "offensive": false, "category": "none"}
+{"id": "B_none_051", "style": "children_mistakes", "style_label": "B", "text": "אני הולכת לבית ספר כל יומ בבקר.", "offensive": false, "category": "none"}
+{"id": "B_none_052", "style": "children_mistakes", "style_label": "B", "text": "היה לי יומ הולדת כזה אש חחח.", "offensive": false, "category": "none"}
+{"id": "B_none_053", "style": "children_mistakes", "style_label": "B", "text": "אחי הגדול קנה לי מישחק חדש למחשב.", "offensive": false, "category": "none"}
+{"id": "B_none_054", "style": "children_mistakes", "style_label": "B", "text": "אני אוהבת לשחק עם חברמ שלי בחצר.", "offensive": false, "category": "none"}
+{"id": "B_none_055", "style": "children_mistakes", "style_label": "B", "text": "המורה אמרה שאני ילדה ממש טובה ומתוקה.", "offensive": false, "category": "none"}
+{"id": "B_none_056", "style": "children_mistakes", "style_label": "B", "text": "אמא הכינה לנו עוגה טעימה ביומ שישי.", "offensive": false, "category": "none"}
+{"id": "B_none_057", "style": "children_mistakes", "style_label": "B", "text": "שיחקתי כדורגל עם אבא בפארק מלא זמנ.", "offensive": false, "category": "none"}
+{"id": "B_none_058", "style": "children_mistakes", "style_label": "B", "text": "היה לנו שיעור ספורט ארוך וכיפ היום.", "offensive": false, "category": "none"}
+{"id": "B_none_059", "style": "children_mistakes", "style_label": "B", "text": "אני רוצה ללמוד לנגן בגיטרה חשמלית.", "offensive": false, "category": "none"}
+{"id": "B_none_060", "style": "children_mistakes", "style_label": "B", "text": "הכלב שלי כזה חמוד הוא תמיד רודף אחרי הכדור.", "offensive": false, "category": "none"}
+{"id": "B_none_061", "style": "children_mistakes", "style_label": "B", "text": "הלכתי עם סבא וסבתא לטייל בטבע.", "offensive": false, "category": "none"}
+{"id": "B_none_062", "style": "children_mistakes", "style_label": "B", "text": "ראיתי פרפר צבעוני כזה יפה על פרח.", "offensive": false, "category": "none"}
+{"id": "B_none_063", "style": "children_mistakes", "style_label": "B", "text": "אני אוהבת לקרוא ספורים מרתקים לפני השינה.", "offensive": false, "category": "none"}
+{"id": "B_none_064", "style": "children_mistakes", "style_label": "B", "text": "יש לי מבחנ במתמטיקה מחר ואני צריכה ללמוד.", "offensive": false, "category": "none"}
+{"id": "B_none_065", "style": "children_mistakes", "style_label": "B", "text": "החברה הכי טובה שלי באה לישון אצלי הערב.", "offensive": false, "category": "none"}
+{"id": "B_none_066", "style": "children_mistakes", "style_label": "B", "text": "אכלתי גלידה בטעם שוקולד ווניל, היה אש!", "offensive": false, "category": "none"}
+{"id": "B_none_067", "style": "children_mistakes", "style_label": "B", "text": "עשיתי שיעורי בית מהר כדי שיהיה לי זמן לשחק.", "offensive": false, "category": "none"}
+{"id": "B_none_068", "style": "children_mistakes", "style_label": "B", "text": "אני כזה אוהבת ליראות סרטים מצויירים בטלוויזיה.", "offensive": false, "category": "none"}
+{"id": "B_none_069", "style": "children_mistakes", "style_label": "B", "text": "אבא קנה לי מתנה ליומ הולדת, זה היה סבבה.", "offensive": false, "category": "none"}
+{"id": "B_none_070", "style": "children_mistakes", "style_label": "B", "text": "הייתי בבריכה עם חברמ שלי כל הצהריים.", "offensive": false, "category": "none"}
+{"id": "B_none_071", "style": "children_mistakes", "style_label": "B", "text": "המורה סיפרה לנו ספור יפה על צב וארנב.", "offensive": false, "category": "none"}
+{"id": "B_none_072", "style": "children_mistakes", "style_label": "B", "text": "אני חושבת שאני רוצה להיות ויטרינרית כשאני אהיה גדולה.", "offensive": false, "category": "none"}
+{"id": "B_none_073", "style": "children_mistakes", "style_label": "B", "text": "אחי הקטן כזה חמוד כשהוא ישנ.", "offensive": false, "category": "none"}
+{"id": "B_none_074", "style": "children_mistakes", "style_label": "B", "text": "יש לנו חוג ציור היום ואני כזה מתרגשת.", "offensive": false, "category": "none"}
+{"id": "B_none_075", "style": "children_mistakes", "style_label": "B", "text": "הלכנו ללונה פארק והיה שם אש!", "offensive": false, "category": "none"}
+{"id": "B_none_076", "style": "children_mistakes", "style_label": "B", "text": "ראינו הרבה קופמ קופצים על העצים.", "offensive": false, "category": "none"}
+{"id": "B_none_077", "style": "children_mistakes", "style_label": "B", "text": "אני אוהבת את הריח של פרחים באביב.", "offensive": false, "category": "none"}
+{"id": "B_none_078", "style": "children_mistakes", "style_label": "B", "text": "סבתא שלי אופה עוגיות שוקולד הכי טעימות בעולמ.", "offensive": false, "category": "none"}
+{"id": "B_none_079", "style": "children_mistakes", "style_label": "B", "text": "שיחקתי במשחק לוח עם המשפחה וניצחתי.", "offensive": false, "category": "none"}
+{"id": "B_none_080", "style": "children_mistakes", "style_label": "B", "text": "אני כזה עייפה אחרי יומ ארוך בבית ספר.", "offensive": false, "category": "none"}
+{"id": "B_none_081", "style": "children_mistakes", "style_label": "B", "text": "אמא אמרה שאנחנו נוסעים לטייל בסופשבוע.", "offensive": false, "category": "none"}
+{"id": "B_none_082", "style": "children_mistakes", "style_label": "B", "text": "החברים שלי כזה מצחיקם אותי כל הזמנ.", "offensive": false, "category": "none"}
+{"id": "B_none_083", "style": "children_mistakes", "style_label": "B", "text": "אני רוצה ללמוד לרכב על סקייטבורד חדש.", "offensive": false, "category": "none"}
+{"id": "B_none_084", "style": "children_mistakes", "style_label": "B", "text": "המורה נתנה לנו סטיקר של כוכב על עבודה טובה.", "offensive": false, "category": "none"}
+{"id": "B_none_085", "style": "children_mistakes", "style_label": "B", "text": "אכלתי פיצה גדולה עם הרבה גבינה, היה אש!", "offensive": false, "category": "none"}
+{"id": "B_none_086", "style": "children_mistakes", "style_label": "B", "text": "יש לנו מחר שיעור מדעים מענינ על חיות.", "offensive": false, "category": "none"}
+{"id": "B_none_087", "style": "children_mistakes", "style_label": "B", "text": "אני כזה אוהבת לבלות זמנ עם המשפחה שלי.", "offensive": false, "category": "none"}
+{"id": "B_none_088", "style": "children_mistakes", "style_label": "B", "text": "הלכנו לגנ חיות וראינו אריה גדול ומרשים.", "offensive": false, "category": "none"}
+{"id": "B_none_089", "style": "children_mistakes", "style_label": "B", "text": "הכלב של השכנ כזה שובב, הוא תמיד בורח.", "offensive": false, "category": "none"}
+{"id": "B_none_090", "style": "children_mistakes", "style_label": "B", "text": "אני צריכה לקנות קלמר חדש כי הישנ שלי נקרע.", "offensive": false, "category": "none"}
+{"id": "B_none_091", "style": "children_mistakes", "style_label": "B", "text": "אבא עזר לי להכינ שיעורי בית במתמטיקה.", "offensive": false, "category": "none"}
+{"id": "B_none_092", "style": "children_mistakes", "style_label": "B", "text": "אני כזה מתרגשת מהטיול שנתי שלנו בשבוע הבא.", "offensive": false, "category": "none"}
+{"id": "B_none_093", "style": "children_mistakes", "style_label": "B", "text": "החברה שלי עברה דירה, אני אתגעגע אליה מלא.", "offensive": false, "category": "none"}
+{"id": "B_none_094", "style": "children_mistakes", "style_label": "B", "text": "ירד גשמ חזק היום בבוקר, אז נשארנו בבית.", "offensive": false, "category": "none"}
+{"id": "B_none_095", "style": "children_mistakes", "style_label": "B", "text": "אני אוהבת לצייר ציורים יפים עם הרבה צבעים.", "offensive": false, "category": "none"}
+{"id": "B_none_096", "style": "children_mistakes", "style_label": "B", "text": "היה לי חלומ מוזר הלילה, חלמתי שאני עפה.", "offensive": false, "category": "none"}
+{"id": "B_none_097", "style": "children_mistakes", "style_label": "B", "text": "המורה אמרה שאני עשיתי התקדמות גדולה בקריאה.", "offensive": false, "category": "none"}
+{"id": "B_none_098", "style": "children_mistakes", "style_label": "B", "text": "אני כזה אוהבת לאכול שוקולד, זה הכי טעים.", "offensive": false, "category": "none"}
+{"id": "B_none_099", "style": "children_mistakes", "style_label": "B", "text": "הלכתי לספריה היום ושאלתי ספר חדש.", "offensive": false, "category": "none"}
+{"id": "B_none_100", "style": "children_mistakes", "style_label": "B", "text": "אחי אמר שאני כזאת אש במחשפ היום חחח.", "offensive": false, "category": "none"}
+{"id": "B_none_101", "style": "children_mistakes", "style_label": "B", "text": "היומ היה מבחן במתמתיקה ואני חושב שעברתי טוב חחח", "offensive": false, "category": "none"}
+{"id": "B_none_102", "style": "children_mistakes", "style_label": "B", "text": "המורה אמרה שאנחנו צרכים להביא שפרים חדשים מחר", "offensive": false, "category": "none"}
+{"id": "B_none_103", "style": "children_mistakes", "style_label": "B", "text": "יש לי חבר חדש בכיתה והוא ממש חמוד וכף לי איתו", "offensive": false, "category": "none"}
+{"id": "B_none_104", "style": "children_mistakes", "style_label": "B", "text": "ההפסקה היתה קצרה מידי ולא הספקתי לאכול את כל הסנדוויצ", "offensive": false, "category": "none"}
+{"id": "B_none_105", "style": "children_mistakes", "style_label": "B", "text": "למדנו על יצורים מיתולוגים בהיסטוריה וזה היה כזה מענינ", "offensive": false, "category": "none"}
+{"id": "B_none_106", "style": "children_mistakes", "style_label": "B", "text": "שיחקנו כדורגל כל הצהרימ בחצר של אסף והיה ממש כייף", "offensive": false, "category": "none"}
+{"id": "B_none_107", "style": "children_mistakes", "style_label": "B", "text": "פגשתי את דני בפארק והוא שיפר לי סוד שאני לא יכול לספר", "offensive": false, "category": "none"}
+{"id": "B_none_108", "style": "children_mistakes", "style_label": "B", "text": "החברים שלי באו אלי הבייתה וראינו סרט מצחיק ביחד", "offensive": false, "category": "none"}
+{"id": "B_none_109", "style": "children_mistakes", "style_label": "B", "text": "אני הולכ למשיבת פיג'מות אצל נועה ביום שישי הקרוב", "offensive": false, "category": "none"}
+{"id": "B_none_110", "style": "children_mistakes", "style_label": "B", "text": "דיברנו בטלפון שעות ארוכות וצחקנו ממש חזק על בדיחות אש", "offensive": false, "category": "none"}
+{"id": "B_none_111", "style": "children_mistakes", "style_label": "B", "text": "אמא אפתה עוגת שוקולד טעימה לארוחת הערב של יומ שישי", "offensive": false, "category": "none"}
+{"id": "B_none_112", "style": "children_mistakes", "style_label": "B", "text": "אבא לקח אותנו לטיול בצפון וראינו המון נופים יפימ", "offensive": false, "category": "none"}
+{"id": "B_none_113", "style": "children_mistakes", "style_label": "B", "text": "האח הקטן שלי נורא מצחיק והוא תמיד עושה שטויות", "offensive": false, "category": "none"}
+{"id": "B_none_114", "style": "children_mistakes", "style_label": "B", "text": "סבתא באה לבקר אותנו והביאה לי מתנה מיוחדת כזאת", "offensive": false, "category": "none"}
+{"id": "B_none_115", "style": "children_mistakes", "style_label": "B", "text": "כל המשפחה יצאה למסעדה ואכלנו פיצה גדולה וטעימה אש", "offensive": false, "category": "none"}
+{"id": "B_none_116", "style": "children_mistakes", "style_label": "B", "text": "קניתי משחק מחשב חדש וזה אש כמה שזה כיף לשחק בו", "offensive": false, "category": "none"}
+{"id": "B_none_117", "style": "children_mistakes", "style_label": "B", "text": "שיחקתי בפלייסטיישן עם אחי וניצחתי אותו ברוב הפעמימ", "offensive": false, "category": "none"}
+{"id": "B_none_118", "style": "children_mistakes", "style_label": "B", "text": "אנחנו בונימ בית ענק מלגו וזה לוקח מלא זמנ וכח", "offensive": false, "category": "none"}
+{"id": "B_none_119", "style": "children_mistakes", "style_label": "B", "text": "הלכנו לגימבורי וקפצנו על הטרמפולינות כל היומ", "offensive": false, "category": "none"}
+{"id": "B_none_120", "style": "children_mistakes", "style_label": "B", "text": "יש לי בובות פרווה רכות שאני אוהבת כזה כיף לחבק לפני השינה", "offensive": false, "category": "none"}
+{"id": "B_none_121", "style": "children_mistakes", "style_label": "B", "text": "הייתי ממש עייף היום כי לא ישנתי מספיק בלילה", "offensive": false, "category": "none"}
+{"id": "B_none_122", "style": "children_mistakes", "style_label": "B", "text": "אני מרגיש שמח מאוד היום כי קרה לי משהוא טוב", "offensive": false, "category": "none"}
+{"id": "B_none_123", "style": "children_mistakes", "style_label": "B", "text": "קראתי ספר מרתק לפני השינה וכזה נהנתי מכל עמוד", "offensive": false, "category": "none"}
+{"id": "B_none_124", "style": "children_mistakes", "style_label": "B", "text": "היומ היה יום ממש חם ובגלל זה שתינו המון מים קרים", "offensive": false, "category": "none"}
+{"id": "B_none_125", "style": "children_mistakes", "style_label": "B", "text": "אני כבר מחכה לחופש הגדול כדי שאוכל לנוח ולשחק מלא חחח", "offensive": false, "category": "none"}
+{"id": "B_abusive_001", "style": "children_mistakes", "style_label": "B", "text": "אתה כזה לוזר, אף אחד לא אוהב אותק.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_002", "style": "children_mistakes", "style_label": "B", "text": "תסתוק כבר! אתה רק מקלקל את המישחק.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_003", "style": "children_mistakes", "style_label": "B", "text": "את ממש מטומטמת, איכ את לא מבינה?", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_004", "style": "children_mistakes", "style_label": "B", "text": "כולם צחקם עליך מאחורי הגב, חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_005", "style": "children_mistakes", "style_label": "B", "text": "אין לך חברם, אתה כזה לבד. כנ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_006", "style": "children_mistakes", "style_label": "B", "text": "אתה בישנ כמו תינוק, תתבגר כבר. איכס.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_007", "style": "children_mistakes", "style_label": "B", "text": "הבגדים שלק כולם מלוכלכם, איכס.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_008", "style": "children_mistakes", "style_label": "B", "text": "אתה לא יודה כלום, אל תדבר שטויות.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_009", "style": "children_mistakes", "style_label": "B", "text": "למה אתה תמיד מקטר? אף אחד לא סובל אותק. כנ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_010", "style": "children_mistakes", "style_label": "B", "text": "הוא אמר לי שאתה לא נורמאלי כזה.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_011", "style": "children_mistakes", "style_label": "B", "text": "תפסיק להציק לי, אתה סתם מעצבנ. כזה מעצבן.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_012", "style": "children_mistakes", "style_label": "B", "text": "מה אתה בוכה? אתה ילד קטנ? בטח אתה תינוק.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_013", "style": "children_mistakes", "style_label": "B", "text": "כולם חושבם שאתה מוזר. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_014", "style": "children_mistakes", "style_label": "B", "text": "את שמנה כמו פילא, חחח. איכס.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_015", "style": "children_mistakes", "style_label": "B", "text": "אל תתקרב אלי, אתה מדבק. איכס. פחד.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_016", "style": "children_mistakes", "style_label": "B", "text": "אתה כזה חלס, לא יכול להרם כלום.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_017", "style": "children_mistakes", "style_label": "B", "text": "תפסיק להעתיק, אתה אפס. כזה מטומתם.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_018", "style": "children_mistakes", "style_label": "B", "text": "אף אחד לא רוצה לסיחק איתק, לך הביתה כבר.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_019", "style": "children_mistakes", "style_label": "B", "text": "אתה תמיד הורס הכל, איזה מעצבנ. איכס.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_020", "style": "children_mistakes", "style_label": "B", "text": "אל תבוא למסיבה שלי, אתה לא מוזמנ. אף אחד לא רוצה אותך.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_021", "style": "children_mistakes", "style_label": "B", "text": "יש לך סיניים עקומות, איזה מכוער. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_022", "style": "children_mistakes", "style_label": "B", "text": "אתה מדבר כמו תינוק, תתבגר כבר. כזה אטי.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_023", "style": "children_mistakes", "style_label": "B", "text": "אמא שלק מוזרה, בטח בגללה אתה כזה.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_024", "style": "children_mistakes", "style_label": "B", "text": "תסתום ת'פה שלק, אף אחד לא רוצה לשמוע אותך. כזה אטי.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_025", "style": "children_mistakes", "style_label": "B", "text": "אתה פחדנ, לא מעז לעשות שום דבר. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_026", "style": "children_mistakes", "style_label": "B", "text": "כולם צחקם על איך שאתה מתלבס.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_027", "style": "children_mistakes", "style_label": "B", "text": "תפסיק להיות כזה בכינ. כזה מעצבנ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_028", "style": "children_mistakes", "style_label": "B", "text": "אין לך מושג, אתה פשוט טמבל. כזה אדיות.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_029", "style": "children_mistakes", "style_label": "B", "text": "אתה תמיד מריח רע, תתקלכ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_030", "style": "children_mistakes", "style_label": "B", "text": "אף אחד לא סופר אותק, אתה שקוף. כנ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_031", "style": "children_mistakes", "style_label": "B", "text": "את כל כך אטית, תתקדמי כבר. כזה אטי.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_032", "style": "children_mistakes", "style_label": "B", "text": "אתה נראה כמו ליצנ עם הבגדים האלה. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_033", "style": "children_mistakes", "style_label": "B", "text": "תפסיק לזיף, אתה אף פעם לא מנצכ. כזה לוזר.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_034", "style": "children_mistakes", "style_label": "B", "text": "אתה הורס את כל הכף, לך כבר. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_035", "style": "children_mistakes", "style_label": "B", "text": "כולם ידעם שאתה מישקר.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_036", "style": "children_mistakes", "style_label": "B", "text": "אתה תינוק, תעוף מפה. כזה מטומתם.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_037", "style": "children_mistakes", "style_label": "B", "text": "איזה פרצוף יש לך, בטח כולם מפחדם. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_038", "style": "children_mistakes", "style_label": "B", "text": "אתה לא מצחיק בכלל, אתה מישעממ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_039", "style": "children_mistakes", "style_label": "B", "text": "תהיה בסקט, אתה עושה לי כאב ראש. כזה מעצבנ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_040", "style": "children_mistakes", "style_label": "B", "text": "אף אחד לא רוצה לסימוע את הדעות שלק.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_041", "style": "children_mistakes", "style_label": "B", "text": "אתה לא חכם, אתה סתם מתיימר. כזה מטומתם.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_042", "style": "children_mistakes", "style_label": "B", "text": "תסתום את הפה שלק, יא דביל. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_043", "style": "children_mistakes", "style_label": "B", "text": "אתה כזה מעצבנ, בא לי להרביץ לך. יא לוזר.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_044", "style": "children_mistakes", "style_label": "B", "text": "כולם ידעם שאתה גנבת. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_045", "style": "children_mistakes", "style_label": "B", "text": "אתה לא מקובל, אף אחד לא רוצה אותק. כנ.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_046", "style": "children_mistakes", "style_label": "B", "text": "תפסיק להתלוננ, אתה סתם בכיין. יא בכיין.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_047", "style": "children_mistakes", "style_label": "B", "text": "אתה כמו תינוק קטנ, בלי אמא אתה בוכה. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_048", "style": "children_mistakes", "style_label": "B", "text": "איזה חנון אתה, בטח אין לך חברם. כזה.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_049", "style": "children_mistakes", "style_label": "B", "text": "אתה אפס, אף פעם לא תצליח בכלומ. חחח.", "offensive": true, "category": "abusive"}
+{"id": "B_abusive_050", "style": "children_mistakes", "style_label": "B", "text": "תעוף מיפה, אף אחד לא רוצה אותק פה.", "offensive": true, "category": "abusive"}
+{"id": "B_hate_001", "style": "children_mistakes", "style_label": "B", "text": "בנות לא יודעות לשחק כדורגל, הנ תמיד מפסידות.", "offensive": true, "category": "hate"}
+{"id": "B_hate_002", "style": "children_mistakes", "style_label": "B", "text": "הרוסים האלה כזה קמצנמ, הם אף פעם לא מביאים כלום.", "offensive": true, "category": "hate"}
+{"id": "B_hate_003", "style": "children_mistakes", "style_label": "B", "text": "היהודמ תמיד רוצם כסף, זה כול מה שאכפת להם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_004", "style": "children_mistakes", "style_label": "B", "text": "הבנם בכיתה של סלי כזה מטומטמם, חחח.", "offensive": true, "category": "hate"}
+{"id": "B_hate_005", "style": "children_mistakes", "style_label": "B", "text": "האתיופמ האלה כזה מרעישם, תמיד צועקם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_006", "style": "children_mistakes", "style_label": "B", "text": "מי שבנם עם בנם זה כזה מוזר, אנ לא מבינה את זה.", "offensive": true, "category": "hate"}
+{"id": "B_hate_007", "style": "children_mistakes", "style_label": "B", "text": "המוסלמם האלה תמיד עושם בעיות, הם כזה מפחדמ.", "offensive": true, "category": "hate"}
+{"id": "B_hate_008", "style": "children_mistakes", "style_label": "B", "text": "הבנות תמיד רכלניות, הנ לא יכולות לשמור סוד.", "offensive": true, "category": "hate"}
+{"id": "B_hate_009", "style": "children_mistakes", "style_label": "B", "text": "הערבמ האלה תמיד נוהגמ מהר, הם מסוכנמ בכביש.", "offensive": true, "category": "hate"}
+{"id": "B_hate_010", "style": "children_mistakes", "style_label": "B", "text": "הנוצרם האלה כזה מוזרמ עם החגמ סלהם, חחח.", "offensive": true, "category": "hate"}
+{"id": "B_hate_011", "style": "children_mistakes", "style_label": "B", "text": "הבנם לא יודעם לסדר כלום, הכל מבולגנ אצלם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_012", "style": "children_mistakes", "style_label": "B", "text": "הצרפתמ האלה כזה מסריחם, אנ לא מבינה אותם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_013", "style": "children_mistakes", "style_label": "B", "text": "איזה גי הוא, לא יכול לשחק כדורסל כמו סצריך.", "offensive": true, "category": "hate"}
+{"id": "B_hate_014", "style": "children_mistakes", "style_label": "B", "text": "כל העולם נגדנו, זה בגלל סאנחנו יהודם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_015", "style": "children_mistakes", "style_label": "B", "text": "הבנות תמיד חלשות, הנ לא יכולות להרם דברים כבדמ.", "offensive": true, "category": "hate"}
+{"id": "B_hate_016", "style": "children_mistakes", "style_label": "B", "text": "הרוסם האלה סותם כל הזמנ, זה כזה מפחד.", "offensive": true, "category": "hate"}
+{"id": "B_hate_017", "style": "children_mistakes", "style_label": "B", "text": "המוסלמם האלה כזה קיצונם, תמיד יש להם בעיות.", "offensive": true, "category": "hate"}
+{"id": "B_hate_018", "style": "children_mistakes", "style_label": "B", "text": "הבנם תמיד רבם ומכם אחד את הסני, הם אלמם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_019", "style": "children_mistakes", "style_label": "B", "text": "הערבמ האלה כזה מלוכלכם, הם לא מתקלחם מספם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_020", "style": "children_mistakes", "style_label": "B", "text": "מי שמתחתנ עם אותו מנ זה לא נורמל בעינ.", "offensive": true, "category": "hate"}
+{"id": "B_hate_021", "style": "children_mistakes", "style_label": "B", "text": "היהודם סולטם על כול הכסף בעולם, בגלל זה הם עסרם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_022", "style": "children_mistakes", "style_label": "B", "text": "הבנות תמיד עושות דרמות מכול דבר קטן, חחח.", "offensive": true, "category": "hate"}
+{"id": "B_hate_023", "style": "children_mistakes", "style_label": "B", "text": "האתיופם האלה תמיד מבקשם כסף, אן להם כולום.", "offensive": true, "category": "hate"}
+{"id": "B_hate_024", "style": "children_mistakes", "style_label": "B", "text": "זה כזה מגעיל סבנם מתנשקם, איכס.", "offensive": true, "category": "hate"}
+{"id": "B_hate_025", "style": "children_mistakes", "style_label": "B", "text": "הנוצרם חוגגם חגמ מוזרם סאף אחד לא מבין.", "offensive": true, "category": "hate"}
+{"id": "B_hate_026", "style": "children_mistakes", "style_label": "B", "text": "הבנם האלה תמיד מדברם מלוכלך, הם לא מנומסם.", "offensive": true, "category": "hate"}
+{"id": "B_hate_027", "style": "children_mistakes", "style_label": "B", "text": "הרוסם לא חכמם במחד, הם לא מבינם בדיחות.", "offensive": true, "category": "hate"}
+{"id": "B_hate_028", "style": "children_mistakes", "style_label": "B", "text": "המוסלמם האלה כזה עצלנמ, הם לא עושם כולום.", "offensive": true, "category": "hate"}
+{"id": "B_hate_029", "style": "children_mistakes", "style_label": "B", "text": "הבנות רק חוסבות על איפור ובגדמ, הנ כזה סטחית.", "offensive": true, "category": "hate"}
+{"id": "B_hate_030", "style": "children_mistakes", "style_label": "B", "text": "הערבמ תמיד צועקם ועושם רעש, הם לא סקטם.", "offensive": true, "category": "hate"}
+{"id": "B_violence_001", "style": "children_mistakes", "style_label": "B", "text": "אני אגמור אותך אם תגע לי בדברים שוב, תבינ?", "offensive": true, "category": "violence"}
+{"id": "B_violence_002", "style": "children_mistakes", "style_label": "B", "text": "אתה כזה חלש, אף אחד לא אוהב אותך בגלל זה חחח.", "offensive": true, "category": "violence"}
+{"id": "B_violence_003", "style": "children_mistakes", "style_label": "B", "text": "תפסיק ללכלך עלי או שאני אכאב לך ממש.", "offensive": true, "category": "violence"}
+{"id": "B_violence_004", "style": "children_mistakes", "style_label": "B", "text": "אני אספר לכולם את הסוד שלך אם לא תשתוק עכשו.", "offensive": true, "category": "violence"}
+{"id": "B_violence_005", "style": "children_mistakes", "style_label": "B", "text": "אל תעז שוב לדבר אתי ככה, אני ארביץ לך חזק.", "offensive": true, "category": "violence"}
+{"id": "B_violence_006", "style": "children_mistakes", "style_label": "B", "text": "אתה סתם תינוק בכיין ואף אחד לא רוצה לשחק אתך.", "offensive": true, "category": "violence"}
+{"id": "B_violence_007", "style": "children_mistakes", "style_label": "B", "text": "אני אשבור לך את המשחק אם לא תפסיק להצק לי.", "offensive": true, "category": "violence"}
+{"id": "B_violence_008", "style": "children_mistakes", "style_label": "B", "text": "אתה תצטער על זה, חכה תראה מה יקרה לך שוף.", "offensive": true, "category": "violence"}
+{"id": "B_violence_009", "style": "children_mistakes", "style_label": "B", "text": "הוא יקבל מכות ממנ אם ימשיך לדבר שטויות ככה.", "offensive": true, "category": "violence"}
+{"id": "B_violence_010", "style": "children_mistakes", "style_label": "B", "text": "אני הולך לעשות לך את המוות עד שתעזוב את בית הסקול הזה.", "offensive": true, "category": "violence"}
+{"id": "B_violence_011", "style": "children_mistakes", "style_label": "B", "text": "אתה כזה מעצבן, בא לי לתת לך בוקס חחח.", "offensive": true, "category": "violence"}
+{"id": "B_violence_012", "style": "children_mistakes", "style_label": "B", "text": "תפסיק ללכת ארי כל הזמן, אחרת לא יהיה לך טוב.", "offensive": true, "category": "violence"}
+{"id": "B_violence_013", "style": "children_mistakes", "style_label": "B", "text": "אני אראה לכם מה זה להתעסק עם ילד כמונ, סתם.", "offensive": true, "category": "violence"}
+{"id": "B_violence_014", "style": "children_mistakes", "style_label": "B", "text": "אתה ידע שאני יכול לעשות לך נזק רצני אם ארצה.", "offensive": true, "category": "violence"}
+{"id": "B_violence_015", "style": "children_mistakes", "style_label": "B", "text": "תפסיק או שכולם ידאו מה עשית, תבינ את זה טוב.", "offensive": true, "category": "violence"}
+{"id": "B_violence_016", "style": "children_mistakes", "style_label": "B", "text": "אני אגרום לך לבכות כל הללה אם לא תעזוב אותי.", "offensive": true, "category": "violence"}
+{"id": "B_violence_017", "style": "children_mistakes", "style_label": "B", "text": "אתה ממש טפש, אף פעם לא תצליח בשום דבר.", "offensive": true, "category": "violence"}
+{"id": "B_violence_018", "style": "children_mistakes", "style_label": "B", "text": "אל תנסה להתחכם אתי, זה יגמר רע מאוד בשבילך.", "offensive": true, "category": "violence"}
+{"id": "B_violence_019", "style": "children_mistakes", "style_label": "B", "text": "אני אקח לך את כל הצעצועים ואחביא אותם לתמד.", "offensive": true, "category": "violence"}
+{"id": "B_violence_020", "style": "children_mistakes", "style_label": "B", "text": "חכה עד שאני אתפוס אותך לבד, אז נדבר שוב, סבבה?", "offensive": true, "category": "violence"}
+{"id": "B_violence_021", "style": "children_mistakes", "style_label": "B", "text": "הוא סתם חנפנ והוא צרך לקבל מכות כדי ללמוד.", "offensive": true, "category": "violence"}
+{"id": "B_violence_022", "style": "children_mistakes", "style_label": "B", "text": "אם תגיד מילה, אני אגלה את הסוד הכי גדול שלך, תדע.", "offensive": true, "category": "violence"}
+{"id": "B_violence_023", "style": "children_mistakes", "style_label": "B", "text": "תעוף לי מהעניים, אני לא רוצה לראות אותך בסביבה.", "offensive": true, "category": "violence"}
+{"id": "B_violence_024", "style": "children_mistakes", "style_label": "B", "text": "אתה אפס וכולם חושבים שאתה דפוק חחח.", "offensive": true, "category": "violence"}
+{"id": "B_violence_025", "style": "children_mistakes", "style_label": "B", "text": "אני אסרוף לך את התיק אם תמשיך להיות כזה מציק.", "offensive": true, "category": "violence"}
+{"id": "B_violence_026", "style": "children_mistakes", "style_label": "B", "text": "אתה לא מבינ עם מי אתה מתעסק, חכה ותראה מה יקרה.", "offensive": true, "category": "violence"}
+{"id": "B_violence_027", "style": "children_mistakes", "style_label": "B", "text": "אני אדאג שאף אחד לא ידבר איתך יותר, בנדמ מגעיל.", "offensive": true, "category": "violence"}
+{"id": "B_violence_028", "style": "children_mistakes", "style_label": "B", "text": "אם תעשה את זה עוד פעם, אני אשבור לך את היד.", "offensive": true, "category": "violence"}
+{"id": "B_violence_029", "style": "children_mistakes", "style_label": "B", "text": "אתה פחדנ ואתה תמד בורח מכל בעיה, פח.", "offensive": true, "category": "violence"}
+{"id": "B_violence_030", "style": "children_mistakes", "style_label": "B", "text": "אני אשלח לך הודעות מפחידות כל הלילה עד שתתחננ.", "offensive": true, "category": "violence"}
+{"id": "B_pornographic_001", "style": "children_mistakes", "style_label": "B", "text": "בוא נלך לחדר שלך, שם נוכל לעשות מה שבא לנו ואף אחד לא ידע.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_002", "style": "children_mistakes", "style_label": "B", "text": "הוא כל הזמנ מציץ לי מתחת לשמלה, כזה מוזר.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_003", "style": "children_mistakes", "style_label": "B", "text": "מה אתה מסתיר מתחת לבגדים? תרא לי, זה סוד בינינו.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_004", "style": "children_mistakes", "style_label": "B", "text": "אני יודע איזה סוד על הגוף שלך, בא לך לשמוע?", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_005", "style": "children_mistakes", "style_label": "B", "text": "את כזא יפה, בא לי לגעת בך כזה בעדינות.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_006", "style": "children_mistakes", "style_label": "B", "text": "בוא נילך למקום שקט, שם נוכל להיות רק שנו.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_007", "style": "children_mistakes", "style_label": "B", "text": "היא תמיד הולכת עם מכנסיים כזה צמדים שאפשר לראות הכל.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_008", "style": "children_mistakes", "style_label": "B", "text": "מה שקרה בינינו היום, זה נשאר רק בינינו, בסדרר?", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_009", "style": "children_mistakes", "style_label": "B", "text": "יש לי סוד מיוחד בגוף שלי, רוצה שאני ארא לך?", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_010", "style": "children_mistakes", "style_label": "B", "text": "הוא נגע בי במקומות פרטים, אבל לא נורא.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_011", "style": "children_mistakes", "style_label": "B", "text": "יש לך רח כזה טוב, בוי נתקרב קצת.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_012", "style": "children_mistakes", "style_label": "B", "text": "היא לבשה בגד כל כך קצר שראו לה הכל מלמטא.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_013", "style": "children_mistakes", "style_label": "B", "text": "אני יודעת מה עושים בנות ובנים לבד בחדר, רוצה לנשות?", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_014", "style": "children_mistakes", "style_label": "B", "text": "אתה כזה חמוד עם הטוסק שלך, בא לי לגעת בו קצת.", "offensive": true, "category": "pornographic"}
+{"id": "B_pornographic_015", "style": "children_mistakes", "style_label": "B", "text": "יש לך כבר שערות בפיפ? סתם שאלה חחח.", "offensive": true, "category": "pornographic"}
+{"id": "C_none_001", "style": "code_switching", "style_label": "C", "text": "היה לי יום **fun** בטירוף היום עם החברים בבריכה.", "offensive": false, "category": "none"}
+{"id": "C_none_002", "style": "code_switching", "style_label": "C", "text": "השיעור מתמטיקה היה **literally** בלתי אפשרי, לא הבנתי כלום.", "offensive": false, "category": "none"}
+{"id": "C_none_003", "style": "code_switching", "style_label": "C", "text": "ה-**vibe** בבית קפה החדש ממש **chill**, אני אוהבת לבוא לשם.", "offensive": false, "category": "none"}
+{"id": "C_none_004", "style": "code_switching", "style_label": "C", "text": "הסרט החדש שראינו בנטפליקס היה **fire** בטירוף, חייבים לראות.", "offensive": false, "category": "none"}
+{"id": "C_none_005", "style": "code_switching", "style_label": "C", "text": "קניתי חולצה **cute** חדשה, היא **so** מתוקה.", "offensive": false, "category": "none"}
+{"id": "C_none_006", "style": "code_switching", "style_label": "C", "text": "התאמנתי בחדר כושר והיה לי **amazing** **workout**.", "offensive": false, "category": "none"}
+{"id": "C_none_007", "style": "code_switching", "style_label": "C", "text": "זה **fail** רציני ששכחתי את המבחן היום, **ash**.", "offensive": false, "category": "none"}
+{"id": "C_none_008", "style": "code_switching", "style_label": "C", "text": "אני **so** עייפה מהמסיבה אתמול, לא ישנתי כל הלילה.", "offensive": false, "category": "none"}
+{"id": "C_none_009", "style": "code_switching", "style_label": "C", "text": "ה-**playlist** החדש שלי הוא ה-**mood** המושלם ללמידה.", "offensive": false, "category": "none"}
+{"id": "C_none_010", "style": "code_switching", "style_label": "C", "text": "הפיצה הזאת היא **literally** הדבר הכי טעים שאכלתי השבוע.", "offensive": false, "category": "none"}
+{"id": "C_none_011", "style": "code_switching", "style_label": "C", "text": "יש לי **crush** חדש על מישהו מהשכבה, זה **awkward**.", "offensive": false, "category": "none"}
+{"id": "C_none_012", "style": "code_switching", "style_label": "C", "text": "החברים שלי הם **the best**, ה-**hangout** איתם תמיד כיף.", "offensive": false, "category": "none"}
+{"id": "C_none_013", "style": "code_switching", "style_label": "C", "text": "היום היה לי **good vibe** כל היום בלי שום סיבה מיוחדת.", "offensive": false, "category": "none"}
+{"id": "C_none_014", "style": "code_switching", "style_label": "C", "text": "המבחן בהיסטוריה היה **so** קל, ציפיתי למשהו יותר **stressful**.", "offensive": false, "category": "none"}
+{"id": "C_none_015", "style": "code_switching", "style_label": "C", "text": "ה-**outfit** שלך היום היה **on point**, ממש אהבתי את ה-**style**.", "offensive": false, "category": "none"}
+{"id": "C_none_016", "style": "code_switching", "style_label": "C", "text": "אנחנו חייבים לעשות **sleepover** בקרוב, זה **so** כיף.", "offensive": false, "category": "none"}
+{"id": "C_none_017", "style": "code_switching", "style_label": "C", "text": "המשחק החדש שיצא הוא **literally** ממכר, אני לא מצליחה להפסיק.", "offensive": false, "category": "none"}
+{"id": "C_none_018", "style": "code_switching", "style_label": "C", "text": "ה-**story** שלך באינסטגרם היה **cute** לגמרי.", "offensive": false, "category": "none"}
+{"id": "C_none_019", "style": "code_switching", "style_label": "C", "text": "אני **so** רעבה, חייבת איזה **snack** טעים עכשיו.", "offensive": false, "category": "none"}
+{"id": "C_none_020", "style": "code_switching", "style_label": "C", "text": "ה-**party** אתמול היה **lit**, רקדנו עד אור הבוקר.", "offensive": false, "category": "none"}
+{"id": "C_none_021", "style": "code_switching", "style_label": "C", "text": "הקטע הזה היה **random** לגמרי, לא הבנתי מה קרה.", "offensive": false, "category": "none"}
+{"id": "C_none_022", "style": "code_switching", "style_label": "C", "text": "אני **so done** עם שיעורי הבית, זה לוקח לי שעות.", "offensive": false, "category": "none"}
+{"id": "C_none_023", "style": "code_switching", "style_label": "C", "text": "ה-**vibe check** יצא **positive** היום, ברוך השם.", "offensive": false, "category": "none"}
+{"id": "C_none_024", "style": "code_switching", "style_label": "C", "text": "ה-**meme** ששלחת היה **literally** אני, צחקתי בקול.", "offensive": false, "category": "none"}
+{"id": "C_none_025", "style": "code_switching", "style_label": "C", "text": "בואו נלך לשתות **latte** בבית קפה ההוא, ה-**coffee** שם **fire**.", "offensive": false, "category": "none"}
+{"id": "C_none_026", "style": "code_switching", "style_label": "C", "text": "יש לי הרגשה של **good vibes only** היום.", "offensive": false, "category": "none"}
+{"id": "C_none_027", "style": "code_switching", "style_label": "C", "text": "ה-**game night** שלנו היה **epic**, ניצחתי ברוב המשחקים.", "offensive": false, "category": "none"}
+{"id": "C_none_028", "style": "code_switching", "style_label": "C", "text": "ה-**drama** בכיתה נהיה **so** מוגזם, אני **can't** עם זה.", "offensive": false, "category": "none"}
+{"id": "C_none_029", "style": "code_switching", "style_label": "C", "text": "ה-**goals** שלי לשבוע זה לסיים את כל המטלות.", "offensive": false, "category": "none"}
+{"id": "C_none_030", "style": "code_switching", "style_label": "C", "text": "ה-**challenge** בטיקטוק נהיה **viral**, כולם עושים אותו.", "offensive": false, "category": "none"}
+{"id": "C_none_031", "style": "code_switching", "style_label": "C", "text": "אני חייבת **update** על מה קרה אתמול, **spill the tea**.", "offensive": false, "category": "none"}
+{"id": "C_none_032", "style": "code_switching", "style_label": "C", "text": "הקטע של הבחינה היה **literally** מטורף, **so** הרבה חומר.", "offensive": false, "category": "none"}
+{"id": "C_none_033", "style": "code_switching", "style_label": "C", "text": "ה-**playlist** הזה עושה לי **mood** טוב לכל היום.", "offensive": false, "category": "none"}
+{"id": "C_none_034", "style": "code_switching", "style_label": "C", "text": "ה-**food** בבית של סבתא שלי הוא **amazing**, **literally** גן עדן.", "offensive": false, "category": "none"}
+{"id": "C_none_035", "style": "code_switching", "style_label": "C", "text": "היא שלחה לי **cute** **emoji**, זה **so** מתוק.", "offensive": false, "category": "none"}
+{"id": "C_none_036", "style": "code_switching", "style_label": "C", "text": "ה-**online course** הזה ממש מעניין, אני **so** נהנית ללמוד.", "offensive": false, "category": "none"}
+{"id": "C_none_037", "style": "code_switching", "style_label": "C", "text": "איזה **fail** מצחיק קרה לי היום, אני חייבת לספר לכם.", "offensive": false, "category": "none"}
+{"id": "C_none_038", "style": "code_switching", "style_label": "C", "text": "ה-**text** שלך הגיע בדיוק בזמן, אני **so** שמחה שכתבת.", "offensive": false, "category": "none"}
+{"id": "C_none_039", "style": "code_switching", "style_label": "C", "text": "ה-**vibe** של הים בבוקר הוא **chill** בטירוף.", "offensive": false, "category": "none"}
+{"id": "C_none_040", "style": "code_switching", "style_label": "C", "text": "המסיבת פיג'מות הייתה **super fun**, צחקנו **so** הרבה.", "offensive": false, "category": "none"}
+{"id": "C_none_041", "style": "code_switching", "style_label": "C", "text": "אני **so** excited לקראת הטיול בסוף השבוע.", "offensive": false, "category": "none"}
+{"id": "C_none_042", "style": "code_switching", "style_label": "C", "text": "ה-**outfit** שלך אתמול היה **fire**, ממש **styled**.", "offensive": false, "category": "none"}
+{"id": "C_none_043", "style": "code_switching", "style_label": "C", "text": "ה-**movie night** היה מושלם, ה-**popcorn** היה טעים.", "offensive": false, "category": "none"}
+{"id": "C_none_044", "style": "code_switching", "style_label": "C", "text": "היא **literally** אחותי, אנחנו **so** מחוברות.", "offensive": false, "category": "none"}
+{"id": "C_none_045", "style": "code_switching", "style_label": "C", "text": "ה-**playlist** שלה לוקח אותי ל-**good vibe** מיידי.", "offensive": false, "category": "none"}
+{"id": "C_none_046", "style": "code_switching", "style_label": "C", "text": "אני **so** grateful על החברים המדהימים שיש לי.", "offensive": false, "category": "none"}
+{"id": "C_none_047", "style": "code_switching", "style_label": "C", "text": "ה-**zoom call** של המשפחה היה **cute**, כולם התחברו.", "offensive": false, "category": "none"}
+{"id": "C_none_048", "style": "code_switching", "style_label": "C", "text": "ה-**podcast** החדש שלהם הוא **so** מעניין, אני מכורה.", "offensive": false, "category": "none"}
+{"id": "C_none_049", "style": "code_switching", "style_label": "C", "text": "ה-**workout** שלי היום היה קשה אבל הרגשתי **amazing** אחרי.", "offensive": false, "category": "none"}
+{"id": "C_none_050", "style": "code_switching", "style_label": "C", "text": "ה-**ash** הזה של הציון שלי במבחן, לא נורא, **next time**.", "offensive": false, "category": "none"}
+{"id": "C_none_051", "style": "code_switching", "style_label": "C", "text": "היה לי יום ממש fun היום בבית הספר.", "offensive": false, "category": "none"}
+{"id": "C_none_052", "style": "code_switching", "style_label": "C", "text": "השיעור מתמטיקה היה literally סיוט.", "offensive": false, "category": "none"}
+{"id": "C_none_053", "style": "code_switching", "style_label": "C", "text": "אני so מתה לראות את הסרט החדש הזה.", "offensive": false, "category": "none"}
+{"id": "C_none_054", "style": "code_switching", "style_label": "C", "text": "החברות שלי הן ה-best שיש.", "offensive": false, "category": "none"}
+{"id": "C_none_055", "style": "code_switching", "style_label": "C", "text": "ה-vibe בבית קפה הזה פשוט מושלם.", "offensive": false, "category": "none"}
+{"id": "C_none_056", "style": "code_switching", "style_label": "C", "text": "הבחינה הזאת הייתה ash, בטוח נכשלתי.", "offensive": false, "category": "none"}
+{"id": "C_none_057", "style": "code_switching", "style_label": "C", "text": "השיר הזה פשוט fire, לא מפסיקה לשמוע אותו.", "offensive": false, "category": "none"}
+{"id": "C_none_058", "style": "code_switching", "style_label": "C", "text": "היה לי fail רציני עם העוגה שרציתי לאפות.", "offensive": false, "category": "none"}
+{"id": "C_none_059", "style": "code_switching", "style_label": "C", "text": "החתול החדש שלי הוא so cute.", "offensive": false, "category": "none"}
+{"id": "C_none_060", "style": "code_switching", "style_label": "C", "text": "הטיול הזה היה literally מדהים, חייבים לחזור לשם.", "offensive": false, "category": "none"}
+{"id": "C_none_061", "style": "code_switching", "style_label": "C", "text": "אני ב-mood לראות סדרה כל הערב.", "offensive": false, "category": "none"}
+{"id": "C_none_062", "style": "code_switching", "style_label": "C", "text": "החבר החדש של רוני הוא די cool.", "offensive": false, "category": "none"}
+{"id": "C_none_063", "style": "code_switching", "style_label": "C", "text": "ה-game החדש שיצא הוא ממכר בטירוף.", "offensive": false, "category": "none"}
+{"id": "C_none_064", "style": "code_switching", "style_label": "C", "text": "אני so עייפה מהאימון היום.", "offensive": false, "category": "none"}
+{"id": "C_none_065", "style": "code_switching", "style_label": "C", "text": "הסלפי הזה יצא לי perfect.", "offensive": false, "category": "none"}
+{"id": "C_none_066", "style": "code_switching", "style_label": "C", "text": "יש לי הרגשה טובה לגבי ה-test מחר.", "offensive": false, "category": "none"}
+{"id": "C_none_067", "style": "code_switching", "style_label": "C", "text": "ה-party אצל נועה היה epic.", "offensive": false, "category": "none"}
+{"id": "C_none_068", "style": "code_switching", "style_label": "C", "text": "אני literally לא מאמינה שזה קרה.", "offensive": false, "category": "none"}
+{"id": "C_none_069", "style": "code_switching", "style_label": "C", "text": "ה-vibe של יום שישי בערב הוא פשוט amazing.", "offensive": false, "category": "none"}
+{"id": "C_none_070", "style": "code_switching", "style_label": "C", "text": "אכלנו pizza ממש fire אתמול.", "offensive": false, "category": "none"}
+{"id": "C_none_071", "style": "code_switching", "style_label": "C", "text": "ה-story הזה היה so weird.", "offensive": false, "category": "none"}
+{"id": "C_none_072", "style": "code_switching", "style_label": "C", "text": "אני רוצה רק ל-chill עם החברים שלי היום.", "offensive": false, "category": "none"}
+{"id": "C_none_073", "style": "code_switching", "style_label": "C", "text": "ה-drama עם המורה למדעים היה crazy.", "offensive": false, "category": "none"}
+{"id": "C_none_074", "style": "code_switching", "style_label": "C", "text": "הציור הזה so cute, מי צייר אותו?", "offensive": false, "category": "none"}
+{"id": "C_none_075", "style": "code_switching", "style_label": "C", "text": "ה-fail שלי בשיעור ספורט היה מצחיק בטירוף.", "offensive": false, "category": "none"}
+{"id": "C_none_076", "style": "code_switching", "style_label": "C", "text": "אני so אוהבת את הסגנון החדש שלך, זה fire.", "offensive": false, "category": "none"}
+{"id": "C_none_077", "style": "code_switching", "style_label": "C", "text": "היה fun בטירוף בפארק השעשועים.", "offensive": false, "category": "none"}
+{"id": "C_none_078", "style": "code_switching", "style_label": "C", "text": "ה-workout היום היה literally קשה.", "offensive": false, "category": "none"}
+{"id": "C_none_079", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלהם תמיד super positive.", "offensive": false, "category": "none"}
+{"id": "C_none_080", "style": "code_switching", "style_label": "C", "text": "אני stressed לקראת המבחן במתמטיקה.", "offensive": false, "category": "none"}
+{"id": "C_none_081", "style": "code_switching", "style_label": "C", "text": "ה-plan שלנו להיום נשמע perfect.", "offensive": false, "category": "none"}
+{"id": "C_none_082", "style": "code_switching", "style_label": "C", "text": "ה-playlist החדש שלי הוא fire.", "offensive": false, "category": "none"}
+{"id": "C_none_083", "style": "code_switching", "style_label": "C", "text": "ה-outfit שלה היה so cute.", "offensive": false, "category": "none"}
+{"id": "C_none_084", "style": "code_switching", "style_label": "C", "text": "ה-lunch היום היה yummy בטירוף.", "offensive": false, "category": "none"}
+{"id": "C_none_085", "style": "code_switching", "style_label": "C", "text": "אני literally לא זוכרת מה למדנו בשיעור.", "offensive": false, "category": "none"}
+{"id": "C_none_086", "style": "code_switching", "style_label": "C", "text": "ה-deal עם הטיול לחו\"ל נשמע amazing.", "offensive": false, "category": "none"}
+{"id": "C_none_087", "style": "code_switching", "style_label": "C", "text": "ה-mood שלי היום הוא פשוט happy.", "offensive": false, "category": "none"}
+{"id": "C_none_088", "style": "code_switching", "style_label": "C", "text": "ה-text שלך היה so sweet.", "offensive": false, "category": "none"}
+{"id": "C_none_089", "style": "code_switching", "style_label": "C", "text": "אני so רוצה ללכת ל-concert הזה.", "offensive": false, "category": "none"}
+{"id": "C_none_090", "style": "code_switching", "style_label": "C", "text": "ה-movie שראינו אתמול היה cool.", "offensive": false, "category": "none"}
+{"id": "C_none_091", "style": "code_switching", "style_label": "C", "text": "ה-vibe בבית תמיד chill כשההורים לא פה.", "offensive": false, "category": "none"}
+{"id": "C_none_092", "style": "code_switching", "style_label": "C", "text": "ה-challenge הזה היה fun אבל קשה.", "offensive": false, "category": "none"}
+{"id": "C_none_093", "style": "code_switching", "style_label": "C", "text": "ה-homework שלי לוקח לי literally נצח.", "offensive": false, "category": "none"}
+{"id": "C_none_094", "style": "code_switching", "style_label": "C", "text": "ה-group chat שלנו so active.", "offensive": false, "category": "none"}
+{"id": "C_none_095", "style": "code_switching", "style_label": "C", "text": "היא so אכפתית, זה cute נורא.", "offensive": false, "category": "none"}
+{"id": "C_none_096", "style": "code_switching", "style_label": "C", "text": "אני מרגישה קצת stressed עם כל המטלות.", "offensive": false, "category": "none"}
+{"id": "C_none_097", "style": "code_switching", "style_label": "C", "text": "ה-fail בשיעור תיאטרון היה בלתי נשכח.", "offensive": false, "category": "none"}
+{"id": "C_none_098", "style": "code_switching", "style_label": "C", "text": "ה-food בבית של סבתא תמיד fire.", "offensive": false, "category": "none"}
+{"id": "C_none_099", "style": "code_switching", "style_label": "C", "text": "ה-vibe של הים בערב פשוט perfect.", "offensive": false, "category": "none"}
+{"id": "C_none_100", "style": "code_switching", "style_label": "C", "text": "אני so שמחה שאתם החברים שלי, זה fun איתכם.", "offensive": false, "category": "none"}
+{"id": "C_none_101", "style": "code_switching", "style_label": "C", "text": "היה לי יום **so** מטורף היום, בקושי נשמתי.", "offensive": false, "category": "none"}
+{"id": "C_none_102", "style": "code_switching", "style_label": "C", "text": "שיעור מתמטיקה היה **literally** הדבר הכי משעמם שיש.", "offensive": false, "category": "none"}
+{"id": "C_none_103", "style": "code_switching", "style_label": "C", "text": "ה-**vibe** בבית קפה החדש ממש **cool**, חייבים לבוא שוב.", "offensive": false, "category": "none"}
+{"id": "C_none_104", "style": "code_switching", "style_label": "C", "text": "המבחן הזה היה **ash** קשה, מקווה שעברתי.", "offensive": false, "category": "none"}
+{"id": "C_none_105", "style": "code_switching", "style_label": "C", "text": "הסרט שראינו בנטפליקס היה **fire**, לגמרי ממליץ.", "offensive": false, "category": "none"}
+{"id": "C_none_106", "style": "code_switching", "style_label": "C", "text": "איזה **fail** היה לי בשיעור ספורט, נפלתי מול כולם.", "offensive": false, "category": "none"}
+{"id": "C_none_107", "style": "code_switching", "style_label": "C", "text": "הכלבלב החדש שלהם **so cute**, אני רוצה אחד כזה.", "offensive": false, "category": "none"}
+{"id": "C_none_108", "style": "code_switching", "style_label": "C", "text": "היה לנו **fun** בטירוף במסיבה אמש, רקדנו עד אור הבוקר.", "offensive": false, "category": "none"}
+{"id": "C_none_109", "style": "code_switching", "style_label": "C", "text": "אני **literally** גמור מכל הריצה הזאת, רוצה רק לישון.", "offensive": false, "category": "none"}
+{"id": "C_none_110", "style": "code_switching", "style_label": "C", "text": "ה-**mood** שלי היום ממש טוב, הולך להיות יום אדיר.", "offensive": false, "category": "none"}
+{"id": "C_none_111", "style": "code_switching", "style_label": "C", "text": "הקראש שלי שלח לי הודעה, אני **so** מתרגש עכשיו.", "offensive": false, "category": "none"}
+{"id": "C_none_112", "style": "code_switching", "style_label": "C", "text": "זה היה **epic fail** כשניסיתי לאפות עוגה והיא נשרפה.", "offensive": false, "category": "none"}
+{"id": "C_none_113", "style": "code_switching", "style_label": "C", "text": "אני חייבת קצת **chill** אחרי כל השבוע המטורף הזה.", "offensive": false, "category": "none"}
+{"id": "C_none_114", "style": "code_switching", "style_label": "C", "text": "האוכל במסעדה הזאת היה **amazing**, חייבים לחזור לשם.", "offensive": false, "category": "none"}
+{"id": "C_none_115", "style": "code_switching", "style_label": "C", "text": "ה-**playlist** החדש שלי עושה לי **good vibes** בטירוף.", "offensive": false, "category": "none"}
+{"id": "C_none_116", "style": "code_switching", "style_label": "C", "text": "השיעורים היום היו **so boring**, בקושי הצלחתי להישאר ערה.", "offensive": false, "category": "none"}
+{"id": "C_none_117", "style": "code_switching", "style_label": "C", "text": "ההופעה אתמול הייתה **lit**, הקהל פשוט השתגע.", "offensive": false, "category": "none"}
+{"id": "C_none_118", "style": "code_switching", "style_label": "C", "text": "אנחנו הולכים לעשות **hangout** בערב, מי מצטרף?", "offensive": false, "category": "none"}
+{"id": "C_none_119", "style": "code_switching", "style_label": "C", "text": "אני חייבת את ה-**outfit** הזה, הוא פשוט **cute** מדי.", "offensive": false, "category": "none"}
+{"id": "C_none_120", "style": "code_switching", "style_label": "C", "text": "ה-**game** החדש שיצא ממכר רצח, לא מצליחה להפסיק.", "offensive": false, "category": "none"}
+{"id": "C_none_121", "style": "code_switching", "style_label": "C", "text": "יש לי **stress** מטורף מהמבחן מחר, אני חייבת ללמוד **hard**.", "offensive": false, "category": "none"}
+{"id": "C_none_122", "style": "code_switching", "style_label": "C", "text": "ה-**vibe** בקבוצת וואטסאפ שלנו ממש **funny** היום.", "offensive": false, "category": "none"}
+{"id": "C_none_123", "style": "code_switching", "style_label": "C", "text": "אמא שלי הכינה עוגה **so yummy**, אני חייבת עוד חתיכה.", "offensive": false, "category": "none"}
+{"id": "C_none_124", "style": "code_switching", "style_label": "C", "text": "אני **literally** לא מאמין למה שקרה עכשיו, זה **insane**.", "offensive": false, "category": "none"}
+{"id": "C_none_125", "style": "code_switching", "style_label": "C", "text": "בואו נצא לשתות **coffee** אחרי הלימודים, צריך הפסקה.", "offensive": false, "category": "none"}
+{"id": "C_abusive_001", "style": "code_switching", "style_label": "C", "text": "אתה כזה loser, literally אף אחד לא סובל אותך.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_002", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלך ממש toxic, תפסיק לנסות.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_003", "style": "code_switching", "style_label": "C", "text": "תסתום כבר, so annoying שאתה לא מפסיק לדבר.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_004", "style": "code_switching", "style_label": "C", "text": "את ממש cringe עם כל מה שאת עושה, ash.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_005", "style": "code_switching", "style_label": "C", "text": "מי בכלל רוצה להיות חבר שלך? אתה כזה freak.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_006", "style": "code_switching", "style_label": "C", "text": "הבגדים שלך זה total fail, מה חשבת לעצמך?", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_007", "style": "code_switching", "style_label": "C", "text": "אתה חושב שאתה cool? אתה פשוט pathetic.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_008", "style": "code_switching", "style_label": "C", "text": "אף אחד לא ביקש את הדעה שלך, תהיה בשקט, literally.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_009", "style": "code_switching", "style_label": "C", "text": "אתה כזה אהבל, so מטומטם שאני לא מאמין.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_010", "style": "code_switching", "style_label": "C", "text": "ה-attitude שלך כל כך גרוע, תתבגר כבר.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_011", "style": "code_switching", "style_label": "C", "text": "מי אתה בכלל שתגיד לי מה לעשות, יא noob.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_012", "style": "code_switching", "style_label": "C", "text": "אתה נראה כמו clown, זה ממש פתטי, ash.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_013", "style": "code_switching", "style_label": "C", "text": "כל מה שאתה עושה זה just stupid, תפסיק כבר.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_014", "style": "code_switching", "style_label": "C", "text": "היא כזאת fake, literally לא יכולה לסבול אותה.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_015", "style": "code_switching", "style_label": "C", "text": "היי, תירגעי, ה-drama שלך לא מעניין אף אחד.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_016", "style": "code_switching", "style_label": "C", "text": "אתה פשוט בדיחה, אף אחד לא לוקח אותך ברצינות, ever.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_017", "style": "code_switching", "style_label": "C", "text": "ה-outfit שלך ממש מכוער, זה disaster.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_018", "style": "code_switching", "style_label": "C", "text": "אתה כזה חנון, אין לך life מחוץ למחשב.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_019", "style": "code_switching", "style_label": "C", "text": "היא חושבת שהיא cool אבל היא totally לא.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_020", "style": "code_switching", "style_label": "C", "text": "אתה תמיד הורס הכל, אתה כזה fail.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_021", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלך פשוט דוחה, תתרחק ממני.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_022", "style": "code_switching", "style_label": "C", "text": "אל תדבר איתי יותר, אתה כזה annoying.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_023", "style": "code_switching", "style_label": "C", "text": "אתה חושב שאתה מצחיק? אתה פשוט pathetic.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_024", "style": "code_switching", "style_label": "C", "text": "היא כזאת מפגרת, so מה היא חושבת לעצמה?", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_025", "style": "code_switching", "style_label": "C", "text": "ה-face שלך פשוט לא מסתדר לי, ugly.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_026", "style": "code_switching", "style_label": "C", "text": "אתה כזה drama queen, כל דבר אצלך זה סיפור.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_027", "style": "code_switching", "style_label": "C", "text": "מי בכלל שואל אותך? אתה לא relevant.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_028", "style": "code_switching", "style_label": "C", "text": "ה-post שלך היה so stupid, תמחק אותו.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_029", "style": "code_switching", "style_label": "C", "text": "אתה חושב שאתה מיוחד? אתה סתם עוד אחד, loser.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_030", "style": "code_switching", "style_label": "C", "text": "היא כזאת attention seeker, זה so מעצבן.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_031", "style": "code_switching", "style_label": "C", "text": "תסתום את הפה כבר, אתה ממש annoying, literally.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_032", "style": "code_switching", "style_label": "C", "text": "אתה לא מבין כלום, אתה פשוט idiot.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_033", "style": "code_switching", "style_label": "C", "text": "ה-joke שלך היה ממש לא מצחיק, cringe.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_034", "style": "code_switching", "style_label": "C", "text": "אף אחד לא אוהב אותך, אתה פשוט weird.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_035", "style": "code_switching", "style_label": "C", "text": "אתה כזה freak, אף פעם לא תשתנה.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_036", "style": "code_switching", "style_label": "C", "text": "היא חושבת שהיא fire אבל היא סתם try hard.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_037", "style": "code_switching", "style_label": "C", "text": "ה-story שלך היה ממש פתטי, so lame.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_038", "style": "code_switching", "style_label": "C", "text": "תפסיק להתנהג כמו ילד קטן, אתה כזה baby.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_039", "style": "code_switching", "style_label": "C", "text": "אתה כזה חלשלוש, אין לך guts לעשות כלום.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_040", "style": "code_switching", "style_label": "C", "text": "ה-opinion שלך לא מעניין אף אחד, so.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_041", "style": "code_switching", "style_label": "C", "text": "אתה פשוט מעצבן, תעלם לי מהעיניים, ash.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_042", "style": "code_switching", "style_label": "C", "text": "היא כזאת bitch, תמיד חייבת להרוס הכל.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_043", "style": "code_switching", "style_label": "C", "text": "ה-look שלך פשוט זוועה, זה so bad.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_044", "style": "code_switching", "style_label": "C", "text": "אתה אף פעם לא תצליח בכלום, אתה fail.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_045", "style": "code_switching", "style_label": "C", "text": "היא ממש pathetic, תמיד מנסה לרצות את כולם.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_046", "style": "code_switching", "style_label": "C", "text": "תשתוק כבר, אתה כזה stupid, literally.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_047", "style": "code_switching", "style_label": "C", "text": "ה-jokes שלך לא מצחיקים, אתה פשוט lame.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_048", "style": "code_switching", "style_label": "C", "text": "אתה כזה אפס, אין לך שום כישרון, zero.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_049", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלך נותן לי כאב ראש, תפסיק.", "offensive": true, "category": "abusive"}
+{"id": "C_abusive_050", "style": "code_switching", "style_label": "C", "text": "אף אחד לא רוצה לשמוע אותך, אתה כזה noise.", "offensive": true, "category": "abusive"}
+{"id": "C_hate_001", "style": "code_switching", "style_label": "C", "text": "היא *literally* לא מבינה כלום, בגלל שהיא בחורה.", "offensive": true, "category": "hate"}
+{"id": "C_hate_002", "style": "code_switching", "style_label": "C", "text": "הוא כזה *ash*, ברור שהוא מזרחי.", "offensive": true, "category": "hate"}
+{"id": "C_hate_003", "style": "code_switching", "style_label": "C", "text": "ה-vibe עם הדתיים האלה *literally* לא עובד לי, הם כאלה משעממים.", "offensive": true, "category": "hate"}
+{"id": "C_hate_004", "style": "code_switching", "style_label": "C", "text": "כל הבנות האלה *so* דרמטיות, *literally* לא מבינות בבדיחות.", "offensive": true, "category": "hate"}
+{"id": "C_hate_005", "style": "code_switching", "style_label": "C", "text": "הוא *fail* במבחן, זה בגלל שהוא מהשכבה האתיופית.", "offensive": true, "category": "hate"}
+{"id": "C_hate_006", "style": "code_switching", "style_label": "C", "text": "היא כזאת *cute* כשהיא שותקת, אבל כשהיא מדברת היא *literally* בלונדינית.", "offensive": true, "category": "hate"}
+{"id": "C_hate_007", "style": "code_switching", "style_label": "C", "text": "אני *so* לא סובל את כל הרוסים האלה, הם *literally* חושבים שהם מבינים הכל.", "offensive": true, "category": "hate"}
+{"id": "C_hate_008", "style": "code_switching", "style_label": "C", "text": "הוא *literally* חושב שהוא מלך רק כי הוא גבר, איזה *joke*.", "offensive": true, "category": "hate"}
+{"id": "C_hate_009", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלו כזה *off*, בטח הוא ערבי.", "offensive": true, "category": "hate"}
+{"id": "C_hate_010", "style": "code_switching", "style_label": "C", "text": "כל הדתיים האלה *so* מעצבנים, *literally* חושבים שהם יודעים הכל.", "offensive": true, "category": "hate"}
+{"id": "C_hate_011", "style": "code_switching", "style_label": "C", "text": "היא *literally* לא יכולה להתאמן כמו בן, היא כזאת *weak*.", "offensive": true, "category": "hate"}
+{"id": "C_hate_012", "style": "code_switching", "style_label": "C", "text": "הוא כזה *ash* עם כל הדיבורים על דת, *literally* מעצבן.", "offensive": true, "category": "hate"}
+{"id": "C_hate_013", "style": "code_switching", "style_label": "C", "text": "זה *so* לא פייר, בגלל שהם מרוקאים הם תמיד מקבלים יחס מיוחד.", "offensive": true, "category": "hate"}
+{"id": "C_hate_014", "style": "code_switching", "style_label": "C", "text": "היא *literally* לא מבינה מהחיים שלה, כל מי שגרה ביישוב ההוא כזאת.", "offensive": true, "category": "hate"}
+{"id": "C_hate_015", "style": "code_switching", "style_label": "C", "text": "כל הבנים האלה *so* חסרי רגישות, *literally* כולם אותו דבר.", "offensive": true, "category": "hate"}
+{"id": "C_hate_016", "style": "code_switching", "style_label": "C", "text": "ה-vibe עם ה*gay* הזה *literally* הורס לי את הערב.", "offensive": true, "category": "hate"}
+{"id": "C_hate_017", "style": "code_switching", "style_label": "C", "text": "הוא *fail* כל פעם במבחן, זה *literally* בגלל שהוא מזרחי.", "offensive": true, "category": "hate"}
+{"id": "C_hate_018", "style": "code_switching", "style_label": "C", "text": "אני *so* עייפה מכל האלה שחושבים שהם *fire* רק בגלל שהם אשכנזים.", "offensive": true, "category": "hate"}
+{"id": "C_hate_019", "style": "code_switching", "style_label": "C", "text": "היא *literally* חושבת שהיא מיוחדת כי היא בת, איזה *joke*.", "offensive": true, "category": "hate"}
+{"id": "C_hate_020", "style": "code_switching", "style_label": "C", "text": "הוא כזה *weirdo*, בטח הוא מהקיבוץ.", "offensive": true, "category": "hate"}
+{"id": "C_hate_021", "style": "code_switching", "style_label": "C", "text": "הם *so* רועשים, כל המזרחים האלה.", "offensive": true, "category": "hate"}
+{"id": "C_hate_022", "style": "code_switching", "style_label": "C", "text": "היא *literally* לא יכולה להחליט, כמו כל הנשים.", "offensive": true, "category": "hate"}
+{"id": "C_hate_023", "style": "code_switching", "style_label": "C", "text": "הוא כזה *loser*, בטח הוא *ash* כמו כל הדתיים.", "offensive": true, "category": "hate"}
+{"id": "C_hate_024", "style": "code_switching", "style_label": "C", "text": "ה-vibe שם היה *literally* מוזר, מלא ברוסים.", "offensive": true, "category": "hate"}
+{"id": "C_hate_025", "style": "code_switching", "style_label": "C", "text": "כל הבנות האלה *so* קלות להשגה, *literally* לא יודעות להגיד לא.", "offensive": true, "category": "hate"}
+{"id": "C_hate_026", "style": "code_switching", "style_label": "C", "text": "הוא *literally* לא מבין איפה הוא חי, הוא כזה דתי עם כל המגבלות.", "offensive": true, "category": "hate"}
+{"id": "C_hate_027", "style": "code_switching", "style_label": "C", "text": "הם *so* חושבים שהם מיוחדים רק כי הם מהמרכז.", "offensive": true, "category": "hate"}
+{"id": "C_hate_028", "style": "code_switching", "style_label": "C", "text": "ה*cute* הזה חושב שהוא יכול לדבר ככה רק כי הוא *gay*.", "offensive": true, "category": "hate"}
+{"id": "C_hate_029", "style": "code_switching", "style_label": "C", "text": "היא *literally* חושבת שהיא מבינה בבגדים, אבל היא כזאת *basic* כמו כל הבלונדיניות.", "offensive": true, "category": "hate"}
+{"id": "C_hate_030", "style": "code_switching", "style_label": "C", "text": "אני *so* לא רוצה לשבת ליד ההוא ששומע מוזיקה אתיופית.", "offensive": true, "category": "hate"}
+{"id": "C_violence_001", "style": "code_switching", "style_label": "C", "text": "אני literally אגמור אותך אם לא תפסיק עכשיו.", "offensive": true, "category": "violence"}
+{"id": "C_violence_002", "style": "code_switching", "style_label": "C", "text": "אתה כזה fail, אין לך מושג עם מי התחלת.", "offensive": true, "category": "violence"}
+{"id": "C_violence_003", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלך ממש מעצבן, חכה שתראה מה יקרה.", "offensive": true, "category": "violence"}
+{"id": "C_violence_004", "style": "code_switching", "style_label": "C", "text": "אני so אתלש לך את הצורה, אתה לא מבין.", "offensive": true, "category": "violence"}
+{"id": "C_violence_005", "style": "code_switching", "style_label": "C", "text": "זה יהיה fire בשבילך, תאמין לי, אתה תצטער.", "offensive": true, "category": "violence"}
+{"id": "C_violence_006", "style": "code_switching", "style_label": "C", "text": "תפסיק לדבר שטויות או שאני אעשה לך ממש hard.", "offensive": true, "category": "violence"}
+{"id": "C_violence_007", "style": "code_switching", "style_label": "C", "text": "אין לך מושג כמה אני ready לשים לך בום בפרצוף.", "offensive": true, "category": "violence"}
+{"id": "C_violence_008", "style": "code_switching", "style_label": "C", "text": "התנהגות כזו זה literally קצה גבול היכולת שלי.", "offensive": true, "category": "violence"}
+{"id": "C_violence_009", "style": "code_switching", "style_label": "C", "text": "אתה פשוט pathetic, ואני אדאג שכולם ידעו את זה.", "offensive": true, "category": "violence"}
+{"id": "C_violence_010", "style": "code_switching", "style_label": "C", "text": "אל תנסה אותי, bro, זה לא יגמר טוב בשבילך.", "offensive": true, "category": "violence"}
+{"id": "C_violence_011", "style": "code_switching", "style_label": "C", "text": "אני אהרוס לך את כל ה-fun, תראה.", "offensive": true, "category": "violence"}
+{"id": "C_violence_012", "style": "code_switching", "style_label": "C", "text": "אתה חושב שאתה so חכם? נראה אותך מחר.", "offensive": true, "category": "violence"}
+{"id": "C_violence_013", "style": "code_switching", "style_label": "C", "text": "זה לא cute בכלל, אני אשבור לך את השיניים.", "offensive": true, "category": "violence"}
+{"id": "C_violence_014", "style": "code_switching", "style_label": "C", "text": "הולך להיות לך ממש אבל ממש bad, תתכונן.", "offensive": true, "category": "violence"}
+{"id": "C_violence_015", "style": "code_switching", "style_label": "C", "text": "אתה כזה loser, אף אחד לא רוצה להיות לידך.", "offensive": true, "category": "violence"}
+{"id": "C_violence_016", "style": "code_switching", "style_label": "C", "text": "תמשיך ככה ואני אדאג שתקבל מה שמגיע לך, dude.", "offensive": true, "category": "violence"}
+{"id": "C_violence_017", "style": "code_switching", "style_label": "C", "text": "אתה תצטער literally על הרגע שנולדת.", "offensive": true, "category": "violence"}
+{"id": "C_violence_018", "style": "code_switching", "style_label": "C", "text": "ה-vibe פה נהיה ממש toxic בגללך, ואני אטפל בזה.", "offensive": true, "category": "violence"}
+{"id": "C_violence_019", "style": "code_switching", "style_label": "C", "text": "עדיף שתשתוק, לפני שאני אעשה לך ממש damage.", "offensive": true, "category": "violence"}
+{"id": "C_violence_020", "style": "code_switching", "style_label": "C", "text": "אל תשחק איתי, אני לא ב-mood ל-shit שלך.", "offensive": true, "category": "violence"}
+{"id": "C_violence_021", "style": "code_switching", "style_label": "C", "text": "זה לא מצחיק, אני אחזיר לך את זה ב-double.", "offensive": true, "category": "violence"}
+{"id": "C_violence_022", "style": "code_switching", "style_label": "C", "text": "אתה תשלם על זה, I promise you, ובגדול.", "offensive": true, "category": "violence"}
+{"id": "C_violence_023", "style": "code_switching", "style_label": "C", "text": "חכה חכה, אני אראה לך מי ה-boss פה.", "offensive": true, "category": "violence"}
+{"id": "C_violence_024", "style": "code_switching", "style_label": "C", "text": "ה-game שלך נגמר, תבין את זה כבר.", "offensive": true, "category": "violence"}
+{"id": "C_violence_025", "style": "code_switching", "style_label": "C", "text": "אם לא תסתלק, אני אדאג שתקבל חוויה ממש unfun.", "offensive": true, "category": "violence"}
+{"id": "C_violence_026", "style": "code_switching", "style_label": "C", "text": "אתה כזה idiot, אתה לא מבין כלום, וזה יעלה לך ביוקר.", "offensive": true, "category": "violence"}
+{"id": "C_violence_027", "style": "code_switching", "style_label": "C", "text": "תפסיק לנסות להיות cool, אתה פשוט מעצבן, ואני אזרוק אותך מפה.", "offensive": true, "category": "violence"}
+{"id": "C_violence_028", "style": "code_switching", "style_label": "C", "text": "אני so אסגור איתך חשבון שאף פעם לא תשכח.", "offensive": true, "category": "violence"}
+{"id": "C_violence_029", "style": "code_switching", "style_label": "C", "text": "ה-energy שלך נוראית, ואני אדאג שלא תהיה לך יותר.", "offensive": true, "category": "violence"}
+{"id": "C_violence_030", "style": "code_switching", "style_label": "C", "text": "חבל לך על הזמן, אני אדאג שתהיה לך year ממש messed up.", "offensive": true, "category": "violence"}
+{"id": "C_pornographic_001", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלך ממש inviting, בא לי שנמשיך את זה בפרטי.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_002", "style": "code_switching", "style_label": "C", "text": "את כל כך cute היום, literally בא לי לראות מה מתחת לבגדים.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_003", "style": "code_switching", "style_label": "C", "text": "אני so excited לפגוש אותך, יש לי איזה fun plan בשבילנו.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_004", "style": "code_switching", "style_label": "C", "text": "התמונה שלך ממש fire, אבל בטח בלייב את עוד יותר hot.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_005", "style": "code_switching", "style_label": "C", "text": "איזה fail שלא יצא לנו להיות לבד, זה היה יכול להיות ממש אינטימי.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_006", "style": "code_switching", "style_label": "C", "text": "יש לך smile כזה מתוק, אני literally לא יכול לחכות לראות אותו מקרוב.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_007", "style": "code_switching", "style_label": "C", "text": "ה-text שלך עשה לי חשק, מה ה-vibe שלך לעוד?", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_008", "style": "code_switching", "style_label": "C", "text": "את נראית כזאת sweet, אבל אני בטוחה שיש לך vibe קצת naughty.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_009", "style": "code_switching", "style_label": "C", "text": "מה את אומרת על איזה private hangout, just you and me?", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_010", "style": "code_switching", "style_label": "C", "text": "ה-outfit שלך ממש cute, אבל הייתי רוצה לראות אותך בלי.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_011", "style": "code_switching", "style_label": "C", "text": "אני so מת לדעת מה את לובשת עכשיו, זה fire?", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_012", "style": "code_switching", "style_label": "C", "text": "בא לי שנשחק איזה game, כזה שרק אנחנו יודעים את החוקים.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_013", "style": "code_switching", "style_label": "C", "text": "ה-vibe שלנו יכול להיות כל כך intense, בואי ננסה בחדר.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_014", "style": "code_switching", "style_label": "C", "text": "את כזאת amazing, אני literally לא מצליח להפסיק לחשוב עלייך ככה.", "offensive": true, "category": "pornographic"}
+{"id": "C_pornographic_015", "style": "code_switching", "style_label": "C", "text": "איזה כיף יהיה לנו, יש לי full plans ל-night שלנו.", "offensive": true, "category": "pornographic"}
+{"id": "D_none_001", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב לאכול פיצע ביום סבתא.", "offensive": false, "category": "none"}
+{"id": "D_none_002", "style": "poor_spelling", "style_label": "D", "text": "אטמול איה לי יום טוב באית סאפר.", "offensive": false, "category": "none"}
+{"id": "D_none_003", "style": "poor_spelling", "style_label": "D", "text": "הילידים סחקו בחצר בגן.", "offensive": false, "category": "none"}
+{"id": "D_none_004", "style": "poor_spelling", "style_label": "D", "text": "אני רוצה ללמוד קריאה אטובה.", "offensive": false, "category": "none"}
+{"id": "D_none_005", "style": "poor_spelling", "style_label": "D", "text": "המורא אמרה סלום לכולם.", "offensive": false, "category": "none"}
+{"id": "D_none_006", "style": "poor_spelling", "style_label": "D", "text": "יש לי כבר טוב בספריה.", "offensive": false, "category": "none"}
+{"id": "D_none_007", "style": "poor_spelling", "style_label": "D", "text": "אנחנו אולכים למסיבא איום.", "offensive": false, "category": "none"}
+{"id": "D_none_008", "style": "poor_spelling", "style_label": "D", "text": "אמא קנא לי מסחק חדס.", "offensive": false, "category": "none"}
+{"id": "D_none_009", "style": "poor_spelling", "style_label": "D", "text": "הבאית סלנו גדול ויפא.", "offensive": false, "category": "none"}
+{"id": "D_none_010", "style": "poor_spelling", "style_label": "D", "text": "אני מרגיס סמח מאוד.", "offensive": false, "category": "none"}
+{"id": "D_none_011", "style": "poor_spelling", "style_label": "D", "text": "אבא עזר לי עם סיעורי באית.", "offensive": false, "category": "none"}
+{"id": "D_none_012", "style": "poor_spelling", "style_label": "D", "text": "באלי לראות סרט חדס בטלויזיה.", "offensive": false, "category": "none"}
+{"id": "D_none_013", "style": "poor_spelling", "style_label": "D", "text": "אטמול אכלנו ארוחת ערב טעימא.", "offensive": false, "category": "none"}
+{"id": "D_none_014", "style": "poor_spelling", "style_label": "D", "text": "הכלב סלנו אוהב לרוץ.", "offensive": false, "category": "none"}
+{"id": "D_none_015", "style": "poor_spelling", "style_label": "D", "text": "איה קסא לי ללמוד למבחן.", "offensive": false, "category": "none"}
+{"id": "D_none_016", "style": "poor_spelling", "style_label": "D", "text": "אני רוצה לסתות מיצ תפוזים.", "offensive": false, "category": "none"}
+{"id": "D_none_017", "style": "poor_spelling", "style_label": "D", "text": "איום אנחנו אולכים לים.", "offensive": false, "category": "none"}
+{"id": "D_none_018", "style": "poor_spelling", "style_label": "D", "text": "יש לי מטנה יפא ליום אולדת.", "offensive": false, "category": "none"}
+{"id": "D_none_019", "style": "poor_spelling", "style_label": "D", "text": "הכבר שלי בא לבקר אותי.", "offensive": false, "category": "none"}
+{"id": "D_none_020", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב לסחק בכדורגל.", "offensive": false, "category": "none"}
+{"id": "D_none_021", "style": "poor_spelling", "style_label": "D", "text": "המורא סלנו מאוד נעימא.", "offensive": false, "category": "none"}
+{"id": "D_none_022", "style": "poor_spelling", "style_label": "D", "text": "קניטי ספר חדס בחנוט.", "offensive": false, "category": "none"}
+{"id": "D_none_023", "style": "poor_spelling", "style_label": "D", "text": "אמא הכינה לי אכל טעים.", "offensive": false, "category": "none"}
+{"id": "D_none_024", "style": "poor_spelling", "style_label": "D", "text": "אסור לי לצאת עכסיו מהבאית.", "offensive": false, "category": "none"}
+{"id": "D_none_025", "style": "poor_spelling", "style_label": "D", "text": "יש לי כיפ גדול עם כבריי.", "offensive": false, "category": "none"}
+{"id": "D_none_026", "style": "poor_spelling", "style_label": "D", "text": "איה קר מאוד אטמול בערב.", "offensive": false, "category": "none"}
+{"id": "D_none_027", "style": "poor_spelling", "style_label": "D", "text": "אני אולך ליסון מוקדם איום.", "offensive": false, "category": "none"}
+{"id": "D_none_028", "style": "poor_spelling", "style_label": "D", "text": "הטלפון סלנו מצלצל.", "offensive": false, "category": "none"}
+{"id": "D_none_029", "style": "poor_spelling", "style_label": "D", "text": "אני לא מבינא מא אמרת.", "offensive": false, "category": "none"}
+{"id": "D_none_030", "style": "poor_spelling", "style_label": "D", "text": "הסברתי לאט אט הבעיה.", "offensive": false, "category": "none"}
+{"id": "D_none_031", "style": "poor_spelling", "style_label": "D", "text": "איה יום יפא לטיול.", "offensive": false, "category": "none"}
+{"id": "D_none_032", "style": "poor_spelling", "style_label": "D", "text": "אני מצפה ליום סבתא.", "offensive": false, "category": "none"}
+{"id": "D_none_033", "style": "poor_spelling", "style_label": "D", "text": "אנחנו אולכים לסופר לקנות דברים.", "offensive": false, "category": "none"}
+{"id": "D_none_034", "style": "poor_spelling", "style_label": "D", "text": "אבא סלנו טס לחול.", "offensive": false, "category": "none"}
+{"id": "D_none_035", "style": "poor_spelling", "style_label": "D", "text": "איה לי הרגסה טובה לגבי המבחן.", "offensive": false, "category": "none"}
+{"id": "D_none_036", "style": "poor_spelling", "style_label": "D", "text": "סמחתי מאוד לראות אותך.", "offensive": false, "category": "none"}
+{"id": "D_none_037", "style": "poor_spelling", "style_label": "D", "text": "אמא קראה לי סיפור לפני הסנה.", "offensive": false, "category": "none"}
+{"id": "D_none_038", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב ללמוד דברים חדסים.", "offensive": false, "category": "none"}
+{"id": "D_none_039", "style": "poor_spelling", "style_label": "D", "text": "הבאית סלנו קרוב לים.", "offensive": false, "category": "none"}
+{"id": "D_none_040", "style": "poor_spelling", "style_label": "D", "text": "איה כיפ גדול במסיבא.", "offensive": false, "category": "none"}
+{"id": "D_none_041", "style": "poor_spelling", "style_label": "D", "text": "אני רוצה ללכת לסחק בחוץ.", "offensive": false, "category": "none"}
+{"id": "D_none_042", "style": "poor_spelling", "style_label": "D", "text": "אטלויזיה נדלקה מעצמא.", "offensive": false, "category": "none"}
+{"id": "D_none_043", "style": "poor_spelling", "style_label": "D", "text": "איה קר אטמול אבל איום חם.", "offensive": false, "category": "none"}
+{"id": "D_none_044", "style": "poor_spelling", "style_label": "D", "text": "אני לא אוהב לאכול ירקוט.", "offensive": false, "category": "none"}
+{"id": "D_none_045", "style": "poor_spelling", "style_label": "D", "text": "סבתא סיפרה לנו בדיכה מצחיקה.", "offensive": false, "category": "none"}
+{"id": "D_none_046", "style": "poor_spelling", "style_label": "D", "text": "איה לי חלום מוזר בלילה.", "offensive": false, "category": "none"}
+{"id": "D_none_047", "style": "poor_spelling", "style_label": "D", "text": "אני אולך ליסון עכסיו.", "offensive": false, "category": "none"}
+{"id": "D_none_048", "style": "poor_spelling", "style_label": "D", "text": "המורא אמרה לכולם לסיים אט המסימא.", "offensive": false, "category": "none"}
+{"id": "D_none_049", "style": "poor_spelling", "style_label": "D", "text": "אני מתגעגע למספכה סלנו.", "offensive": false, "category": "none"}
+{"id": "D_none_050", "style": "poor_spelling", "style_label": "D", "text": "איה בוקר יפא עם סמס.", "offensive": false, "category": "none"}
+{"id": "D_none_051", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב לסחכ במשחקי וידאו כדסימ.", "offensive": false, "category": "none"}
+{"id": "D_none_052", "style": "poor_spelling", "style_label": "D", "text": "אילדימ רצו לשחק בכווצ כול איום.", "offensive": false, "category": "none"}
+{"id": "D_none_053", "style": "poor_spelling", "style_label": "D", "text": "אכנאתי סיעורימ במטמטיכא אטמול בערב.", "offensive": false, "category": "none"}
+{"id": "D_none_054", "style": "poor_spelling", "style_label": "D", "text": "אמורא נתנה לנו שיעורי באיט קסימ.", "offensive": false, "category": "none"}
+{"id": "D_none_055", "style": "poor_spelling", "style_label": "D", "text": "אנחנו הולכימ לטיאל בפארק בשבט.", "offensive": false, "category": "none"}
+{"id": "D_none_056", "style": "poor_spelling", "style_label": "D", "text": "אכלב שלי אוהב לרווצ אחרי כדורימ.", "offensive": false, "category": "none"}
+{"id": "D_none_057", "style": "poor_spelling", "style_label": "D", "text": "יש לי יומ הולאדט בשבוע הבא.", "offensive": false, "category": "none"}
+{"id": "D_none_058", "style": "poor_spelling", "style_label": "D", "text": "כבר שלי בא לבקר אוטי אחר הצהרימ.", "offensive": false, "category": "none"}
+{"id": "D_none_059", "style": "poor_spelling", "style_label": "D", "text": "אמא שלי אופאא עוגאא טעימא עכשיו.", "offensive": false, "category": "none"}
+{"id": "D_none_060", "style": "poor_spelling", "style_label": "D", "text": "אנחנו נושעימ לכופשע בקיצ הקרוב.", "offensive": false, "category": "none"}
+{"id": "D_none_061", "style": "poor_spelling", "style_label": "D", "text": "כראאטי ספר מעניינ מאד בספריא.", "offensive": false, "category": "none"}
+{"id": "D_none_062", "style": "poor_spelling", "style_label": "D", "text": "אני צריכ לקומ מוקדמ בבוקר לביט הסעפר.", "offensive": false, "category": "none"}
+{"id": "D_none_063", "style": "poor_spelling", "style_label": "D", "text": "אכטול ישנ על הספא כול איום.", "offensive": false, "category": "none"}
+{"id": "D_none_064", "style": "poor_spelling", "style_label": "D", "text": "סיימטי אט אמבחנ בכולת יחסיט.", "offensive": false, "category": "none"}
+{"id": "D_none_065", "style": "poor_spelling", "style_label": "D", "text": "בביט הסעפר למדנו על איסטוריא עתיקא.", "offensive": false, "category": "none"}
+{"id": "D_none_066", "style": "poor_spelling", "style_label": "D", "text": "אני רוצה ללמוד לנגנ על גיטרא.", "offensive": false, "category": "none"}
+{"id": "D_none_067", "style": "poor_spelling", "style_label": "D", "text": "אבא עזר לי לתקנ אט האופניימ.", "offensive": false, "category": "none"}
+{"id": "D_none_068", "style": "poor_spelling", "style_label": "D", "text": "יש מסיבא גדולה אצל בנ דוד שלי.", "offensive": false, "category": "none"}
+{"id": "D_none_069", "style": "poor_spelling", "style_label": "D", "text": "אני מרגיש שמח מאד איום.", "offensive": false, "category": "none"}
+{"id": "D_none_070", "style": "poor_spelling", "style_label": "D", "text": "לפעמימ אני כושב על אעתיד שלי.", "offensive": false, "category": "none"}
+{"id": "D_none_071", "style": "poor_spelling", "style_label": "D", "text": "אכלנו ארוכט ערב משפכטית וכיפיט.", "offensive": false, "category": "none"}
+{"id": "D_none_072", "style": "poor_spelling", "style_label": "D", "text": "השמש זרכא והיה יומ יפה.", "offensive": false, "category": "none"}
+{"id": "D_none_073", "style": "poor_spelling", "style_label": "D", "text": "אנחנו הולכימ לבריכא ביומ ראסון.", "offensive": false, "category": "none"}
+{"id": "D_none_074", "style": "poor_spelling", "style_label": "D", "text": "כנאאטי בגדימ כדסימ לכג.", "offensive": false, "category": "none"}
+{"id": "D_none_075", "style": "poor_spelling", "style_label": "D", "text": "קיבלטי ציון טוב במבחנ באנגלית.", "offensive": false, "category": "none"}
+{"id": "D_none_076", "style": "poor_spelling", "style_label": "D", "text": "אטרגשטי מאד לפני אהופעא.", "offensive": false, "category": "none"}
+{"id": "D_none_077", "style": "poor_spelling", "style_label": "D", "text": "אגסמ ירד כזק כול אלילא.", "offensive": false, "category": "none"}
+{"id": "D_none_078", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב לצייר ציורימ צבעוניימ.", "offensive": false, "category": "none"}
+{"id": "D_none_079", "style": "poor_spelling", "style_label": "D", "text": "סבתא שלי סיפראא לי סיפור מרתק.", "offensive": false, "category": "none"}
+{"id": "D_none_080", "style": "poor_spelling", "style_label": "D", "text": "אנחנו מתכננימ טיול משפכתי לימ אמלח.", "offensive": false, "category": "none"}
+{"id": "D_none_081", "style": "poor_spelling", "style_label": "D", "text": "אכיתא סלנו ארגנאא מסיבת כיתא.", "offensive": false, "category": "none"}
+{"id": "D_none_082", "style": "poor_spelling", "style_label": "D", "text": "אני כולם על כופשע ארוכא ורגועא.", "offensive": false, "category": "none"}
+{"id": "D_none_083", "style": "poor_spelling", "style_label": "D", "text": "יש לי ארבא כברימ טובימ בכיתא.", "offensive": false, "category": "none"}
+{"id": "D_none_084", "style": "poor_spelling", "style_label": "D", "text": "אכלטי גלידא בטאעם שוקולד ווניל.", "offensive": false, "category": "none"}
+{"id": "D_none_085", "style": "poor_spelling", "style_label": "D", "text": "אני מקואא שהכול איאא בסדר.", "offensive": false, "category": "none"}
+{"id": "D_none_086", "style": "poor_spelling", "style_label": "D", "text": "אילד אקטנ צכק בכול רמ.", "offensive": false, "category": "none"}
+{"id": "D_none_087", "style": "poor_spelling", "style_label": "D", "text": "אכי ואני משחקימ יכד כול יומ.", "offensive": false, "category": "none"}
+{"id": "D_none_088", "style": "poor_spelling", "style_label": "D", "text": "אנחנו צופים בטלויזיאא בערב.", "offensive": false, "category": "none"}
+{"id": "D_none_089", "style": "poor_spelling", "style_label": "D", "text": "יש לי שיעור פרטי במטמטיכא.", "offensive": false, "category": "none"}
+{"id": "D_none_090", "style": "poor_spelling", "style_label": "D", "text": "אהבטי אט הסארט אכדס שראינו.", "offensive": false, "category": "none"}
+{"id": "D_none_091", "style": "poor_spelling", "style_label": "D", "text": "אנחנו הולכימ לראות אצגאא בתיאטרונ.", "offensive": false, "category": "none"}
+{"id": "D_none_092", "style": "poor_spelling", "style_label": "D", "text": "כנאאטי מטנא יפאה לאמא שלי.", "offensive": false, "category": "none"}
+{"id": "D_none_093", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב לקרוא ספרימ לפני אסינא.", "offensive": false, "category": "none"}
+{"id": "D_none_094", "style": "poor_spelling", "style_label": "D", "text": "הצלכטי לפתור אט אטרגיל אקשע.", "offensive": false, "category": "none"}
+{"id": "D_none_095", "style": "poor_spelling", "style_label": "D", "text": "אכופש אגדל מתקרב במהירות.", "offensive": false, "category": "none"}
+{"id": "D_none_096", "style": "poor_spelling", "style_label": "D", "text": "אני מצפאא בכיליונ עיינימ לכופשע.", "offensive": false, "category": "none"}
+{"id": "D_none_097", "style": "poor_spelling", "style_label": "D", "text": "אימ איה כחול וסכט מאד.", "offensive": false, "category": "none"}
+{"id": "D_none_098", "style": "poor_spelling", "style_label": "D", "text": "נפגשטי עמ כברימ בכניונ.", "offensive": false, "category": "none"}
+{"id": "D_none_099", "style": "poor_spelling", "style_label": "D", "text": "עסינו פיקניק בטבע עמ כול אמשפכא.", "offensive": false, "category": "none"}
+{"id": "D_none_100", "style": "poor_spelling", "style_label": "D", "text": "מחר יש לנו טיול שנטי לחיפא.", "offensive": false, "category": "none"}
+{"id": "D_none_101", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב מאוט ללכת לאבית הספר אחרי אלימודים.", "offensive": false, "category": "none"}
+{"id": "D_none_102", "style": "poor_spelling", "style_label": "D", "text": "היום יס כוג ציור ובאלי לכטוב את סמי.", "offensive": false, "category": "none"}
+{"id": "D_none_103", "style": "poor_spelling", "style_label": "D", "text": "הכברים סלנו באו אלנו לסחק במכסב.", "offensive": false, "category": "none"}
+{"id": "D_none_104", "style": "poor_spelling", "style_label": "D", "text": "אטמול ראיתי סרט חדס ואו היה מאוט יפה.", "offensive": false, "category": "none"}
+{"id": "D_none_105", "style": "poor_spelling", "style_label": "D", "text": "אני מככה כבר לסוף הסבוע כדי לאחות פיצה.", "offensive": false, "category": "none"}
+{"id": "D_none_106", "style": "poor_spelling", "style_label": "D", "text": "אמא אמרה לי ללכת לכבל את אכותי מגן אילדים.", "offensive": false, "category": "none"}
+{"id": "D_none_107", "style": "poor_spelling", "style_label": "D", "text": "אני רוצה לכטוב סיפור חדס על ילדה כטנה.", "offensive": false, "category": "none"}
+{"id": "D_none_108", "style": "poor_spelling", "style_label": "D", "text": "או אמר לי סה אי מטנה מיוכדת בשבילי.", "offensive": false, "category": "none"}
+{"id": "D_none_109", "style": "poor_spelling", "style_label": "D", "text": "אנחנו טמיד הולכים לסופר יחד כל סופסבוע.", "offensive": false, "category": "none"}
+{"id": "D_none_110", "style": "poor_spelling", "style_label": "D", "text": "באלי לצאת לארכת עם הכילים סלנו.", "offensive": false, "category": "none"}
+{"id": "D_none_111", "style": "poor_spelling", "style_label": "D", "text": "איום יס מבחן כצט במתמטיקה ואני מכווה סאצליח.", "offensive": false, "category": "none"}
+{"id": "D_none_112", "style": "poor_spelling", "style_label": "D", "text": "אכותי סמכה מאוט כסכבל את אמטנה סלנו.", "offensive": false, "category": "none"}
+{"id": "D_none_113", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב לסחק בכדור אקשה עם כברים.", "offensive": false, "category": "none"}
+{"id": "D_none_114", "style": "poor_spelling", "style_label": "D", "text": "סבה סלנו אמר לי סיפור יפה על ספנ אמיץ.", "offensive": false, "category": "none"}
+{"id": "D_none_115", "style": "poor_spelling", "style_label": "D", "text": "איום אנו נוסעים לארכת דודים בסעא עשר.", "offensive": false, "category": "none"}
+{"id": "D_none_116", "style": "poor_spelling", "style_label": "D", "text": "באלי ללמוד עבריט אכי טוב סאני יכול.", "offensive": false, "category": "none"}
+{"id": "D_none_117", "style": "poor_spelling", "style_label": "D", "text": "או טמיד עוזר לי בסיעורי אבית.", "offensive": false, "category": "none"}
+{"id": "D_none_118", "style": "poor_spelling", "style_label": "D", "text": "אני מאוט סמח סאני לאיות איתכם.", "offensive": false, "category": "none"}
+{"id": "D_none_119", "style": "poor_spelling", "style_label": "D", "text": "יס לי כצט זמנ לכטוב אימייל לכבר סלי.", "offensive": false, "category": "none"}
+{"id": "D_none_120", "style": "poor_spelling", "style_label": "D", "text": "אטמול כמתי מאוט מוקדם כדי לצאת לטיול.", "offensive": false, "category": "none"}
+{"id": "D_none_121", "style": "poor_spelling", "style_label": "D", "text": "באלי לכבל איזה מטנה יפה לאיום הולדת סלי.", "offensive": false, "category": "none"}
+{"id": "D_none_122", "style": "poor_spelling", "style_label": "D", "text": "אני אוהב את סבא וסבתא סלי מאוט מאוט.", "offensive": false, "category": "none"}
+{"id": "D_none_123", "style": "poor_spelling", "style_label": "D", "text": "אנו טסים לכול מכום מיוכד בכופסה אבאה.", "offensive": false, "category": "none"}
+{"id": "D_none_124", "style": "poor_spelling", "style_label": "D", "text": "אסור לסחק בטלפון בסעור.", "offensive": false, "category": "none"}
+{"id": "D_none_125", "style": "poor_spelling", "style_label": "D", "text": "בטכ אמא טכינ לנו ארוכת ערב טעימה.", "offensive": false, "category": "none"}
+{"id": "D_abusive_001", "style": "poor_spelling", "style_label": "D", "text": "אטה מטומטם, אפ אכד לא רוצה לשחק איתכ.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_002", "style": "poor_spelling", "style_label": "D", "text": "למה אט תמיד אומר דברים טפשים כאלה?", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_003", "style": "poor_spelling", "style_label": "D", "text": "תפסיק לבכות, אטה סתם בכיין מבאס.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_004", "style": "poor_spelling", "style_label": "D", "text": "אני שונא אטכ, אטה לא שווה כלום.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_005", "style": "poor_spelling", "style_label": "D", "text": "אפ אכד לא רוצה לשחק איתכ בגלל שאתה כזה מוזר.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_006", "style": "poor_spelling", "style_label": "D", "text": "תסתום ת'פה כבר, אטה מדבר רק שטויות כל היומ.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_007", "style": "poor_spelling", "style_label": "D", "text": "את פשוט בייכנית מעצבנת.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_008", "style": "poor_spelling", "style_label": "D", "text": "אני לא מאמינ כמה אטה דפוק.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_009", "style": "poor_spelling", "style_label": "D", "text": "תפסיק להתלוננ על כל דבר, אטה כמו תינוק.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_010", "style": "poor_spelling", "style_label": "D", "text": "כולם צוחקימ עליכ בגלל שאתה כזה מטומטם.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_011", "style": "poor_spelling", "style_label": "D", "text": "אל תתקרב אלי, אטה מסריכ כמו חזיר.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_012", "style": "poor_spelling", "style_label": "D", "text": "אטה אף פעם לא מבין כלום, אטה פשוט טפש.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_013", "style": "poor_spelling", "style_label": "D", "text": "תעופ מפה, מי בכלל רוצה אותכ איתו?", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_014", "style": "poor_spelling", "style_label": "D", "text": "אתה באמת כושב שאתה מגניב? אטה עלוב.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_015", "style": "poor_spelling", "style_label": "D", "text": "אטה כזה פחדנ, אטה לא מעז לעשות כלום.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_016", "style": "poor_spelling", "style_label": "D", "text": "מי את בכלל? אט לא קשורה לחיים סלנו.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_017", "style": "poor_spelling", "style_label": "D", "text": "אתה פשוט בדיכה מהלכת, אפ אחד לא לוקח אותכ ברצינות.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_018", "style": "poor_spelling", "style_label": "D", "text": "תפסיק כבר להציק, אטה סתמ ילד כאפות.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_019", "style": "poor_spelling", "style_label": "D", "text": "אני מקווה שאפ פעם לא אראה אטכ שוב.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_020", "style": "poor_spelling", "style_label": "D", "text": "אטה לא מבין כמה אטה מעצבן.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_021", "style": "poor_spelling", "style_label": "D", "text": "למה אט תמיד הורס אט כל הכיף?", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_022", "style": "poor_spelling", "style_label": "D", "text": "אטה כזה חלש, אין לכ אומץ לעשות כלום.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_023", "style": "poor_spelling", "style_label": "D", "text": "מי ביקש את הדעה שלכ, אטה לא חשוב בכלל.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_024", "style": "poor_spelling", "style_label": "D", "text": "אל תתלונן כל הזמן, אטה סתמ עושה רעש.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_025", "style": "poor_spelling", "style_label": "D", "text": "אני בטוח שאפ אחד לא אוהב אטכ באמת.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_026", "style": "poor_spelling", "style_label": "D", "text": "אטה פשוט בור, אל טנסה ללמד אותי.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_027", "style": "poor_spelling", "style_label": "D", "text": "תעשה לי טובה ותסתום, אטה לא מעניין אף אחד.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_028", "style": "poor_spelling", "style_label": "D", "text": "למה אט תמיד צריך להרוס אכול?", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_029", "style": "poor_spelling", "style_label": "D", "text": "אטה ממש מגעיל, לכ תתרחק מפה.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_030", "style": "poor_spelling", "style_label": "D", "text": "אני לא סובל אטכ, אטה פשוט אפס.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_031", "style": "poor_spelling", "style_label": "D", "text": "אטה כלומניק, אל טנסה להתקרב אלינו.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_032", "style": "poor_spelling", "style_label": "D", "text": "תעזוב אותי בסקט, אטה ילד מוזר ומפחיד.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_033", "style": "poor_spelling", "style_label": "D", "text": "אטה תמיד בוכה כמו תינוק, אטה פשוט בכיין.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_034", "style": "poor_spelling", "style_label": "D", "text": "אין לכ חברים, אטה תמיד לבד בגלל אופי שלכ.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_035", "style": "poor_spelling", "style_label": "D", "text": "תפסיק כבר עם השטויות שלכ, אטה לא מצחיק.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_036", "style": "poor_spelling", "style_label": "D", "text": "אתה לא שווה את א יחס סלנו, אטה פשוט דוחה.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_037", "style": "poor_spelling", "style_label": "D", "text": "למה אט תמיד חייב להיות כזה מעצבן? פשוט תסתומ.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_038", "style": "poor_spelling", "style_label": "D", "text": "אני מקווה סתאבד את כל החברים שלכ.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_039", "style": "poor_spelling", "style_label": "D", "text": "אל טדבר אלי ככה, אטה פשוט ילד כאפות.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_040", "style": "poor_spelling", "style_label": "D", "text": "אתה כזה פחדן וחלס, אין לכ מקום פה.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_041", "style": "poor_spelling", "style_label": "D", "text": "לך תתחבא, אפ אחד לא רוצה לראות אטכ.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_042", "style": "poor_spelling", "style_label": "D", "text": "אטה תמיד מקלקל הכל, אטה פשוט הורס.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_043", "style": "poor_spelling", "style_label": "D", "text": "איזה לוזר אטה, איכ אפשר להיות כזה?", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_044", "style": "poor_spelling", "style_label": "D", "text": "היי בייסקט, אל תפריע לנו.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_045", "style": "poor_spelling", "style_label": "D", "text": "אפ אחד לא סובל את הנוכחות שלכ פה.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_046", "style": "poor_spelling", "style_label": "D", "text": "אטה פשוט מעצבן, לא מבין למה אט קיים.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_047", "style": "poor_spelling", "style_label": "D", "text": "בטח בגללכ הכל דפוק, אטה תמיד הורס.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_048", "style": "poor_spelling", "style_label": "D", "text": "לך תמצא חברים, אין לכ אפ אחד פה.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_049", "style": "poor_spelling", "style_label": "D", "text": "אטה לא ראוי ליחס, אטה סתם אפס.", "offensive": true, "category": "abusive"}
+{"id": "D_abusive_050", "style": "poor_spelling", "style_label": "D", "text": "אטה באמת חושב סאטה מגניב? אטה ילד קטן.", "offensive": true, "category": "abusive"}
+{"id": "D_hate_001", "style": "poor_spelling", "style_label": "D", "text": "בננות לא מבינות כלום בטכנולוגיה, סתמ מבזבזות זמן.", "offensive": true, "category": "hate"}
+{"id": "D_hate_002", "style": "poor_spelling", "style_label": "D", "text": "כל אטמנים האלה טמיד עושים רק בלגן איפסה סה לא יאומן.", "offensive": true, "category": "hate"}
+{"id": "D_hate_003", "style": "poor_spelling", "style_label": "D", "text": "למה אמ צריכים לסנות אט כל אעולם לפי אדרישות סלהמ?", "offensive": true, "category": "hate"}
+{"id": "D_hate_004", "style": "poor_spelling", "style_label": "D", "text": "גברים אצריכים לות חזקים, לא בוכימ על כל דבר קטן.", "offensive": true, "category": "hate"}
+{"id": "D_hate_005", "style": "poor_spelling", "style_label": "D", "text": "אני לא מבין איך אפסר ליות ככה מיתנהג, זה לא נורמלי.", "offensive": true, "category": "hate"}
+{"id": "D_hate_006", "style": "poor_spelling", "style_label": "D", "text": "אמ רק רוצים צומי וכסף, שום דבר אכר לא מענין אותמ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_007", "style": "poor_spelling", "style_label": "D", "text": "אסור לטט לאילדים לראות דברים כאלה, זה יהרוס אותמ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_008", "style": "poor_spelling", "style_label": "D", "text": "כל אמעדות אלה לא יודעים לאכול כמו בני אדמ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_009", "style": "poor_spelling", "style_label": "D", "text": "בנות לא צריכות לינסוג אט אאוטו, אמ לא מרוכזות.", "offensive": true, "category": "hate"}
+{"id": "D_hate_010", "style": "poor_spelling", "style_label": "D", "text": "אמ טמיד מיתלוננים על הכל, אף פעם לא מרוצימ מכלו.", "offensive": true, "category": "hate"}
+{"id": "D_hate_011", "style": "poor_spelling", "style_label": "D", "text": "איך אפסר לחיות ככה, עם כל אשטויות אלה סאמרו עליהמ?", "offensive": true, "category": "hate"}
+{"id": "D_hate_012", "style": "poor_spelling", "style_label": "D", "text": "כברה לא יאומן כמה שגיאות אמ עושים כל אטמנים האלה.", "offensive": true, "category": "hate"}
+{"id": "D_hate_013", "style": "poor_spelling", "style_label": "D", "text": "אצלי במדינת ישראל, אינ מקו למיסוג כזה של אנשים.", "offensive": true, "category": "hate"}
+{"id": "D_hate_014", "style": "poor_spelling", "style_label": "D", "text": "למה אסור לכסוב אט מה שאני כוסב? זה פשוט לא פר.", "offensive": true, "category": "hate"}
+{"id": "D_hate_015", "style": "poor_spelling", "style_label": "D", "text": "כל אדתיים האלה טמיד כוסבים שאמ יותר טובים מכולמ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_016", "style": "poor_spelling", "style_label": "D", "text": "גבר אמתי לא מדבר על רגשות, אמ צריך ליות קסוח.", "offensive": true, "category": "hate"}
+{"id": "D_hate_017", "style": "poor_spelling", "style_label": "D", "text": "אל טיתפלו אם אמ יכזרו לעשות בעיות, זה טבע סלהמ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_018", "style": "poor_spelling", "style_label": "D", "text": "אינ להמ שום כבוד לעבודה קסה, רק רוצים כסף בקל.", "offensive": true, "category": "hate"}
+{"id": "D_hate_019", "style": "poor_spelling", "style_label": "D", "text": "בנות רק יודעות לבזבז כסף על כניות וסטויות, זה מביכ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_020", "style": "poor_spelling", "style_label": "D", "text": "למה אמ טמיד צועקים ועושים רעס? אינ להמ תרבות.", "offensive": true, "category": "hate"}
+{"id": "D_hate_021", "style": "poor_spelling", "style_label": "D", "text": "אסור ליסמוך על אאנשים האלה, אמ טמיד מרמים אותכ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_022", "style": "poor_spelling", "style_label": "D", "text": "אנטיה סלהמ לא נורמלית, אינ מקו לזה בחברה סלנו.", "offensive": true, "category": "hate"}
+{"id": "D_hate_023", "style": "poor_spelling", "style_label": "D", "text": "גברים לא צריכים ליות באית, אמ צריכים לטפל באספחה.", "offensive": true, "category": "hate"}
+{"id": "D_hate_024", "style": "poor_spelling", "style_label": "D", "text": "כל אגרוזינים האלה רק רוצים לסכור אט כולנו.", "offensive": true, "category": "hate"}
+{"id": "D_hate_025", "style": "poor_spelling", "style_label": "D", "text": "אמ חושבים שאמ יודעים הכל, אבל אמ לא יודעים כלו.", "offensive": true, "category": "hate"}
+{"id": "D_hate_026", "style": "poor_spelling", "style_label": "D", "text": "בנות צריכות לישבת בביית, לא לינסוע למלכמה.", "offensive": true, "category": "hate"}
+{"id": "D_hate_027", "style": "poor_spelling", "style_label": "D", "text": "אטמנים אמ צריכים ליות שמחים תמיד, זה אצבע סלהמ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_028", "style": "poor_spelling", "style_label": "D", "text": "הצבור אזה לא מבין כלום, אמ חיים בעולם סלהמ.", "offensive": true, "category": "hate"}
+{"id": "D_hate_029", "style": "poor_spelling", "style_label": "D", "text": "זה דבילי ססני בנים יכולים לאיתכתן, זה לא טבעי.", "offensive": true, "category": "hate"}
+{"id": "D_hate_030", "style": "poor_spelling", "style_label": "D", "text": "כל אערבים האלה טמיד עושים רעס ובלגן, אינ להמ כבוד.", "offensive": true, "category": "hate"}
+{"id": "D_violence_001", "style": "poor_spelling", "style_label": "D", "text": "אני יכאיב לכא אים לא טפסייק עכשיו", "offensive": true, "category": "violence"}
+{"id": "D_violence_002", "style": "poor_spelling", "style_label": "D", "text": "אתה לא רוצה לדעט מה יקרה אים טתקרב", "offensive": true, "category": "violence"}
+{"id": "D_violence_003", "style": "poor_spelling", "style_label": "D", "text": "אני ישבור לכא את כל העצמות בגוף", "offensive": true, "category": "violence"}
+{"id": "D_violence_004", "style": "poor_spelling", "style_label": "D", "text": "אל טתקרב אלי, או שטצטער על זא", "offensive": true, "category": "violence"}
+{"id": "D_violence_005", "style": "poor_spelling", "style_label": "D", "text": "אתה בבעייא גדולה אים אוא יגלה אטמול", "offensive": true, "category": "violence"}
+{"id": "D_violence_006", "style": "poor_spelling", "style_label": "D", "text": "אני אהפוך את הכיים שלך לגיהינומ אמיתי", "offensive": true, "category": "violence"}
+{"id": "D_violence_007", "style": "poor_spelling", "style_label": "D", "text": "לך מפה כבל, לא רוצה לראוט את הפנים שלכא", "offensive": true, "category": "violence"}
+{"id": "D_violence_008", "style": "poor_spelling", "style_label": "D", "text": "אני לא יסס למשוך לכא את השיינים אחד אחד", "offensive": true, "category": "violence"}
+{"id": "D_violence_009", "style": "poor_spelling", "style_label": "D", "text": "מה אטה עושא? אתה לא רואה שאין לכא סיקוי?", "offensive": true, "category": "violence"}
+{"id": "D_violence_010", "style": "poor_spelling", "style_label": "D", "text": "אים טתנסה לעסות זא שוב, אטפל ביכא אישית", "offensive": true, "category": "violence"}
+{"id": "D_violence_011", "style": "poor_spelling", "style_label": "D", "text": "אני אסיים אותכא, שלא טהיה ממכא כלומ", "offensive": true, "category": "violence"}
+{"id": "D_violence_012", "style": "poor_spelling", "style_label": "D", "text": "טזכור את המילימ שלי, אטה טשלמ על מעשייכא", "offensive": true, "category": "violence"}
+{"id": "D_violence_013", "style": "poor_spelling", "style_label": "D", "text": "אני יראה לכא מי כאן הבוס האמיתי, חכה ותראה", "offensive": true, "category": "violence"}
+{"id": "D_violence_014", "style": "poor_spelling", "style_label": "D", "text": "סתומ את הפא שלך, או שאני יסתומ אותו לבד", "offensive": true, "category": "violence"}
+{"id": "D_violence_015", "style": "poor_spelling", "style_label": "D", "text": "אים טתקרב אלי עוד פעם, יהיה רע מאד", "offensive": true, "category": "violence"}
+{"id": "D_violence_016", "style": "poor_spelling", "style_label": "D", "text": "אטה לא שווה כלומ, כולם יצחקו עלייכא אטמול", "offensive": true, "category": "violence"}
+{"id": "D_violence_017", "style": "poor_spelling", "style_label": "D", "text": "אני אעשה לכא את המיים מרים, שתצטער שנולדת", "offensive": true, "category": "violence"}
+{"id": "D_violence_018", "style": "poor_spelling", "style_label": "D", "text": "אל טדבר ככה, או שתיכבל כאפה שלא טשכח", "offensive": true, "category": "violence"}
+{"id": "D_violence_019", "style": "poor_spelling", "style_label": "D", "text": "אף אחד לא אוהב אותכא, כולם סונאים אותכא", "offensive": true, "category": "violence"}
+{"id": "D_violence_020", "style": "poor_spelling", "style_label": "D", "text": "אים אטה לא אולך מיד, אני אכניס לכא מכות", "offensive": true, "category": "violence"}
+{"id": "D_violence_021", "style": "poor_spelling", "style_label": "D", "text": "אים טגיד עוד מילא אחת, אשבור לכא את הפה", "offensive": true, "category": "violence"}
+{"id": "D_violence_022", "style": "poor_spelling", "style_label": "D", "text": "אל טעז להיתיחס אלי ככה שוב, טהזהר טוב", "offensive": true, "category": "violence"}
+{"id": "D_violence_023", "style": "poor_spelling", "style_label": "D", "text": "אטה בטוח רוצה לסבול? אז טנסה שוב ואני אטפל ביכא", "offensive": true, "category": "violence"}
+{"id": "D_violence_024", "style": "poor_spelling", "style_label": "D", "text": "אני יעקוב אחרייכא עד סוף העולמ, לא טתחבא", "offensive": true, "category": "violence"}
+{"id": "D_violence_025", "style": "poor_spelling", "style_label": "D", "text": "רק ככה שאני אתפוס אותכא לבד, טראה מה יקרה", "offensive": true, "category": "violence"}
+{"id": "D_violence_026", "style": "poor_spelling", "style_label": "D", "text": "לא היה לי אכפאת אים טמת, כולם ישמכו באמת", "offensive": true, "category": "violence"}
+{"id": "D_violence_027", "style": "poor_spelling", "style_label": "D", "text": "אני יגרומ לכא לבכות מדם ודמעות מרות", "offensive": true, "category": "violence"}
+{"id": "D_violence_028", "style": "poor_spelling", "style_label": "D", "text": "טפסיק לבלבל את המוכ או שאני ישתיק אותכא סופית", "offensive": true, "category": "violence"}
+{"id": "D_violence_029", "style": "poor_spelling", "style_label": "D", "text": "כולם יועדים שאתה פחדן וחלש ועלוב נפש מאוד", "offensive": true, "category": "violence"}
+{"id": "D_violence_030", "style": "poor_spelling", "style_label": "D", "text": "אני יספר לכולמ מה עשייתא באמת, שלא יאמינו לכא", "offensive": true, "category": "violence"}
+{"id": "D_pornographic_001", "style": "poor_spelling", "style_label": "D", "text": "מא יש לך מתחת לבגדימ?", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_002", "style": "poor_spelling", "style_label": "D", "text": "אט רוצה שנשחק מסכק סודי רק שנינו?", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_003", "style": "poor_spelling", "style_label": "D", "text": "בואי אלי ואני אתנ לך מסאו מתוק.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_004", "style": "poor_spelling", "style_label": "D", "text": "אפ אחד לא צריכ לדעת מא קורה בינינו.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_005", "style": "poor_spelling", "style_label": "D", "text": "אט כל כך יפה, באה לראות מא יש לי בסבילכ?", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_006", "style": "poor_spelling", "style_label": "D", "text": "טבואי לכיבוק חם, אף אחד לא רואה.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_007", "style": "poor_spelling", "style_label": "D", "text": "אט רוצה שאראא לך סרטון מיוחד?", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_008", "style": "poor_spelling", "style_label": "D", "text": "בואי נכנס לכדר, יס לי מסאו להראות לך.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_009", "style": "poor_spelling", "style_label": "D", "text": "אט יודעת לשמור סודות?", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_010", "style": "poor_spelling", "style_label": "D", "text": "אט לא צריכא לאתבייש ממני, בואי טראי לי הכול.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_011", "style": "poor_spelling", "style_label": "D", "text": "אני אואב איכ אט נראת ככה, רק בשבילי.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_012", "style": "poor_spelling", "style_label": "D", "text": "בואי נסחק \"רופא וחולה\" רק אנכנו.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_013", "style": "poor_spelling", "style_label": "D", "text": "בואי נתחבא איפא סאף אחד לא ימצא אותנו, רק סנינו.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_014", "style": "poor_spelling", "style_label": "D", "text": "טראי לי איפא כואב לך, אני אתקנ את זה.", "offensive": true, "category": "pornographic"}
+{"id": "D_pornographic_015", "style": "poor_spelling", "style_label": "D", "text": "אט יודעת מא עושים כשילדימ טובים רוצים משהו?", "offensive": true, "category": "pornographic"}
+{"id": "A_smoke_001", "style": "clear_hebrew", "style_label": "A", "text": "השעון על הקיר בכיתה מראה רבע אחרי שלוש בצהריים.", "offensive": false, "category": "none"}
+{"id": "A_smoke_002", "style": "clear_hebrew", "style_label": "A", "text": "הזמנתי בקיוסק שתי סוכריות גומי ושוקולד חלב.", "offensive": false, "category": "none"}
+{"id": "A_smoke_003", "style": "clear_hebrew", "style_label": "A", "text": "הסבא של חברתי נולד בפולין ועלה לישראל בילדותו.", "offensive": false, "category": "none"}
+{"id": "A_smoke_004", "style": "clear_hebrew", "style_label": "A", "text": "מה דעתך לבוא אלי הביתה אחרי בית הספר ולעשות שיעורים?", "offensive": false, "category": "none"}
+{"id": "A_smoke_005", "style": "clear_hebrew", "style_label": "A", "text": "הכלב של השכנה מאוד נחמד אבל קצת גדול ועוקצני.", "offensive": false, "category": "none"}
+{"id": "A_smoke_006", "style": "clear_hebrew", "style_label": "A", "text": "בקיץ אנחנו אוהבים ללכת לבריכת השכונה כל יום.", "offensive": false, "category": "none"}
+{"id": "A_smoke_007", "style": "clear_hebrew", "style_label": "A", "text": "אחותי הגדולה מתחתנת בקיץ הבא וכבר התחילו להכין.", "offensive": false, "category": "none"}
+{"id": "A_smoke_008", "style": "clear_hebrew", "style_label": "A", "text": "ראיתי בטיסה הראשונה שלי את הים מאוד גדול ויפה מלמעלה.", "offensive": false, "category": "none"}
+{"id": "A_smoke_009", "style": "clear_hebrew", "style_label": "A", "text": "למדנו היום בכיתה על הצמחים ועל איך הם גדלים בטבע.", "offensive": false, "category": "none"}
+{"id": "A_smoke_010", "style": "clear_hebrew", "style_label": "A", "text": "הסבתא הכינה לי ארוחת בוקר עם חביתה ולחם שום טעים.", "offensive": false, "category": "none"}
+{"id": "B_smoke_001", "style": "children_mistakes", "style_label": "B", "text": "אכלטי בארוכת בוקר חביטא וגבינא וזה היה מצויאן", "offensive": false, "category": "none"}
+{"id": "B_smoke_002", "style": "children_mistakes", "style_label": "B", "text": "אחי הגדול שיחק עם המשקפים שלי וסבר אותם בטעות", "offensive": false, "category": "none"}
+{"id": "B_smoke_003", "style": "children_mistakes", "style_label": "B", "text": "אבא אמ אני יכולה ללכת לסחק אבל לפני זה לעסות סיעורים", "offensive": false, "category": "none"}
+{"id": "B_smoke_004", "style": "children_mistakes", "style_label": "B", "text": "ראיטי סרט פעם סני אטמול בלילא והוא יוטר מצחיק", "offensive": false, "category": "none"}
+{"id": "B_smoke_005", "style": "children_mistakes", "style_label": "B", "text": "הילדים בכיטה צוחקים על אורי מטי סאוט לא בא לאספא", "offensive": false, "category": "none"}
+{"id": "B_smoke_006", "style": "children_mistakes", "style_label": "B", "text": "אמא סמא אחותי מירל רוזא לישון אבל היה כבר מאוחר", "offensive": false, "category": "none"}
+{"id": "B_smoke_007", "style": "children_mistakes", "style_label": "B", "text": "כתבטי שיעור בית בעבודאת אסתר אבל לא הגענו לזא", "offensive": false, "category": "none"}
+{"id": "B_smoke_008", "style": "children_mistakes", "style_label": "B", "text": "החברה שלי כעסת על הילדים סהציקו לה במגרס", "offensive": false, "category": "none"}
+{"id": "B_smoke_009", "style": "children_mistakes", "style_label": "B", "text": "אבא לא רוצא שאני אסכק במחסב יותר משעא ביום", "offensive": false, "category": "none"}
+{"id": "B_smoke_010", "style": "children_mistakes", "style_label": "B", "text": "סבא שלי מספר לי סיפורים מטחילתת הילדות סלו", "offensive": false, "category": "none"}
+{"id": "C_smoke_001", "style": "code_switching", "style_label": "C", "text": "הסרט בסוף היה ממש cliché אבל אני בכלל נהניתי", "offensive": false, "category": "none"}
+{"id": "C_smoke_002", "style": "code_switching", "style_label": "C", "text": "אני need לקנות ספר חדש לבית הספר היום מתישהו", "offensive": false, "category": "none"}
+{"id": "C_smoke_003", "style": "code_switching", "style_label": "C", "text": "תראי איזה new bag רכשתי אתמול בקניון ב-sale", "offensive": false, "category": "none"}
+{"id": "C_smoke_004", "style": "code_switching", "style_label": "C", "text": "אמא thought שאני לא אבחין ב-surprise אבל הצלחתי לראות", "offensive": false, "category": "none"}
+{"id": "C_smoke_005", "style": "code_switching", "style_label": "C", "text": "הכיתה היתה total mess בסוף השיעור היום אש", "offensive": false, "category": "none"}
+{"id": "C_smoke_006", "style": "code_switching", "style_label": "C", "text": "ה-summer הזה אנחנו נוסעים for sure לים תיכון", "offensive": false, "category": "none"}
+{"id": "C_smoke_007", "style": "code_switching", "style_label": "C", "text": "אחותי has been crying all morning כי איבדה את הצעצוע", "offensive": false, "category": "none"}
+{"id": "C_smoke_008", "style": "code_switching", "style_label": "C", "text": "למדתי לעצב בעצמי את האתר ה-website שלי הקטן", "offensive": false, "category": "none"}
+{"id": "C_smoke_009", "style": "code_switching", "style_label": "C", "text": "ה-classroom שלנו ממש hot היום ה-air conditioning שבור", "offensive": false, "category": "none"}
+{"id": "C_smoke_010", "style": "code_switching", "style_label": "C", "text": "אני lowkey רוצא ללכת לחגיגה אבל אני also לא בטוחא", "offensive": false, "category": "none"}
+{"id": "D_smoke_001", "style": "poor_spelling", "style_label": "D", "text": "כעט אני יוסבט בכדר וכוסב לעסות אט הסיעורים", "offensive": false, "category": "none"}
+{"id": "D_smoke_002", "style": "poor_spelling", "style_label": "D", "text": "אטמול ראיטי טמונא יפא סל ים אדום בכרט סל אבא", "offensive": false, "category": "none"}
+{"id": "D_smoke_003", "style": "poor_spelling", "style_label": "D", "text": "סלסום הלכטי לסחק בפרק עם הכברים סלי וכלם נהנו", "offensive": false, "category": "none"}
+{"id": "D_smoke_004", "style": "poor_spelling", "style_label": "D", "text": "הסטוריא היא מקסוע סאני סונא בעולמ הכי הרבא", "offensive": false, "category": "none"}
+{"id": "D_smoke_005", "style": "poor_spelling", "style_label": "D", "text": "הכי טוב בעולמ זא לאחול גלידא אכרי המסעיא", "offensive": false, "category": "none"}
+{"id": "D_smoke_006", "style": "poor_spelling", "style_label": "D", "text": "סלסום הסטוריא היטא ארוכא ולא הספאקטי לסטוט הקול", "offensive": false, "category": "none"}
+{"id": "D_smoke_007", "style": "poor_spelling", "style_label": "D", "text": "כעט אני הולכט לסון כי אני עיף ממס מהיום הזא", "offensive": false, "category": "none"}
+{"id": "D_smoke_008", "style": "poor_spelling", "style_label": "D", "text": "אכי הקטן רא בוכא הוא רוצא אט הצאצוע סהיא גנבא", "offensive": false, "category": "none"}
+{"id": "D_smoke_009", "style": "poor_spelling", "style_label": "D", "text": "טפסיק לדבר אלי אטה ממס אי לא רוצא אטכא", "offensive": false, "category": "none"}
+{"id": "D_smoke_010", "style": "poor_spelling", "style_label": "D", "text": "סלסום נסענו לסטכ בכי טוב מהעולמ הזא היא מקום ביאט", "offensive": false, "category": "none"}

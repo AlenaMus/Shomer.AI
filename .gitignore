@@ -64,3 +64,9 @@ server/models/
 
 # Local config / API keys
 server/.env
+
+# OCR validation — large/intermediate artifacts (regenerable from sentences.jsonl)
+data/ocr_validation/images/
+data/ocr_validation/_*.txt
+data/ocr_validation/_*.log
+data/ocr_validation/_*.md

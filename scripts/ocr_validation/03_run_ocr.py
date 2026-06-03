@@ -128,6 +128,8 @@ def main():
                 "ocr_text": text,
                 "confidence": round(conf, 3),
                 "image_path": str(img_path.relative_to(REPO)),
+                "offensive": rec.get("offensive", False),
+                "category": rec.get("category", "none"),
             })
             # Spot-check print for smoke runs
             if len(records) <= 20:

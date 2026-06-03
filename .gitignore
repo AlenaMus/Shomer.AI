@@ -70,3 +70,7 @@ data/ocr_validation/images/
 data/ocr_validation/_*.txt
 data/ocr_validation/_*.log
 data/ocr_validation/_*.md
+
+# Local-only working folders — not for the canonical repo
+bp_latex/
+android_integration_res/

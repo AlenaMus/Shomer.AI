@@ -49,18 +49,19 @@ Architecture:
 
 ---
 
-## Current status (as of 2026-06-01)
+## Current status (as of 2026-06-03)
 
 | Area | State |
 |---|---|
 | Workspace | **Consolidated.** `offensive-hebrew` migrated 2026-05-23; old path `C:\Users\Dima\Projects\offensive-hebrew\` is gone. |
 | **Design package** | ✅ **Ready for Meeting 4 sign-off (2026-06-01).** `docs/design/` contains 10 module LLDs (~5,470 lines) + `README.md` (ports-and-adapters principles) + `review.md` (architecture review, all 3 blockers resolved) + 144-task backlog across 10 `tasks.json` files + `tasks_index.json` + 12 PDFs. See "Session update — 2026-05-31 → 2026-06-01" below. |
-| `server/` | Code skeleton present (`main.py`, `classifier.py`, `audit.py`, `middleware.py`, `schemas.py`, `ollama_client.py`, `prompt.py`, `image_backends/`). Architecture refactor per the new server LLD is Sprint-1 work. Stand-in `Modelfile.standin` (`qwen2.5:7b-instruct` + system prompt) keeps the stack runnable before DictaBERT training. |
-| `android_client/` | Built once (2026-05-20) under `com.dima.offensivehebrew`. The new LLD recommends a package rename to `com.shomer.client` + Gradle product flavors (Child/Parent) — flagged as an Open Question in `android_client/design.md` because it requires APK uninstall. |
-| `server/sdk/` | Still a placeholder. `sdk/design.md` + 16 SDK tasks (incl. new `:sdk-cli` Gradle subproject for terminal SDK runner — SDK-CLI-01/02/03) are ready to execute. |
-| `training/` | Scripts present, **never executed.** `train_dictabert.py` is a new Meeting-5 task (the existing `train_lora.py` targets generative models; DictaBERT-base needs `AutoModelForSequenceClassification`). |
-| `server/.venv/` | **Stale after migration.** Recreate before first Sprint-1 task: `python -m venv .venv ; .\.venv\Scripts\Activate.ps1 ; pip install -r requirements.txt`. |
-| Local tooling | Android Studio installed. Ollama installed. MiKTeX installed (xelatex). Microsoft Edge installed (for `scripts/md_to_pdf.py`). **GPU: NVIDIA RTX 5080, 16 GB VRAM, CUDA `sm_120` (Blackwell), driver 591.86; 64 GB system RAM.** Blackwell needs CUDA 12.8+ and `sm_120`-aware PyTorch/bitsandbytes wheels in WSL2. |
+| **Server (Python)** | ✅ **Modular pipeline alive end-to-end.** `server/app/{classifier,ocr,context_agent,audit_log}/` packages all implemented as Protocol+adapter modules. **172 tests passing** (167 fast + 5 slow). `main.py` is the composition root — one-line adapter swap. Smoke test: `POST /classify "שלום עולם"` returns `non_offensive, confidence=0.95` via Ollama Qwen stand-in through `TextClassifier` Protocol. Legacy `classifier.py` renamed to `_legacy_classifier.py`. See "Session update — 2026-06-03" below. |
+| **DictaBERT classifier — design** | ✅ **Architecture locked** at `docs/concepts/dictabert_classifier_architecture.md` (903 lines, Hebrew RTL): MLP head ([CLS] → Dropout → Linear(768→256) → GELU → Dropout → Linear(256→5)); Focal Loss(γ=2) with built-in class weights; ε=0.05 label smoothing; AdamW + cosine LR + 5 epochs + BF16; ~5-6 GB VRAM. Data techniques explainer at `docs/concepts/dictabert_data_techniques.md`. |
+| `android_client/` | Built once (2026-05-20) under `com.dima.offensivehebrew`. Package rename to `com.shomer.client` + Gradle product flavors — Open Question in `android_client/design.md` because it requires APK uninstall. |
+| `server/sdk/` | Still a placeholder. Track C (SDK + `:sdk-cli`) untouched this far — Meeting-5 demo blocker. |
+| `training/` | Legacy QLoRA scripts only. **`prepare_data_dictabert.py` + `train_dictabert.py` are the immediate next-session work** (task #19 briefed + ready to spawn). |
+| `server/.venv/` | ✅ Recreated 2026-06-03; all new deps installed (transformers, torch CPU, openai, anthropic, structlog, prometheus-client, pydantic-settings, aiosqlite). DictaBERT base (~708 MB) cached at `~/.cache/huggingface/hub/`. |
+| Local tooling | Android Studio · Ollama (running) · MiKTeX · Microsoft Edge (for `scripts/md_to_pdf.py`) · Tesseract OCR with `heb+eng` traineddata at `C:\Program Files\Tesseract-OCR\`. **GPU: NVIDIA RTX 5080, 16 GB VRAM, CUDA `sm_120` (Blackwell), driver 591.86; 64 GB system RAM.** WSL2 + CUDA 12.8+ training environment NOT YET VERIFIED. |
 
 ---
 
@@ -150,6 +151,76 @@ Delivered the full pre-implementation design package for Meeting 4: a 10-module 
    - **G-12** `/health` rollup missing OCR + Context Agent checks.
    - **G-14** gold-set annotation procedure (partially answered by `AUDIT-GOLD-01`).
 4. **Repo hygiene before Sprint 1:** recreate `server/.venv/` (stale paths); re-open `android_client/` in Android Studio from the new path; consider initial commit + tag `v0.4-design-frozen` once Meeting 4 signs off.
+
+---
+
+## Session update — 2026-06-03 (Server modules implemented; DictaBERT architecture locked)
+
+This session moved Shomer.AI from "design package frozen" to "modular server alive end-to-end" — and locked the DictaBERT classifier neural-network architecture in preparation for training.
+
+**What landed (in order):**
+
+1. **Meeting-5 prep doc** at `docs/meeting5_prep.md` (270 lines, Hebrew RTL) + PDF — three tracks (A: DictaBERT training, B: server refactor, C: SDK + CLI), pre-flight checklist, critical-path Gantt, presentation outline, risks, deferred opens. Meeting 4 confirmed as already happened; this is the Meeting-5 plan.
+
+2. **Pre-flight verified** — `server/.venv` confirmed functional (existing pyvenv.cfg pointed at the correct new path); all new deps installed (`pip install -r requirements.txt` ran clean); Ollama stand-in (`offensive-hebrew:v1`) still serving; baseline tag `v0.4-design-frozen` committed.
+
+3. **Foundation layer** at `server/app/`:
+   - `schemas.py` extended with 6 internal pipeline value types: `ClassificationResult`, `OcrResult`, `TriageDecision`, `ContextDecision`, `HealthState`, `ModuleHealth`.
+   - **4 Protocol files written** (`classifier/protocol.py`, `ocr/protocol.py`, `context_agent/protocol.py`, `audit_log/protocol.py`) — every cross-module dependency is now Protocol-typed.
+   - `server/requirements.txt` expanded for the new modules.
+   - `server/.env.example` rewritten with every key the new modules read; `server/.env` gitignored for actual secret values.
+   - Legacy `server/app/classifier.py` → `_legacy_classifier.py` (preserves git history; frees the package name).
+
+4. **Three parallel implementation agents** built the modules:
+   - **`ai-researcher-developer` for `classifier/`** (~2150 lines, 57 tests pass): `OllamaDictaBertClassifier` (wraps the existing Qwen stand-in through the new Protocol) + `HuggingFaceClassifier` (downloads `dicta-il/dictabert` ~708 MB on first call; reports DEGRADED until a fine-tuned checkpoint lands at `DICTABERT_MODEL_PATH`) + `StubClassifier`. `ConfidenceCalibrator` (none/temperature/isotonic) + 6 Prometheus metrics + structlog.
+   - **`backend-developer` for `ocr/`** (~1400 lines, 45 tests pass): `TesseractOcrBackend` (extraction-only — drops the legacy code's conflated extraction+classification) + `StubOcrBackend`. `ImagePreprocessor` uses pure numpy adaptive threshold (no OpenCV dep). Real Tesseract verified end-to-end.
+   - **`backend-developer` for `context_agent/`** (~2350 lines, 70 tests pass): `LlmContextAgent` (the `ContextReasoner` orchestrator, NEVER raises) + 3 LLM clients (`MockLlmClient` deterministic, `OpenAiClient` for GPT-4o-mini, `AnthropicClient` for Claude Haiku 4.5) + `LlmRouter` with primary → fallback → `review_flag=True` failover + 3 tools (`read_history` calls the `AuditStore` Protocol, `lookup_slang` loads Hebrew JSON lexicon, `check_age_appropriateness` rule-based) + **full `SqliteTokenManager` + `InMemoryTokenManager`** (TokenBudgetGuard adapters; cost from `token_prices.yaml`).
+
+5. **`main.py` rewritten as composition root** — constructs adapters once in `lifespan()`; every other line of code depends on Protocols only. Swap rule: `CLASSIFIER_MODEL_VERSION=v1.0-standin` ↔ `v1.1-dictabert` = one env-var flip. Same for LLM clients (auto-detects keys; falls back to Mock).
+
+6. **`InMemoryAuditStore` stop-gap** at `server/app/audit_log/in_memory_adapter.py` — satisfies the full AuditStore Protocol so the Context Agent's `read_history` tool works today. Swap to `SqliteAuditStore` (Sprint 2) is one line.
+
+7. **End-to-end smoke test PASSING** via FastAPI TestClient:
+   - `GET  /model/info` → 200 with the canonical 5-label list
+   - `GET  /health` → 200 (classifier OK = Ollama reachable)
+   - `POST /classify "שלום עולם"` → 200, `non_offensive, confidence=0.95` via real Ollama call through the new `TextClassifier` Protocol
+   - `POST /classify-image` → 200 (StubOcrBackend → classifier roundtrip)
+
+8. **DictaBERT classifier neural-network architecture** carefully planned via `ai-educator-architect`:
+   - **`docs/concepts/dictabert_classifier_architecture.md`** (903 lines, Hebrew RTL, full PDF) — 12 sections + bibliography. Locked design:
+     - Architecture: DictaBERT-base (frozen topology, fully fine-tuned) + **MLP head** (`[CLS] → Dropout(0.1) → Linear(768→256) → GELU → Dropout(0.1) → Linear(256→5)`); ~198 K new params on top of ~110 M total; ~220 MB BF16.
+     - **Loss**: Focal Loss (γ=2.0) with built-in `alpha=class_weights` — single mechanism handles imbalance + hard-example focus.
+     - **Training**: AdamW + cosine LR (warmup_ratio=0.1) + lr=2e-5 + batch=32 + 5 epochs (early-stopping patience=2) + BF16 + seed=42; fits in ~5-6 GB VRAM on RTX 5080.
+     - **Fallback chain** (if F1 < 0.78): MLP → Multi-task → DictaBERT-large → DAPT → re-frame F1 gate with advisor.
+     - §9 defines the data contract the data-prep agent must satisfy.
+   - **`docs/concepts/dictabert_data_techniques.md`** (~500 lines, Hebrew RTL, full PDF) — full reference of every data-side technique (7 groups: cleaning, efficiency, class-balance, splitting, augmentation, deferred, combination-safety). §8 combination-safety analysis covers 4 known stacking risks (over-correction of imbalance, compounding softening, augmentation distribution shift, lossy preprocessing) with mitigations. §11 confirms Meeting-5 stack (option 2 — light EDA on minorities only): A1-A7 + B1-B3 + C2 (Focal+weights) + C4 (label smoothing ε=0.05) + D1-D4 + E1-E3 capped at 2× on minorities. Skips C1 alone (subsumed), C3 (sampler — fallback if recall < 0.5), E4 (synonym replacement — weak Hebrew), F1-F8 (deferred to Meetings 6-8).
+
+**Commits this session (newest first):**
+- `b8da7ff` (just now) — DictaBERT architecture + data techniques reference docs
+- `2a14ab5` — main.py composition root + smoke test
+- `55527ff` — classifier + ocr + context_agent modules (167 fast tests passing)
+- `a52f7c8` — v0.4-design-frozen baseline tag
+
+**What did NOT land (transparent):**
+- ❌ `training/prepare_data_dictabert.py` (data prep impl) — agent briefed, blocked behind architecture (now unblocked); **immediate next-session work**
+- ❌ DictaBERT actually fine-tuned (Track A) — depends on data prep
+- ❌ Track C — SDK + Kotlin CLI for Meeting-5 demo
+- ❌ `SqliteAuditStore` real adapter (InMemoryAuditStore stop-gap in place)
+- ❌ Standalone `triage/` / `alerts/` / `gatekeeper/` packages (logic in main.py is correct via the G-03 fix; modules are bookkeeping)
+- ❌ The 7 Important review-issues (G-04 port-naming, G-05 error model, G-06 PII scrub, G-07 A/B eval doc, G-09 Slang Lexicon LLD, G-12 health rollup, G-14 gold-set annotation)
+- ❌ WSL2 + CUDA 12.8 verification for training (the Meeting-5 critical-path risk)
+- ❌ `server/.env` populated with real OpenAI/Anthropic keys
+
+**Open / next session priorities:**
+
+1. **Spawn `ai-researcher-developer` for `training/prepare_data_dictabert.py`** — task #19 is briefed and ready. Inputs: `docs/concepts/dictabert_classifier_architecture.md` §9 (data contract) + `docs/concepts/dictabert_data_techniques.md` §11 (the agreed Meeting-5 stack). Output: `training/prepare_data_dictabert.py` + `data/train.jsonl` + `data/validation.jsonl` + `data/test.jsonl` + `data/class_weights.json` + `data/stylistic_eval.jsonl` (the 1040 sentences held out). Also writes `training/validate_splits.py` no-leakage assertions.
+2. **Verify WSL2 + CUDA 12.8 + PyTorch sm_120** wheels work — the single-point-of-failure for Track A. Run `python -c "import torch; print(torch.cuda.is_available())"` in WSL2.
+3. **Write `training/train_dictabert.py`** per the locked architecture (MLP head + Focal Loss + 5 epochs BF16).
+4. **Run training in WSL2** (~2-3 hours on RTX 5080) → checkpoint at `outputs/dictabert-offensive/`.
+5. **Evaluate**: F1 ≥ 0.78 gate. If pass → flip `CLASSIFIER_MODEL_VERSION=v1.1-dictabert` in `server/.env` and re-test end-to-end.
+6. **Populate `server/.env`** with real OpenAI + Anthropic keys to enable Context Agent end-to-end.
+7. **Track C — SDK + Kotlin CLI** — start in parallel for the Meeting-5 live demo. SDK-IF-01 → SDK-CLI-01/02.
+8. **Sprint-1 reconciliation pass** (G-04 port naming etc.) — can land in parallel; no architectural blockers.
 
 ---
 
@@ -285,6 +356,6 @@ Every working session must leave behind a digest of what the user asked for and 
 2. Verify the post-migration checklist above is done — if not, finish it first.
 3. Skim the most recent file under `prompts/` for the previous session's digest and carry-over items.
 4. Continue from the current "Plan" step. Open today's prompts log (`prompts/YYYY-MM-DD_meeting-N.md`) on the first substantive prompt and append turn-by-turn as the session progresses (see "Session prompts log — REQUIRED on every session" above).
-5. **2026-06-01 →:** see the "Session update — 2026-05-31 → 2026-06-01" block above. Design package is **Ready** at `docs/design/`. Meeting 4 awaits sign-off. Immediately after Meeting 4 sign-off, Sprint 1 = the **10 `*-IF-01` Protocol-definition tasks** (start with `AUDIT-IF-01` — it blocks the most downstream work). Track via `docs/design/tasks_index.json` (144 entries). Before any coding: recreate `server/.venv/` and re-open `android_client/` from the new path. The 7 Important review-issues (G-04, G-05, G-06, G-07, G-09, G-12, G-14) can be addressed in parallel with Sprint 1 — do not block on them.
+5. **2026-06-03 →:** see the "Session update — 2026-06-03" block above. **Modular server pipeline is alive end-to-end** (172 tests passing; smoke test confirmed). DictaBERT classifier architecture **locked** at `docs/concepts/dictabert_classifier_architecture.md`; data techniques reference at `docs/concepts/dictabert_data_techniques.md`. **First action: spawn `ai-researcher-developer` to implement `training/prepare_data_dictabert.py`** per the agreed Meeting-5 stack (architecture §9 data contract + techniques §11 confirmed stack). Then verify WSL2+CUDA, write `train_dictabert.py`, train, evaluate F1≥0.78. In parallel: populate `server/.env` with real LLM keys; start Track C (SDK+CLI). The 7 Important review-issues (G-04 through G-14) remain deferrable to parallel work.
 
 <!-- Append resolution notes below this line as the project progresses. -->

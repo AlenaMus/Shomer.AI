@@ -1,8 +1,55 @@
+# Core HTTP / API (existing)
 fastapi>=0.115.0
 uvicorn[standard]>=0.32.0
 httpx>=0.27.0
 pydantic>=2.9.0
 python-dotenv>=1.0.0
 python-multipart>=0.0.12
+
+# OCR (existing)
 pytesseract>=0.3.13
 Pillow>=11.0.0
+
+# -----------------------------------------------------------------------------
+# Settings & observability (per LLDs)
+# -----------------------------------------------------------------------------
+pydantic-settings>=2.6.0
+structlog>=24.4.0
+prometheus-client>=0.21.0
+prometheus-fastapi-instrumentator>=7.0.0
+slowapi>=0.1.9
+
+# -----------------------------------------------------------------------------
+# Classifier (TextClassifier Protocol — HuggingFaceClassifier adapter)
+# CPU-only torch wheel is sufficient for inference. Training in WSL2 has its
+# own requirements (see training/requirements.txt).
+# -----------------------------------------------------------------------------
+transformers>=4.46.0
+torch>=2.5.0
+scikit-learn>=1.5.0
+safetensors>=0.4.5
+accelerate>=1.0.0
+
+# -----------------------------------------------------------------------------
+# Context Agent — LLM clients (LlmClient Protocol adapters)
+# -----------------------------------------------------------------------------
+openai>=1.55.0
+anthropic>=0.39.0
+
+# -----------------------------------------------------------------------------
+# Audit Log — sqlite3 is stdlib, aiosqlite for async access (AuditStore Protocol)
+# -----------------------------------------------------------------------------
+aiosqlite>=0.20.0
+
+# -----------------------------------------------------------------------------
+# Resilience
+# -----------------------------------------------------------------------------
+tenacity>=9.0.0
+
+# -----------------------------------------------------------------------------
+# Testing (kept here so contract tests can run without a separate venv)
+# -----------------------------------------------------------------------------
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+pytest-cov>=6.0.0
+respx>=0.21.0

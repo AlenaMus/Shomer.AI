@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
-from .classifier import classify_text
+from ._legacy_classifier import classify_text  # legacy stand-in; new modular classifier lives in app/classifier/
 from .image_backends import (
     ImageProcessor,
     OcrBackend,

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+from enum import Enum
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -49,3 +51,82 @@ class ModelInfoResponse(BaseModel):
     model: str
     base: str | None = None
     labels: list[Category] = ["abusive", "hate", "violence", "pornographic", "non_offensive"]
+
+
+# ---------------------------------------------------------------------------
+# Internal pipeline value types (frozen dataclasses).
+#
+# These types flow BETWEEN modules. Per docs/design/README.md, modules import
+# these value types directly from schemas — but they do NOT import concrete
+# adapter classes from other modules. Adapters are constructed only in
+# server/app/main.py lifespan(), via Protocols.
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class ClassificationResult:
+    """Output of TextClassifier.classify() — classifier LLD §2.2."""
+
+    label: Category
+    confidence: float            # CALIBRATED P(predicted_class), 0.0–1.0
+    is_offensive: bool           # True iff label != "non_offensive"
+    model_version: str           # e.g. "v1.0-standin" / "v1.1-dictabert"
+    latency_ms: float
+    is_borderline: bool          # True when confidence ∈ [borderline_low, borderline_high]
+    raw_confidence: float        # pre-calibration softmax, for diagnostics
+    error: bool = False          # True if model crashed → triage routes to REVIEW_NEEDED
+
+
+@dataclass(frozen=True)
+class OcrResult:
+    """Output of OcrBackend.process() — ocr LLD §5."""
+
+    extracted_text: str
+    confidence: float                  # mean per-word OCR confidence, 0.0–1.0
+    lang_detected: tuple[str, ...]     # e.g. ("heb",) or ("heb", "eng")
+    bbox_count: int
+    image_unreadable: bool = False
+    backend: str = "tesseract"
+
+
+class TriageDecision(str, Enum):
+    """Output of TriageEngine.decide() — triage LLD §2."""
+
+    SILENT = "silent"                  # confidently non-offensive
+    ALERT_DIRECT = "alert_direct"      # confidently offensive
+    ESCALATE_TO_CA = "escalate_to_ca"  # borderline → Context Agent
+    REVIEW_NEEDED = "review_needed"    # classifier error / invalid input
+
+
+@dataclass(frozen=True)
+class ContextDecision:
+    """Output of ContextReasoner.evaluate() — context_agent LLD §2."""
+
+    is_real_threat: bool
+    severity: str                  # "low" | "medium" | "high"
+    explanation: str               # one-sentence Hebrew rationale for the parent
+    review_flag: bool = False      # True iff both LLMs unreachable → human review
+    tokens_input: int = 0
+    tokens_output: int = 0
+    cost_usd: float = 0.0
+    model_used: str | None = None  # "gpt-4o-mini" | "haiku-4.5" | "mock" | None
+    reasoning_trace: str = ""      # full chain-of-thought, for audit_log
+    tools_called: tuple[str, ...] = ()
+    latency_ms: float = 0.0
+
+
+class HealthState(str, Enum):
+    """Per-module health.  /health endpoint aggregates these via ModuleHealth."""
+
+    OK = "ok"
+    DEGRADED = "degraded"
+    DOWN = "down"
+
+
+@dataclass(frozen=True)
+class ModuleHealth:
+    """Health report for one module — used by the server /health rollup."""
+
+    module: str
+    state: HealthState
+    detail: str = ""               # one-line free-form (e.g. "Ollama unreachable")

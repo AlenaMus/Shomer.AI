@@ -1,0 +1,21 @@
+# server/app/context_agent/token_prices.yaml
+# Prices in USD per 1M tokens (source: provider pricing pages, 2026-05-31)
+# [למקור] — verify before Meeting 8 against latest API pricing pages
+
+gpt-4o-mini:
+  input_per_1m_tokens_usd: 0.15    # $0.15 / 1M input tokens
+  output_per_1m_tokens_usd: 0.60   # $0.60 / 1M output tokens
+
+haiku-4.5:
+  input_per_1m_tokens_usd: 1.00    # $1.00 / 1M input tokens
+  output_per_1m_tokens_usd: 5.00   # $5.00 / 1M output tokens
+
+# Alias matching Anthropic API model ID variant
+claude-haiku-4-5:
+  input_per_1m_tokens_usd: 1.00
+  output_per_1m_tokens_usd: 5.00
+
+# Mock client — zero cost, used in tests
+mock:
+  input_per_1m_tokens_usd: 0.0
+  output_per_1m_tokens_usd: 0.0

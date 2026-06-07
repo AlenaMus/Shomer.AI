@@ -53,7 +53,7 @@ C:\AIDevelopmentCourse\Shomer.AI\
 
 | Area | State |
 |---|---|
-| **Server (Python)** | ✅ **Full flow wired end-to-end + Gemini CA live.** All modules Protocol-typed: `classifier · ocr · context_agent · triage · alerts · gatekeeper · audit_log(SqliteAuditStore)`. **387 fast tests pass.** `main.py` v0.6.0-fullflow. Live-verified on Ollama `v1.0-standin`: classify→triage→CA→LogNotifier alert→SQLite + history + `/metrics`. Context Agent runs on real `gemini-2.5-flash` (primary) + `haiku-4.5` (fallback) when keys in `server/.env`. **Run pytest from REPO ROOT** (running from `server/` falsely fails 9 data-file tests). |
+| **Server (Python)** | ✅ **S2 Identity & Auth shipped.** All modules Protocol-typed: `classifier · ocr · context_agent · triage · alerts · gatekeeper · audit_log(SqliteAuditStore) · identity(SqliteIdentityStore) · monitor · dedup · flagged`. **488 tests pass (5 skipped = HF classifier, awaits checkpoint).** `main.py` v0.6.1-identity. `POST /v1/monitor/events` now requires Bearer device token (child token; enforces child_id match). Pairing flow live: `POST /v1/parent/register` → `POST /v1/parent/children` → `POST /v1/parent/pairing-code` → `POST /v1/pair` → device token. Auth middleware in Gatekeeper group (content-blind; sets `request.state.device_context`). Allowlist: `/health`, `/metrics`, `/docs`, `/v1/parent/register`, `/v1/pair`, `/classify`, `/classify-image`, `/model/info`. **Run pytest from REPO ROOT.** |
 | **DictaBERT classifier** | ✅ **Architecture locked** at `docs/concepts/dictabert_classifier_architecture.md`: MLP head (`[CLS]→Dropout→Linear(768→256)→GELU→Dropout→Linear(256→5)`); Focal Loss(γ=2, alpha=class_weights); ε=0.05 label smoothing; AdamW + cosine LR + lr=2e-5 + batch=32 + 5 epochs + BF16, seed=42. Real param count **184.3 M** (Hebrew vocab), BF16 ≈370 MB, ~6–8 GB VRAM. Data techniques + locked Meeting-5 stack in `docs/concepts/dictabert_data_techniques.md` §11. Fallback if F1<0.78: MLP→Multi-task→DictaBERT-large→DAPT. **NOT yet trained.** |
 | **Training stack** | ✅ **WSL2 + CUDA 12.8 verified (RTX 5080, sm_120).** Venv `~/shomer-training-venv` with `torch 2.11.0+cu128`, `transformers 5.10.1`, `bitsandbytes 0.49.2`. Real BF16 fwd+bwd + DictaBERT Hebrew forward pass confirmed on GPU. Pinned in `training/requirements-wsl.txt`. Reproduce: see "Training env" below. |
 | **Design package** | ✅ Signed off (Meeting 4). 10 module LLDs + `docs/design/README.md` + `review.md` (3 blockers G-01/02/03 resolved) + 144-task backlog (`tasks_index.json`) + PDFs. |
@@ -145,11 +145,17 @@ Detailed reports stay under `docs/`; decisions under `plan-docs/decisions/`.
 - **Master plan:** `plan-docs/Plan.md` (10 academic meetings; detail in `plan-docs/plan/00–10`).
   POC reframed as Step 0 (feasibility, done).
 - **Technical roadmap:** `plan-docs/POC_Plan.md` — 7 phases (0–6). **Phase 3** = train the Hebrew classifier;
-  **Phase 4** = the academic contribution: A/B image strategies (OCR vs vision-LLM vs pipeline vs parallel),
-  pick default empirically (decision D1).
-- **Research questions:** `plan-docs/research_questions.md` (8 RQs). Thesis spine = **RQ3 + RQ4** (multimodal architecture study).
-- **Flagship anchors:** `plan-docs/related_work.md` — SinaLab Offensive-Hebrew (Hamad et al. 2023, arXiv:2309.02724)
-  + QLoRA. Multimodal-moderation axis is the project's own contribution.
+  **Phase 4** = multimodal image-strategy A/B (OCR vs vision-LLM vs pipeline vs parallel) — **secondary axis** since the 2026-05-27 reframe.
+- **Research question (REFRAMED 2026-05-27 → `docs/research_question/research_question.md`):**
+  *Does adding conversational context (the previous k turns) to Hebrew bullying classification reduce the
+  false-positive rate vs. classifying the message in isolation — without hurting recall?* Measured = **FPR + recall**;
+  baseline = the **same model, context-blind**. Success = a statistically-significant FPR drop with non-inferior recall on a
+  real gold set. The multimodal image-routing axis was **demoted from spine to secondary** (old RQ3/RQ4).
+  Decision: `plan-docs/decisions/research-framing.decision.md` (D-Reframe-2026-05-27).
+- **Flagship anchors** (`docs/literature/literature_flagship.md`): SinaLab Offensive-Hebrew (Hamad et al. 2023,
+  arXiv:2309.02724) = the 5-label schema **and the context-blind baseline we compare against**; Pavlopoulos 2020 = context axis;
+  Sap 2019 / Davidson 2019 = false-positive axis; SynBullying / ToxiGen = synthetic conversational data; QLoRA = fine-tune method.
+  **Contribution = bringing conversational-context FP-reduction to Hebrew bullying detection — an axis not yet studied in Hebrew.**
 
 ---
 

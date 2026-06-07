@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head><meta charset="utf-8"><title>prompt-book</title>
+<style>
+@page { size: A4; margin: 1.6cm; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "David", "Frank Ruehl CLM", "Times New Roman", "Segoe UI", Arial, sans-serif;
+  font-size: 11.5pt; line-height: 1.6; color: #1a1a1a; max-width: 100%;
+}
+h1 { font-size: 21pt; border-bottom: 3px solid #2c5f8a; padding-bottom: 6px; color: #1f3f5f; }
+h2 { font-size: 16pt; border-bottom: 1px solid #cdd9e5; padding-bottom: 3px; color: #2c5f8a; margin-top: 1.4em; }
+h3 { font-size: 13pt; color: #34618a; }
+h1, h2, h3 { page-break-after: avoid; }
+table { border-collapse: collapse; width: 100%; margin: 0.8em 0; page-break-inside: avoid; font-size: 10.5pt; }
+th, td { border: 1px solid #b9c4d0; padding: 5px 8px; text-align: start; vertical-align: top; }
+th { background: #dee9f7; font-weight: 700; }
+tr:nth-child(even) td { background: #f5f8fc; }
+blockquote { border-inline-start: 4px solid #e0a800; background: #fffbe9; margin: 0.8em 0; padding: 6px 14px; }
+code { background: #f0f0f3; padding: 1px 5px; border-radius: 3px; font-size: 0.9em; }
+pre { background: #f6f8fa; border: 1px solid #d9dde2; border-radius: 6px; padding: 10px 14px;
+      direction: ltr; text-align: left; overflow-x: auto; font-size: 9.5pt; }
+pre code { background: none; padding: 0; }
+a { color: #1a56c4; }
+ul, ol { padding-inline-start: 1.4em; }
+hr { border: none; border-top: 1px solid #d0d7de; margin: 1.4em 0; }
+</style>
+
+</head>
+<body><h1 id="shomerai-prompt-book">Shomer.AI — ספר פרומפטים (Prompt Book)</h1>
+<p><strong>מטרה:</strong> תיעוד כל שימוש משמעותי בסוכן AI בפרויקט — דרישת הקורס (חוק הזהב + ספר פרומפטים, שקופיות 4–5, 14).
+<strong>Path A (סוכן ככלי פיתוח):</strong> הרשומות כאן מתעדות את <strong>Claude Code</strong> כסוכן פיתוח לאורך הפרויקט — ניסוח, הרכבה, אימות, ארגון. זהו חלק ממנדט הסוכנים (ראו <a href="preparatory_report.md"><code>preparatory_report.md</code></a> רכיב 7).
+<strong>פורמט:</strong> 7 שדות לכל רשומה — Goal · Context · Prompt · Model · Output · Evaluation · Decision.</p>
+<blockquote>
+<p><strong>הערה:</strong> הפרומפטים מצוטטים בתמצית. הניסוח המלא נמצא בהיסטוריית השיחה ובהגדרות הסוכנים שהורצו.</p>
+</blockquote>
+<hr>
+<h2 id="1-3-">רשומה 1 — הרכבת תוצרי מפגש 3 (במקביל, מבוססת-סוכנים)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>להכין את ארבעת תוצרי מפגש 3 — דו"ח מכין, שאלת מחקר, מאמרי דגל, תכנית עסקית — בחלון של 4 ימים.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>מקורות קיימים: Proposal, <code>plan-he/</code>, <code>research_questions.he.md</code>, <code>related_work.he.md</code>, ה-decision log. דרישת "הרכבה והתאמה", לא יצירה מאפס.</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"בוא נמשיך לבצע את ההכנות לקראת מחר 28-05 ... להכין דו"ח מכין מפורט, למצוא שאלת מחקר ... להכין תכנית עסקית ולהכין מאמרי דגל ... במקביל על ידי skills מתאימים לכל משימה."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td>Claude Opus 4.7 (1M context) — orchestrator; שני sub-agents (<code>general-purpose</code>) במקביל ברקע.</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td>חלוקה: סוכן A → תכנית עסקית LaTeX; סוכן B → אימות ציטוטים; ה-thread הראשי → דו"ח מכין + ספר פרומפטים.</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>זוהתה מראש מתיחות מסגור (Proposal מול docs/) ואומתה מול ה-decision log לפני כתיבה — נמנע תוצר סותר.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>✅ התקבל. לעקוב אחרי המסגור המתועד (RQ3 ראשית + ארכיטקטורה פתוחה למפגש 4), לא לפתוח החלטות נעולות.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2">רשומה 2 — אימות ציטוטים של מאמרי הדגל</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>לאמת ולתקן את הציטוטים של מאמרי הדגל לפני ההגשה; לפתור את ה-⚠️ על ציטוט SinaLab.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td><code>literature_flagship.md</code> סימן את ציטוט SinaLab כטעון-אימות; "Jarrar et al." היה ניחוש. המסגור (שני עוגנים) נעול ואסור לשנותו.</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Verify and format citations ... resolve the SinaLab ⚠️ ... never fabricate a citation, arXiv id, or DOI ... do NOT change the framing."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td>Claude (<code>general-purpose</code> sub-agent) + WebSearch/WebFetch (arXiv, IEEE Xplore, ACL Anthology, GitHub).</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td>ציטוט SinaLab מתוקן: <strong>Hamad, N., Jarrar, M., Khalilia, M., &amp; Nashif, N. (2023). "Offensive Hebrew Corpus and Detection using BERT." AICCSA. arXiv:2309.02724.</strong> + תיקון DictaLM 2.0 (Shmidman et al., 2024, arXiv:2407.07080) + יצירת <code>references.bib</code>.</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>מאומת מול arXiv/IEEE/ACL. ה-DOI של SinaLab נגזר מ-doc 10479258 וסומן לאימות-סופי (IEEE החזיר 401). שום ציטוט לא הומצא.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>✅ התקבל ועודכן in-place. נותר: אימות סופי של ה-DOI לפני ההגשה הסופית.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="3-latex">רשומה 3 — כתיבת תכנית עסקית ב-LaTeX</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>תכנית עסקית 6 סעיפים ב-LaTeX (עברית RTL), מוכנה לקימפול ב-Overleaf (XeLaTeX).</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>מקורות: Proposal §2.3/§3/§4/§9.1/§11.3 + <code>plan-he/03</code>. אין מנוע LaTeX מקומי → חייב להיות Overleaf-ready. דרישה: לסמן מספרים לא-ממוקרים <code>[למקור]</code>, לא להמציא.</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Author a 6-section business plan in LaTeX ... XeLaTeX + polyglossia + bidi ... token-economics formula + worked example ... mark unsourced numbers [למקור]. No invented citations."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td>Claude (<code>general-purpose</code> sub-agent) + WebSearch (גודל שוק, דמוגרפיה CBS, תמחור מתחרים, תמחור טוקנים).</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td><code>docs/business_plan/business_plan.tex</code> + <code>README.md</code> עם הוראות קימפול ורשימת מספרים טעוני-מקור. <em>(ראו דוח הסוכן בסיום הריצה.)</em></td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>אומתו בוויב (footnotes): גודל שוק ~$1.55B→$1.74B/CAGR ~9.8–12.25%; ~2.25M משפחות בישראל (CBS); תמחור Bark/Qustodio/Canopy; מחירי טוקנים Claude Haiku/GPT-4o-mini/Gemini Flash. נשארו <code>[למקור]</code>: קוהורט SAM מדויק (6–16 עם סמארטפון), SOM (5,000 / ₪40 — יעד פנימי), מחירי Keepers/Bosco, והנחות נפח ה-token-economics. שום ציטוט לא הומצא.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>טיוטה מובנית להצגה במפגש 3; מספרי token-economics ממוקרים-במלואם נדחים לאחרי המפגש (ראו <code>next-meeting-prep</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="4-4-10-llds">רשומה 4 — הרכבת חבילת התכן המלאה (מפגש 4, 10 LLDs במקביל)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>לייצר חבילת תכן מלאה לפני מימוש — Low-Level Design לכל מודול + גיבוי משימות JSON — מוכנה לאישור מפגש 4.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>PRD v1.0 + ארכיטקטורה B נעולים. נדרש תכן מפורט (תבנית 11 סעיפים) לכל מודול, עם דגש OOP / ports-and-adapters ו-swappability מלאה (החלפת OCR / DictaBERT / Context-Agent בלי לגעת בשרת).</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Use product manager + project organizer agents to analyze the PRD and produce one Low-Level Design per module ... JSON tasks per module; everything under a <code>design/</code> folder."</em> + <em>"Every component must be swappable ... without changing the server. Strong OOP."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td>Claude Opus (orchestrator) + <strong>3 סוכני <code>product-strategist</code> במקביל</strong> (client-edge / AI-core / orchestration).</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td>9 קבצי <code>design.md</code> (~5,470 שורות) + <code>docs/design/README.md</code> (עקרונות ports-and-adapters) + §2.5 "Interface boundary" בכל LLD + <code>tasks_index.json</code> + 9 <code>tasks.json</code> (124 משימות, מורחב מאוחר יותר ל-144).</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>זוהו מראש פערים לתיקון (<code>none-offensive</code>↔<code>non_offensive</code>, חוסר <code>train_dictabert.py</code>, refactor של <code>OcrBackend</code>); כל ה-JSON אומת לפרסור ול-cross-references.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>✅ דפוס composition-root נעול: רק <code>server/app/main.py</code> <code>lifespan()</code> בונה adapters קונקרטיים. ה-README הוא מקור-האמת למי-מייבא-את-מי.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-3-4">רשומה 5 — סקירת ארכיטקטורה + פתרון 3 חוסמים (מפגש 4)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>לוודא שה-LLDs מכסים את כל הפונקציונליות הנדרשת, ולזהות שאלות פתוחות לפני תחילת מימוש.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>9 LLDs קיימים; נדרש coverage matrix מול PRD §1–§15 ובדיקת concerns חוצי-מערכת (trace_id, A/B switch, privacy, retention, label consistency, confidence direction).</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Review the architecture design and charts and verify the LLD architecture contains all necessary functionality. Are there open questions to resolve before tasks execution?"</em> → <em>"Yes [fix the 3 blockers]."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td>סוכן <code>architecture-reviewer</code> (סקירה) + סוכן <code>product-strategist</code> (LLD למודול audit_log).</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td><code>docs/design/review.md</code> (486 שורות), verdict <strong>Conditional Ready · 3 Blockers · 7 Important · 5 Nice</strong>. 3 החוסמים נפתרו: <strong>G-01</strong> — <code>audit_log/</code> LLD חדש (758 שורות + 14 משימות, סכמת SQLite 5 טבלאות); <strong>G-02</strong> — תווית נעולה <code>non_offensive</code>; <strong>G-03</strong> — תיקון polarity ב-<code>_decide_inner</code> + מטריצת בדיקה 6 שורות. Backlog → 144 משימות.</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>כל חוסם סומן ✅ RESOLVED ב-<code>review.md</code> כלוח-מצב חי; באג G-03 (<code>is_offensive=False, confidence=0.92</code> היה מנותב בטעות ל-ALERT_DIRECT) נתפס ונמנע.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>✅ אושר; 7 בעיות Important (G-04…G-14) נדחו במכוון לשבוע 1 של מימוש.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="6-5-3-agents">רשומה 6 — בניית צינור השרת המודולרי (מפגש 5, 3 agents במקביל)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>לבנות את מודולי השרת — classifier (DictaBERT), OCR, Context Agent — מאחורי ה-Protocols, חי end-to-end.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>ממשקי Protocol מוגדרים; שכבת ה-foundation (<code>schemas.py</code> + 4 קבצי <code>protocol.py</code>) הוכנה ידנית מראש כדי לאפשר עבודה מקבילית בלי התנגשויות.</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Can we start building the server modules: classifier, OCR, Context Agent — using backend-developer + ml-developer in parallel ... now that we have the Protocol interfaces."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td><code>ai-researcher-developer</code> (classifier) + 2× <code>backend-developer</code> (ocr, context_agent) <strong>במקביל</strong>.</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td>classifier (~2,150 שורות, 57 tests; Ollama+HuggingFace+Stub adapters) + ocr (~1,400, 45 tests; Tesseract extraction-only) + context_agent (~2,350, 70 tests; Mock+OpenAI+Anthropic clients + LlmRouter + SqliteTokenManager) + <code>InMemoryAuditStore</code> stop-gap + <code>main.py</code> כ-composition root. <strong>172 tests passing</strong>; smoke test <code>POST /classify "שלום עולם"</code> → <code>non_offensive</code>.</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>smoke test ירוק דרך Ollama אמיתי; כל החלפת adapter = env-var flip יחיד (<code>CLASSIFIER_MODEL_VERSION</code>).</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>✅ ה-composition-root + ייבוא Protocol-only בין מודולים הם כעת אמיתיים בקוד, לא רק במסמכים.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="7-dictabert-5">רשומה 7 — נעילת ארכיטקטורת הרשת של DictaBERT (מפגש 5)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>לתכנן בקפידה, שכבה-אחר-שכבה, את ארכיטקטורת הרשת (DictaBERT + שכבות חדשות) לסיווג תוכן פוגעני — לפני אימון.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>ה-LLD של ה-classifier החזיק רק היפר-פרמטרים בסיסיים (lr, batch, epochs) — לא ארכיטקטורה מלאה ולא בחירת loss.</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Plan the full NN architecture carefully — do we have it? Use ai-educator-architect + ai-researcher-developer."</em> + <em>"What ways do we have to change data for best results — accurate and fast?"</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td>סוכן <code>ai-educator-architect</code>.</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td><strong><code>docs/concepts/dictabert_classifier_architecture.md</code></strong> (903 שורות, 12 סעיפים): MLP head (<code>[CLS]→Dropout→Linear(768→256)→GELU→Dropout→Linear(256→5)</code>), Focal Loss γ=2 + <code>alpha=class_weights</code>, ε=0.05 label smoothing, AdamW+cosine, 5 epochs BF16, fallback chain, §9 data contract. + <strong><code>dictabert_data_techniques.md</code></strong> (~500 שורות) עם §8 combination-safety.</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>הושוו 5 חלופות ארכיטקטורה (Vanilla/Multi-task/Hierarchical/DAPT); ε=0.05 (ולא 0.1) הומלץ בגלל השילוב עם Focal; §8 תיעד 4 סיכוני stacking עם מיטיגציות.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>הארכיטקטורה נעולה — המסמך עצמו הוא רשומת ההחלטה (עם נימוק, חלופות וציטוטים). הערה: param count אמיתי התברר כ-<strong>184.3M</strong> (לא ~110M) עקב אוצר-המילים העברי.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-6-4">רשומה 8 — זרימת השרת המלאה (מפגש 6, 4 מודולים במקביל)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>לחבר כל מודול מתוכנן end-to-end — Triage / Alerts / Gatekeeper / SqliteAuditStore — בלי אימון DictaBERT ובלי שינוי קלט ה-classifier.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>הצינור הריץ classifier→inline-triage→CA→in-memory audit; חסרו Gatekeeper, Alerts (ALERT_DIRECT היה inert), Triage עצמאי, ו-SQLite persistence.</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Build the full flow, then the SDK, create tasks, and implement with backend-developer + ai-researcher-developer agents."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td>3× <code>backend-developer</code> + 1× <code>ai-researcher-developer</code> <strong>במקביל</strong>.</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td>triage (45 tests) + alerts/<code>LogNotifier</code> (105) + <code>gateway.py</code> (37) + <code>SqliteAuditStore</code> (23); <code>main.py</code> v0.6.0-fullflow (retention sweeper, LogNotifier dispatch, <code>register_gateway()</code>, conversation persistence); debug SDK (<code>dev_client replay</code> / <code>inspect_audit</code> / <code>load_test</code>) + 7 integration tests. <strong>384 fast tests pass</strong>; live demo 10/10, 6 sent + 2 rate_limited alerts persisted.</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>4 באגים התגלו בבדיקות ותוקנו: <code>record_agent_trace</code> לא נקרא, <code>trace_id</code> לא הועבר ל-CA, קונסולת Windows cp1252 הפילה שורת log עברית של <code>alerts.sent</code> (→ אכיפת UTF-8 stdio), crash על dict ב-<code>inspect_audit</code>.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td>D1 <code>LogNotifier</code> ברירת-מחדל (+ FCM כצעד הבא); D2 כלי-debug ב-Python קודם (+ Kotlin <code>:sdk-cli</code> אחריו); D3 <code>child_id</code> אופציונלי לזיכרון-שיחה אמיתי.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="9-context-agent-llm-gemini-baseline-accuracy-test-console-6">רשומה 9 — Context Agent על LLM אמיתי (Gemini) + baseline accuracy + test console (מפגש 6)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal (מטרה)</strong></td>
+<td>להעלות את ה-Context Agent על LLM אמיתי, למדוד את ה-accuracy הבסיסי של המערכת, ולבנות קונסולת בדיקה ידנית ידידותית.</td>
+</tr>
+<tr>
+<td><strong>Context (הקשר)</strong></td>
+<td>ה-CA רץ עד כה על Mock דטרמיניסטי (כל הסלמה → "לא איום" → silent); לא היה מדד accuracy בסיסי ולא כלי בדיקה ידני נוח (הקלדת עברית מתהפכת ב-Windows terminal).</td>
+</tr>
+<tr>
+<td><strong>Prompt (פרומפט)</strong></td>
+<td><em>"Build a friendly UI for manual full-flow testing ... add Gemini support for the Context Agent; and run the OCR/text eval data through the pipeline to measure baseline accuracy as a PDF (no data changes / no training)."</em></td>
+</tr>
+<tr>
+<td><strong>Model (מודל)</strong></td>
+<td><code>GeminiClient</code> — <strong><code>gemini-2.5-flash</code></strong> (primary, endpoint תואם-OpenAI) + <strong><code>haiku-4.5</code></strong> (fallback). הערכה דרך השרת החי.</td>
+</tr>
+<tr>
+<td><strong>Output (פלט)</strong></td>
+<td><code>scripts/test_console.py</code> (RTL via <code>python-bidi</code> + sample-picker ממוספר, per-session <code>audit.db</code>+<code>server.log</code>) + <code>GeminiClient</code> + <code>scripts/eval_accuracy.py</code>. <strong>Baseline: TEXT 69.5% / IMAGE 66.3%</strong> 5-class, ~80% binary; <code>hate</code> recall ≈0.10. PDF: <code>docs/meeting6_accuracy_report.pdf</code>.</td>
+</tr>
+<tr>
+<td><strong>Evaluation (הערכה)</strong></td>
+<td>image ≈ text → <strong>ה-classifier הוא צוואר-הבקבוק, לא ה-OCR</strong> — מוטיבציה כמותית חזקה ל-fine-tune. תוקנו 3 באגי bring-up (model 2.0→2.5, פסי <code>```json</code>, "thinking" שגדע JSON) + באג key-string + מפתחות <code>.env</code> שגויים.</td>
+</tr>
+<tr>
+<td><strong>Decision (החלטה)</strong></td>
+<td><code>plan-docs/decisions/gemini-context-agent.decision.md</code> — עדיפות <strong>Gemini &gt; OpenAI &gt; Anthropic</strong> (מפתח ראשון primary, שני fallback, Mock משלים).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="_1">תבנית לרשומה חדשה (להעתיק)</h2>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תוכן</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Prompt</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Model</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Evaluation</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></body></html>

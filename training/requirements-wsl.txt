@@ -1,0 +1,46 @@
+# Training environment — WSL2 / RTX 5080 (sm_120 Blackwell)
+#
+# Frozen 2026-06-04 against ~/shomer-training-venv inside Ubuntu-24.04 WSL2.
+# This file pins ONLY the direct dependencies. Transitive packages (numpy,
+# scipy, NVIDIA cuXX-12 wheels, etc.) are resolved by pip from these constraints.
+#
+# Reproducing this venv:
+#   wsl -d Ubuntu-24.04
+#   python3 -m venv ~/shomer-training-venv
+#   source ~/shomer-training-venv/bin/activate
+#   pip install --upgrade pip wheel setuptools
+#   # PyTorch MUST come from the cu128 index — the default PyPI wheel lacks sm_120:
+#   pip install torch==2.11.0+cu128 torchvision==0.26.0+cu128 torchaudio==2.11.0+cu128 \
+#       --index-url https://download.pytorch.org/whl/cu128
+#   pip install -r training/requirements-wsl.txt
+#
+# Verification (after install):
+#   python -c "import torch; assert 'sm_120' in torch.cuda.get_arch_list(); \
+#              x=torch.randn(8,8,device='cuda'); print((x@x).sum().item())"
+#
+# See plan-docs/decisions/training-environment.decision.md for the rationale.
+
+# --- core training stack ---
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+torchaudio==2.11.0+cu128
+
+# --- HuggingFace stack ---
+transformers==5.10.1
+tokenizers==0.22.2
+datasets==4.8.5
+huggingface_hub==1.17.0
+accelerate==1.13.0
+peft==0.19.1
+safetensors==0.7.0
+
+# --- QLoRA fallback (architecture doc §10 fallback chain) ---
+bitsandbytes==0.49.2
+
+# --- data prep + evaluation utilities ---
+scikit-learn==1.9.0
+pandas==3.0.3
+numpy==2.4.4
+
+# --- misc ---
+pyyaml==6.0.3

@@ -53,3 +53,10 @@ pytest>=8.3.0
 pytest-asyncio>=0.24.0
 pytest-cov>=6.0.0
 respx>=0.21.0
+
+# -----------------------------------------------------------------------------
+# Dev / testing tooling (scripts/): test console RTL display + accuracy charts.
+# Not imported by the server itself; the console degrades gracefully without bidi.
+# -----------------------------------------------------------------------------
+python-bidi>=0.4.2        # correct Hebrew RTL display in scripts/test_console.py
+matplotlib>=3.8.0         # histograms/confusion matrices in scripts/eval_accuracy.py

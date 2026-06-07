@@ -29,10 +29,12 @@ class ContextAgentSettings(BaseSettings):
     # LLM secrets — marked SecretStr so values never appear in repr / logs
     openai_api_key: SecretStr | None = None
     anthropic_api_key: SecretStr | None = None
+    gemini_api_key: SecretStr | None = None      # GEMINI_API_KEY (Google AI Studio)
 
     # LLM model selection
     context_agent_primary_llm: str = "gpt-4o-mini"
     context_agent_fallback_llm: str = "haiku-4.5"
+    gemini_model: str = "gemini-2.5-flash"        # GEMINI_MODEL override
 
     # Timing
     context_agent_timeout_s: float = 5.0

@@ -17,6 +17,23 @@ from app.context_agent.output_parser import AgentLlmResponse, parse_llm_output
 # --------------------------------------------------------------------------- #
 
 
+def test_parse_markdown_fenced_json():
+    """Anthropic/Haiku wraps JSON in ```json ... ``` fences — must still parse."""
+    raw = '```json\n{"is_real_threat": true, "severity": "high", "explanation": "איום ברור"}\n```'
+    result, ok = parse_llm_output(raw)
+    assert ok is True
+    assert result.is_real_threat is True
+    assert result.severity == "high"
+
+
+def test_parse_json_with_surrounding_prose():
+    """JSON embedded in prose — extract the outermost object."""
+    raw = 'Here is my analysis:\n{"is_real_threat": false, "severity": "none", "explanation": "בטוח"}\nDone.'
+    result, ok = parse_llm_output(raw)
+    assert ok is True
+    assert result.is_real_threat is False
+
+
 def test_parse_valid_not_threat():
     raw = json.dumps({
         "is_real_threat": False,

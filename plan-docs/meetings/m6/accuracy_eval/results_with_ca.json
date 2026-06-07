@@ -1,0 +1,215 @@
+{
+  "model": "v1.0-standin",
+  "context_agent": "enabled",
+  "text": {
+    "n_total": 200,
+    "n_valid": 200,
+    "n_failed": 0,
+    "accuracy": 0.695,
+    "binary_accuracy": 0.795,
+    "macro_f1": 0.49004116558741906,
+    "per_class": {
+      "non_offensive": {
+        "precision": 0.7404580152671756,
+        "recall": 0.9326923076923077,
+        "f1": 0.825531914893617,
+        "support": 104
+      },
+      "abusive": {
+        "precision": 0.5555555555555556,
+        "recall": 0.7894736842105263,
+        "f1": 0.6521739130434783,
+        "support": 38
+      },
+      "hate": {
+        "precision": 1.0,
+        "recall": 0.08695652173913043,
+        "f1": 0.16,
+        "support": 23
+      },
+      "violence": {
+        "precision": 0.7777777777777778,
+        "recall": 0.30434782608695654,
+        "f1": 0.4375,
+        "support": 23
+      },
+      "pornographic": {
+        "precision": 0.75,
+        "recall": 0.25,
+        "f1": 0.375,
+        "support": 12
+      }
+    },
+    "confusion": [
+      [
+        97,
+        4,
+        0,
+        2,
+        1
+      ],
+      [
+        8,
+        30,
+        0,
+        0,
+        0
+      ],
+      [
+        14,
+        7,
+        2,
+        0,
+        0
+      ],
+      [
+        5,
+        11,
+        0,
+        7,
+        0
+      ],
+      [
+        7,
+        2,
+        0,
+        0,
+        3
+      ]
+    ],
+    "mean_ms": 3593.3742114988854
+  },
+  "image": {
+    "n_total": 300,
+    "n_valid": 300,
+    "n_failed": 0,
+    "accuracy": 0.66,
+    "binary_accuracy": 0.8033333333333333,
+    "macro_f1": 0.4545669033886557,
+    "per_class": {
+      "non_offensive": {
+        "precision": 0.7771428571428571,
+        "recall": 0.8717948717948718,
+        "f1": 0.8217522658610272,
+        "support": 156
+      },
+      "abusive": {
+        "precision": 0.46875,
+        "recall": 0.7758620689655172,
+        "f1": 0.5844155844155844,
+        "support": 58
+      },
+      "hate": {
+        "precision": 0.8,
+        "recall": 0.11428571428571428,
+        "f1": 0.2,
+        "support": 35
+      },
+      "violence": {
+        "precision": 0.8181818181818182,
+        "recall": 0.2647058823529412,
+        "f1": 0.4,
+        "support": 34
+      },
+      "pornographic": {
+        "precision": 0.3076923076923077,
+        "recall": 0.23529411764705882,
+        "f1": 0.26666666666666666,
+        "support": 17
+      }
+    },
+    "confusion": [
+      [
+        136,
+        13,
+        0,
+        1,
+        6
+      ],
+      [
+        11,
+        45,
+        0,
+        1,
+        1
+      ],
+      [
+        13,
+        18,
+        4,
+        0,
+        0
+      ],
+      [
+        4,
+        18,
+        1,
+        9,
+        2
+      ],
+      [
+        11,
+        2,
+        0,
+        0,
+        4
+      ]
+    ],
+    "mean_ms": 3562.0459246705286
+  },
+  "decision": {
+    "text": {
+      "n_scored": 200,
+      "frontline": {
+        "accuracy": 0.77,
+        "recall_off": 0.5729166666666666,
+        "fpr": 0.04807692307692308
+      },
+      "with_ca": {
+        "accuracy": 0.805,
+        "recall_off": 0.6458333333333334,
+        "fpr": 0.04807692307692308
+      }
+    },
+    "image": {
+      "n_scored": 300,
+      "frontline": {
+        "accuracy": 0.77,
+        "recall_off": 0.6597222222222222,
+        "fpr": 0.1282051282051282
+      },
+      "with_ca": {
+        "accuracy": 0.7966666666666666,
+        "recall_off": 0.7152777777777778,
+        "fpr": 0.1282051282051282
+      }
+    }
+  },
+  "ca_involvement": {
+    "text": {
+      "n_invoked": 9,
+      "by_model": {
+        "gemini-2.5-flash": 9
+      },
+      "threat_yes": 7,
+      "threat_no": 2,
+      "on_gold": {
+        "violence": 7,
+        "non_offensive": 2
+      }
+    },
+    "image": {
+      "n_invoked": 12,
+      "by_model": {
+        "gemini-2.5-flash": 12
+      },
+      "threat_yes": 8,
+      "threat_no": 4,
+      "on_gold": {
+        "violence": 9,
+        "abusive": 1,
+        "non_offensive": 2
+      }
+    }
+  }
+}

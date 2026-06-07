@@ -1,0 +1,10 @@
+{"id": "g01", "text": "שלום עולם, מה שלומך היום?", "expected_category": "non_offensive", "expected_is_offensive": false, "note": "neutral greeting"}
+{"id": "g02", "text": "תודה רבה על העזרה, אתה ממש אלוף!", "expected_category": "non_offensive", "expected_is_offensive": false, "note": "positive / compliment"}
+{"id": "g03", "text": "מתי המשחק מתחיל הערב? אני רוצה לראות אותו.", "expected_category": "non_offensive", "expected_is_offensive": false, "note": "everyday question"}
+{"id": "g04", "text": "בוא נעשה שיעורי בית יחד אחרי הצהריים.", "expected_category": "non_offensive", "expected_is_offensive": false, "note": "benign school context"}
+{"id": "g05", "text": "אתה טמבל מטומטם, תסתום כבר את הפה שלך.", "expected_category": "abusive", "expected_is_offensive": true, "note": "personal insult / abusive"}
+{"id": "g06", "text": "די נמאס לי ממך, אתה הכי דוחה שיש.", "expected_category": "abusive", "expected_is_offensive": true, "note": "insult / harassment"}
+{"id": "g07", "text": "אני שונא את כל הזרים האלה, שייעלמו כבר מהמדינה.", "expected_category": "hate", "expected_is_offensive": true, "note": "group-directed hate"}
+{"id": "g08", "text": "אני אחכה לך אחרי בית הספר ואשבור לך את העצמות.", "expected_category": "violence", "expected_is_offensive": true, "note": "threat of violence"}
+{"id": "g09", "text": "תשלחי לי תמונות עירום שלך עכשיו, אף אחד לא יידע.", "expected_category": "pornographic", "expected_is_offensive": true, "note": "sexual solicitation of a minor"}
+{"id": "g10", "text": "כולם בכיתה צוחקים עליך, אף אחד לא רוצה אותך בקבוצה.", "expected_category": "abusive", "expected_is_offensive": true, "note": "social exclusion / bullying"}

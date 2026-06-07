@@ -1,0 +1,1982 @@
+{
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\build.gradle.kts": {
+    "mtime": 1779521459.6284177,
+    "ast_hash": "10fc5fc63c1d1d78172f38d819d2a443",
+    "semantic_hash": "10fc5fc63c1d1d78172f38d819d2a443"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\MainActivity.kt": {
+    "mtime": 1779219201.3687308,
+    "ast_hash": "3da9ea0044a515ac5858f155e1643441",
+    "semantic_hash": "3da9ea0044a515ac5858f155e1643441"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\data\\ApiService.kt": {
+    "mtime": 1779521471.6449943,
+    "ast_hash": "0d1f07af53658794f889c93098236a6c",
+    "semantic_hash": "0d1f07af53658794f889c93098236a6c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\data\\Models.kt": {
+    "mtime": 1779521463.808704,
+    "ast_hash": "90fcb11cd0f6d9b57aa2cb7ce639e004",
+    "semantic_hash": "90fcb11cd0f6d9b57aa2cb7ce639e004"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\data\\SettingsRepository.kt": {
+    "mtime": 1779219220.8551805,
+    "ast_hash": "97f6dccf04672b3edb34689aa8be3565",
+    "semantic_hash": "97f6dccf04672b3edb34689aa8be3565"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\ui\\ClassifyScreen.kt": {
+    "mtime": 1779521544.4972084,
+    "ast_hash": "d00a58cc0012f25d35e5189ba31c1c20",
+    "semantic_hash": "d00a58cc0012f25d35e5189ba31c1c20"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\ui\\SettingsScreen.kt": {
+    "mtime": 1779219269.0957103,
+    "ast_hash": "c0fd78262ea28e3e628a2cf70b171a3c",
+    "semantic_hash": "c0fd78262ea28e3e628a2cf70b171a3c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\ui\\theme\\Theme.kt": {
+    "mtime": 1779219206.4624212,
+    "ast_hash": "b138f9bd27e63a2b66314962d086eb4c",
+    "semantic_hash": "b138f9bd27e63a2b66314962d086eb4c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\app\\src\\main\\java\\com\\dima\\offensivehebrew\\viewmodel\\ClassifyViewModel.kt": {
+    "mtime": 1779521491.037784,
+    "ast_hash": "6264720d028c4ce16ecd526c30b04c64",
+    "semantic_hash": "6264720d028c4ce16ecd526c30b04c64"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\build.gradle.kts": {
+    "mtime": 1779219172.1604056,
+    "ast_hash": "ff454b83c89c73957fb6286e63fdd967",
+    "semantic_hash": "ff454b83c89c73957fb6286e63fdd967"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\gradlew": {
+    "mtime": 1779255531.9842114,
+    "ast_hash": "266606e78242737ef3da02a80ea0564d",
+    "semantic_hash": "266606e78242737ef3da02a80ea0564d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\settings.gradle.kts": {
+    "mtime": 1779219169.6978755,
+    "ast_hash": "c2824c55c1ae366ed8e4911cf284f0da",
+    "semantic_hash": "c2824c55c1ae366ed8e4911cf284f0da"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\alerts\\tasks.json": {
+    "mtime": 1780243943.9346304,
+    "ast_hash": "8d86dc5f67122e0a6c27743f8978b9d9",
+    "semantic_hash": "8d86dc5f67122e0a6c27743f8978b9d9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\android_client\\tasks.json": {
+    "mtime": 1780244243.3490832,
+    "ast_hash": "cb41ead6261ed18707ee91054f0d4fc7",
+    "semantic_hash": "cb41ead6261ed18707ee91054f0d4fc7"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\audit_log\\tasks.json": {
+    "mtime": 1780254255.9339645,
+    "ast_hash": "27332121e4bf740c1b7e3953225b69d9",
+    "semantic_hash": "27332121e4bf740c1b7e3953225b69d9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\classifier\\tasks.json": {
+    "mtime": 1780253981.8239703,
+    "ast_hash": "826cc311b9b70b151db7b67db1c64bf8",
+    "semantic_hash": "826cc311b9b70b151db7b67db1c64bf8"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\context_agent\\tasks.json": {
+    "mtime": 1780244058.1311297,
+    "ast_hash": "0aad02c14a046a7f47161ca47185c817",
+    "semantic_hash": "0aad02c14a046a7f47161ca47185c817"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\gatekeeper\\tasks.json": {
+    "mtime": 1780243860.9147782,
+    "ast_hash": "31db1e9b39b92b4047222a922b3deb0a",
+    "semantic_hash": "31db1e9b39b92b4047222a922b3deb0a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\ocr\\tasks.json": {
+    "mtime": 1780243645.543991,
+    "ast_hash": "11814db842c62ec1ccec231c849247a2",
+    "semantic_hash": "11814db842c62ec1ccec231c849247a2"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\sdk\\tasks.json": {
+    "mtime": 1780342442.5346017,
+    "ast_hash": "b806b04a9f30b541840d64ab39002d8d",
+    "semantic_hash": "b806b04a9f30b541840d64ab39002d8d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\server\\tasks.json": {
+    "mtime": 1780342467.7726948,
+    "ast_hash": "acc94819bdd76c201d31ca15ba2d67a0",
+    "semantic_hash": "acc94819bdd76c201d31ca15ba2d67a0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\tasks_index.json": {
+    "mtime": 1780342477.3503995,
+    "ast_hash": "c8b192fe0d19c7d441e091db0eea9ba3",
+    "semantic_hash": "c8b192fe0d19c7d441e091db0eea9ba3"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\triage\\tasks.json": {
+    "mtime": 1780243711.8859067,
+    "ast_hash": "7df7e4e456a9bd8a9e019d217d464187",
+    "semantic_hash": "7df7e4e456a9bd8a9e019d217d464187"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\ocr_validation_tasks.json": {
+    "mtime": 1780254052.6647117,
+    "ast_hash": "4427fa0ca7828c411114384dc5fe12b1",
+    "semantic_hash": "4427fa0ca7828c411114384dc5fe12b1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\dev_client.py": {
+    "mtime": 1780733749.598285,
+    "ast_hash": "126e1529c8e3eacc946f4bdd66397bf4",
+    "semantic_hash": "126e1529c8e3eacc946f4bdd66397bf4"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\md_to_pdf.py": {
+    "mtime": 1780343267.0962188,
+    "ast_hash": "6f09542eca94078a610dd5dda69ed778",
+    "semantic_hash": "6f09542eca94078a610dd5dda69ed778"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\01_generate_sentences.py": {
+    "mtime": 1780502669.4425137,
+    "ast_hash": "59da579d668864419a185f55c2915322",
+    "semantic_hash": "59da579d668864419a185f55c2915322"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\02_render_images.py": {
+    "mtime": 1780342845.7858696,
+    "ast_hash": "b56fb4da10e81d795281de28336e1ce9",
+    "semantic_hash": "b56fb4da10e81d795281de28336e1ce9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\03_run_ocr.py": {
+    "mtime": 1780505979.2453187,
+    "ast_hash": "0422deabb2509a51d9a3d5ce7f41a2cc",
+    "semantic_hash": "0422deabb2509a51d9a3d5ce7f41a2cc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\04_compute_metrics.py": {
+    "mtime": 1780505988.3826528,
+    "ast_hash": "87152bbdedf4e439b764913f7904cee9",
+    "semantic_hash": "87152bbdedf4e439b764913f7904cee9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\05_analysis_charts.py": {
+    "mtime": 1780499773.6347387,
+    "ast_hash": "5a572ce3b62397f96ed22a8ee8fa22f7",
+    "semantic_hash": "5a572ce3b62397f96ed22a8ee8fa22f7"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\06_summary_report.py": {
+    "mtime": 1780506625.7876263,
+    "ast_hash": "6b7955e8ae4e2475aba5b200d9d930ab",
+    "semantic_hash": "6b7955e8ae4e2475aba5b200d9d930ab"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\07_category_analysis.py": {
+    "mtime": 1780505958.7571213,
+    "ast_hash": "550fcf740d5af1a6b8f132ecb733ea57",
+    "semantic_hash": "550fcf740d5af1a6b8f132ecb733ea57"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\99_visualize.py": {
+    "mtime": 1780343908.3422372,
+    "ast_hash": "32fc4f4d65e01d4e7b04be3b444b8134",
+    "semantic_hash": "32fc4f4d65e01d4e7b04be3b444b8134"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\extend_with_smoke.py": {
+    "mtime": 1780505915.6841087,
+    "ast_hash": "e0506ab0b529b4a88b3e2c2dc0d90d35",
+    "semantic_hash": "e0506ab0b529b4a88b3e2c2dc0d90d35"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\quick_stats.py": {
+    "mtime": 1780343939.0049717,
+    "ast_hash": "612055a0646bd9a22988ad4c0902d950",
+    "semantic_hash": "612055a0646bd9a22988ad4c0902d950"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\scripts\\ocr_validation\\run_full_pipeline.ps1": {
+    "mtime": 1780503489.00648,
+    "ast_hash": "95d82fe8c52b915c6efcb1046aef8d3e",
+    "semantic_hash": "95d82fe8c52b915c6efcb1046aef8d3e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\__init__.py": {
+    "mtime": 1779219121.7976334,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\_legacy_classifier.py": {
+    "mtime": 1779532797.2354527,
+    "ast_hash": "5f3cb8a5c8a963a75b92e7f150f72f45",
+    "semantic_hash": "5f3cb8a5c8a963a75b92e7f150f72f45"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\__init__.py": {
+    "mtime": 1780727146.2381175,
+    "ast_hash": "ec1af2495202c81b6206da0abc0ceb67",
+    "semantic_hash": "ec1af2495202c81b6206da0abc0ceb67"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\fcm_notifier.py": {
+    "mtime": 1780727129.7020185,
+    "ast_hash": "f4bf62d195109ee7b4ee8064e601c779",
+    "semantic_hash": "f4bf62d195109ee7b4ee8064e601c779"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\log_notifier.py": {
+    "mtime": 1780727082.7833397,
+    "ast_hash": "77e3013479142cc8746fec6f6c517e65",
+    "semantic_hash": "77e3013479142cc8746fec6f6c517e65"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\metrics.py": {
+    "mtime": 1780726999.8520055,
+    "ast_hash": "b9e26efdf6399cfa5749e004b5d067a1",
+    "semantic_hash": "b9e26efdf6399cfa5749e004b5d067a1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\protocol.py": {
+    "mtime": 1780726973.1668265,
+    "ast_hash": "009cda21abe2785f13dec688def2fbcc",
+    "semantic_hash": "009cda21abe2785f13dec688def2fbcc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\rate_limiter.py": {
+    "mtime": 1780727045.4723446,
+    "ast_hash": "062a9eea80241f3f8da696a677ad15de",
+    "semantic_hash": "062a9eea80241f3f8da696a677ad15de"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\retry_queue.py": {
+    "mtime": 1780727030.0834365,
+    "ast_hash": "caee96b2da1b3d00f3cdac645dee3eb7",
+    "semantic_hash": "caee96b2da1b3d00f3cdac645dee3eb7"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\settings.py": {
+    "mtime": 1780726987.1569562,
+    "ast_hash": "1ec7d142d6fa540451e4923bd1cad685",
+    "semantic_hash": "1ec7d142d6fa540451e4923bd1cad685"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\severity.py": {
+    "mtime": 1780727017.2331338,
+    "ast_hash": "38ddaa8a00366aff794718686d0250c9",
+    "semantic_hash": "38ddaa8a00366aff794718686d0250c9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\alerts\\stub_notifier.py": {
+    "mtime": 1780727095.6102822,
+    "ast_hash": "bcdd4c517838d84ad1d3cd9439a6a495",
+    "semantic_hash": "bcdd4c517838d84ad1d3cd9439a6a495"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\audit.py": {
+    "mtime": 1779524953.564862,
+    "ast_hash": "b5a515e2bdf19479edb4abd9ff8be5f7",
+    "semantic_hash": "b5a515e2bdf19479edb4abd9ff8be5f7"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\audit_log\\__init__.py": {
+    "mtime": 1780727690.509516,
+    "ast_hash": "c8a3b5dfbf714c94fd7a74e79a2cb6c0",
+    "semantic_hash": "c8a3b5dfbf714c94fd7a74e79a2cb6c0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\audit_log\\in_memory_adapter.py": {
+    "mtime": 1780504045.0187488,
+    "ast_hash": "6ed83ec672b88831dd2c677751fb495e",
+    "semantic_hash": "6ed83ec672b88831dd2c677751fb495e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\audit_log\\protocol.py": {
+    "mtime": 1780502719.59752,
+    "ast_hash": "f590bd7e38df7fb268ab2ba7f0d18e5f",
+    "semantic_hash": "f590bd7e38df7fb268ab2ba7f0d18e5f"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\audit_log\\retention.py": {
+    "mtime": 1780727099.2410145,
+    "ast_hash": "4803e0289e8f41e37187a392feb9f854",
+    "semantic_hash": "4803e0289e8f41e37187a392feb9f854"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\audit_log\\settings.py": {
+    "mtime": 1780727011.0781965,
+    "ast_hash": "90cd5d711c0b2685685c0dea0fcc00df",
+    "semantic_hash": "90cd5d711c0b2685685c0dea0fcc00df"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\audit_log\\sqlite_adapter.py": {
+    "mtime": 1780727085.7352588,
+    "ast_hash": "802c787cbf4104dda10b52132f8f98e6",
+    "semantic_hash": "802c787cbf4104dda10b52132f8f98e6"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\__init__.py": {
+    "mtime": 1780503174.50356,
+    "ast_hash": "ac7a9e39e55095459361a02490b5ef86",
+    "semantic_hash": "ac7a9e39e55095459361a02490b5ef86"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\calibration.py": {
+    "mtime": 1780503477.4195073,
+    "ast_hash": "056ddb4ca887982fb77c86ab8e4f17b0",
+    "semantic_hash": "056ddb4ca887982fb77c86ab8e4f17b0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\huggingface_adapter.py": {
+    "mtime": 1780503461.5264199,
+    "ast_hash": "92f09726be48531125fd77aa78c52fee",
+    "semantic_hash": "92f09726be48531125fd77aa78c52fee"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\logging.py": {
+    "mtime": 1780503021.067268,
+    "ast_hash": "baa6c8c9bf7746f69d8b2dd5c0327868",
+    "semantic_hash": "baa6c8c9bf7746f69d8b2dd5c0327868"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\metrics.py": {
+    "mtime": 1780503043.0475545,
+    "ast_hash": "535865ff5f5ee45e80357345d6c0a4d4",
+    "semantic_hash": "535865ff5f5ee45e80357345d6c0a4d4"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\ollama_adapter.py": {
+    "mtime": 1780503446.7112324,
+    "ast_hash": "871c0f2e7e392895db1842cc3f02849c",
+    "semantic_hash": "871c0f2e7e392895db1842cc3f02849c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\protocol.py": {
+    "mtime": 1780502674.5979893,
+    "ast_hash": "ebca014a282c4d7793c95b3704932ebe",
+    "semantic_hash": "ebca014a282c4d7793c95b3704932ebe"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\settings.py": {
+    "mtime": 1780503006.4999752,
+    "ast_hash": "53e99c3ae526318f5e77165331950b1b",
+    "semantic_hash": "53e99c3ae526318f5e77165331950b1b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\stub_adapter.py": {
+    "mtime": 1780503432.260183,
+    "ast_hash": "79e025ba43381ed9984f6bcb4601e89f",
+    "semantic_hash": "79e025ba43381ed9984f6bcb4601e89f"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\__init__.py": {
+    "mtime": 1780503294.8975866,
+    "ast_hash": "3381effc27330be3b19d083e344c3772",
+    "semantic_hash": "3381effc27330be3b19d083e344c3772"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\agent.py": {
+    "mtime": 1780503287.8418388,
+    "ast_hash": "7826eb1491cfc0b6363f187969ac3b15",
+    "semantic_hash": "7826eb1491cfc0b6363f187969ac3b15"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\clients\\__init__.py": {
+    "mtime": 1780503194.303286,
+    "ast_hash": "033431f794e609ef1b15482a3c67ed41",
+    "semantic_hash": "033431f794e609ef1b15482a3c67ed41"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\clients\\anthropic_client.py": {
+    "mtime": 1780503222.9930334,
+    "ast_hash": "241368419eadce784e0c81d666ac51a8",
+    "semantic_hash": "241368419eadce784e0c81d666ac51a8"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\clients\\mock_client.py": {
+    "mtime": 1780503204.4554403,
+    "ast_hash": "cb4ac7446ab670c980f50f9a26bd1dc4",
+    "semantic_hash": "cb4ac7446ab670c980f50f9a26bd1dc4"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\clients\\openai_client.py": {
+    "mtime": 1780503213.7620187,
+    "ast_hash": "1a9525df935c19ce73743faed2ba0388",
+    "semantic_hash": "1a9525df935c19ce73743faed2ba0388"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\llm_router.py": {
+    "mtime": 1780503242.8842878,
+    "ast_hash": "525900ee37803b9be45ec694fffdd998",
+    "semantic_hash": "525900ee37803b9be45ec694fffdd998"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\logging.py": {
+    "mtime": 1780503038.9013045,
+    "ast_hash": "e8d773de28efcf4db2689a8d78079080",
+    "semantic_hash": "e8d773de28efcf4db2689a8d78079080"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\metrics.py": {
+    "mtime": 1780503052.0856614,
+    "ast_hash": "dc831c243511fe8af5fb32d7a9936565",
+    "semantic_hash": "dc831c243511fe8af5fb32d7a9936565"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\output_parser.py": {
+    "mtime": 1780503121.206643,
+    "ast_hash": "6f293f58f5e70d129b0dcf5c13824c48",
+    "semantic_hash": "6f293f58f5e70d129b0dcf5c13824c48"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\prompt.py": {
+    "mtime": 1780503149.6982958,
+    "ast_hash": "2f901f15794276d4bb8b0e6b9aff6f85",
+    "semantic_hash": "2f901f15794276d4bb8b0e6b9aff6f85"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\protocol.py": {
+    "mtime": 1780502697.8094382,
+    "ast_hash": "26588949ea2b955e5d67555761881a76",
+    "semantic_hash": "26588949ea2b955e5d67555761881a76"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\settings.py": {
+    "mtime": 1780503031.3788745,
+    "ast_hash": "bf92436796127b9be8b30ebec847d606",
+    "semantic_hash": "bf92436796127b9be8b30ebec847d606"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\tools\\__init__.py": {
+    "mtime": 1780503154.4643886,
+    "ast_hash": "6f18c8edfe474d277becf4cc1d17a6ac",
+    "semantic_hash": "6f18c8edfe474d277becf4cc1d17a6ac"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\tools\\base.py": {
+    "mtime": 1780503158.5440407,
+    "ast_hash": "8b2ebaa88a597bfc709d77b63db84e10",
+    "semantic_hash": "8b2ebaa88a597bfc709d77b63db84e10"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\tools\\check_age.py": {
+    "mtime": 1780503188.885756,
+    "ast_hash": "07398c068a46190d17091c93f174a7df",
+    "semantic_hash": "07398c068a46190d17091c93f174a7df"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\tools\\lookup_slang.py": {
+    "mtime": 1780503178.1693387,
+    "ast_hash": "dceeaf2cd30044659018613595bcf986",
+    "semantic_hash": "dceeaf2cd30044659018613595bcf986"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\tools\\read_history.py": {
+    "mtime": 1780503168.81451,
+    "ast_hash": "f342f12d67ca00edac00b5f558cd09e6",
+    "semantic_hash": "f342f12d67ca00edac00b5f558cd09e6"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\gateway.py": {
+    "mtime": 1780727361.5498798,
+    "ast_hash": "cef41891ec33a231b21d67d82cd72075",
+    "semantic_hash": "cef41891ec33a231b21d67d82cd72075"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\image_backends\\__init__.py": {
+    "mtime": 1779532843.6975973,
+    "ast_hash": "0c7208dcaecc49afed1c8899acd2fc94",
+    "semantic_hash": "0c7208dcaecc49afed1c8899acd2fc94"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\image_backends\\base.py": {
+    "mtime": 1779521418.1576264,
+    "ast_hash": "998fbe735704630462c2d24a400d4f54",
+    "semantic_hash": "998fbe735704630462c2d24a400d4f54"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\image_backends\\ocr.py": {
+    "mtime": 1779532808.4157755,
+    "ast_hash": "fd07e92a1ec6c1a4c5eaa130560514ec",
+    "semantic_hash": "fd07e92a1ec6c1a4c5eaa130560514ec"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\image_backends\\strategies.py": {
+    "mtime": 1779635065.3035772,
+    "ast_hash": "e914acc129b27e0bd0f3757e9464c024",
+    "semantic_hash": "e914acc129b27e0bd0f3757e9464c024"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\image_backends\\stub.py": {
+    "mtime": 1779521421.2838666,
+    "ast_hash": "303f2a4effaa305648ce52894da6c473",
+    "semantic_hash": "303f2a4effaa305648ce52894da6c473"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\image_backends\\vision.py": {
+    "mtime": 1779532820.00003,
+    "ast_hash": "2b4e53007ae9f1ba462cee591605319a",
+    "semantic_hash": "2b4e53007ae9f1ba462cee591605319a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\main.py": {
+    "mtime": 1780729266.8517337,
+    "ast_hash": "ddbc79b1b11147d9c43992297560fab6",
+    "semantic_hash": "ddbc79b1b11147d9c43992297560fab6"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\middleware.py": {
+    "mtime": 1779526880.444493,
+    "ast_hash": "aebfe92598923bebae883f91939365a6",
+    "semantic_hash": "aebfe92598923bebae883f91939365a6"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\__init__.py": {
+    "mtime": 1780503117.063825,
+    "ast_hash": "0673a0a9b60aa7d9749605b7f11a80d5",
+    "semantic_hash": "0673a0a9b60aa7d9749605b7f11a80d5"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\logging.py": {
+    "mtime": 1780502992.3134158,
+    "ast_hash": "fff7bda38519bd82b7fc86b9632dda50",
+    "semantic_hash": "fff7bda38519bd82b7fc86b9632dda50"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\metrics.py": {
+    "mtime": 1780503006.1545706,
+    "ast_hash": "6ce29cd3a0df49101cef3a909366ff2e",
+    "semantic_hash": "6ce29cd3a0df49101cef3a909366ff2e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\preprocessor.py": {
+    "mtime": 1780503036.1077242,
+    "ast_hash": "6507cec76e3fd3ca0711b24981de1828",
+    "semantic_hash": "6507cec76e3fd3ca0711b24981de1828"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\protocol.py": {
+    "mtime": 1780502682.7977214,
+    "ast_hash": "d9f16a7e549727e6c8f04dc4a8331023",
+    "semantic_hash": "d9f16a7e549727e6c8f04dc4a8331023"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\settings.py": {
+    "mtime": 1780502986.8146338,
+    "ast_hash": "b2058a8cba7d116608621781d00aa5a9",
+    "semantic_hash": "b2058a8cba7d116608621781d00aa5a9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\stub_adapter.py": {
+    "mtime": 1780503109.7439053,
+    "ast_hash": "57921911454ba52f70ca998c98a9bd46",
+    "semantic_hash": "57921911454ba52f70ca998c98a9bd46"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\tesseract_adapter.py": {
+    "mtime": 1780503101.0513437,
+    "ast_hash": "10a7a47cd38844b071f9a366254637d1",
+    "semantic_hash": "10a7a47cd38844b071f9a366254637d1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\tesseract_runner.py": {
+    "mtime": 1780503061.6838813,
+    "ast_hash": "98cc1f7e175b8f847e3c3582244972a3",
+    "semantic_hash": "98cc1f7e175b8f847e3c3582244972a3"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ollama_client.py": {
+    "mtime": 1779532792.52677,
+    "ast_hash": "eacab2da939baa7cbda91837a2ec3ca1",
+    "semantic_hash": "eacab2da939baa7cbda91837a2ec3ca1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\prompt.py": {
+    "mtime": 1779219131.8151438,
+    "ast_hash": "7405333e9703a24104b7a225a3f870bc",
+    "semantic_hash": "7405333e9703a24104b7a225a3f870bc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\schemas.py": {
+    "mtime": 1780727690.5105162,
+    "ast_hash": "0e15506935765566388bc328fbaa3f29",
+    "semantic_hash": "0e15506935765566388bc328fbaa3f29"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\triage\\__init__.py": {
+    "mtime": 1780727046.7489848,
+    "ast_hash": "3e0c8104c7708a5279544f20fc959165",
+    "semantic_hash": "3e0c8104c7708a5279544f20fc959165"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\triage\\metrics.py": {
+    "mtime": 1780726969.3844643,
+    "ast_hash": "572cdc482768d819cb9fa38d6fd099ae",
+    "semantic_hash": "572cdc482768d819cb9fa38d6fd099ae"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\triage\\protocol.py": {
+    "mtime": 1780727001.5706933,
+    "ast_hash": "94d4fb292b2b2bf8bd89e3228db42fbf",
+    "semantic_hash": "94d4fb292b2b2bf8bd89e3228db42fbf"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\triage\\settings.py": {
+    "mtime": 1780726987.8958473,
+    "ast_hash": "1666da3f2d8a14ce5fcceb44e65bbbd8",
+    "semantic_hash": "1666da3f2d8a14ce5fcceb44e65bbbd8"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\triage\\stub_engine.py": {
+    "mtime": 1780727039.752769,
+    "ast_hash": "d524a7309b780ab03b6a498c390534e9",
+    "semantic_hash": "d524a7309b780ab03b6a498c390534e9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\triage\\threshold_engine.py": {
+    "mtime": 1780727031.5315084,
+    "ast_hash": "8b1d1fef874a5c8b34916143868c0e2d",
+    "semantic_hash": "8b1d1fef874a5c8b34916143868c0e2d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\conftest.py": {
+    "mtime": 1780503249.3066368,
+    "ast_hash": "156c518b8d351c8e4a3b8534490068db",
+    "semantic_hash": "156c518b8d351c8e4a3b8534490068db"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\data\\slang_lexicon.json": {
+    "mtime": 1780503305.982108,
+    "ast_hash": "bf4e4092dc2787d6d38bcd2139b34187",
+    "semantic_hash": "bf4e4092dc2787d6d38bcd2139b34187"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\__init__.py": {
+    "mtime": 1780503123.4698014,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\alerts\\__init__.py": {
+    "mtime": 1780727152.5382113,
+    "ast_hash": "fde7fe4367598a153b0a4d3baf2dfaa7",
+    "semantic_hash": "fde7fe4367598a153b0a4d3baf2dfaa7"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\alerts\\conftest.py": {
+    "mtime": 1780727166.9420574,
+    "ast_hash": "09084456d0a20f40ca29412b61cfeb32",
+    "semantic_hash": "09084456d0a20f40ca29412b61cfeb32"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\alerts\\test_fcm_stub.py": {
+    "mtime": 1780727286.4649093,
+    "ast_hash": "da18211791533165524e0714e4d70335",
+    "semantic_hash": "da18211791533165524e0714e4d70335"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\alerts\\test_log_notifier.py": {
+    "mtime": 1780727244.6377175,
+    "ast_hash": "a097de3b139f68390863b3e18fddf231",
+    "semantic_hash": "a097de3b139f68390863b3e18fddf231"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\alerts\\test_notification_channel_contract.py": {
+    "mtime": 1780727192.4140894,
+    "ast_hash": "84931a4828f4aafaeb3f9a38109bce63",
+    "semantic_hash": "84931a4828f4aafaeb3f9a38109bce63"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\alerts\\test_rate_limiter.py": {
+    "mtime": 1780727216.7174845,
+    "ast_hash": "02fe588b863231276b5a3f7367f4458a",
+    "semantic_hash": "02fe588b863231276b5a3f7367f4458a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\alerts\\test_severity.py": {
+    "mtime": 1780727263.177917,
+    "ast_hash": "e6ea840acdfb7823580c5fdf1e4b58ae",
+    "semantic_hash": "e6ea840acdfb7823580c5fdf1e4b58ae"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\audit_log\\__init__.py": {
+    "mtime": 1780727124.287089,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\audit_log\\conftest.py": {
+    "mtime": 1780727130.5537941,
+    "ast_hash": "fd21a6e41420816ae6eafbb9685340ff",
+    "semantic_hash": "fd21a6e41420816ae6eafbb9685340ff"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\audit_log\\test_sqlite_contract.py": {
+    "mtime": 1780727206.3131478,
+    "ast_hash": "cf1354a3cca76f250703ea975332d450",
+    "semantic_hash": "cf1354a3cca76f250703ea975332d450"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\classifier\\__init__.py": {
+    "mtime": 1780503246.1258483,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\classifier\\conftest.py": {
+    "mtime": 1780503414.7531424,
+    "ast_hash": "45084025f71d0d116800e363f1a5f495",
+    "semantic_hash": "45084025f71d0d116800e363f1a5f495"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\classifier\\test_calibration.py": {
+    "mtime": 1780503341.357895,
+    "ast_hash": "29f7bff7e0ccccfb5a352ddc03a83f61",
+    "semantic_hash": "29f7bff7e0ccccfb5a352ddc03a83f61"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\classifier\\test_contract.py": {
+    "mtime": 1780503306.4144442,
+    "ast_hash": "58ce45948c1126cb6cdc0d28bcf63f14",
+    "semantic_hash": "58ce45948c1126cb6cdc0d28bcf63f14"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\classifier\\test_huggingface_adapter.py": {
+    "mtime": 1780503402.9102,
+    "ast_hash": "668b2941ace931ac46732562ce696725",
+    "semantic_hash": "668b2941ace931ac46732562ce696725"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\classifier\\test_ollama_adapter.py": {
+    "mtime": 1780503378.7477334,
+    "ast_hash": "af5841f59a44c54f781bd6b3da018870",
+    "semantic_hash": "af5841f59a44c54f781bd6b3da018870"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\classifier\\test_stub_adapter.py": {
+    "mtime": 1780503316.8854916,
+    "ast_hash": "97f419c17c0209833989657a547a0228",
+    "semantic_hash": "97f419c17c0209833989657a547a0228"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\context_agent\\__init__.py": {
+    "mtime": 1780503348.1142778,
+    "ast_hash": "cc8456ae9a9db2697a71b62f2e489308",
+    "semantic_hash": "cc8456ae9a9db2697a71b62f2e489308"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\context_agent\\conftest.py": {
+    "mtime": 1780503371.357645,
+    "ast_hash": "6f9c99dae16c2395e28f34ba879705d0",
+    "semantic_hash": "6f9c99dae16c2395e28f34ba879705d0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\context_agent\\test_agent_e2e.py": {
+    "mtime": 1780503528.8392677,
+    "ast_hash": "dea54c13676997afe056d5e3bd162171",
+    "semantic_hash": "dea54c13676997afe056d5e3bd162171"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\context_agent\\test_contract.py": {
+    "mtime": 1780503401.0076573,
+    "ast_hash": "84879794a3cd2854d8348f386ef35f25",
+    "semantic_hash": "84879794a3cd2854d8348f386ef35f25"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\context_agent\\test_llm_router.py": {
+    "mtime": 1780503421.2964406,
+    "ast_hash": "bfe4e83f0cb018d39988d59b7874003e",
+    "semantic_hash": "bfe4e83f0cb018d39988d59b7874003e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\context_agent\\test_output_parser.py": {
+    "mtime": 1780503493.616035,
+    "ast_hash": "80714efd0c90fb1fc2eaf28d6ea5da25",
+    "semantic_hash": "80714efd0c90fb1fc2eaf28d6ea5da25"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\context_agent\\test_tools.py": {
+    "mtime": 1780503443.060881,
+    "ast_hash": "4cb179deb6814802855d1a967e9bd0a6",
+    "semantic_hash": "4cb179deb6814802855d1a967e9bd0a6"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\__init__.py": {
+    "mtime": 1780727085.0992956,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\conftest.py": {
+    "mtime": 1780727102.3122156,
+    "ast_hash": "def48278401783ea2e8ebb79c8781da1",
+    "semantic_hash": "def48278401783ea2e8ebb79c8781da1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\test_failopen.py": {
+    "mtime": 1780727298.8453488,
+    "ast_hash": "2a5c432ea7a0023f9645565b6118497e",
+    "semantic_hash": "2a5c432ea7a0023f9645565b6118497e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\test_metrics.py": {
+    "mtime": 1780727187.138404,
+    "ast_hash": "1fb48639d20181b0c3fc4e6a04518860",
+    "semantic_hash": "1fb48639d20181b0c3fc4e6a04518860"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\test_rate_limit.py": {
+    "mtime": 1780727156.1497312,
+    "ast_hash": "1c9d5a1e41b7a2e176d97e04e6b5d0a2",
+    "semantic_hash": "1c9d5a1e41b7a2e176d97e04e6b5d0a2"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\test_size_limit.py": {
+    "mtime": 1780727136.099701,
+    "ast_hash": "6d00f4649f5214699b184ffa5cd364db",
+    "semantic_hash": "6d00f4649f5214699b184ffa5cd364db"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\test_timeout.py": {
+    "mtime": 1780727201.627967,
+    "ast_hash": "d463178b18afc77d58a862c1a7c611ac",
+    "semantic_hash": "d463178b18afc77d58a862c1a7c611ac"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\gatekeeper\\test_traceid.py": {
+    "mtime": 1780727118.8122325,
+    "ast_hash": "82d9468a02cfba3dfc6085244e4ee056",
+    "semantic_hash": "82d9468a02cfba3dfc6085244e4ee056"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\ocr\\__init__.py": {
+    "mtime": 1780503123.7968278,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\ocr\\conftest.py": {
+    "mtime": 1780503142.9564269,
+    "ast_hash": "afae1ebe1d3f4efb68ad1ec7c256d4c8",
+    "semantic_hash": "afae1ebe1d3f4efb68ad1ec7c256d4c8"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\ocr\\test_contract.py": {
+    "mtime": 1780503279.0817,
+    "ast_hash": "8e03474595edc7a68c281707623887ff",
+    "semantic_hash": "8e03474595edc7a68c281707623887ff"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\ocr\\test_preprocessor.py": {
+    "mtime": 1780503195.5763814,
+    "ast_hash": "f3c51dd43358993b3ac975205abba7a1",
+    "semantic_hash": "f3c51dd43358993b3ac975205abba7a1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\ocr\\test_stub_adapter.py": {
+    "mtime": 1780503177.1366007,
+    "ast_hash": "244f608b8741c631cf6e732f99062420",
+    "semantic_hash": "244f608b8741c631cf6e732f99062420"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\ocr\\test_tesseract_adapter.py": {
+    "mtime": 1780503283.151039,
+    "ast_hash": "23a15f9289cdc314f9cba8e020dc1483",
+    "semantic_hash": "23a15f9289cdc314f9cba8e020dc1483"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\triage\\__init__.py": {
+    "mtime": 1780727049.0839083,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\triage\\conftest.py": {
+    "mtime": 1780727059.4819663,
+    "ast_hash": "a1f73d849328714367ccc72bb65069c2",
+    "semantic_hash": "a1f73d849328714367ccc72bb65069c2"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\triage\\test_contract.py": {
+    "mtime": 1780727087.7595756,
+    "ast_hash": "5a8db40e0f26855ec41322cd3bf1c91e",
+    "semantic_hash": "5a8db40e0f26855ec41322cd3bf1c91e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\tests\\triage\\test_polarity_matrix.py": {
+    "mtime": 1780727129.2018068,
+    "ast_hash": "d9787f5882991967eb95ac89750a9d40",
+    "semantic_hash": "d9787f5882991967eb95ac89750a9d40"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\scripts\\connections.py": {
+    "mtime": 1775914375.4610057,
+    "ast_hash": "1606c9917623cc43787353d2cd8731ff",
+    "semantic_hash": "1606c9917623cc43787353d2cd8731ff"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\scripts\\evaluation.py": {
+    "mtime": 1775914375.4610057,
+    "ast_hash": "1a26a79489e2ae76029ec68b32065e61",
+    "semantic_hash": "1a26a79489e2ae76029ec68b32065e61"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\check_bounding_boxes.py": {
+    "mtime": 1775914375.462005,
+    "ast_hash": "9ab55fc4cd2082641fdebda3866371ac",
+    "semantic_hash": "9ab55fc4cd2082641fdebda3866371ac"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\check_fillable_fields.py": {
+    "mtime": 1775914375.463518,
+    "ast_hash": "28e26c214bee178c166cbfcc1cae017a",
+    "semantic_hash": "28e26c214bee178c166cbfcc1cae017a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\convert_pdf_to_images.py": {
+    "mtime": 1775914375.463518,
+    "ast_hash": "3291b3cb048d3cbb081aeea0a4f82e70",
+    "semantic_hash": "3291b3cb048d3cbb081aeea0a4f82e70"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\create_validation_image.py": {
+    "mtime": 1775914375.463518,
+    "ast_hash": "7c0fae6c2839e189e7f47b9e266d305e",
+    "semantic_hash": "7c0fae6c2839e189e7f47b9e266d305e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\extract_form_field_info.py": {
+    "mtime": 1775914375.463518,
+    "ast_hash": "285308f8690e16404562d2fdea8cf5e9",
+    "semantic_hash": "285308f8690e16404562d2fdea8cf5e9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\extract_form_structure.py": {
+    "mtime": 1775914375.463518,
+    "ast_hash": "5b1297993e80415376ee17a72ba5c573",
+    "semantic_hash": "5b1297993e80415376ee17a72ba5c573"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\fill_fillable_fields.py": {
+    "mtime": 1775914375.463518,
+    "ast_hash": "88e38e501f0b4ed7b8476883aaf28879",
+    "semantic_hash": "88e38e501f0b4ed7b8476883aaf28879"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\scripts\\fill_pdf_form_with_annotations.py": {
+    "mtime": 1775914375.464532,
+    "ast_hash": "55e4b1777a927ecf556a554e6ed1d69c",
+    "semantic_hash": "55e4b1777a927ecf556a554e6ed1d69c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-diagrams\\scripts\\render_diagram.py": {
+    "mtime": 1780132908.4272442,
+    "ast_hash": "95323617a880ff2fb230a1df2df04aca",
+    "semantic_hash": "95323617a880ff2fb230a1df2df04aca"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\webapp-testing\\examples\\console_logging.py": {
+    "mtime": 1775914375.48811,
+    "ast_hash": "7166d10f96ff246e0529038e6885d0ff",
+    "semantic_hash": "7166d10f96ff246e0529038e6885d0ff"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\webapp-testing\\examples\\element_discovery.py": {
+    "mtime": 1775914375.48811,
+    "ast_hash": "5282fba5ef350f26c2145e5cfaa76fc9",
+    "semantic_hash": "5282fba5ef350f26c2145e5cfaa76fc9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\webapp-testing\\examples\\static_html_automation.py": {
+    "mtime": 1775914375.48811,
+    "ast_hash": "ed829df858c7c0adf2b6b35e33643215",
+    "semantic_hash": "ed829df858c7c0adf2b6b35e33643215"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\webapp-testing\\scripts\\with_server.py": {
+    "mtime": 1775914375.4891164,
+    "ast_hash": "01c7c8d2b96019e3f88f18bb945d2abe",
+    "semantic_hash": "01c7c8d2b96019e3f88f18bb945d2abe"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\evaluate.py": {
+    "mtime": 1779219077.8803315,
+    "ast_hash": "4ef97bbfb80d06bb33a6a9e05409f82f",
+    "semantic_hash": "4ef97bbfb80d06bb33a6a9e05409f82f"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\export_gguf.py": {
+    "mtime": 1779219091.425195,
+    "ast_hash": "7fcf470ab9b74d14b375bc4e30134724",
+    "semantic_hash": "7fcf470ab9b74d14b375bc4e30134724"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\prepare_data.py": {
+    "mtime": 1779219050.3427062,
+    "ast_hash": "34f00eaf8b07396911d1e57c1e4d53b4",
+    "semantic_hash": "34f00eaf8b07396911d1e57c1e4d53b4"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\train_lora.py": {
+    "mtime": 1779219065.391207,
+    "ast_hash": "ff9c4905ceafc81ea7651750669645f3",
+    "semantic_hash": "ff9c4905ceafc81ea7651750669645f3"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\CLAUDE.md": {
+    "mtime": 1780727690.5085175,
+    "ast_hash": "6f059bbc7a55a894f9126efa62dc0abb",
+    "semantic_hash": "6f059bbc7a55a894f9126efa62dc0abb"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\README.md": {
+    "mtime": 1779899478.781388,
+    "ast_hash": "051a35028c8a4cf51ac5f8e7126c6c2a",
+    "semantic_hash": "051a35028c8a4cf51ac5f8e7126c6c2a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\agents\\ai-educator-architect.md": {
+    "mtime": 1780133044.151457,
+    "ast_hash": "90917f14f6480608464a6be34604d5a9",
+    "semantic_hash": "90917f14f6480608464a6be34604d5a9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\agents\\ai-researcher-developer.md": {
+    "mtime": 1780132837.3816364,
+    "ast_hash": "9a5ddf792befdb8bb7ec60f8d7652b1b",
+    "semantic_hash": "9a5ddf792befdb8bb7ec60f8d7652b1b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\agents\\architecture-reviewer.md": {
+    "mtime": 1766152435.0079238,
+    "ast_hash": "1811b2f733ef08c052107f4bc3f6917d",
+    "semantic_hash": "1811b2f733ef08c052107f4bc3f6917d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\agents\\backend-developer.md": {
+    "mtime": 1766152435.015068,
+    "ast_hash": "43ade7ed039541e6c6f8e9bef21d733b",
+    "semantic_hash": "43ade7ed039541e6c6f8e9bef21d733b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\agents\\product-strategist.md": {
+    "mtime": 1780135294.4724307,
+    "ast_hash": "0df8a056505d3eb3856ad381e9abc063",
+    "semantic_hash": "0df8a056505d3eb3856ad381e9abc063"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\agents\\project-organizer.md": {
+    "mtime": 1766152435.0209978,
+    "ast_hash": "e991b749e22f1db807dbd5ef02a2603c",
+    "semantic_hash": "e991b749e22f1db807dbd5ef02a2603c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\agents\\project-planner.md": {
+    "mtime": 1766152435.0229979,
+    "ast_hash": "f5ffd7bc1f7983f2f12cef436166f680",
+    "semantic_hash": "f5ffd7bc1f7983f2f12cef436166f680"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\android_client\\README.md": {
+    "mtime": 1779516306.0742517,
+    "ast_hash": "d09c6209b3b9fd9ae832b059d97b715e",
+    "semantic_hash": "d09c6209b3b9fd9ae832b059d97b715e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\bullying_data_he.md": {
+    "mtime": 1779899989.047124,
+    "ast_hash": "9f6cfc8ca31f15b3af4d71b520941eaa",
+    "semantic_hash": "9f6cfc8ca31f15b3af4d71b520941eaa"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\verification.html": {
+    "mtime": 1780503685.7828715,
+    "ast_hash": "7f085e1544e144a4d68da6d3d739f42d",
+    "semantic_hash": "7f085e1544e144a4d68da6d3d739f42d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\PRD.md": {
+    "mtime": 1780253826.3797116,
+    "ast_hash": "46676ed27ac43c383ec8fafcf1e926db",
+    "semantic_hash": "46676ed27ac43c383ec8fafcf1e926db"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\architecture_diagrams.html": {
+    "mtime": 1780239613.7256372,
+    "ast_hash": "0291cca1472aacd8947bb9dc29e46435",
+    "semantic_hash": "0291cca1472aacd8947bb9dc29e46435"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\architecture_diagrams.md": {
+    "mtime": 1780168296.0512948,
+    "ast_hash": "7bf99582b4b61b2afbdd8df5542666b9",
+    "semantic_hash": "7bf99582b4b61b2afbdd8df5542666b9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\business_plan\\business_plan.md": {
+    "mtime": 1780162956.1277776,
+    "ast_hash": "bd5309f51f58c19a45ad1e9429184a12",
+    "semantic_hash": "bd5309f51f58c19a45ad1e9429184a12"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\business_plan\\summary_one_pager.md": {
+    "mtime": 1780241693.8466532,
+    "ast_hash": "724cfbdf328d30e0ac89e3585524971c",
+    "semantic_hash": "724cfbdf328d30e0ac89e3585524971c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\concepts\\concepts.md": {
+    "mtime": 1780136918.0257347,
+    "ast_hash": "3b648cf12ed116f28040804b1dc1bf39",
+    "semantic_hash": "3b648cf12ed116f28040804b1dc1bf39"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\concepts\\dictabert_classifier_architecture.md": {
+    "mtime": 1780507183.6087852,
+    "ast_hash": "a885ed20fa7a729f9273d164bb2e267c",
+    "semantic_hash": "a885ed20fa7a729f9273d164bb2e267c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\concepts\\dictabert_data_techniques.md": {
+    "mtime": 1780515446.860561,
+    "ast_hash": "81de5353c1364fc510b5b3d0d4137c97",
+    "semantic_hash": "81de5353c1364fc510b5b3d0d4137c97"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\README.md": {
+    "mtime": 1780254137.597962,
+    "ast_hash": "c91feda3b41e12e8585cdf3b9d4fe3f6",
+    "semantic_hash": "c91feda3b41e12e8585cdf3b9d4fe3f6"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\alerts\\design.md": {
+    "mtime": 1780243784.2490242,
+    "ast_hash": "46569a53de082dabb4654ee628f75387",
+    "semantic_hash": "46569a53de082dabb4654ee628f75387"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\android_client\\design.md": {
+    "mtime": 1780243838.2363753,
+    "ast_hash": "b64d05019843a4400f39ea492522e9ed",
+    "semantic_hash": "b64d05019843a4400f39ea492522e9ed"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\audit_log\\design.md": {
+    "mtime": 1780253966.542171,
+    "ast_hash": "959e3bf82d1cd2cc308aabf22325d783",
+    "semantic_hash": "959e3bf82d1cd2cc308aabf22325d783"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\classifier\\design.md": {
+    "mtime": 1780253898.054754,
+    "ast_hash": "2a50848c8f39bfe80c78d2e1d0547918",
+    "semantic_hash": "2a50848c8f39bfe80c78d2e1d0547918"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\context_agent\\design.md": {
+    "mtime": 1780243727.3664854,
+    "ast_hash": "d8a21ac06c72e51b9e5665536ced48e1",
+    "semantic_hash": "d8a21ac06c72e51b9e5665536ced48e1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\gatekeeper\\design.md": {
+    "mtime": 1780243810.616206,
+    "ast_hash": "8df55c48cb2437af502aa34a91103b94",
+    "semantic_hash": "8df55c48cb2437af502aa34a91103b94"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\ocr\\design.md": {
+    "mtime": 1780243665.9812465,
+    "ast_hash": "80d1a75c681891e4e1626877a52b3b14",
+    "semantic_hash": "80d1a75c681891e4e1626877a52b3b14"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\review.md": {
+    "mtime": 1780254296.6265695,
+    "ast_hash": "804a8d21a09c3b118efdc36a410d7262",
+    "semantic_hash": "804a8d21a09c3b118efdc36a410d7262"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\sdk\\design.md": {
+    "mtime": 1780342505.9700143,
+    "ast_hash": "ba67d06d57621275a64e76ad24664689",
+    "semantic_hash": "ba67d06d57621275a64e76ad24664689"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\server\\design.md": {
+    "mtime": 1780342528.384357,
+    "ast_hash": "40cfd59669372a396b4de8ecb5b28296",
+    "semantic_hash": "40cfd59669372a396b4de8ecb5b28296"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\triage\\design.md": {
+    "mtime": 1780253945.4535015,
+    "ast_hash": "1bef917c526e89f1b339b903a25a4c0b",
+    "semantic_hash": "1bef917c526e89f1b339b903a25a4c0b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\literature\\literature_flagship.md": {
+    "mtime": 1779895652.0489607,
+    "ast_hash": "ad3db6aefc53736a8435ab0d7cd84bcf",
+    "semantic_hash": "ad3db6aefc53736a8435ab0d7cd84bcf"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\meeting4_agenda.md": {
+    "mtime": 1780161825.3545463,
+    "ast_hash": "b66a408b134055399147816b005534fe",
+    "semantic_hash": "b66a408b134055399147816b005534fe"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\meeting5_prep.html": {
+    "mtime": 1780501279.3084085,
+    "ast_hash": "f1f8609e2828b786a17919358134b627",
+    "semantic_hash": "f1f8609e2828b786a17919358134b627"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\meeting5_prep.md": {
+    "mtime": 1780501277.0824676,
+    "ast_hash": "d46b3277cc25fd22a1256293ce196a4d",
+    "semantic_hash": "d46b3277cc25fd22a1256293ce196a4d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\ocr_validation_report.md": {
+    "mtime": 1780506677.6295378,
+    "ast_hash": "b3a1acdb44e364bbc8a8387a6e2f2f24",
+    "semantic_hash": "b3a1acdb44e364bbc8a8387a6e2f2f24"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\open_questions.md": {
+    "mtime": 1780161364.237364,
+    "ast_hash": "f2bcaea1f6e698b2372eede41e1be1da",
+    "semantic_hash": "f2bcaea1f6e698b2372eede41e1be1da"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\preparatory_report\\preparatory_report.md": {
+    "mtime": 1779898483.794089,
+    "ast_hash": "309d70fb21f418fcd78c03e3a05276a1",
+    "semantic_hash": "309d70fb21f418fcd78c03e3a05276a1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\prompt_book\\prompt-book.md": {
+    "mtime": 1779860993.5307424,
+    "ast_hash": "299c353297d36ec4ffd38dc29476196a",
+    "semantic_hash": "299c353297d36ec4ffd38dc29476196a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\research_question\\research_question.md": {
+    "mtime": 1779895716.31474,
+    "ast_hash": "395df24eaf49f2e9b026d7b7f792aa8c",
+    "semantic_hash": "395df24eaf49f2e9b026d7b7f792aa8c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\integration\\README.md": {
+    "mtime": 1779523405.960138,
+    "ast_hash": "1fb25a6543584da2e095b38805c328d3",
+    "semantic_hash": "1fb25a6543584da2e095b38805c328d3"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\integration\\integration-1.md": {
+    "mtime": 1779528747.3696952,
+    "ast_hash": "b9e30a747b6251bc3911b87b9dde4137",
+    "semantic_hash": "b9e30a747b6251bc3911b87b9dde4137"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\integration\\integration-2.md": {
+    "mtime": 1779533252.3051047,
+    "ast_hash": "718fed62b7f5a405ca2ca8b4668d6a63",
+    "semantic_hash": "718fed62b7f5a405ca2ca8b4668d6a63"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\integration\\results\\README.md": {
+    "mtime": 1779523402.2015145,
+    "ast_hash": "0d6b44061a882014cda413e99767db95",
+    "semantic_hash": "0d6b44061a882014cda413e99767db95"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\integration\\results\\integration-1\\run-2026-05-23-physical-huawei-p20pro.md": {
+    "mtime": 1779530566.1545057,
+    "ast_hash": "91701ca271270d701d76e378bab29cad",
+    "semantic_hash": "91701ca271270d701d76e378bab29cad"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\integration\\results\\integration-1\\run-2026-05-23.md": {
+    "mtime": 1779530597.648411,
+    "ast_hash": "3c24af1fb785180521c0c93bf005f65b",
+    "semantic_hash": "3c24af1fb785180521c0c93bf005f65b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\Shomer_AI_Project_Proposal.md": {
+    "mtime": 1779533433.2182634,
+    "ast_hash": "d0c9901b11e6692f8035551e9f9f3c08",
+    "semantic_hash": "d0c9901b11e6692f8035551e9f9f3c08"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\architecture.decision.md": {
+    "mtime": 1780161140.133094,
+    "ast_hash": "e31bc548e48ed2d4d5f53b89f1ad225a",
+    "semantic_hash": "e31bc548e48ed2d4d5f53b89f1ad225a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\business-strategist-skill.decision.md": {
+    "mtime": 1780135385.4132886,
+    "ast_hash": "f00e1a80a9708d5969139059bef11e53",
+    "semantic_hash": "f00e1a80a9708d5969139059bef11e53"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\meeting-5-demo.decision.md": {
+    "mtime": 1780582095.8672824,
+    "ast_hash": "0b07fd52b1bb519409ffe4a94baa3e28",
+    "semantic_hash": "0b07fd52b1bb519409ffe4a94baa3e28"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\meeting-6-server-flow.decision.md": {
+    "mtime": 1780726526.6356814,
+    "ast_hash": "03b5cc9bb7b5c42fd735e13d728af0b5",
+    "semantic_hash": "03b5cc9bb7b5c42fd735e13d728af0b5"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\ocr-engine-validation.decision.md": {
+    "mtime": 1780506665.1365507,
+    "ast_hash": "c029adefba34798b366861523f8527be",
+    "semantic_hash": "c029adefba34798b366861523f8527be"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\phase-1.decision.md": {
+    "mtime": 1779533080.8766358,
+    "ast_hash": "f06bebee195150d574c89dabeabf3071",
+    "semantic_hash": "f06bebee195150d574c89dabeabf3071"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\phase-2.decision.md": {
+    "mtime": 1779635553.2966504,
+    "ast_hash": "e474f40a6edfd3e07ba261cf2d49572b",
+    "semantic_hash": "e474f40a6edfd3e07ba261cf2d49572b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\plan-he-alignment.decision.md": {
+    "mtime": 1779646981.4739177,
+    "ast_hash": "0051d11aa87fef150941c6bf0e78d91a",
+    "semantic_hash": "0051d11aa87fef150941c6bf0e78d91a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\plan-structure.decision.md": {
+    "mtime": 1779634638.077785,
+    "ast_hash": "9517274592ebffe4586d74d7f5db6abc",
+    "semantic_hash": "9517274592ebffe4586d74d7f5db6abc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\prd-enrichment.decision.md": {
+    "mtime": 1780168347.4193943,
+    "ast_hash": "7722873b768d11f9caa950f747439fa6",
+    "semantic_hash": "7722873b768d11f9caa950f747439fa6"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\reframe-reconciliation.decision.md": {
+    "mtime": 1780161720.9001772,
+    "ast_hash": "0fc303f0037ed50212512fe28b69ae90",
+    "semantic_hash": "0fc303f0037ed50212512fe28b69ae90"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\training-environment.decision.md": {
+    "mtime": 1780581566.227085,
+    "ast_hash": "00ca099fee24fbecfd6b89ba4a3797c9",
+    "semantic_hash": "00ca099fee24fbecfd6b89ba4a3797c9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meeting6_server_flow_plan.md": {
+    "mtime": 1780726572.0446024,
+    "ast_hash": "0b6e60860490f29ce58c60cffc8bf775",
+    "semantic_hash": "0b6e60860490f29ce58c60cffc8bf775"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\01-research-question.md": {
+    "mtime": 1779648614.1227207,
+    "ast_hash": "7074979e9761dcc425bf07613ae3ee7d",
+    "semantic_hash": "7074979e9761dcc425bf07613ae3ee7d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\02-flagship-papers.md": {
+    "mtime": 1779648614.1237206,
+    "ast_hash": "2fa8c250ef599578910b3decc4a72857",
+    "semantic_hash": "2fa8c250ef599578910b3decc4a72857"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\03-preparatory-report.md": {
+    "mtime": 1779648614.1237206,
+    "ast_hash": "fd2e0bc4e6b6a8745fe55df41275c401",
+    "semantic_hash": "fd2e0bc4e6b6a8745fe55df41275c401"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\04-latex-setup.md": {
+    "mtime": 1779648614.124349,
+    "ast_hash": "122632223888081c159d7f200f0411a9",
+    "semantic_hash": "122632223888081c159d7f200f0411a9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\05-business-plan-core.md": {
+    "mtime": 1779648614.124349,
+    "ast_hash": "0232355ca7533e6db2f24cc3dd9fa6f3",
+    "semantic_hash": "0232355ca7533e6db2f24cc3dd9fa6f3"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\06-business-plan-cost.md": {
+    "mtime": 1779648614.131874,
+    "ast_hash": "93900545a3ffa52528eb8a6a3ecc5027",
+    "semantic_hash": "93900545a3ffa52528eb8a6a3ecc5027"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\07-prompt-book.md": {
+    "mtime": 1779648614.131874,
+    "ast_hash": "8a5e54f63a97e585282ad30aa94dd904",
+    "semantic_hash": "8a5e54f63a97e585282ad30aa94dd904"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\08-github-release.md": {
+    "mtime": 1779648614.131874,
+    "ast_hash": "deb390c1314ea1d2113c3676d3a4262a",
+    "semantic_hash": "deb390c1314ea1d2113c3676d3a4262a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m3\\09-meeting-agenda.md": {
+    "mtime": 1779648614.1328735,
+    "ast_hash": "dfae4ee6b8e65954c4f87ad8655bf210",
+    "semantic_hash": "dfae4ee6b8e65954c4f87ad8655bf210"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\00-ocr-validation-plan.md": {
+    "mtime": 1780342172.7908733,
+    "ast_hash": "7ad22908ca76eb93b3d4f7b93b779e35",
+    "semantic_hash": "7ad22908ca76eb93b3d4f7b93b779e35"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\01-setup-check.md": {
+    "mtime": 1780243279.9101162,
+    "ast_hash": "fd0801de0dededd0add0126901a7c2bc",
+    "semantic_hash": "fd0801de0dededd0add0126901a7c2bc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\02-generate-sentences.md": {
+    "mtime": 1780253918.0288436,
+    "ast_hash": "898b2655e2d55e4de723b15620ece577",
+    "semantic_hash": "898b2655e2d55e4de723b15620ece577"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\03-render-images.md": {
+    "mtime": 1780243328.406852,
+    "ast_hash": "f712ff292d3459ae7b6bfc79a6984afa",
+    "semantic_hash": "f712ff292d3459ae7b6bfc79a6984afa"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\04-run-ocr.md": {
+    "mtime": 1780243346.6854086,
+    "ast_hash": "aec675072aa7aaf8768d7117d2c37dde",
+    "semantic_hash": "aec675072aa7aaf8768d7117d2c37dde"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\05-compute-metrics.md": {
+    "mtime": 1780243368.1865516,
+    "ast_hash": "73ba4b6b342b2223ad8beb305a39314c",
+    "semantic_hash": "73ba4b6b342b2223ad8beb305a39314c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\06-analysis-charts.md": {
+    "mtime": 1780243389.9285343,
+    "ast_hash": "2d10e41ee8b3f3284e19bdded898c1a5",
+    "semantic_hash": "2d10e41ee8b3f3284e19bdded898c1a5"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\07-summary-report.md": {
+    "mtime": 1780243415.3183143,
+    "ast_hash": "6ebbe09805210ea14de67f7653e91b08",
+    "semantic_hash": "6ebbe09805210ea14de67f7653e91b08"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\meetings\\m5\\08-decision-doc.md": {
+    "mtime": 1780243434.355969,
+    "ast_hash": "b615ab1aa232625dc1f2aebb47153635",
+    "semantic_hash": "b615ab1aa232625dc1f2aebb47153635"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\01-\u05d1\u05d7\u05d9\u05e8\u05ea-\u05e0\u05d5\u05e9\u05d0.md": {
+    "mtime": 1779648614.119717,
+    "ast_hash": "3c5e46737fc63f347e93d3723438e587",
+    "semantic_hash": "3c5e46737fc63f347e93d3723438e587"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\02-\u05e9\u05d0\u05dc\u05ea-\u05de\u05d7\u05e7\u05e8.md": {
+    "mtime": 1779648614.120721,
+    "ast_hash": "a894e7ff579beb84cf7a9b6e032da767",
+    "semantic_hash": "a894e7ff579beb84cf7a9b6e032da767"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\03-\u05ea\u05db\u05e0\u05d9\u05ea-\u05e2\u05e1\u05e7\u05d9\u05ea.md": {
+    "mtime": 1779648614.120721,
+    "ast_hash": "8962fc754f517a3840cf31929b8f04cf",
+    "semantic_hash": "8962fc754f517a3840cf31929b8f04cf"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\04-\u05d0\u05e8\u05db\u05d9\u05d8\u05e7\u05d8\u05d5\u05e8\u05d4.md": {
+    "mtime": 1779648614.120721,
+    "ast_hash": "783d7fbc92e953a3fe9f0947d3ee19af",
+    "semantic_hash": "783d7fbc92e953a3fe9f0947d3ee19af"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\05-\u05e9\u05dc\u05d3-\u05de\u05e2\u05e8\u05db\u05ea.md": {
+    "mtime": 1779648614.120721,
+    "ast_hash": "7b5dfa6a5fe2866c95249ccec8f97d5f",
+    "semantic_hash": "7b5dfa6a5fe2866c95249ccec8f97d5f"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\06-\u05dc\u05d9\u05d1\u05ea-AI.md": {
+    "mtime": 1779648614.121721,
+    "ast_hash": "c7159e2edfb27b1e064ee473be60c51d",
+    "semantic_hash": "c7159e2edfb27b1e064ee473be60c51d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\07-\u05d1\u05d3\u05d9\u05e7\u05d5\u05ea.md": {
+    "mtime": 1779648614.121721,
+    "ast_hash": "d1da442c8422390bd022a9a0ef1b1b40",
+    "semantic_hash": "d1da442c8422390bd022a9a0ef1b1b40"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\08-\u05e1\u05e8\u05d8\u05d5\u05df-\u05ea\u05d3\u05de\u05d9\u05ea.md": {
+    "mtime": 1779648614.121721,
+    "ast_hash": "bc049669fc71ddd40a914491c405d08e",
+    "semantic_hash": "bc049669fc71ddd40a914491c405d08e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\09-\u05d3\u05d5\u05d7-\u05d5\u05de\u05e6\u05d2\u05ea.md": {
+    "mtime": 1779648614.121721,
+    "ast_hash": "38aaaed0d12027ac88dbf161e410973d",
+    "semantic_hash": "38aaaed0d12027ac88dbf161e410973d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\10-\u05d4\u05d2\u05e0\u05d4.md": {
+    "mtime": 1779648614.1227207,
+    "ast_hash": "2869fcfbd6a977c47f93321e0c4abdac",
+    "semantic_hash": "2869fcfbd6a977c47f93321e0c4abdac"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\README.md": {
+    "mtime": 1779648614.1227207,
+    "ast_hash": "9f98675082a5c6075e04801a4dbc10b5",
+    "semantic_hash": "9f98675082a5c6075e04801a4dbc10b5"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\00-poc-feasibility.md": {
+    "mtime": 1779634472.291445,
+    "ast_hash": "e2aad498ed61005b8cbebf47310a0b6a",
+    "semantic_hash": "e2aad498ed61005b8cbebf47310a0b6a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\01-research-foundation.md": {
+    "mtime": 1779634506.6966062,
+    "ast_hash": "f6a36583ccee9cfffe8d173a5466edbc",
+    "semantic_hash": "f6a36583ccee9cfffe8d173a5466edbc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\02-literature-and-baseline.md": {
+    "mtime": 1779634518.047055,
+    "ast_hash": "f4e454bf2b621ae9a38f13d570eb10d1",
+    "semantic_hash": "f4e454bf2b621ae9a38f13d570eb10d1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\03-business-and-cost.md": {
+    "mtime": 1779634527.2921765,
+    "ast_hash": "c1465c813e349640adae511789ab961e",
+    "semantic_hash": "c1465c813e349640adae511789ab961e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\04-prd-and-architecture.md": {
+    "mtime": 1779634538.5637028,
+    "ast_hash": "9e86df4e66b7d88db4839a6f22ba37d2",
+    "semantic_hash": "9e86df4e66b7d88db4839a6f22ba37d2"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\05-finetune-classifier.md": {
+    "mtime": 1779634550.691669,
+    "ast_hash": "9d7e83bab043ef4b502bcb5002121588",
+    "semantic_hash": "9d7e83bab043ef4b502bcb5002121588"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\06-synthetic-data.md": {
+    "mtime": 1779634561.3724265,
+    "ast_hash": "cc22275cea6f7df7f6364187d698afdb",
+    "semantic_hash": "cc22275cea6f7df7f6364187d698afdb"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\07-agents-and-rag.md": {
+    "mtime": 1779634574.0216887,
+    "ast_hash": "0b82195faae031817626554321b6dfb0",
+    "semantic_hash": "0b82195faae031817626554321b6dfb0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\08-gold-set-and-metrics.md": {
+    "mtime": 1779634584.6793368,
+    "ast_hash": "1fb5b1c87f7d51fc7d4fed4e292262a9",
+    "semantic_hash": "1fb5b1c87f7d51fc7d4fed4e292262a9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\09-production-and-marketing.md": {
+    "mtime": 1779634597.7277403,
+    "ast_hash": "52ce043a8eb82f42c19f1a8a086c376d",
+    "semantic_hash": "52ce043a8eb82f42c19f1a8a086c376d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-meetings\\10-defense-and-submission.md": {
+    "mtime": 1779634608.5643203,
+    "ast_hash": "6752991d09be64ae97d6bd1a0800dedc",
+    "semantic_hash": "6752991d09be64ae97d6bd1a0800dedc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\poc\\POC_Plan.md": {
+    "mtime": 1779523863.030797,
+    "ast_hash": "d9f3ed7c31a01c935c7683e124b7c281",
+    "semantic_hash": "d9f3ed7c31a01c935c7683e124b7c281"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\poc\\README.md": {
+    "mtime": 1779516296.387694,
+    "ast_hash": "9f32567df21c66fb2ffc63a04e13fc99",
+    "semantic_hash": "9f32567df21c66fb2ffc63a04e13fc99"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\2026-05-30_meeting-4.md": {
+    "mtime": 1780243353.0871165,
+    "ast_hash": "f46dd41dd4133acd7a2adf9f9300a939",
+    "semantic_hash": "f46dd41dd4133acd7a2adf9f9300a939"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\2026-05-31_meeting-4.md": {
+    "mtime": 1780243367.45497,
+    "ast_hash": "54e50f0e598fc580cf7095a16c4619ba",
+    "semantic_hash": "54e50f0e598fc580cf7095a16c4619ba"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\2026-06-01_meeting-4.md": {
+    "mtime": 1780344089.3741786,
+    "ast_hash": "005f876d1a50a49ab21ea6a854d66332",
+    "semantic_hash": "005f876d1a50a49ab21ea6a854d66332"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\2026-06-03_meeting-5.md": {
+    "mtime": 1780515670.2018483,
+    "ast_hash": "ebdc0f1aef347cca7cacb3963dc6c105",
+    "semantic_hash": "ebdc0f1aef347cca7cacb3963dc6c105"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\2026-06-04_meeting-5-2.md": {
+    "mtime": 1780582154.1091764,
+    "ast_hash": "050ae96347e483d4363a78b9d72e9301",
+    "semantic_hash": "050ae96347e483d4363a78b9d72e9301"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\2026-06-04_meeting-5.md": {
+    "mtime": 1780581532.5741563,
+    "ast_hash": "b52101d2a53c4f530185284ec2f94925",
+    "semantic_hash": "b52101d2a53c4f530185284ec2f94925"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\2026-06-06_meeting-6.md": {
+    "mtime": 1780726584.8451617,
+    "ast_hash": "127973c00dd1fd5ff5c0f01363c03abd",
+    "semantic_hash": "127973c00dd1fd5ff5c0f01363c03abd"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\README.md": {
+    "mtime": 1780133662.3897007,
+    "ast_hash": "c5873f509f0f943d06e0f0899fb5205f",
+    "semantic_hash": "c5873f509f0f943d06e0f0899fb5205f"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\prompts\\_template.md": {
+    "mtime": 1780133672.315406,
+    "ast_hash": "59844f0a936fcbd9d320c331317b25fa",
+    "semantic_hash": "59844f0a936fcbd9d320c331317b25fa"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\README.md": {
+    "mtime": 1779252593.811775,
+    "ast_hash": "4c413cebaface8b25e500a4aa4a752c2",
+    "semantic_hash": "4c413cebaface8b25e500a4aa4a752c2"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\classifier\\README.md": {
+    "mtime": 1780503209.202385,
+    "ast_hash": "dbf5bfaa0772ad8add351c459528d419",
+    "semantic_hash": "dbf5bfaa0772ad8add351c459528d419"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\context_agent\\README.md": {
+    "mtime": 1780503333.896811,
+    "ast_hash": "d8bef8de027f5437d9686f07def37c0d",
+    "semantic_hash": "d8bef8de027f5437d9686f07def37c0d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\app\\ocr\\README.md": {
+    "mtime": 1780503333.8199923,
+    "ast_hash": "ec7e5560e43d2bae672ceb13a70fe59b",
+    "semantic_hash": "ec7e5560e43d2bae672ceb13a70fe59b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\requirements.txt": {
+    "mtime": 1780502757.6204545,
+    "ast_hash": "8f6bf8c43fcd17cf7b4e06d127c97654",
+    "semantic_hash": "8f6bf8c43fcd17cf7b4e06d127c97654"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\server\\sdk\\README.md": {
+    "mtime": 1779516291.3483727,
+    "ast_hash": "e62cf5c5a358443c65dea371fe3d767e",
+    "semantic_hash": "e62cf5c5a358443c65dea371fe3d767e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\ai-researcher-developer\\SKILL.md": {
+    "mtime": 1772199429.5224068,
+    "ast_hash": "79fb081953f0ee19f807a68c17088bfb",
+    "semantic_hash": "79fb081953f0ee19f807a68c17088bfb"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\android-developer\\SKILL.md": {
+    "mtime": 1779521027.1167133,
+    "ast_hash": "2eee05fe874180e020da6acba4f1ab48",
+    "semantic_hash": "2eee05fe874180e020da6acba4f1ab48"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\android-developer\\references\\permissions-media.md": {
+    "mtime": 1779521027.15581,
+    "ast_hash": "75671cb5781a838cc2a658c8e793cf00",
+    "semantic_hash": "75671cb5781a838cc2a658c8e793cf00"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\backend-engineer\\SKILL.md": {
+    "mtime": 1766152442.3977666,
+    "ast_hash": "f8d32b7902b6f029c6833ccfe41b296c",
+    "semantic_hash": "f8d32b7902b6f029c6833ccfe41b296c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\backend-engineer\\api-design.md": {
+    "mtime": 1766152442.388496,
+    "ast_hash": "b8327e9570f2e10f447790dd93ad0dac",
+    "semantic_hash": "b8327e9570f2e10f447790dd93ad0dac"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\backend-engineer\\common-dev-mistakes.md": {
+    "mtime": 1766152442.3934953,
+    "ast_hash": "16068c5d9d7e98ebf68bf5ca7ce34fdd",
+    "semantic_hash": "16068c5d9d7e98ebf68bf5ca7ce34fdd"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\backend-engineer\\database-management.md": {
+    "mtime": 1766152442.3962626,
+    "ast_hash": "7867f5e56a47f019d1b52dd1daabd8ef",
+    "semantic_hash": "7867f5e56a47f019d1b52dd1daabd8ef"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\brand-guidelines\\LICENSE.txt": {
+    "mtime": 1775914374.9689755,
+    "ast_hash": "0ba5044c64ef53cb0189c9546081e228",
+    "semantic_hash": "0ba5044c64ef53cb0189c9546081e228"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\brand-guidelines\\SKILL.md": {
+    "mtime": 1775914374.9689755,
+    "ast_hash": "102fdf2bc10ece32dd7a14fa75d0f435",
+    "semantic_hash": "102fdf2bc10ece32dd7a14fa75d0f435"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\frontend-design\\LICENSE.txt": {
+    "mtime": 1775914375.4580083,
+    "ast_hash": "29256199be2a609aac596980ffc11996",
+    "semantic_hash": "29256199be2a609aac596980ffc11996"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\frontend-design\\SKILL.md": {
+    "mtime": 1775914375.4580083,
+    "ast_hash": "400c8b8231420f30b48aed0a6f37df9f",
+    "semantic_hash": "400c8b8231420f30b48aed0a6f37df9f"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\SKILL.md": {
+    "mtime": 1780726834.8838177,
+    "ast_hash": "c0ac08140ebbce36e6562f1a8d3a97b9",
+    "semantic_hash": "c0ac08140ebbce36e6562f1a8d3a97b9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\add-watch.md": {
+    "mtime": 1780726833.6639862,
+    "ast_hash": "0df0589623217ca38a12bdcabfb42f4c",
+    "semantic_hash": "0df0589623217ca38a12bdcabfb42f4c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\exports.md": {
+    "mtime": 1780726833.6639862,
+    "ast_hash": "7fb1a81aca17a462db70684a324fcfb0",
+    "semantic_hash": "7fb1a81aca17a462db70684a324fcfb0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\extraction-spec.md": {
+    "mtime": 1780726833.6639862,
+    "ast_hash": "24808b03abfeaf5f6435bb69c0125b2c",
+    "semantic_hash": "24808b03abfeaf5f6435bb69c0125b2c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\github-and-merge.md": {
+    "mtime": 1780726833.6649861,
+    "ast_hash": "cde13df085e4c492aeb7ba298a996d0d",
+    "semantic_hash": "cde13df085e4c492aeb7ba298a996d0d"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\hooks.md": {
+    "mtime": 1780726833.6649861,
+    "ast_hash": "3f545db6ce646650bb9de588f5512a27",
+    "semantic_hash": "3f545db6ce646650bb9de588f5512a27"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\query.md": {
+    "mtime": 1780726833.6649861,
+    "ast_hash": "c2a8e798674a81b02aa9975f43023819",
+    "semantic_hash": "c2a8e798674a81b02aa9975f43023819"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\transcribe.md": {
+    "mtime": 1780726833.6649861,
+    "ast_hash": "70f6aa30d6211f3a2c7e9fc45479f50c",
+    "semantic_hash": "70f6aa30d6211f3a2c7e9fc45479f50c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\graphify\\references\\update.md": {
+    "mtime": 1780726833.665987,
+    "ast_hash": "735932eaa4f0c8fef9566c538ae3e5f8",
+    "semantic_hash": "735932eaa4f0c8fef9566c538ae3e5f8"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\hebrew-ai-project-manager\\SKILL.md": {
+    "mtime": 1779635066.0,
+    "ast_hash": "ecdf4be634a2281d78798576066a6c93",
+    "semantic_hash": "ecdf4be634a2281d78798576066a6c93"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\hebrew-ai-project-manager\\references\\implementation-summary.md": {
+    "mtime": 1779635224.0,
+    "ast_hash": "5532fd5e6adb33882e7474360ca957ca",
+    "semantic_hash": "5532fd5e6adb33882e7474360ca957ca"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\hebrew-ai-project-manager\\references\\next-meeting-prep.md": {
+    "mtime": 1779628544.0,
+    "ast_hash": "a457204f542f821a9025c864954a2cdf",
+    "semantic_hash": "a457204f542f821a9025c864954a2cdf"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\hebrew-ai-project-manager\\references\\requirements-analysis.md": {
+    "mtime": 1779628652.0,
+    "ast_hash": "b58b39d88202836cd6cf123632e46702",
+    "semantic_hash": "b58b39d88202836cd6cf123632e46702"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\internal-comms\\LICENSE.txt": {
+    "mtime": 1775914375.4580083,
+    "ast_hash": "0ba5044c64ef53cb0189c9546081e228",
+    "semantic_hash": "0ba5044c64ef53cb0189c9546081e228"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\internal-comms\\SKILL.md": {
+    "mtime": 1775914375.4580083,
+    "ast_hash": "71f265f56df2c640d8487a11662ad100",
+    "semantic_hash": "71f265f56df2c640d8487a11662ad100"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\internal-comms\\examples\\3p-updates.md": {
+    "mtime": 1775914375.4589975,
+    "ast_hash": "2527d29b082eb0ad7a8f7e0b40505cc2",
+    "semantic_hash": "2527d29b082eb0ad7a8f7e0b40505cc2"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\internal-comms\\examples\\company-newsletter.md": {
+    "mtime": 1775914375.4589975,
+    "ast_hash": "fc73c156d851e5da9be6a75b73872233",
+    "semantic_hash": "fc73c156d851e5da9be6a75b73872233"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\internal-comms\\examples\\faq-answers.md": {
+    "mtime": 1775914375.4589975,
+    "ast_hash": "a432e0062aca8e1f32ef5823a250a420",
+    "semantic_hash": "a432e0062aca8e1f32ef5823a250a420"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\internal-comms\\examples\\general-comms.md": {
+    "mtime": 1775914375.4589975,
+    "ast_hash": "e7df9737d246ee8d0d8058612b94dfff",
+    "semantic_hash": "e7df9737d246ee8d0d8058612b94dfff"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\LICENSE.txt": {
+    "mtime": 1775914375.4599972,
+    "ast_hash": "0ba5044c64ef53cb0189c9546081e228",
+    "semantic_hash": "0ba5044c64ef53cb0189c9546081e228"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\SKILL.md": {
+    "mtime": 1775914375.4599972,
+    "ast_hash": "9905c569b29714bfaa92f0caabc231fd",
+    "semantic_hash": "9905c569b29714bfaa92f0caabc231fd"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\reference\\evaluation.md": {
+    "mtime": 1775914375.4599972,
+    "ast_hash": "c20f36eb6a9e8f0e7bdbe625a54f4396",
+    "semantic_hash": "c20f36eb6a9e8f0e7bdbe625a54f4396"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\reference\\mcp_best_practices.md": {
+    "mtime": 1775914375.4599972,
+    "ast_hash": "40b4b4097253fe25a37bc1cd8c8e4728",
+    "semantic_hash": "40b4b4097253fe25a37bc1cd8c8e4728"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\reference\\node_mcp_server.md": {
+    "mtime": 1775914375.4610057,
+    "ast_hash": "a25cf11720e6f4e956aeb3e02e0aa651",
+    "semantic_hash": "a25cf11720e6f4e956aeb3e02e0aa651"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\reference\\python_mcp_server.md": {
+    "mtime": 1775914375.4610057,
+    "ast_hash": "b6e242e5cf7bc8d30abc7bbd4d9a21ec",
+    "semantic_hash": "b6e242e5cf7bc8d30abc7bbd4d9a21ec"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\mcp-builder\\scripts\\requirements.txt": {
+    "mtime": 1775914375.462005,
+    "ast_hash": "6b5eb2873ee0dd7a24a96d89cced5c38",
+    "semantic_hash": "6b5eb2873ee0dd7a24a96d89cced5c38"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\ml-architect\\SKILL.md": {
+    "mtime": 1779522559.6286988,
+    "ast_hash": "82ad6e7e8f2ee2d38491f6208ccba9be",
+    "semantic_hash": "82ad6e7e8f2ee2d38491f6208ccba9be"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\ml-evaluator\\SKILL.md": {
+    "mtime": 1779522559.6525204,
+    "ast_hash": "2bb079c8becc34865a5c8ab50e001856",
+    "semantic_hash": "2bb079c8becc34865a5c8ab50e001856"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\ml-iteration-coach\\SKILL.md": {
+    "mtime": 1779522559.6575208,
+    "ast_hash": "e17f50adeab0d6a7c652de3b8017774a",
+    "semantic_hash": "e17f50adeab0d6a7c652de3b8017774a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\ml-server-integrator\\SKILL.md": {
+    "mtime": 1779522559.6465156,
+    "ast_hash": "957a96fe85a9c74fdc2c69da8644cbe3",
+    "semantic_hash": "957a96fe85a9c74fdc2c69da8644cbe3"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\ml-trainer\\SKILL.md": {
+    "mtime": 1779522559.6402466,
+    "ast_hash": "fd533f2af95559f9fa688793cd66d44b",
+    "semantic_hash": "fd533f2af95559f9fa688793cd66d44b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\LICENSE.txt": {
+    "mtime": 1775914375.462005,
+    "ast_hash": "03077c38ac09b5515927eb4d5cf12484",
+    "semantic_hash": "03077c38ac09b5515927eb4d5cf12484"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\SKILL.md": {
+    "mtime": 1775914375.462005,
+    "ast_hash": "8609b5c38f8cc19061b2a459080b5b43",
+    "semantic_hash": "8609b5c38f8cc19061b2a459080b5b43"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\forms.md": {
+    "mtime": 1775914375.462005,
+    "ast_hash": "6e2413286cceefab10fab9cd1cb59c97",
+    "semantic_hash": "6e2413286cceefab10fab9cd1cb59c97"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\pdf\\reference.md": {
+    "mtime": 1775914375.462005,
+    "ast_hash": "e648d10ba8cb9629ed12312b6da4279e",
+    "semantic_hash": "e648d10ba8cb9629ed12312b6da4279e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\product-manager\\SKILL.md": {
+    "mtime": 1766152442.4058406,
+    "ast_hash": "04ccaa26b0c69de1acf922b323ff05bf",
+    "semantic_hash": "04ccaa26b0c69de1acf922b323ff05bf"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\product-manager\\metrics-guide.md": {
+    "mtime": 1766152442.3997722,
+    "ast_hash": "5fd5131a4951416344b4df26236c6773",
+    "semantic_hash": "5fd5131a4951416344b4df26236c6773"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\product-manager\\prioritization-frameworks.md": {
+    "mtime": 1766152442.4017756,
+    "ast_hash": "576aba10cb108cac878953d8c0b432ae",
+    "semantic_hash": "576aba10cb108cac878953d8c0b432ae"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\product-manager\\product-templates.md": {
+    "mtime": 1766152442.4048367,
+    "ast_hash": "5bfc9fc5e0f5a7c5f9e05cefe3ee3534",
+    "semantic_hash": "5bfc9fc5e0f5a7c5f9e05cefe3ee3534"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-architect\\SKILL.md": {
+    "mtime": 1780132975.7732286,
+    "ast_hash": "dd1babc0eb2421392809a32af0892f49",
+    "semantic_hash": "dd1babc0eb2421392809a32af0892f49"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-architect\\architecture-patterns.md": {
+    "mtime": 1766152442.4257407,
+    "ast_hash": "aba837aa2fbb9480633f078759b23d68",
+    "semantic_hash": "aba837aa2fbb9480633f078759b23d68"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-architect\\design-patterns.md": {
+    "mtime": 1766152442.4302042,
+    "ast_hash": "78b546747f1cf805458010a3b458f3b5",
+    "semantic_hash": "78b546747f1cf805458010a3b458f3b5"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-architect\\review-checklist.md": {
+    "mtime": 1766152442.4302042,
+    "ast_hash": "8c512e1af94db60b352a7806a02e35bb",
+    "semantic_hash": "8c512e1af94db60b352a7806a02e35bb"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-diagrams\\SKILL.md": {
+    "mtime": 1780132599.234243,
+    "ast_hash": "7c1a40f49c50fed6dd47bf090e11595e",
+    "semantic_hash": "7c1a40f49c50fed6dd47bf090e11595e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-diagrams\\references\\c4-model.md": {
+    "mtime": 1780132825.4360838,
+    "ast_hash": "43c76d0ef1c73a9d49ea3100319a6660",
+    "semantic_hash": "43c76d0ef1c73a9d49ea3100319a6660"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-diagrams\\references\\diagram-selection.md": {
+    "mtime": 1780132640.8681219,
+    "ast_hash": "13c4ba6293939544c715ec0d700afeb8",
+    "semantic_hash": "13c4ba6293939544c715ec0d700afeb8"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-diagrams\\references\\mermaid-cookbook.md": {
+    "mtime": 1780132731.8483908,
+    "ast_hash": "cfcc596afd85c7d2b983961462105b5c",
+    "semantic_hash": "cfcc596afd85c7d2b983961462105b5c"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-diagrams\\references\\plantuml-cookbook.md": {
+    "mtime": 1780132785.1193614,
+    "ast_hash": "e93ce22db6c7540887d290f189984dd0",
+    "semantic_hash": "e93ce22db6c7540887d290f189984dd0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\software-diagrams\\references\\style-guide.md": {
+    "mtime": 1780132871.1615157,
+    "ast_hash": "36b3cd60b9b5de28e8d3216448921568",
+    "semantic_hash": "36b3cd60b9b5de28e8d3216448921568"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\webapp-testing\\LICENSE.txt": {
+    "mtime": 1775914375.4871187,
+    "ast_hash": "0ba5044c64ef53cb0189c9546081e228",
+    "semantic_hash": "0ba5044c64ef53cb0189c9546081e228"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\skills\\webapp-testing\\SKILL.md": {
+    "mtime": 1775914375.48811,
+    "ast_hash": "3becd8cd21604694b63809e483bc31a7",
+    "semantic_hash": "3becd8cd21604694b63809e483bc31a7"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\README.md": {
+    "mtime": 1779219103.3069477,
+    "ast_hash": "6def92ced6d22bb326e82e560eb2765e",
+    "semantic_hash": "6def92ced6d22bb326e82e560eb2765e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\configs\\train.yaml": {
+    "mtime": 1779219035.65814,
+    "ast_hash": "1e2721c6a42babdfbc5c02e9140b24bb",
+    "semantic_hash": "1e2721c6a42babdfbc5c02e9140b24bb"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\requirements-wsl.txt": {
+    "mtime": 1780582074.384555,
+    "ast_hash": "5a9d02bf562d8dec456001db0a2d3e86",
+    "semantic_hash": "5a9d02bf562d8dec456001db0a2d3e86"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\training\\requirements.txt": {
+    "mtime": 1779219026.2817202,
+    "ast_hash": "e8eb9db61f87abfdfd06487d1b67f48e",
+    "semantic_hash": "e8eb9db61f87abfdfd06487d1b67f48e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\bullying_data_he.pdf": {
+    "mtime": 1779980438.7477345,
+    "ast_hash": "5a1aecf23169080172a0488e873c60b5",
+    "semantic_hash": "5a1aecf23169080172a0488e873c60b5"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\PRD.pdf": {
+    "mtime": 1780240359.2042766,
+    "ast_hash": "2ba15b68da4d13c59c8c72adb2384593",
+    "semantic_hash": "2ba15b68da4d13c59c8c72adb2384593"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\Shomer_AI_Project_Proposal.pdf": {
+    "mtime": 1779898971.790522,
+    "ast_hash": "da31540f41a15d44b347566fd7b4c2ea",
+    "semantic_hash": "da31540f41a15d44b347566fd7b4c2ea"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\architecture_diagrams.pdf": {
+    "mtime": 1780239614.7303157,
+    "ast_hash": "ce156d3f0c24e892155694a19d0fd46e",
+    "semantic_hash": "ce156d3f0c24e892155694a19d0fd46e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\business_plan\\business_plan.pdf": {
+    "mtime": 1780163100.4234242,
+    "ast_hash": "40b4f52eed374cbc99d27c07f02c5187",
+    "semantic_hash": "40b4f52eed374cbc99d27c07f02c5187"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\business_plan\\summary_one_pager.pdf": {
+    "mtime": 1780241696.0522835,
+    "ast_hash": "4fd2301f0eda67c5d6866abe63aa4278",
+    "semantic_hash": "4fd2301f0eda67c5d6866abe63aa4278"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\concepts\\dictabert_classifier_architecture.pdf": {
+    "mtime": 1780515452.5546894,
+    "ast_hash": "dc0d2679b9e81aeb2bde9a9605972ec9",
+    "semantic_hash": "dc0d2679b9e81aeb2bde9a9605972ec9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\concepts\\dictabert_data_techniques.pdf": {
+    "mtime": 1780515450.94676,
+    "ast_hash": "7e491ad032d03d0d9e88b33b24885159",
+    "semantic_hash": "7e491ad032d03d0d9e88b33b24885159"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\README.pdf": {
+    "mtime": 1780343279.261997,
+    "ast_hash": "c14dc92e814474b80a8a6425973dba8e",
+    "semantic_hash": "c14dc92e814474b80a8a6425973dba8e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\alerts\\design.pdf": {
+    "mtime": 1780343287.9668195,
+    "ast_hash": "399a563736c3717516f428c592e251ca",
+    "semantic_hash": "399a563736c3717516f428c592e251ca"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\android_client\\design.pdf": {
+    "mtime": 1780343280.993345,
+    "ast_hash": "b9ddceab54cbe6dbe931023cca896b5b",
+    "semantic_hash": "b9ddceab54cbe6dbe931023cca896b5b"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\audit_log\\design.pdf": {
+    "mtime": 1780343289.043258,
+    "ast_hash": "3c3bd2eef474cd41dbbdedb029eacb57",
+    "semantic_hash": "3c3bd2eef474cd41dbbdedb029eacb57"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\classifier\\design.pdf": {
+    "mtime": 1780343284.9198055,
+    "ast_hash": "6bb9b7daa4157c7b866f1b2088e319a9",
+    "semantic_hash": "6bb9b7daa4157c7b866f1b2088e319a9"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\context_agent\\design.pdf": {
+    "mtime": 1780343286.0071094,
+    "ast_hash": "5d27a477b576b4426f03799f9c1f492f",
+    "semantic_hash": "5d27a477b576b4426f03799f9c1f492f"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\gatekeeper\\design.pdf": {
+    "mtime": 1780343282.9094908,
+    "ast_hash": "09e4318cc618c7b4131a50251bff944e",
+    "semantic_hash": "09e4318cc618c7b4131a50251bff944e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\ocr\\design.pdf": {
+    "mtime": 1780343283.8540947,
+    "ast_hash": "d62b9a85bb401915542fd514c89afcb3",
+    "semantic_hash": "d62b9a85bb401915542fd514c89afcb3"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\review.pdf": {
+    "mtime": 1780343280.0191736,
+    "ast_hash": "b97ad248aba07cb4236c92892121e872",
+    "semantic_hash": "b97ad248aba07cb4236c92892121e872"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\sdk\\design.pdf": {
+    "mtime": 1780343281.9456005,
+    "ast_hash": "a343c228af41c9d50a972cccf9404eb0",
+    "semantic_hash": "a343c228af41c9d50a972cccf9404eb0"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\server\\design.pdf": {
+    "mtime": 1780343290.1645613,
+    "ast_hash": "dbf53e7ae5d8e523a45c697b8070e684",
+    "semantic_hash": "dbf53e7ae5d8e523a45c697b8070e684"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\design\\triage\\design.pdf": {
+    "mtime": 1780343286.9768672,
+    "ast_hash": "382a49bc462df193d1834510502a7c57",
+    "semantic_hash": "382a49bc462df193d1834510502a7c57"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\literature\\literature_flagship.pdf": {
+    "mtime": 1779897426.2709568,
+    "ast_hash": "d0f9994e8376b6fc4338dbd8f5e3aad1",
+    "semantic_hash": "d0f9994e8376b6fc4338dbd8f5e3aad1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\meeting4_agenda.pdf": {
+    "mtime": 1780161929.685901,
+    "ast_hash": "f4aed086db5735fd722f721d72df3798",
+    "semantic_hash": "f4aed086db5735fd722f721d72df3798"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\meeting5_prep.pdf": {
+    "mtime": 1780501280.0981765,
+    "ast_hash": "bc78ed11ea8d6c62d31b756f1a2c4d83",
+    "semantic_hash": "bc78ed11ea8d6c62d31b756f1a2c4d83"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\ocr_validation_report.pdf": {
+    "mtime": 1780506678.6345565,
+    "ast_hash": "a45fa31bbe1699e85348ad99a45d64fc",
+    "semantic_hash": "a45fa31bbe1699e85348ad99a45d64fc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\open_questions.pdf": {
+    "mtime": 1780161928.9979477,
+    "ast_hash": "8933b7d4c5d2e2a7cc7c819775823f87",
+    "semantic_hash": "8933b7d4c5d2e2a7cc7c819775823f87"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\preparatory_report\\preparatory_report.pdf": {
+    "mtime": 1779898490.1957972,
+    "ast_hash": "8dce4ad145ef18a7cb8e99c0079983c7",
+    "semantic_hash": "8dce4ad145ef18a7cb8e99c0079983c7"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\prompt_book\\prompt-book.pdf": {
+    "mtime": 1779861058.2045524,
+    "ast_hash": "4b75ebb46a15020ec59c726f050c0b28",
+    "semantic_hash": "4b75ebb46a15020ec59c726f050c0b28"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\docs\\research_question\\research_question.pdf": {
+    "mtime": 1779897425.4588127,
+    "ast_hash": "3de29bcda244de65dbd2dbd8a4370a34",
+    "semantic_hash": "3de29bcda244de65dbd2dbd8a4370a34"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\decisions\\research-framing.decision.md": {
+    "mtime": 1779895744.7851276,
+    "ast_hash": "9531ff5459701c19ce9ccb90725a5e17",
+    "semantic_hash": "9531ff5459701c19ce9ccb90725a5e17"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\plan-docs\\plan-he\\\u05e4\u05e8\u05d5\u05d9\u05e7\u05d8_\u05d2\u05de\u05e8_\u05d1\u05e7\u05d5\u05e8\u05e1_\u05de\u05d5\u05de\u05d7\u05d9_AI_\u05de\u05e6\u05d2\u05ea.pdf": {
+    "mtime": 1778949207.2405505,
+    "ast_hash": "7d282218f670683f90574c71ebedca2e",
+    "semantic_hash": "7d282218f670683f90574c71ebedca2e"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\01_cer_histogram_by_style.png": {
+    "mtime": 1780503684.4715648,
+    "ast_hash": "b5011725f59db94c003d69370079f1d1",
+    "semantic_hash": "b5011725f59db94c003d69370079f1d1"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\02_cosine_histogram_by_style.png": {
+    "mtime": 1780503684.589818,
+    "ast_hash": "444899f4c4479c9766f0428ba4d2a88a",
+    "semantic_hash": "444899f4c4479c9766f0428ba4d2a88a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\03_mean_cer_by_style_bar.png": {
+    "mtime": 1780503684.6593983,
+    "ast_hash": "87a07e4e3e6e17c0b8e9cc072c908f21",
+    "semantic_hash": "87a07e4e3e6e17c0b8e9cc072c908f21"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\04_cer_vs_cosine_scatter.png": {
+    "mtime": 1780503684.7642286,
+    "ast_hash": "3a2715aad44084867ac0b6b842741caa",
+    "semantic_hash": "3a2715aad44084867ac0b6b842741caa"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\05_confusion_chart.png": {
+    "mtime": 1780503684.8793378,
+    "ast_hash": "a747324f0133bb98fee2409981b549cc",
+    "semantic_hash": "a747324f0133bb98fee2409981b549cc"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\06_cer_histogram_by_category.png": {
+    "mtime": 1780506127.0690587,
+    "ast_hash": "0b807a3de94bddcbf9148b16c5aeb3e2",
+    "semantic_hash": "0b807a3de94bddcbf9148b16c5aeb3e2"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\07_success_rate_by_style_category.png": {
+    "mtime": 1780506127.1837194,
+    "ast_hash": "f222821ae95f39e73a1353506273654a",
+    "semantic_hash": "f222821ae95f39e73a1353506273654a"
+  },
+  "C:\\AIDevelopmentCourse\\Shomer.AI\\data\\ocr_validation\\charts\\08_overall_success_per_category.png": {
+    "mtime": 1780506127.2567267,
+    "ast_hash": "f235c6db0b7e57da01b63ba56bce0636",
+    "semantic_hash": "f235c6db0b7e57da01b63ba56bce0636"
+  }
+}

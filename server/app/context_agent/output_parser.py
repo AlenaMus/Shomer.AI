@@ -43,6 +43,27 @@ class AgentLlmResponse(BaseModel):
         return v
 
 
+def _extract_json(raw: str) -> str:
+    """Pull the JSON object out of an LLM reply.
+
+    Providers that don't honour a strict json_object response format (e.g.
+    Anthropic) wrap the JSON in a ```json ... ``` markdown fence or add prose
+    around it. Strip the fence, then fall back to the outermost ``{ ... }``.
+    """
+    s = raw.strip()
+    if s.startswith("```"):
+        # drop the opening fence line (``` or ```json) and the closing fence
+        s = s.split("\n", 1)[1] if "\n" in s else s
+        if "```" in s:
+            s = s.rsplit("```", 1)[0]
+        s = s.strip()
+    if not s.startswith("{"):
+        i, j = s.find("{"), s.rfind("}")
+        if i != -1 and j > i:
+            s = s[i:j + 1]
+    return s
+
+
 def parse_llm_output(raw: str) -> tuple[AgentLlmResponse, bool]:
     """Parse and validate the LLM's JSON output.
 
@@ -50,7 +71,7 @@ def parse_llm_output(raw: str) -> tuple[AgentLlmResponse, bool]:
     parse failed and the safe default was used.
     """
     try:
-        data = json.loads(raw)
+        data = json.loads(_extract_json(raw))
         return AgentLlmResponse(**data), True
     except (json.JSONDecodeError, ValueError, TypeError) as exc:
         _logger.warning(

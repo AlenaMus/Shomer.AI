@@ -1,34 +1,78 @@
-# Server SDK — shared client library
+# Shomer.AI Client SDK
 
-This folder hosts the **client SDK**: a library that any client (Android, web, future others) imports to communicate with the FastAPI server in `../app/`. Instead of every client hand-rolling HTTP calls, JSON shapes, and error handling, they all go through this library.
+The shared client library every client (Android child/parent, future web, CLI,
+integration harnesses) imports to talk to the FastAPI server in `../app/` —
+instead of each hand-rolling HTTP calls, JSON shapes, retries, and error handling.
 
-## Status (2026-05-23)
+## Status (2026-06-08)
 
-**Placeholder only.** Folder created so the project structure makes the intent visible. No code yet — implementation approach is deferred until the first real client integration starts.
+**Implemented (MVP `1.0.0`).** Approach = **hand-written Kotlin** (not OpenAPI-generated),
+per `docs/design/sdk/design.md` and `plan-docs/decisions/sdk-implementation.decision.md`.
 
-## Decision deferred — pick when we touch this folder for real
+Two Gradle modules in a standalone build rooted here:
 
-| Approach | What goes in here | Pros | Cons |
-|---|---|---|---|
-| **Generated from OpenAPI** | `openapi.yaml` (exported from FastAPI) + `kotlin/` and `typescript/` subfolders produced by `openapi-generator` | Server changes → regenerate → clients update. Strict contract. Demo-friendly. | Adds a code-gen step; generated code can be verbose. |
-| **Hand-written** | `kotlin/ShomerApiClient.kt`, `typescript/shomerApiClient.ts`, plus shared models | Readable, fewer moving parts. Easy to explain in an academic write-up. | Must manually keep client models in sync with `../app/schemas.py`. |
+| Module | Dir | What it is |
+|---|---|---|
+| `:sdk` | `kotlin/` | The hand-written library — pure Kotlin/JVM (no `android.*`), OkHttp + Moshi |
+| `:sdk-cli` | `kotlin-cli/` | clikt terminal runner / fat-jar wrapping the same `ShomerApi` |
 
-Until this is decided, **clients should keep their own minimal HTTP layer** (as `android_client/` does today) — duplicated work for now, but it's easy to swap to a real SDK once we choose.
+## Public surface
 
-## Intended consumers
+```kotlin
+val api: ShomerApi = ShomerClient.create(SdkConfig(baseUrl = "http://10.0.2.2:8000/"))
 
-- `../../android_client/` — Kotlin client. Will depend on the Kotlin SDK published from here.
-- *(future)* `../../web_client/` — TypeScript / browser client.
-- Any future client (CLI, other mobile platform, integration test harness) should also import from here rather than hand-rolling its own HTTP layer.
+when (val r = api.classify("תפסיק להיות כזה לוזר")) {
+    is ShomerResult.Success -> println("${r.value.category} @ ${r.value.confidence}")
+    is ShomerResult.Failure -> println(r.error.message)   // typed ShomerError
+}
+api.close()
+```
 
-## Contract surface (what the SDK will wrap)
+- Port: `ShomerApi` (`classify(text)`, `classify(bytes,mime)`, `health()`, `modelInfo()`, `close()`).
+- Default adapter: `internal ShomerHttpClient` (OkHttp + Moshi). Callers only ever name `ShomerApi`.
+- Results: `ShomerResult.Success | Failure`; errors: `NetworkError · ServerError · RateLimitError · ValidationError · TimeoutError · ParseError`.
+- Retry: 3 attempts, 1s/2s/4s backoff, on 5xx + IOException only (never 4xx).
+- Every request carries a UUID4 `X-Trace-ID` + `User-Agent: shomer-sdk/<ver>`.
+- Models mirror `../app/schemas.py`; unknown/new fields parse leniently.
 
-The FastAPI server in `../app/main.py` currently exposes:
+## Build & test
+
+Requires JDK 17+. Uses the bundled Gradle 9.0.0 wrapper.
+
+```bash
+cd server/sdk
+./gradlew :sdk:test          # MockWebServer contract suite
+./gradlew :sdk-cli:fatJar    # → kotlin-cli/build/libs/shomer-cli.jar
+```
+
+## CLI usage
+
+```bash
+java -jar kotlin-cli/build/libs/shomer-cli.jar classify "תפסיק להיות כזה לוזר"
+java -jar shomer-cli.jar classify-image screenshot.png --verbose
+java -jar shomer-cli.jar health --server http://localhost:8000
+java -jar shomer-cli.jar info
+java -jar shomer-cli.jar demo          # runs the curated golden set
+```
+
+Or without building the jar: `./gradlew :sdk-cli:run --args="health"`.
+
+## Server contract wrapped
 
 | Method | Path | Purpose |
 |---|---|---|
-| GET | `/health` | Liveness + Ollama reachability |
-| GET | `/model/info` | Model id, labels |
-| POST | `/classify` | `{ text }` → `{ is_offensive, category, confidence, model, latency_ms }` |
+| POST | `/classify` | `{text, child_id?, message_id?}` → classification |
+| POST | `/classify-image` | multipart `image=@file` → OCR + classification |
+| GET | `/health` | liveness + Ollama reachability |
+| GET | `/model/info` | model id, base, labels |
 
-Any change to these endpoints is a contract change and must be reflected here.
+Any change to these endpoints is a contract change and must be reflected in
+`kotlin/src/main/kotlin/com/shomer/sdk/internal/Wire.kt` + the contract test.
+
+## Not yet done (tracked)
+
+- **`:sdk-cli batch` mode** for Meeting-8 gold-set evals (SDK-CLI-03, Phase 6).
+- **Wire the Android client onto `:sdk`** (replace `android_client/.../data/ApiService.kt`).
+  Today the SDK is a standalone build; folding it into `android_client/settings.gradle.kts`
+  as `project(":sdk")` is the follow-on — see the decision file.
+- **TypeScript variant** (Phase 9) and **published Maven/JitPack artifact** (post-Meeting-8).

@@ -41,6 +41,11 @@ bitsandbytes==0.49.2
 scikit-learn==1.9.0
 pandas==3.0.3
 numpy==2.4.4
+datasketch==1.10.0          # MinHash near-dedup (prepare_data_dictabert.py §A2)
+
+# --- Gemini data pipeline (translation / synthesis / textdetox sub-labeling) ---
+openai==2.41.0              # Gemini via OpenAI-compatible endpoint (gemini_utils.py)
+python-dotenv==1.2.2        # reads GEMINI_API_KEY from server/.env
 
 # --- misc ---
 pyyaml==6.0.3

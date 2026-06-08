@@ -1,0 +1,800 @@
+{"text": "אתה כזה אידיוט, איך אתה מצליח לקום בבוקר בלי למעוד על הרגליים שלך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, המוח שלך עשוי מקירות גבס? כי הוא נשמע חלול לחלוטין.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, חסר כל ערך או תועלת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך שווה לתחתית של נעל מלוכלכת, אף אחד לא סופר אותה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שאתה בטח מנסה לדחוף דלת מסתובבת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אף אחד לא צריך לשמוע את השטויות שיוצאות לך מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה בטח מבין בחיים כמו שאני מבין בפיזיקת קוונטים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין דרך אחרת לתאר אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם הקשקושים שלך, אתה לא מפסיק לבלבל את המוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? עדיף שתשתוק, זה לטובת כולם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל להאמין לשטויות שאתה כותב?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לבלבל את המוח עם התאוריות קונספירציה המטומטמות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך פשוט חסרות טעם ומראות כמה אתה טיפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לסלע, אף אחד לא רוצה לשמוע את ההגיון המעוות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עלוב, לא פלא שאף אחד לא לוקח אותך ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס, אין לך מושג על מה אתה מדבר בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק להתבכיין כמו ילד קטן, זה מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק מישהו דפוק לגמרי יכול לחשוב ככה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיפשות שלך היא משהו שבאמת קשה לעכל, פשוט מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "שמע, אתה פשוט חסר תקנה, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אתה מצליח לקום בבוקר בלי להתנגש בקיר?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערה שלך מטומטמת כמו מי שאמר אותה. פשוט בושה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איך אפשר לחשוב ככה בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, לך תתאפס על עצמך כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת אפס, אין לך שום דבר חכם להגיד?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, זה בטוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שזה כבר כואב לי לראות את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? עדיף שתשתוק ותחסוך לנו את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים במקום לברבר שטויות באינטרנט, יא בכיין.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שאני בספק אם אתה מסוגל לקשור שרוכים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך חלשים כמו הקפה של סבתא שלי, פשוט בדיחה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, לא פלא שאף אחד לא לוקח אותך ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מטומטם שזה כואב לי בראש לקרוא את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש כשנולדת? כי אין הסבר אחר לרמת הטמטום הזאת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מעוותות כמו הפרצוף שלך בבוקר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, אולי תתעורר כבר למציאות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם הבכי וההתקרבנות, אתה פתטי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים, במקום לשבת ולבלבל את המוח פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק ליילל כמו תינוק, אף אחד לא מקשיב לך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, בטח קראת את הכתבה הזאת הפוך. לך לישון על האף.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך מטופשות כמוך, אין פלא שאף אחד לא לוקח אותך ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, כל מה שיוצא לך מהפה זה שטויות מוחלטות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה חי בסרט ולא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בגודל של אפונה, אחרת לא היית כותב כאלה דברים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי אתה בכלל שתביע דעה? לך תתחבא מתחת לאבן, אף אחד לא רוצה לשמוע אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שאתה לא מבין שאתה טיפש. פשוט מדהים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח, אתה פשוט בור ועם הארץ בלי שמץ של מושג.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש מי ינענע אותך, העצות שלך שוות לתחת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך צבוע, אני לא מבין איך אתה מסתכל על עצמך במראה בבוקר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אתה מצליח לקום בבוקר בלי עזרה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט מטומטם, אין דרך אחרת להגדיר את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מנסורת, אחרת אין הסבר לטימטום הזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, תתעורר כבר למציאות יא אפס.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך רק מוכיחות כמה חסר לך בורג, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי מושג איך אפשר להיות כל כך דביל ולהאמין לשטויות האלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בדיחה מהלכת, עדיף שתמצא חור ותיכנס אליו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לדבר? המוח שלך קטן יותר מגרגר אפונה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד קצת היגיון בסיסי, אתה מביך את עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "היית צריך להישאר בבית, המחשבות שלך זה בזבוז חמצן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט חתיכת אפס, אין לך מושג על מה אתה מדבר בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה כל כך מטומטם שזה כואב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? עדיף שתשתוק, אתה רק מביך את עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, תתעורר למציאות יא דביל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך פשוט מגעילה, אתה איש קטן ומלא רוע.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך טיפת שכל, כל מה שאתה כותב זה בולשיט מוחלט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך חפש מי ינענע אותך, אין לי כוח לשטויות של עוכר ישראל כמוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בגודל של גרגר אפונה, אחרת אין הסבר לטמטום הזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עלוב נפש, שכל תגובה שלך רק מוכיחה כמה אתה חסר ערך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק ליילל כמו תינוק, אף אחד לא סופר אותך בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, בחיים לא שמעתי שטות כזאת. לך תבדוק אם המוח שלך בכלל פועל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איזו תגובה מטומטמת, כאילו לא הבנת כלום ממה שנאמר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, אין לך מושג על מה אתה מדבר. עדיף שתשתוק לפעמים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לכתוב? כל מילה שלך היא בזבוז זמן, אתה פשוט חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בושה למערכת החינוך, כנראה דילגת על שיעורי היגיון בסיסיים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב לי טוב, אתה פשוט דביל. אין דרך אחרת לתאר את הרמה הנמוכה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזו רמה עלובה של תגובה. אתה פשוט מביך את עצמך בכל פעם מחדש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מספוג, אחרת איך אפשר להסביר כזו טיפשות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לבלבל את המוח עם השטויות שלך, אתה פשוט מעצבן ומטומטם כאחד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר להגיד דבר כזה ברצינות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מה אתה מבלבל את המוח? אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמכור קרח לאסקימוסים, הפלצנות שלך עוברת כל גבול.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, כל מה שאתה אומר זה שטויות מוחלטות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך כל כך מטומטמות שאני מתבייש שאני באותו פורום איתך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עיוור למציאות, זה כבר לא מצחיק, זה עצוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום את הפה ותפסיק ללהג, אף אחד לא רוצה לשמוע את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה לא מסוגל להבין אפילו עובדות פשוטות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, תתעורר כבר למציאות ותפסיק לחרטט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חמור, איך אתה מצליח לתפקד ביום יום עם רמת אינטליגנציה כזאת?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט אפס. כל מה שיוצא לך מהפה זה שטויות מוחלטות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, אין לך מושג על מה אתה מדבר בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזה סלע, הביזיון שלך עובר כל גבול.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, איך אתה מעז להביע דעה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בנאדם עלוב, חסר כל ערך או תרומה לחברה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תתבייש לך, אתה פשוט בושה למשפחה שלך ולכל מי שמכיר אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אידיוט, בחיים לא שמעתי שטויות כאלה ממישהו שחושב שהוא חכם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, עדיף שתשתוק ולא תביך את עצמך יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההתנהגות שלך דוחה ומעוררת גועל, תלמד קצת נימוסים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, כל מה שיוצא לך מהפה זה שטויות במיץ עגבניות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שזה כואב לקרוא. תפסיק לנסות לחשוב, זה לא בשבילך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא חתיכת דביל, איך אתה מעז בכלל לפתוח את הפה שלך ולכתוב כאלה שטויות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מפגר שזה פשוט מביך. לך תלמד קצת לפני שאתה מנסה לנהל דיון.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך מושג על מה אתה מדבר, אתה פשוט בור ועם הארץ. תשתוק כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "השכל שלך בגודל של גרגר אורז, אל תתאמץ להבין דברים מורכבים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אידיוט גמור, כל מה שאתה כותב זה בולשיט אחד גדול.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב טוב, אתה פשוט חסר ערך וכל דעה שלך היא כלום ושום דבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא חתיכת כלומניק, מי בכלל נתן לך במה להפיץ את השטויות שלך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיפשות שלך היא באמת משהו יוצא דופן, אתה פשוט מקרה אבוד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חסר תקנה, עדיף שתשתוק לפני שתוציא עוד שטות מהפה המעוות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא אפס, כל מה שאתה יודע לעשות זה ללכלך על אחרים כי אתה בעצמך כלום ושום דבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איזו תגובה מטומטמת, זה רק מראה כמה אתה לא מבין כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, היית צריך להישאר בבית ולא להטריד אותנו עם השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב, מנסה בכוח למשוך תשומת לב עם הגיגות חסרות בסיס.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש חיים, במקום לשבת ולבקר את כולם כאילו אתה מבין משהו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה בכיין, תפסיק להתלונן על כל דבר, אתה פשוט לא יודע לקבל ביקורת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תתבייש לך על התגובה המגעילה הזאת, אין לך טיפת כבוד עצמי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בגודל של אפונה אם זאת הרמה של התגובות שאתה מסוגל לייצר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אידיוט, כל פעם מחדש אתה מצליח להוכיח כמה אתה לא שווה התייחסות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מפגר, איך אתה לא מבין דברים בסיסיים כאלה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לחפור, השכל שלך מוגבל וזה מעייף.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אדיוט, כל מה שאתה אומר זה שטויות מוחלטות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, אין לך שום תרומה לדיון הזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש מי ינענע אותך, אין לי כוח לטיפשות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההיגיון שלך מעוות לגמרי, אתה חי בסרט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק ליילל, אתה נשמע כמו תינוק מגודל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? עדיף שתשתוק, זה פחות מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט דביל, אין דרך אחרת לתאר את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת, כאילו יצאה מגן ילדים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, לא מבין כלום מהחיים שלך ומהעולם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "טיפש, אתה לא מסוגל להבין אפילו עובדות בסיסיות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מקש, אין שום דבר הגיוני בדברים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מעצבן, אי אפשר לסבול את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד קצת לפני שאתה מנסה להתווכח, בור ועם הארץ שכמוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה לא קולט שאתה טועה בגדול?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט פתטי, מנסה בכוח להוכיח משהו שאין לו שום בסיס.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חמור, איך אתה מצליח לחיות עם עצמך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב לי טוב, אתה פשוט אידיוט, אין לי מילה אחרת לתאר אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אורז, ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע של עצמך, תתעורר כבר!", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כל מה שאתה כותב זה בולשיט מוחלט, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך פתטי, אני מרחם עליך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים במקום לבלבל את המוח פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, חסר כל ערך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מטומטמות כמוך, אין פלא שאף אחד לא לוקח אותך ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עילג, איך אתה בכלל מצליח לתקשר?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל להתווכח עם מישהו עם רמת הבנה כזו?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לחפור, אתה פשוט לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, תתעורר למציאות במקום להפיץ שטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס, אין לך מושג כמה אתה חסר חשיבות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר כמו טמבל, אין שום היגיון במה שאתה אומר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תישן על האף, אתה פשוט עייף מדי בשביל להבין דברים פשוטים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דפוק, אתה חוזר על אותם טיעונים מטומטמים כל פעם מחדש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק להיות כזה בכיין, אף אחד לא סובל את הקיטורים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מנותק, איך אפשר להיות כל כך עיוור למציאות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה חסר תקנה, אין סיכוי שתשתנה ותתחיל לחשוב בהיגיון.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק כבר לברבר שטויות, נמאסת עם הדמגוגיה הזולה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי בכלל מקשיב לבן אדם דביל כמוך? תשתוק כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, תתעורר למציאות במקום להפיץ הבלים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך חלשים כמוך, בקושי שווה להתייחס אליהם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מביך, כל מילה שיוצאת לך מהפה רק מוכיחה כמה אתה טיפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד היסטוריה במקום להפיץ פה שקרים ועיוותים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת צבוע, אין גבול לצביעות שלך ולחוסר היושרה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בזבוז של חמצן, עדיף שתשתוק ותחסוך מאיתנו את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "שמע, אתה פשוט מטומטם אם אתה חושב שזו הדרך הנכונה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, תתעורר כבר למציאות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש, זה כואב לקרוא את התגובות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, אין לך שום דבר חכם להגיד?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט מעצבן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה איש הזוי לגמרי, חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אתה מביך את עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך פתטי, העמדה שלך פשוט מגוחכת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל לקחת אותך ברצינות עם הטיעונים המטופשים האלה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק להתבכיין, אתה פשוט חסר עמוד שדרה ולא מסוגל לקחת אחריות על שום דבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מקש, כי אין הסבר אחר לכמות השטויות שיוצאות לך מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, דמגוג זול שמנסה לעורר מהומות בלי שום בסיס הגיוני.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזו אבן, אתה כל כך פתטי שאפילו לא שווה להתייחס אליך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך שווה לכלום, פשוט עוד אחד שמצייץ בלי להבין כלום מהחיים שלו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אהבל, אתה חי בסרט אם אתה באמת חושב שהתיאוריות קונספירציה שלך מעניינות מישהו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חסר בושה, מפיץ שקרים בלי למצמץ ובלי שום כבוד לעובדות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "בטח יש לך מוח של ציפור, אחרת איך אפשר להסביר את הרדידות והטפשות שלך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם ההתמסכנות, אתה פשוט בכיין שלא יודע להתמודד עם מציאות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שאני בספק אם אתה יודע לקשור שרוכים. סתום כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערה שלך מטומטמת ברמה שאין דברים כאלה. לך תמצא איזה חור להסתתר בו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי מושג איך אפשר להיות כל כך עיוור למציאות. אתה פשוט אפס מאופס.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר שטויות במיץ עגבניות. עדיף שתשתוק לפני שתוציא עוד פנינה כזאת מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "וואו, איזו רמת אינטליגנציה נמוכה. אתה בטח גאון הדור לפי האמא שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש. לך תמצא חיים במקום ללכלך פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מספוג, כי כל מה שיוצא לך מהפה זה קשקושים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה סתם מבלבל את המוח? אף אחד לא סופר אותך בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה בכיין. לך תמצא מוצץ ותפסיק ליילל על כל דבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה לא מבין כלום מהחיים שלך, אז אל תתיימר להיות מומחה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר להגיד דבר כזה בשיא הרצינות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט חסר תקנה, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך מושג על מה אתה מדבר, סתם מפזר שטויות באוויר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שזה כואב, לך תלמד משהו לפני שאתה מגיב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין גבול לבורות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח, אתה לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לדבר? אתה חסר כל היגיון.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי כוח לשטויות שלך, אתה פשוט מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, לך תתעורר על החיים שלך כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך מטומטמת ברמות, פשוט אין לי מילים לכמות הטיפשות שבה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי אתה בכלל שתביע דעה? אפס מאופס.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, תתעורר כבר למציאות יא הזוי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, רק אתה יכול לכתוב שטויות כאלה ברצינות גמורה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לחפור, אתה משעמם ופתטי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד היסטוריה במקום להפיץ בורות, יא בור.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של אפונה, זה ברור לפי מה שאתה כותב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך שקרן שאני לא מאמין למילה אחת שיוצאת לך מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שזה כואב, איך אתה מצליח לקום בבוקר עם כל כך מעט שכל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "שתוק כבר, אתה פשוט לא מבין כלום מהחיים שלך, חתיכת אפס.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שאני תוהה אם אתה בכלל יודע לקרוא.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה לא מסוגל לחבר משפט הגיוני אחד בלי לצאת טמבל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר שטויות במיץ, עדיף שתשתוק לפני שתעשה מעצמך עוד יותר צחוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק ליילל, אתה פשוט בכיין ועלוב, אף אחד לא סובל את הקיטורים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "וואו, הרמה האינטלקטואלית שלך נמוכה יותר מהגרביים המלוכלכים שלי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שאתה בטח צריך הוראות כדי לנשום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה בור ועם הארץ, עדיף שתחזור לבית ספר במקום לנסות להישמע חכם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין לך שום דבר מעניין או חכם להגיד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר להאמין לכל השטויות שאתה כותב?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איזו תגובה מטופשת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד היסטוריה במקום להפיץ פה בורות, יא חסר השכלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק אדם טיפש כמוך יכול לחשוב שזו עובדה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, יא דביל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מגוחך, לא ברור לי איך אתה מצליח לקום בבוקר עם כל השטויות האלה בראש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם הבכי וההתקרבנות, אתה פשוט חלש אופי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מפגרת שאני לא יודע מאיפה להתחיל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דפוק, אתה חי בסרט אם אתה חושב שזה הגיוני.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שזה כואב, איך אפשר לחשוב ככה בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? השטויות שאתה כותב פשוט מביכות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מקש, אין דרך אחרת להסביר את הטיפשות הזו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לבלבל את המוח, אף אחד לא מקשיב לשטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט דביל, אין מילה אחרת לתאר אותך ואת הדעות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת מטומטם, לך תלמד קצת לפני שאתה מגיב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה בכיין אתה, תתבגר כבר ותפסיק להתלונן על הכל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מפגרת שאני לא יודע אם לצחוק או לבכות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אדיוט מושלם, בלי טיפה של הבנה או היגיון.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, חסר עמוד שדרה ודעת משל עצמך. תפסיק ליילל כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך מטומטמות כמו מי שכתב אותן. תתבייש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, מנותק לגמרי מהמציאות. תחזור לכדור הארץ.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה מדבר כמו תינוק שלא קיבל סוכריה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה בכיין, כל מה שאתה יודע זה להתלונן. תעשה משהו מועיל בחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אדם רדוד וריק מתוכן. חבל על המילים שאני מבזבז עליך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בגודל של אפונה, אחרת איך אפשר להסביר את הטמטום הזה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח, אתה פשוט אידיוט שלא מבין כלום מהחיים שלו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש חיים, אתה משעמם ומעצבן כמו יתוש באוזן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כל פעם מחדש אתה מוכיח כמה אתה טיפש. אין לך תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר, אף אחד לא רוצה לשמוע את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, אין לך שום מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא דביל, לך תלמד היסטוריה לפני שאתה מגיב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה מטומטם, המוח שלך בגודל של גרגר אפונה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חסר מוח, זה פשוט מדהים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך לעזאזל, אף אחד לא צריך את הדעות המעוותות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חתיכת בהמה, אין לך טיפת שכל ישר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מפגרת, אי אפשר לקחת אותך ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא חתיכת כלומניק, מי אתה חושב שאתה בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מפגר שאי אפשר להבין איך אתה בכלל מצליח לקשור שרוכים בבוקר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך קטן יותר מגרגר חומוס, בגלל זה כל מה שיוצא לך מהפה זה שטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, כל מה שאתה עושה זה להפיץ רעל ובורות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה כזה חמור, עדיף שתשתוק ותחסוך מאיתנו את הטימטום שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לא ברור לי איך אנשים כמוך בכלל מצליחים לתפקד בחברה, אתה פשוט עלוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אידיוט גמור, כל רעיון שלך הוא יותר מטופש מהקודם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, עדיף שתחזור לחור שממנו יצאת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מעידות על רמת אינטליגנציה של אצות ים, פשוט מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמכור ארטיקים, זה בערך הרמה שלך בחיים, לא להביע דעות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך חסר תועלת, העולם היה מקום טוב יותר בלעדיך ובלעדי השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך מטופשת כמו הפנים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר שטויות, עדיף שתשתוק לפני שתביך את עצמך עוד יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שזה כואב לי בראש לקרוא את מה שכתבת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש מי ינענע אותך, עזוב אותנו בשקט עם השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך שכל ישר, אתה חושב עם הברכיים שלך כנראה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שזה כואב לי בלב לראות כמה שטויות אתה כותב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך קטן יותר מגרגר חומוס, בגלל זה אתה לא מבין כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש כשהיית קטן? אין הסבר אחר לשטויות שאתה מפליט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין לך טיפה של כבוד עצמי או שכל ישר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל אתה, לא יכול להיות שמישהו באמת חושב ככה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שאני מתפלא איך אתה מצליח לקשור שרוכים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "עדיף שתסתום את הפה שלך, כל מילה שיוצאת לך מהפה רק מוכיחה כמה אתה אטום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, אין בך שום דבר מעניין או חכם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תישן על האף, אולי כשתתעורר תבין כמה טמבל היית.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, כל פעם שאתה מדבר אני מתגלגל מצחוק על הרמה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל להתווכח איתך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט בלתי נסבל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, אין לך בושה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שאין לי מילים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה לא מבין כלום, סתם מקשקש שטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש מי ינענע אותך, עוף לי מהעיניים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין לך שום דבר חכם להגיד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק ליילל כמו תינוק, תתבגר כבר!", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כל מה שיוצא לך מהפה זה זבל מוחלט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אתה מצליח לחיות עם עצמך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איזו שטות מוחלטת אמרת עכשיו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט לא מבין כלום, הטיפשות שלך עוברת כל גבול.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמכור לוקשים למישהו אחר, אני לא קונה את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, אין לך בושה להגיד דברים כאלה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב לי טוב, אתה פשוט דביל אם אתה חושב ככה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, איזה היגיון יש לך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "עדיף שתשתוק, כל מילה שיוצאת לך מהפה רק מוכיחה כמה אתה מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, איך אתה לא מתבייש בעצמך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שזה כואב לי בלב לקרוא את השטויות שאתה כותב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שאני תוהה אם אתה בכלל מבין עברית.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך שמץ של מושג על מה אתה מדבר, אתה פשוט בור ועם הארץ.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אפס מאופס, חסר כל ערך או תרומה לדיון הזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תדחוף את הדעות המעוותות שלך למקום אחר, אף אחד לא רוצה לשמוע את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה חתיכת דביל, אתה לא מסוגל להבין טיעון פשוט?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מספוג אם זה מה שאתה מצליח להוציא מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, מחפש צומי בכל מחיר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח עם השטויות שלך, אתה פשוט טרחן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מנותק מהמציאות שזה פשוט עצוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל לקחת אותך ברצינות עם השטויות שאתה כותב?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה אם אתה חושב שזה הגיוני בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, אין לך שום דבר חכם להגיד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לבלבל את המוח, אתה פשוט מטומטם ברמות קשות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "וואו, איזו רמה נמוכה של טיעונים. אתה פשוט בושה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לדבר בכלל? אתה לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזה סלע, אתה מביך את כולם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה לא קולט כלום ממה שקורה סביבך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה סתם טרול שמחפש צומי, עוף מפה כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כל מילה שלך היא בזבוז של דיו, אתה פשוט חסר ערך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר לחשוב ככה בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר ליילל, אתה נשמע כמו תינוק שלא קיבל ממתק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך ריקים מתוכן, פשוט שטויות במיץ.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איזה הגיון מעוות יש לך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אתה פשוט מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אני לא מבין איך אפשר להיות כל כך עיוור למציאות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט משלך, תתעורר כבר!", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כל מילה שלך היא בזבוז זמן, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לכתוב? אתה לא מבין כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מטומטמות כמו מי שאמר אותן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל אתה, לא מבין כלום מהחיים שלו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום ת'פה כבר, נמאס לשמוע את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אף אחד לא רוצה לשמוע את הדעות המטומטמות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לדבר? אתה חסר תקנה לחלוטין.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה חוצפן, תתבייש לך על איך שאתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "שכל ישר זה לא הצד החזק שלך, אה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תתבגר כבר, אתה מדבר כמו ילד בגן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט לא מבין כלום, תעשה טובה ותשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איך אפשר להיות כל כך עיוור למציאות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, בחיים לא שמעתי שטות כזאת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, איך אתה בכלל מתפקד?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט חסר תקנה, אין עם מי לדבר פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תסתכל במראה, אולי תבין כמה אתה מגוחך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה טמבל, העולם היה מקום טוב יותר בלעדיך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אני לא מאמין שאתה באמת חושב ככה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט מפגר, אין דרך אחרת לתאר את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לבלבל את המוח, אתה פשוט משעמם וטיפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כל מילה שלך היא עדות לחוסר האינטליגנציה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט מטומטם אם אתה חושב שזה הגיוני בכלל, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך רדודה, כאילו מישהו עם IQ של צנון כתב אותה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בטח חי בסרט אם אתה מאמין לשטויות האלה. תתעורר על החיים שלך כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, כל מה שאתה יודע זה להתלונן במקום לעשות משהו מועיל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מפקק שעם אם זו רמת ההבנה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר כמו טרול שמנסה לעצבן בכוח, אין שום היגיון בדברים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים במקום להפיץ פה את השטויות שלך, אתה פשוט מבייש את עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מעוותות כמו הראייה שלך, אתה חייב לבדוק את עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך צבוע שזה מגעיל, תסתכל במראה לפני שאתה מעביר ביקורת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק אחד ששקוע כל כך עמוק בבורות יכול לכתוב דברים כאלה מגוחכים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא אפס, מי בכלל נתן לך במה? הדעות שלך שוות לתחתית של הנעל שלי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, קשה להאמין שאתה מצליח לקשור שתי מילים בלי לצאת מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט בכיין ועלוב נפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, כל פעם מחדש אתה מוכיח שאין לך טיפת שכל ישר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אף אחד לא רוצה לשמוע את ההבלים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מביך, אני מתכווץ במקומי מרוב בושה לקרוא את מה שכתבת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "וואו, איזה אפס מאופס. פשוט חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חתיכת מטומטם, אין דרך אחרת לתאר את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט אפס מאופס, לא שווה התייחסות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר שטויות במיץ עגבניות, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, רק לך יכול לצאת דבר כזה מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בחופשה, כי מה שכתבת פשוט מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חתיכת טיפש, הגיע הזמן שתסתום כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איכס, אתה פשוט מגעיל ומלא שנאה, תתבייש לך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים במקום לברבר שטויות כל היום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עלוב, שאין לי מילים לתאר את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק מישהו כמוך יכול להאמין לשטויות האלה, פשוט מגוחך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההיגיון שלך מעוות כמו כביש אחרי רעידת אדמה, פשוט חסר טעם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, וזה סרט ממש גרוע.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של אפונה, ברור שאתה לא מבין כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה רציני? אתה פשוט בדיחה מהלכת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך מושג על מה אתה מדבר, אתה סתם מקשקש שטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שזה כואב לי רק לקרוא את התגובה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים, במקום להגיב שטויות כאן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שזה כואב, איך אפשר להיות כל כך עיוור למציאות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, הראש שלך מרוח כמו חומוס על הפיתה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב לי טוב, אתה פשוט אפס מאופס, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט משלך, תתעורר כבר, החיים האמיתיים קורים מחוץ לבועה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, רק מישהו עם מוח של ציפור יכול לכתוב דברים כאלה מטומטמים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר, אתה חופר כמו בולדוזר והכל בולשיט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך פשוט מגוחכות, אתה לא שווה את האוויר שאתה נושם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שאתה בטח חושב שקקטוס הוא ירק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי כוח לשטויות שלך, אתה פשוט בכיין ועלוב נפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזה סלע, אתה מביך את עצמך בכל תגובה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, יא חתיכת אידיוט, תפסיק לבלבל את המוח עם השטויות האלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך כל כך מטומטמות, אני לא מאמין שיש אנשים שחושבים כמוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כנראה חי בסרט משלך, מנותק לגמרי מהמציאות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תשמע, אתה פשוט דביל אם אתה חושב שזה הגיוני.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "עוד אחד שאין לו שום הבנה, רק פותח את הפה כדי להשמיע רעש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כמה טיפש אפשר להיות? אתה עושה צחוק מעצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק כבר עם השטויות, יא חסר שכל, זה לא מעניין אף אחד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מגוחך, אני לא יודע אם לצחוק או לבכות מהטמטום שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך בושה? איך אתה מעז לכתוב דברים כאלה, יא עלוב נפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה טמבל, אתה חי בסרט אם אתה חושב שזה הגיוני.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה רציני? אתה פשוט עיוור למציאות, אידיוט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה מדבר שטויות במיץ עגבניות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חסר תקנה, עדיף שתשתוק לפני שתוציא עוד פנינה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד לי, אתה בכוונה מנסה להרגיז? כי זה מצליח לך, יא מתוסכל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה סתם מקשקש? עדיף שתלך לישון, מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה בדיחה אתה, כל מילה שלך זה בזבוז זמן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט חשוך, אין לי מילים לתאר כמה אתה לא מבין.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אתה מביך את עצמך עם כל תגובה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שאפילו גזר יודע יותר ממך על פוליטיקה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך מטופשות כמוך, חסרות כל היגיון וטעם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט חסר תקנה, עדיף שתשתוק לפני שתבייש את עצמך עוד יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בדיחה מהלכת, איך אפשר לקחת אותך ברצינות בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מקש, אין שום דרך להסביר את הטמטום הזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אין לך מה לחפש בדיון רציני עם הדעות המגוחכות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שאתה לא מבין עד כמה אתה לא מבין כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אני לא מבין איך אנשים כמוך בכלל מסוגלים לתפקד בחברה, אתה פשוט עול.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כל מה שיוצא לך מהפה זה שטויות, פשוט תחסוך מאיתנו את הזבל שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אפס מאופס, דמות חסרת חשיבות שרק מפריעה לכולם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, המוח שלך עשוי מקירות גבס? כי אין שם כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר שטויות כאילו קיבלת תואר דוקטור בלהיות טיפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך כל כך מטומטמות, אני מרגיש שה IQ שלי יורד רק מלקרוא אותן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך שמץ של מושג על מה אתה מדבר, סתום כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק מישהו עם אפס יכולות חשיבה יכול לכתוב דבר כזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בדיחה מהלכת, אין לך טיפת שכל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק להתבכיין כמו ילד קטן, תתבגר כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך כל כך דביליות, הן גורמות לי לרצות לצרוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע אם אתה באמת מאמין למה שאתה אומר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל לדבר איתך ברצינות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב לי טוב, אתה פשוט חסר תקנה, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך מטומטמות כמוך, אין פלא שאף אחד לא מקשיב לך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה טיפש ובור, אל תנסה אפילו להתיימר להבין.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך קטן יותר מגרגר אורז, תפסיק לנסות לחשוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בנאדם עלוב, חסר עמוד שדרה וחסר עקרונות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? כל מילה שלך היא שטות מוחלטת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש חיים, יא פתטי, במקום להטריד אנשים פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חמור, לא מבין כלום מהחיים שלך. רק מפיץ שטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה לא מפסיק לבלבל את המוח עם הגיון מעוות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, תפסיק להתבכיין על כל דבר קטן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך הזויה לחלוטין, איפה בדיוק למדת לחשוב ככה? בבית ספר לדבילים?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה חייב להיות כל כך מעצבן וטרחן? אין לך חיים משלך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר את הפה, אף אחד לא רוצה לשמוע את השטויות המטופשות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בור ועם הארץ, אין לך מושג על מה אתה מדבר בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אידיוט, איך אפשר לחשוב מחשבות כאלה מפגרות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך שקוף ושקרן, אף אחד לא מאמין למילה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אתה פשוט מביך את כולנו עם הטמטום שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה רציני? רק אידיוט גמור היה מאמין לשטויות האלה. לך תתחבא מתחת לסלע.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, איך אתה מצליח לתפקד בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט בכיין ועלוב. אף אחד לא סובל אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דפוק אתה, לא מסוגל להבין דבר פשוט כזה? אולי תחזור לבית ספר יסודי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אפס, אין לך שום דבר חכם להגיד אז אתה סתם מקלל כמו ילד קטן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך מטומטמת ברמות אחרות. עדיף שתשתוק לפני שאתה מביך את עצמך עוד יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה לא מבין כלום מהחיים שלך, חתיכת טמבל. לך תעשה שיעורי בית.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה טיפש חסר תקנה, כל מילה שלך היא הוכחה לגבולות האינטלקט שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בדיחה עצובה, אף אחד לא לוקח אותך ברצינות, מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק מישהו עם IQ של נעל יכול היה לכתוב תגובה כל כך דבילית.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל לקחת אותך ברצינות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך מטופשות כל כך שזה כואב לקרוא אותן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש חיים, דביל שכמוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אפס מאופס, דעה כזאת רק מוכיחה כמה אתה טיפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי כוח לשטויות שלך, אתה פשוט חסר שכל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בגודל של אפונה, אחרת לא היית אומר דברים כאלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מגוחך, לא ברור איך אתה מצליח לתפקד ביום-יום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם הקשקושים שלך, אתה מעייף עם הטיפשות הזאת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה מטומטם אתה, פשוט אין גבול לטמטום שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אפס, בחיים לא תצליח לעשות כלום כמו שצריך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר את הפה המטונף שלך, נמאסת על כולם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך שווה לתחת, אף אחד לא סופר אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא באיזה חור, אתה פשוט מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת אידיוט, איך אפשר להיות כל כך עיוור?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עלוב נפש, אין לך טיפת כבוד עצמי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בדיחה מהלכת, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר להתווכח עם בנאדם שחי בסרט משלו?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איזו שטות מוחלטת כתבת פה עכשיו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של אפונה, ברצינות. כל מילה שלך היא הוכחה לכך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין דרך אחרת לתאר את הרמה הנמוכה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי כוח לשטויות שלך, אתה פשוט בזבוז זמן מוחלט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד קצת היסטוריה לפני שאתה מפיץ פה בורות כזאת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שזה כואב לקרוא אותה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה רציני עכשיו? אתה נשמע כמו ילד בן חמש שרב על צעצוע.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לא פלא שאף אחד לא לוקח אותך ברצינות, אתה פשוט בדיחה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס. אתה לא שווה את הדיו שבו נכתבה התגובה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מפגר שאי אפשר להסביר לך כלום, חבל על המאמץ.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך מטומטמות כמוך, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אידיוט גמור, כל מה שיוצא לך מהפה זה שטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? אתה בושה וחרפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח, אתה פשוט אפס מאופס.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, איך אפשר לחשוב ככה בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך כל כך חלשים שזה מביך, אתה פשוט בור.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש מי ינענע אותך, אתה חתיכת טרחן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, כל מה שאתה כותב זה שטויות מוחלטות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לחפור, אף אחד לא סובל את הגישה המתנשאת שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שזה כואב, איך אפשר להגיד דברים כאלה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר את הפה, לא מעניין אף אחד השטויות שיוצאות לך משם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת אידיוט, אתה לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא עלוב נפש, אין לך בושה בכלל להגיב ככה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, זה ברור.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה סתם טרול שמחפש צומי, לך מפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כמה רוע יכול להיות באדם אחד? אתה פשוט מגעיל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? אתה מדבר כמו ילד בן חמש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, אין לך טיפת כבוד עצמי?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק טמבל כמוך יכול לכתוב כאלה דברים מגוחכים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מקש, אין דרך אחרת להסביר את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזו רמה נמוכה, אתה מביך את כולנו עם הטמטום הזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל לקחת אותך ברצינות? כל מילה שלך זה בזבוז זמן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך עשוי מקש? כי אין שום היגיון במה שאתה אומר פה, אפס מחשבה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט בכיין שלא יודע לקבל ביקורת. תתבגר כבר!", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שזה כואב. עדיף שתשתוק לפני שתוציא עוד פנינה של בורות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל. רק בנאדם שחי מתחת לסלע יכול לחשוב ככה. תתעורר על החיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס. תסתום את הפה ותחסוך מאיתנו את ההבלים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? כל מה שאתה כותב זה בולשיט. לך תמצא חיים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך חסר טקט ואגוצנטרי, זה מדהים כמה אתה מנותק מהמציאות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת צבוע. אין לך שום עמוד שדרה, אתה פשוט מתהפך לפי הרוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה תמים אתה, או שאתה פשוט מתיימר להיות? אף אחד לא קונה את השטויות האלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, אין לך מושג על מה אתה מדבר, סתום כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של אפונה אם אתה חושב ככה. איזה מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איך אפשר להיות כל כך עיוור למציאות? אתה בדיחה מהלכת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מנותק שזה כבר לא מצחיק, פשוט עצוב כמה טמטום יש בך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמכור ארטיקים, זה בערך הרמה שלך בשיחות כאלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח עם השטויות שלך, אף אחד לא מקשיב לך יא מעפן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לכתוב? אתה מביך את עצמך בכל מילה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, ברור שאתה לא מבין כלום אם זו הדעה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך רדוד שאין לי כוח אפילו להגיב לך ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תישן על האף, אתה פשוט עשה מעצמך צחוק עם התגובה הזו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, חסר עמוד שדרה ולא ראוי להתייחסות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך ריקים מתוכן כמו הכיס של מי שמאמין לך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אידיוט, בחיים לא שמעתי שטויות כאלה ממישהו עם מנת משכל מעל חד-תא.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההתבטאויות שלך מביכות ברמה שלא תאמן, לך תמצא לעצמך תחביב מועיל יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר כמו טרמפיסט שנתקע בצד הדרך, אף אחד לא סופר אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תחזור לחור שממנו יצאת, אתה רק מלכלך את הפיד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "השכל שלך בגודל של גרגר אורז, באמת שאין טעם להתווכח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בדיחה מהלכת, עדיף שתשתוק לפני שאתה מביך את עצמך עוד יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד קצת היסטוריה או שכל ישר, אתה פשוט בור ועם הארץ.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מטומטם שזה כואב, איך אפשר לחיות עם כזאת רמה של אינטליגנציה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לחפור, אתה לא מבין שכל מילה שיוצאת לך מהפה זה שטויות במיץ?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? איך אתה מעז לכתוב כאלה דברים הזויים?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, אין לך שום דבר חכם להגיד, רק להשמיץ.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאבן, אף אחד לא צריך לשמוע את השטויות המקולקלות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אידיוט, אתה לא מסוגל להבין אפילו טיעון פשוט. חבל על הזמן שמשקיעים בך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עלוב נפש, אין לך טיפת כבוד עצמי להמשיך להגיב פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר את הפה המטונף שלך, נמאס לשמוע את ההבלים שאתה פולט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לדבר? אתה פשוט בור ועם הארץ, לך תלמד משהו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, אף אחד לא סופר אותך או את הדעות המעוותות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שזה כואב לי במוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים, יא חסר עמוד שדרה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בושה וחרפה, עדיף שלא היית מגיב בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, יא טמבל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה לא מבין כלום מהחיים שלך, חתיכת דביל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "השטויות שאתה כותב גורמות לי לרצות לבכות מרוב טיפשות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עלוב, אין לך שום דבר חכם להגיד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "סתום ת'פה, יא טרול חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר להאמין לשטויות כאלה? פשוט בושה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, נפלת על הראש? מה זה השטויות האלה שאתה מפיץ?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, חסר כל הבנה בסיסית. לך תלמד משהו לפני שאתה מגיב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם הבכי וההתקרבנות שלך, אתה פשוט מעצבן ברמות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, לא מבין כלום מהחיים שלו אבל חייב להביע דעה על הכל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, לגמרי מנותק מהמציאות. תתעורר כבר!", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מה אתה מזבל את השכל? אף אחד לא סופר את הדעות המטומטמות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט חסר תקנה, לא שווה להתייחס למה שיוצא לך מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים במקום לשבת ולכתוב שטויות כאלה כל היום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לא יאומן כמה טמטום יכול להיות מרוכז באדם אחד כמוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שאתה בטח חושב שקקטוס הוא ירק עלים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההיגיון שלך מעוות כמו כביש אחרי רעידת אדמה. פשוט מגוחך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה רציני? עם רמת האינטליגנציה הזו, אני מופתע שאתה מצליח לקשור שרוכים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לסלע, אולי שם תמצא קצת שכל אבוד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך שווה בדיוק כמו נייר טואלט משומש. זבל מוחלט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "כמה טיפש אפשר להיות? אתה כנראה התחבאת מאחורי הדלת כשחילקו שכל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס. תרומה אפסית לדיון ולחברה בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה בכיין, בטח גם בגן אמא שלך הייתה צריכה לבוא להחליף לך חיתול.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תגיד, אתה נולדת עם מוח של אפרוח או שזה משהו שפיתחת עם השנים?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך חלשים כמו קפה נמס שהוכן עם מים קרים. פשוט עלוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, תתעורר כבר! הטיפשות שלך עוברת כל גבול.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט בושה וחרפה. לך תתחבא מתחת לאיזה סלע.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לא ברור לי איך אנשים כמוך בכלל מורשים להביע דעה. אתה פשוט דביל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מנסורת, אין דרך אחרת להסביר את הטמטום הזה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה קשקשן בלתי נלאה, עדיף שתשתוק לפני שתוציא עוד פנינה של טיפשות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה לא מבין כלום מהחיים שלך. לך תלמד משהו במקום לבלבל את המוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מטומטמות כמוך, פשוט מביך לקרוא את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, אין מילה אחרת לתאר אותך. לך תמצא חיים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך מטומטמת ברמות שאפילו חמור לא היה מגיע אליהן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, כל מה שאתה כותב זה שטויות גמורות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תמצא חיים במקום לבלבל את המוח עם השטויות שלך פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, עדיף שתשתוק לפני שתעשה מעצמך צחוק עוד יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה מטורלל, אתה חי בסרט רע של עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה לא מבין כלום מהחיים שלך, עדיף שתפרוש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מטופשות כמו הבעה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מפגר, איך אפשר להגיד דבר כזה ברצינות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אין לך שמץ של מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לא יאמן כמה טיפש אפשר להיות. זה פשוט מביך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "עוד פעם השטויות שלך? אתה משעמם וצפוי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט אידיוט גמור. אין דרך אחרת להגדיר את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש חיים, במקום להפיץ פה את הבורות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה סתם טרול שמנסה לעצבן, אבל זה לא עובד עלי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, בחיים לא שמעתי שטויות כאלה. פשוט בור.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה רציני? אתה מדבר כמו ילד בן חמש, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט חסר תקנה ולא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה באמת מאמין לזה? אין גבול לטיפשות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין לך שום דבר חכם להגיד אז אתה סתם מקשקש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, תתעורר כבר. כל מה שאתה כותב זה בולשיט מוחלט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת אפס, איך אתה מעז לדבר ככה? אין לך כבוד עצמי?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מטומטם שזה כואב. לך תלמד קצת לפני שאתה מגיב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, אחרת לא היית כותב כאלה שטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של אפונה אם אתה חושב שזאת תשובה הגיונית.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט מטומטם ואין לי סבלנות לשטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע אם אתה מאמין לשטויות האלה, תתעורר על החיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אין לך מושג על מה אתה מדבר בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, אין לי מושג איך אתה מצליח לתפקד עם רמת אינטליגנציה כזו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "וואו, הרגע הוכחת שאתה חסר תקנה, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה ממש חתיכת כלומניק, אל תנסה אפילו להתווכח איתי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך כל כך חלשים שזה מביך, לך תמצא לעצמך תחביב אחר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק מישהו מפגר כמוך יכול להעלות טיעון כזה הזוי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, רק לך יכולה לצאת אמירה כזאת מטומטמת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מנסורת, אין הסבר אחר לשטויות האלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס, אתה לא שווה את הדיון הזה בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מטומטם שאני לא יודע מאיפה להתחיל אפילו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מטומטם, איך אתה מצליח לתפקד ביום-יום עם חוסר שכל כזה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט אידיוט ברמה שלא תאמן. כל מילה שלך זו הוכחה לכמה שאתה ריק מתוכן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי מושג איך הגעת למסקנות האלה, כנראה המוח שלך עובד על מצב חיסכון קבוע.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, חסר כל ערך או תרומה. עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לדבר? כי בטח אין לך רישיון לחשוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בן אדם כזה מעצבן וטרחן, שכל פוסט שלך גורם לי לבחילה קלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך כל כך חלשים וילדותיים, שזה פשוט מביך לקרוא אותם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "עוף לי מהעיניים, אתה סתם נטל על השיח ועל האינטרנט בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כנראה חי בסרט משלך, מנותק לחלוטין מהמציאות ועם היגיון מעוות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך מושג על מה אתה מדבר, אתה פשוט מגוחך ברמות שאין לתאר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שזה כואב, איך אתה מצליח לקום בבוקר עם כל הטמטום הזה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך מטומטמות כמו מי שכתב אותן, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, חסר כל ערך ולא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מספוג, אחרת איך אפשר להסביר את הרמה הנמוכה הזו?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך שווה לכלום, בדיוק כמוך. עדיף שתחסוך מאיתנו את השטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לא ברור לי איך אתה מצליח לתפקד בחברה עם כל הטיפשות הזו שיוצאת לך מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזה סלע, אתה פשוט מביך ברמה שלא תיאמן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך פתטי, שזה כבר לא מצחיק, זה פשוט מעציב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח עם השטויות שלך, אף אחד לא מקשיב לך, אתה פשוט מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט אדם קטן ועלוב נפש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעה שלך שווה לכלום, בדיוק כמו הכבוד העצמי שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר, אתה רק פולט שטויות מהפה שלך כאילו אין מחר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי שמדבר ככה פשוט מראה כמה הוא דביל ולא מבין כלום מהחיים שלו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מקש, אחרת אין הסבר לרמת הטיפשות הזאת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך פשוט מביכות, תתבייש בעצמך על הבורות הזאת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך משעמם וצפוי, בטח גם המחשבות שלך שקופות כמו מים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך קטן יותר מגרגר חול, יא חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אפס, בקושי מגיע לקרסוליים של שום דבר משמעותי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מטומטמות כמו מי שבחר בך, אידיוט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר את הפה המטונף שלך, אף אחד לא רוצה לשמוע את השטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך עלובה, בקושי שווה את הנייר שהיא לא נכתבה עליו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא חתיכת בכיין, תפסיק להתלונן על כל דבר קטן כמו ילד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שאני מרגיש שהאייקיו שלי ירד רק מלקרוא אותה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט לא מבין כלום מהחיים שלך, חבל על המילים שאני מבזבז עליך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לכתוב? אתה מביך ברמה בינלאומית.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בגודל של אפונה, אחרת אין לי הסבר לשטויות שאתה כותב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש חיים במקום להפיץ פה את הטיפשות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך פתטי שזה כמעט מצחיק, אבל בעיקר מעצבן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יש לך חור במקום מוח? כי אין לי הסבר אחר לרמת האינטליגנציה הירודה הזו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אף אחד לא מקשיב לך כי אתה מדבר בולשיט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך פשוט חסרות טעם ומראות כמה אתה ריק מתוכן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה טיפש ברמות שקשה לתאר, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, כל מה שאתה עושה זה רק לבלבל את המוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך קטן כמו אגוז, אין לך שמץ של מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? אתה רק מביך את עצמך עם כל מילה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק להתבכיין, אתה פשוט חלש אופי ולא מסוגל להתמודד עם כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מעצבן, רק מלהסתכל עליך בא לי לצעוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר להגיד דבר כזה בכלל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב נפש, אין לך טיפת כבוד עצמי?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, חתיכת מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזו אבן, דביל שכמוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בושה וחרפה, עדיף שלא תגיב בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "רק טיפש כמוך יכול לחשוב שזה הגיוני.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תתבייש לך, אתה מדבר שטויות בלי הפסקה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אני לא מאמין שמישהו כל כך חסר שכל יכול לכתוב פה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אתה מצליח לקום בבוקר בלי להתבלבל בין שמאל לימין?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט בדיחה מהלכת, אין טיפת היגיון במה שיוצא לך מהפה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה מביך את עצמך בכל פוסט מחדש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מישהו צריך להסביר לך שחושב לפני שמדבר, כי אצלך זה עובד הפוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "עוד פעם השטויות הרגילות שלך, משעמם, צפוי וחסר כל תוכן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תדבר עם הקירות, אולי שם יבינו את השטויות שאתה כותב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, אין דרך אחרת לתאר את רמת הטימטום הזו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך כל כך פרימיטיביות, כאילו יצאת עכשיו מהמערה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט טיפש גמור אם אתה באמת חושב ככה, תתבגר כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה שטויות אתה מדבר? מאיפה הבאת את השטות הזאת, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד היסטוריה במקום להפיץ בורות ודמגוגיה זולה, אתה מביך את עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערה שלך כל כך מיותרת וחסרת היגיון, תשתוק עדיף.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אידיוט אם אתה לא מבין שזה פשוט לא הגיוני בעליל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, אין לך בושה לכתוב דברים כאלה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט, תתעורר למציאות במקום להפיץ אשליות מטופשות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך מגוחך, אני לא מאמין שיש אנשים עם דעות כל כך מעוותות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תתבייש לך על הגישה המגעילה הזאת, אתה פשוט דוחה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה לא מבין כלום, סתום את הפה ותן לאנשים חכמים לדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חסר תקנה, עדיף שתשתוק ולא תבייש את עצמך יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר להתבכיין, אתה נשמע כמו ילד קטן שלא קיבל סוכריה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב לי טוב, אתה פשוט מטומטם אם אתה חושב שזה רעיון טוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מפגרת, איפה השארת את המוח שלך?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אפס מאופס, לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, אתה לא קולט עובדות גם כשמראים לך אותן מול העיניים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אידיוט אם אתה חושב שמישהו מקשיב לשטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד קצת לפני שאתה מביע דעה, בור ועם הארץ שכמוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תתבייש לך, אתה פשוט אדם קטן ועלוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה פתטי, תפסיק לנסות להישמע חכם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה חסר תקנה, עדיף שתשתוק.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר את הפה המטונף שלך, נמאסת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מישהו צריך להסביר לך שאתה חי בסרט?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה טמטום, אתה לא קולט כלום.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב, אין לי מילים לתאר כמה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תתבייש לך על התגובה המטופשת הזו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזה סלע, יא פחדן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה רציני? השכל שלך בגודל של גרגר אורז, איך אפשר להיות כל כך עיוור למציאות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטמטום שלך מגיע לשיאים חדשים בכל פוסט. תפסיק לכתוב שטויות, אתה מבייש את עצמך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, בטח קיבלת את התואר שלך במבצע 'חבר מביא חבר' באוניברסיטה של החיים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה פשוט דביל חסר תקנה, לא מבין כלום מהחיים שלו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה לא מבריק במיוחד, בוא נגיד את זה בעדינות. עדיף שתשתוק לפעמים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההיגיון שלך עקום כמו בננה, איך אתה מצליח לקשור משפט בלי להתבלבל?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, חסר כל ערך ורק מפיץ רעל. לך תמצא חיים במקום להטריד אנשים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אני לא מבין איך אפשר להיות כל כך טיפש. כנראה שבבית הספר דילגת על שיעורי היגיון.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הדעות שלך מטומטמות כמו בורג משוחרר, אי אפשר לקחת אותך ברצינות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תשמע, אתה פשוט בדיחה עצובה. אל תנסה אפילו לחשוב, זה לא הצד החזק שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שאפילו אבן יודעת יותר ממך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההיגיון שלך עקום כמו בננה, איך אתה מצליח לקום בבוקר?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אורז, תתחיל לחשוב קצת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר שטויות בלי הפסקה, אי אפשר לשמוע אותך יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך מושג על מה אתה מדבר, סתום ת'פה כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא חתיכת אפס, תפסיק לנסות להרשים אף אחד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "החוכמה שלך מתחבאת טוב, כנראה שהיא לא קיימת בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש חיים, אתה משעמם כמו שיעור היסטוריה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שאני לא מבין איך אתה מצליח לקשור שרוכים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטופשת שאפילו ילד בגן היה מתבייש לכתוב אותה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה כנראה חי בסרט אחר לגמרי אם אתה חושב שזה הגיוני.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "וואו, הרמה האינטלקטואלית שלך נמוכה יותר מקרש חיתוך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש מי ינענע אותך, אין לי זמן לשטויות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דביל, איך אפשר בכלל לחשוב ככה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח עם השטויות שלך, אתה פשוט מעצבן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה בגודל של גרגר אפונה אם זו הרמה של הטיעונים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מפגר שאי אפשר להבין איך אתה בכלל מתפקד.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעונים שלך ריקים מתוכן כמו הכיס שלך, חסר ערך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס, חסר מוח וחסר עמוד שדרה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם השטויות שלך, אתה מדבר כמו תינוק מגודל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אידיוט, אתה לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך טיפש שאתה בטח מפריע לחמצן להתפשט.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "חתיכת אפס, לך תחפש מי ינענע אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט דביל. אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט דביל. אין דרך אחרת להגדיר את רמת הטיפשות שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערה שלך כל כך מטומטמת שאני מתבייש בשבילך. תשתוק כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע, מנותק לחלוטין מכל קשר למציאות. תתבגר כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אהבל, אתה לא מבין כלום ממה שקורה פה. לך תלמד קצת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט עלוב, עצוב לראות אדם שפל כמוך מנסה להביע דעה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מגרביים, אין הסבר אחר לרמת הפיגור הזו.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח עם השטויות שלך, אף אחד לא מקשיב לך, יא חסר משמעות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, כל פעם שאתה פותח את הפה אני פשוט מתייאש מהמין האנושי.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה בורות, אתה חי בסרט אם אתה באמת חושב ככה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח עם השטויות שלך, אתה פשוט מטומטם.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תתחבא מתחת לאיזו אבן, הטיפשות שלך מדבקת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כל כך עלוב, מנסה לעורר פרובוקציות עם דעות כאלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום כבר, אף אחד לא רוצה לשמוע את ההבלים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך טיפת שכל, איך אפשר בכלל לחשוב בצורה כזאת?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, עדיף שתשתוק לפני שתביך את עצמך יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אידיוט, ברור שאתה לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר עם הקשקושים, אתה פשוט חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "שמע, אתה פשוט עילג, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "הטיעון שלך כל כך מטומטם, זה מביך לקרוא את זה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תלמד היסטוריה, יא בור ועם הארץ!", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חי בסרט רע אם אתה באמת מאמין לשטויות האלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "השכל שלך בגודל של גרגר אורז, תתבייש לך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה דפוק, אתה לא מבין כלום מהחיים שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה סתם טרול שמחפש צומי, לך תמצא חיים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט, איך אפשר בכלל להתווכח עם בנאדם שחושב ככה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, לא מבין כלום מהחיים שלך כנראה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה מדבר שטויות במיץ, עדיף שתשתוק ולא תבייש את עצמך יותר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לך שמץ של מושג על מה אתה מדבר, אתה פשוט בור.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תפסיק לבלבל את המוח, אתה פשוט חסר תקנה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה מתוסכל אתה חייב להיות בשביל לכתוב כאלה דברים.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תראה איזה טמבל, איך אפשר להאמין לדברי הבלע האלה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תקשיב, אתה פשוט חסר תקווה. אין עם מי לדבר בכלל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "יא דביל, מה אתה מבלבל את המוח עם השטויות האלה? תתבגר כבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "ההערות שלך פשוט מטומטמות, אין לך מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, איך אתה לא מתבייש להגיד דברים כאלה?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "למה אתה מגיב בכלל? אתה רק מוכיח כמה אתה חסר שכל.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אפס אתה, לא תורם כלום לדיון חוץ משטויות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך בגודל של גרגר אפונה, אחרת איך אפשר להגיד כאלה דברים?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט מקרה אבוד, אין טעם לנסות להסביר לך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה מפגר שאתה לא מבין שכל מה שכתבת זה בולשיט מוחלט? תתבייש לך על הבורות.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "די כבר לחפור, אתה פשוט אידיוט אם אתה חושב שזה רלוונטי בכלל. תתעדכן קצת.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "התגובה שלך כל כך מטומטמת שבא לי לבכות. איך אפשר להיות כל כך עיוור למציאות?", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה אפס מאופס, חתיכת כלומניק. אין לך שמץ של מושג על מה אתה מדבר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "תסתום ת'פה כבר, נמאס לשמוע את השטויות שלך. אתה פשוט ערימה של קשקוש.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אין לי כוח לשטויות שלך, אתה פשוט פתטי. לך תמצא חיים במקום לבלבל את המוח.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה טמבל, ברצינות. כל מילה שיוצאת לך מהפה מוכיחה שאתה מנותק לחלוטין.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה חתיכת טיפש אם אתה מאמין לדבר כזה. תתעורר על החיים שלך, בובה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "המוח שלך כנראה עשוי מקירות, כי אין מצב שאתה כזה סתום בלי סיבה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "עוד אחד שחושב שהוא מבין משהו אבל בסוף סתם מקשקש שטויות. לך חפש מי ינענע אותך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה כזה אידיוט שזה כואב לי במוח רק לקרוא את התגובה שלך.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "מי נתן לך רישיון לכתוב? המוח שלך בגודל של גרגר אפונה.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "איזה אהבל, בטח ההורים שלך עדיין מלבישים אותך בבוקר.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה פשוט אפס מאופס, דמגוג זול בלי שום תוכן.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "לך תחפש מי ינענע אותך, יא לוזר עלוב.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}
+{"text": "אתה בדיחה מהלכת, אל תבייש את עצמך יותר ממה שכבר עשית.", "label": "abusive", "label_id": 1, "source": "synthesized_gemini"}

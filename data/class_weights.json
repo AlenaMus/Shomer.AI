@@ -1,0 +1,29 @@
+{
+  "method": "sklearn_balanced",
+  "computed_on": "train.jsonl",
+  "label_order": [
+    "non_offensive",
+    "abusive",
+    "hate",
+    "violence",
+    "pornographic"
+  ],
+  "weights": [
+    0.413589,
+    1.554386,
+    1.54087,
+    1.551362,
+    1.549854
+  ],
+  "counts": [
+    3856,
+    1026,
+    1035,
+    1028,
+    1029
+  ],
+  "total": 7974,
+  "non_offensive_pct_train": 48.36,
+  "computed_at": "2026-06-08",
+  "note": "D10 prevalence-aware mix: train ~50% non_offensive, val/test ~70% non_offensive. Weights are NOT uniform — non_offensive is down-weighted by Focal Loss alpha. pornographic val/test contains synthetic rows (caveat: only 4 real SinaLab porn examples). D10: light-noise copies (~28% of train, biased toward offensive, D9 unchanged). D11 heavy-noise reverted — cost hate F1 -0.08 for only +0.02 on poor_spelling."
+}

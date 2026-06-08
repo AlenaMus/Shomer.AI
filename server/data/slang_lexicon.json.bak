@@ -1,0 +1,62 @@
+{
+  "לוזר": {
+    "meaning": "loser",
+    "common_use": "playful_among_friends",
+    "valence": "neutral",
+    "age_group": "13-18"
+  },
+  "מטומטם": {
+    "meaning": "stupid/idiot",
+    "common_use": "playful_insult",
+    "valence": "negative",
+    "age_group": "10-18"
+  },
+  "מפגר": {
+    "meaning": "retarded (slur)",
+    "common_use": "serious_insult",
+    "valence": "highly_negative",
+    "age_group": "13-18"
+  },
+  "נאב": {
+    "meaning": "noob / inexperienced",
+    "common_use": "gaming_banter",
+    "valence": "neutral_to_negative",
+    "age_group": "13-18"
+  },
+  "ילד": {
+    "meaning": "kid / childish",
+    "common_use": "dismissive_banter",
+    "valence": "neutral",
+    "age_group": "13-18"
+  },
+  "טמבל": {
+    "meaning": "fool/dumb",
+    "common_use": "playful_insult",
+    "valence": "negative",
+    "age_group": "10-18"
+  },
+  "אידיוט": {
+    "meaning": "idiot",
+    "common_use": "strong_insult",
+    "valence": "highly_negative",
+    "age_group": "13-18"
+  },
+  "גייזר": {
+    "meaning": "geezer / old-fashioned",
+    "common_use": "playful_banter",
+    "valence": "neutral",
+    "age_group": "13-18"
+  },
+  "חנון": {
+    "meaning": "nerd/geek",
+    "common_use": "teasing_among_peers",
+    "valence": "neutral_to_negative",
+    "age_group": "10-18"
+  },
+  "פראייר": {
+    "meaning": "sucker/easy target",
+    "common_use": "social_criticism",
+    "valence": "negative",
+    "age_group": "13-18"
+  }
+}

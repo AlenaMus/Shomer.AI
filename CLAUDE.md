@@ -41,25 +41,26 @@ C:\AIDevelopmentCourse\Shomer.AI\
 ├── prompts\            ← per-session digest log (REQUIRED, see below) + _template.md
 ├── integration\        ← integration test plans, one per POC phase
 ├── android_client\     ← Kotlin + Compose client
-├── server\             ← FastAPI service (app\ · logs\ · sdk\ placeholder · tests\)
+├── server\             ← FastAPI service (app\ · logs\ · sdk\ Kotlin SDK+CLI · tests\)
 └── training\           ← DictaBERT fine-tune (WSL2 + cu128 stack)
 ```
 
-`server/sdk/` is the shared client library for all clients — still a placeholder (README only).
+`server/sdk/` is the shared client library for all clients — **implemented** (hand-written Kotlin `:sdk` + `:sdk-cli`, standalone Gradle build; see status table + `plan-docs/decisions/sdk-implementation.decision.md`).
 
 ---
 
-## Current status (2026-06-07)
+## Current status (2026-06-08)
 
 | Area | State |
 |---|---|
-| **Server (Python)** | ✅ **S2 Identity & Auth shipped.** All modules Protocol-typed: `classifier · ocr · context_agent · triage · alerts · gatekeeper · audit_log(SqliteAuditStore) · identity(SqliteIdentityStore) · monitor · dedup · flagged`. **488 tests pass (5 skipped = HF classifier, awaits checkpoint).** `main.py` v0.6.1-identity. `POST /v1/monitor/events` now requires Bearer device token (child token; enforces child_id match). Pairing flow live: `POST /v1/parent/register` → `POST /v1/parent/children` → `POST /v1/parent/pairing-code` → `POST /v1/pair` → device token. Auth middleware in Gatekeeper group (content-blind; sets `request.state.device_context`). Allowlist: `/health`, `/metrics`, `/docs`, `/v1/parent/register`, `/v1/pair`, `/classify`, `/classify-image`, `/model/info`. **Run pytest from REPO ROOT.** |
-| **DictaBERT classifier** | ✅ **Architecture locked** at `docs/concepts/dictabert_classifier_architecture.md`: MLP head (`[CLS]→Dropout→Linear(768→256)→GELU→Dropout→Linear(256→5)`); Focal Loss(γ=2, alpha=class_weights); ε=0.05 label smoothing; AdamW + cosine LR + lr=2e-5 + batch=32 + 5 epochs + BF16, seed=42. Real param count **184.3 M** (Hebrew vocab), BF16 ≈370 MB, ~6–8 GB VRAM. Data techniques + locked Meeting-5 stack in `docs/concepts/dictabert_data_techniques.md` §11. Fallback if F1<0.78: MLP→Multi-task→DictaBERT-large→DAPT. **NOT yet trained.** |
-| **Training stack** | ✅ **WSL2 + CUDA 12.8 verified (RTX 5080, sm_120).** Venv `~/shomer-training-venv` with `torch 2.11.0+cu128`, `transformers 5.10.1`, `bitsandbytes 0.49.2`. Real BF16 fwd+bwd + DictaBERT Hebrew forward pass confirmed on GPU. Pinned in `training/requirements-wsl.txt`. Reproduce: see "Training env" below. |
+| **Server (Python)** | ✅ **Real monitoring app S1→S4 shipped + verified end-to-end.** All modules Protocol-typed: `classifier · ocr · context_agent · triage · alerts · gatekeeper · audit_log(SqliteAuditStore) · identity(SqliteIdentityStore) · monitor · dedup · flagged(SqliteFlaggedEventStore default) · digest(DigestScheduler)`. **550 tests pass (5 skipped = HF classifier, awaits checkpoint; full suite 5m55s).** `main.py` v0.6.3-parent-review. **Monitor flow:** child pairs (OTP→device token, `/v1/pair`) → batch-uploads captured msgs (`POST /v1/monitor/events`, Bearer-authed, `child_id` match enforced) → `MonitorIngest` dedups + reuses `_run_pipeline` verbatim → flags `alerted`/`review_needed` → **once-a-day `DigestScheduler`** aggregates per child (`GET /v1/parent/digests/{date}`; `AsyncioCronDigestScheduler` default-off, `DIGEST_BACKEND=asyncio` to enable) → parent reviews + reacts (`GET /v1/parent/alerts`, `/{id}`, `POST /{id}/react` ack·label·severity, `GET /v1/parent/labels/export` for training). Auth: `DeviceAuthMiddleware` (content-blind) in Gatekeeper group; opaque device/parent tokens. **End-to-end demo: `scripts/monitor_demo.py`** (in-process TestClient, no uvicorn orphan — runs the full slice green). **Run pytest from REPO ROOT.** |
+| **DictaBERT classifier** | ✅ **Architecture locked + TRAINED (final = D10; D11 reverted).** Test macro-F1 **0.836**, recall[violence]=0.788, precision[non_off]=0.935, ECE=0.034. All 3 gate criteria PASS. Per-class F1: non_off 0.931 · abusive 0.831 · hate 0.739 · violence 0.712 · porn 0.970. Best checkpoint: `training/outputs/dictabert-offensive/checkpoint-best/` (738 MB safetensors). Stylistic slices: clear_hebrew 0.787 · children_mistakes 0.744 · code_switching 0.803 · poor_spelling 0.615. **Data built across 6 rounds** (SinaLab+textdetox real Hebrew + Gemini translation/synthesis + char-noise aug; prevalence-aware ~50% non-off train / ~70% eval + Focal+weights). D11 heavy-noise was **reverted** (cost hate −0.08 for +0.02 poor_spelling). Handoff: `training/outputs/dictabert-offensive/HANDOFF.md`. Decisions D1–D11 in `plan-docs/decisions/data-pipeline.decision.md`. **⚠️ Caveat:** minority val/test still partly synthetic/translated (D8 choice) → minority F1 overstates real-world; porn val/test 100% synthetic. Ready for `backend-developer` to flip `CLASSIFIER_MODEL_VERSION=v1.1-dictabert`. |
+| **Training stack** | ✅ **WSL2 + CUDA 12.8 verified (RTX 5080, sm_120).** Venv `~/shomer-training-venv` with `torch 2.11.0+cu128`, `transformers 5.10.1`, `bitsandbytes 0.49.2`. Real BF16 fwd+bwd + DictaBERT Hebrew forward pass confirmed on GPU. Pinned in `training/requirements-wsl.txt`. Final D10 train size: 7,974 rows; ~2 min/run on RTX 5080; gate eval automated in `train_dictabert.py`. |
 | **Design package** | ✅ Signed off (Meeting 4). 10 module LLDs + `docs/design/README.md` + `review.md` (3 blockers G-01/02/03 resolved) + 144-task backlog (`tasks_index.json`) + PDFs. |
-| `android_client/` | Built once (2026-05-20) as `com.dima.offensivehebrew`. Package rename + Gradle flavors = Open Question (needs APK uninstall). |
-| `server/sdk/` | Placeholder. Track C (SDK + Kotlin `:sdk-cli`) untouched — Meeting-5 demo blocker. |
-| `training/` | Legacy QLoRA scripts only. **`prepare_data_dictabert.py` + `train_dictabert.py` = immediate next work.** |
+| `android_client/` | ✅ **Real client BUILT (`com.shomer.client`) — both flavors compile.** LLD `android_client/design.md`. **Child-mode:** `ShomerAccessibilityService` (captures other apps' text) → `PreFilter` (Hebrew-ratio/dedup/sha256) → encrypted Room buffer → `MonitorUploader` (WorkManager → `POST /v1/monitor/events`, Bearer); consent (inbound+outbound) + pairing (`/v1/pair`) + permission flow + non-dismissible monitoring indicator. **Parent-mode:** role chooser → parent auth (`/v1/parent/register` or paste token) → alert list/detail/**react** (ack·label·severity, polling) + digest screen; `ShomerFcmService` written but **opt-in** (no `google-services.json` needed to build). Gradle flavors `poc`(`com.dima.offensivehebrew`)+`client`(`com.shomer.client`) — **APK uninstall required** when switching applicationId. **All wire models verified field-by-field against `server/app/schemas.py` + routers** (snake_case `@Json`). Set `JAVA_HOME` to Studio JBR; `./gradlew assembleClientDebug`. |
+| **Parent web dashboard** | ✅ `dashboard/index.html` (+README) — self-contained Hebrew-RTL parent surface reading the S4 API (alerts list w/ borderline review queue, detail + ack·label·severity, daily-digest view). Configurable base-URL+token in localStorage; serve via FastAPI StaticFiles or open standalone. |
+| `server/sdk/` | ✅ **Implemented (MVP v1.0.0, 2026-06-08).** Hand-written Kotlin/JVM standalone Gradle build (own wrapper): `:sdk` lib (`ShomerApi` port → internal `ShomerHttpClient` OkHttp+Moshi adapter; `ShomerResult`/`ShomerError` 6 types; retry 1s/2s/4s on 5xx+IOError, never 4xx; UUID4 `X-Trace-ID`; models mirror `schemas.py`) + `:sdk-cli` clikt fat-jar (`classify`/`classify-image`/`health`/`info`/`demo`). **`:sdk:test` = 10/10 MockWebServer contract tests pass; `:sdk-cli:fatJar` builds (18 MB).** Build: `JAVA_HOME`=Studio JBR (JDK 21 → Java-17 bytecode, no toolchain), `cd server/sdk && ./gradlew :sdk:test :sdk-cli:fatJar`. **Not yet:** batch mode (SDK-CLI-03); wiring the Android client off `ApiService.kt` onto `:sdk`. Decision: `plan-docs/decisions/sdk-implementation.decision.md`. |
+| `training/` | ✅ **Full pipeline + final D10 model.** `fetch_inspect_sinalab.py` (Stage-0 download), `gemini_utils.py`, `sublabel_textdetox.py`, `synthesize_{porn,hate_violence,abusive,kids,codeswitch}.py`, `translate_en_he.py`, `expand_slang_lexicon.py`, `augment_noise.py` (heavy-noise fns present but unused after revert), `prepare_data_dictabert.py` (deterministic; consumes cached `training/data/interim/*.jsonl`), `scripts/validate_splits.py`, `train_dictabert.py` (locked). Raw data + inventory: `training/data/raw/`. Checkpoint at `outputs/dictabert-offensive/checkpoint-best/`. |
 | `server/.venv/` | ✅ Functional; all deps installed. DictaBERT base (~708 MB) cached at `~/.cache/huggingface/hub/`. |
 | Tooling | Android Studio · Ollama (running) · MiKTeX (`xelatex` at `C:\Program Files\MiKTeX\miktex\bin\x64\`) · Edge (for `scripts/md_to_pdf.py`) · Tesseract `heb+eng` at `C:\Program Files\Tesseract-OCR\`. GPU: RTX 5080 16 GB, driver 591.86; 64 GB RAM. |
 
@@ -105,16 +106,59 @@ Use the WSL-native venv (not `/mnt/c/...`) for fast pip + HF I/O. WSL repo root:
 
 ## Next session priorities
 
-1. **Spawn `ai-researcher-developer` for `training/prepare_data_dictabert.py`** (task #19, briefed & unblocked).
-   Inputs: architecture §9 (data contract) + techniques §11 (locked stack). Outputs:
-   `prepare_data_dictabert.py` + `data/{train,validation,test}.jsonl` + `class_weights.json` +
-   `stylistic_eval.jsonl` (1040 held-out) + `validate_splits.py` (no-leakage asserts).
-2. **Write `training/train_dictabert.py`** per locked architecture → train in WSL2 (~2–3 h) →
-   checkpoint at `outputs/dictabert-offensive/`.
-3. **Evaluate F1 ≥ 0.78 gate.** If pass → flip `CLASSIFIER_MODEL_VERSION=v1.1-dictabert` in `server/.env`, re-test end-to-end.
-4. **In parallel:** populate `server/.env` with real LLM keys; start Track C (SDK + Kotlin CLI) for Meeting-5 demo.
-5. **Deferrable (7 Important review issues):** G-04 port-naming · G-05 error model · G-06 PII scrub ·
+**Monitoring app (server S1→S4 + Android child+parent modes DONE; plan `~/.claude/plans/linked-yawning-sifakis.md`):**
+1. **On-device integration test** (user-driven — needs Android Studio + emulator/phone). Contract + build
+   are verified; the live run is the only unverified step. Follow `integration/integration-monitor.md`:
+   start server `--host 0.0.0.0 --port 8011`, build/install the `client` flavor (uninstall POC APK first),
+   pair via an OTP from `/v1/parent/pairing-code`, enable AccessibilityService, send a Hebrew message in
+   WhatsApp, confirm it flags server-side + appears in the dashboard/parent-mode. Android A5/A6 (OCR
+   fallback, multi-app direction tuning, prod cleartext-off) are follow-ons.
+2. **S5 privacy hardening** — **enforce `MONITOR_STORE_RAW=false`** (raw text is still persisted for
+   monitor events; setting exists, non-flagged blanking is the remaining work) · TLS + cleartext-off
+   prod · at-rest encryption · PII-scrub logs (G-06) · consent indicator (Android).
+3. **Live FCM ops** — real Firebase project + service-account JSON so the daily digest pushes to a real
+   device (today `LogNotifier`; `FcmNotifier` implemented, needs creds + `ALERTS_CHANNEL=fcm`).
+4. **S6 scale + classifier gate** — Redis dedup · async ingest queue · batched DictaBERT · build a
+   **monitor-realistic eval slice**; gate the `v1.1-dictabert` flip on `hate`/`violence` recall +
+   calibration, not just F1≥0.78.
+
+**DictaBERT training track — TRAINED (final D10), ready for server integration:**
+5. **Flip `CLASSIFIER_MODEL_VERSION=v1.1-dictabert`** in `server/.env` → `backend-developer` wires
+   `DictaBertAdapter` (the MLP-head `DictaBertWithMlpHead` must be importable before `from_pretrained`)
+   → run fast tests from REPO ROOT → live `/classify` smoke test with a misspelled Hebrew sentence.
+   See `training/outputs/dictabert-offensive/HANDOFF.md` for the full checklist.
+   - Tuning is **closed** (6 rounds). Further gains need real misspelled/minority data, not synthesis.
+   - Before flip, optionally produce the **honest real-only eval** (synth→train-only) as a companion
+     metric, and add a real Hebrew porn test seed (D6/D8/D9 caveats).
+6. **Deferrable (Important review issues):** G-04 port-naming · G-05 error model · G-06 PII scrub ·
    G-07 A/B eval doc · G-09 Slang Lexicon LLD · G-12 health rollup · G-14 gold-set annotation.
+
+---
+
+## Session update — 2026-06-08 (DictaBERT trained: full data pipeline, 6 rounds → final D10, gate PASS)
+
+Built the entire train/val/test dataset from scratch and trained the classifier to the F1≥0.78 gate.
+Full decision trail D1–D11 in `plan-docs/decisions/data-pipeline.decision.md`.
+
+- **Stage 0 (recon):** SinaLab is on **GitHub `SinaLab/OffensiveHebrew`** (NOT an HF dataset — `load_dataset`
+  404s). Real deduped counts are far worse than §9 assumed: non_off 14,298 · hate 624 · violence 453 ·
+  abusive **119** · pornographic **4**. Label is a messy free-text column (typos, `racism`→hate, comma
+  multi-label). Verified inventory: `training/data/raw/README.md`.
+- **Sources:** SinaLab + **textdetox `he`** (807 real toxic → Gemini sub-labeled) as real base; **Jigsaw**
+  (threat→violence, identity_hate→hate) Gemini-translated EN→HE; Gemini synthesis for porn / in-context
+  hate+violence / abusive / kids-register / code-switch; deterministic Hebrew char-noise aug. hatespeechdata.com
+  has no Hebrew; OLaH/D_OLaH = SinaLab itself.
+- **Key learnings (the iteration story):** full class-balancing (1:1:1:1:1) **failed** non_off precision
+  (0.69 — false-alarm flood) → reverted to **prevalence-aware** (~50% non-off train / ~70% eval + Focal+weights);
+  benign Heb-Eng code-switch synthesis fixed a code_switching regression (0.68→0.81); heavy typo-noise (D11)
+  was **reverted** (cost hate −0.08 for +0.02 poor_spelling).
+- **Final model (D10):** test macro-F1 **0.836** · recall[violence] 0.788 · precision[non_off] 0.935 ·
+  ECE 0.034 — **all gates PASS**. Slices: clear 0.787 · children 0.744 · code-switch 0.803 · poor_spelling 0.615.
+  Train 7,974 rows. Checkpoint `training/outputs/dictabert-offensive/checkpoint-best/`.
+- **⚠️ Documented limitation (thesis):** minority val/test partly synthetic/translated (D8 user choice) →
+  minority F1 overstates real-world; porn val/test 100% synthetic (Gemini safety-blocked a real seed).
+  Slang lexicon expanded 10→72 (`server/data/slang_lexicon.json`, also helps Context Agent).
+- **NOT flipped:** `CLASSIFIER_MODEL_VERSION` still `v1.0-standin` — server integration is the next step.
 
 ---
 

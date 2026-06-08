@@ -87,15 +87,18 @@ This system reads children's private conversations, so these are **non-negotiabl
 ## Status
 
 - ✅ **POC** — app ↔ local server ↔ model proven end-to-end.
-- ✅ **Server** — full pipeline wired & tested (classify → triage → context agent → alert → audit), 384 tests passing.
+- ✅ **Server** — full pipeline wired & tested (classify → triage → context agent → alert → audit), **plus the monitoring app** (pairing → batch ingest → dedup → daily digest → parent review). **550 tests passing** (5 skipped — the HuggingFace classifier adapter awaits the trained checkpoint).
+- ✅ **Android client** — real app built (`com.shomer.client`), both flavors compile; child-mode capture + parent-mode review are code-complete. **Live on-device integration run is the one unverified step** (`integration/integration-monitor.md`).
+- 🟡 **Client SDK** (`server/sdk/`) — hand-written Kotlin library + `:sdk-cli` runner, implementation in progress (was design-only).
 - ✅ **DictaBERT architecture & training environment** locked and verified.
-- ⏳ **Next** — prepare data, fine-tune DictaBERT (F1 ≥ 0.78 gate), then run the context-vs-baseline evaluation that answers the research question.
+- ⏳ **Next** — prepare data, fine-tune DictaBERT (F1 ≥ 0.78 gate), then run the context-vs-baseline evaluation that answers the research question. Full gap audit: [`plan-docs/meetings/m7/00-gap-audit.md`](plan-docs/meetings/m7/00-gap-audit.md).
 
 ## Repository
 
 | Path | Contents |
 |---|---|
-| [`server/`](server/) | FastAPI service — classifier · ocr · context_agent · triage · alerts · gatekeeper · audit_log |
+| [`server/`](server/) | FastAPI service — classifier · ocr · context_agent · triage · alerts · gatekeeper · audit_log · monitor · digest |
+| [`server/sdk/`](server/sdk/) | Hand-written Kotlin client SDK (`:sdk`) + terminal runner (`:sdk-cli`) — the shared wire layer for all clients |
 | [`training/`](training/) | DictaBERT fine-tuning pipeline (data prep + training) |
 | [`android_client/`](android_client/) | Kotlin/Compose mobile client |
 | [`docs/`](docs/) | Design package (10 module LLDs), concept docs, evaluation reports |

@@ -1,0 +1,10 @@
+{"text": "תודה רבה לך על העזרה, נתראה מחר בבית הספר", "expected": "non_offensive"}
+{"text": "בוא נשחק כדורגל אחרי הצהריים", "expected": "non_offensive"}
+{"text": "אתה כזה לוזר אף אחד לא אוהב אותך", "expected": "abusive"}
+{"text": "תפסיק לדבר זבל אידיוט מטומטם", "expected": "abusive"}
+{"text": "כל הערבים צריכים להיעלם מהמדינה הזאת", "expected": "hate"}
+{"text": "אני אחכה לך אחרי השיעור ואשבור לך את הפנים", "expected": "violence"}
+{"text": "אם לא תיתן לי את הכסף אני אדקור אותך", "expected": "violence"}
+{"text": "שלח לי תמונות עירום שלך עכשיו", "expected": "pornographic"}
+{"text": "הכלב שלי חמוד מאוד ואוהב לרוץ בפארק", "expected": "non_offensive"}
+{"text": "אתה מכוער וטיפש ואף אחד לא רוצה אותך בקבוצה", "expected": "abusive"}

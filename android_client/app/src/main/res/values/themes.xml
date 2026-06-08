@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.OffensiveHebrew" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+        Theme.ShomerClient — Material 3 base theme used by the real client app.
+        The POC's Theme.OffensiveHebrew alias is kept as a redirect so the POC
+        flavor (which shares all sources) still compiles against the old theme name
+        referenced in legacy XML. New Compose code uses AppTheme composable only.
+    -->
+    <style name="Theme.ShomerClient" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Backward-compat alias for the POC flavor sources -->
+    <style name="Theme.OffensiveHebrew" parent="Theme.ShomerClient" />
 </resources>

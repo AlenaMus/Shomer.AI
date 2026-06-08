@@ -42,6 +42,13 @@ anthropic>=0.39.0
 aiosqlite>=0.20.0
 
 # -----------------------------------------------------------------------------
+# Alerts — FcmNotifier (NotificationChannel adapter). OPT-IN: only needed when
+# ALERTS_CHANNEL=fcm. The default channel is LogNotifier (no dependency); the
+# alerts module lazy-imports firebase-admin so the server runs without it.
+# -----------------------------------------------------------------------------
+firebase-admin>=6.5.0
+
+# -----------------------------------------------------------------------------
 # Resilience
 # -----------------------------------------------------------------------------
 tenacity>=9.0.0

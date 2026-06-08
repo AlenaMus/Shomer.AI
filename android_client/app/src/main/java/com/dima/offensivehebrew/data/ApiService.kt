@@ -1,57 +1,19 @@
+@file:Suppress("PackageName")
 package com.dima.offensivehebrew.data
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
-import retrofit2.http.Query
-import java.util.concurrent.TimeUnit
+// MIGRATED — this file is a package-rename tombstone.
+//
+// The POC classes ApiService, ApiFactory, and the Models/SettingsRepository
+// have been moved to com.shomer.client.data.*
+//
+// These type aliases let any remaining code in com.dima.offensivehebrew.* compile
+// without changes. New code must import from com.shomer.client.data directly.
 
-interface ApiService {
-    @GET("health")
-    suspend fun health(): HealthResponse
-
-    @POST("classify")
-    suspend fun classify(@Body request: ClassifyRequest): ClassifyResponse
-
-    /**
-     * Phase 1: upload an image as multipart/form-data. The form-field name
-     * ("image") must match the FastAPI parameter name. `strategy` is wired
-     * for Phase 2's backend router; Phase 1 server ignores it.
-     */
-    @Multipart
-    @POST("classify-image")
-    suspend fun classifyImage(
-        @Part image: MultipartBody.Part,
-        @Query("strategy") strategy: String? = null,
-    ): ClassifyImageResponse
-}
-
-object ApiFactory {
-    fun create(baseUrl: String): ApiService {
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .build()
-        return Retrofit.Builder()
-            .baseUrl(baseUrl.normalizedBaseUrl())
-            .client(client)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-            .create(ApiService::class.java)
-    }
-
-    private fun String.normalizedBaseUrl(): String =
-        if (endsWith("/")) this else "$this/"
-}
+typealias ApiService = com.shomer.client.data.ApiService
+typealias MonitorApi = com.shomer.client.data.MonitorApi
+typealias PairingApi = com.shomer.client.data.PairingApi
+typealias ClassifyRequest = com.shomer.client.data.ClassifyRequest
+typealias ClassifyResponse = com.shomer.client.data.ClassifyResponse
+typealias HealthResponse = com.shomer.client.data.HealthResponse
+typealias ClassifyImageResponse = com.shomer.client.data.ClassifyImageResponse
+typealias SettingsRepository = com.shomer.client.data.SettingsRepository

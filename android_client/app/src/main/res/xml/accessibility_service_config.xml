@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    AccessibilityService configuration for ShomerAccessibilityService.
+
+    accessibilityEventTypes:
+        typeWindowContentChanged — fires when app screen content changes (scroll, new message).
+        typeViewTextChanged      — fires when an editable field changes (compose box).
+    canRetrieveWindowContent:
+        true — required to walk the AccessibilityNodeInfo tree and read text.
+    feedbackType:
+        feedbackGeneric — no audio/haptic feedback; purely observational.
+    notificationTimeout:
+        300 ms — minimum quiet period between events to reduce recomposition noise.
+    packageNames:
+        Only receive events from the target monitoring apps. Adding an app here is
+        the first step; the TargetAppRegistry on the Java side controls the enabled
+        set at runtime (the manifest list is a hard ceiling, the runtime registry can
+        be a subset of it).
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowContentChanged|typeViewTextChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:canRetrieveWindowContent="true"
+    android:notificationTimeout="300"
+    android:packageNames="com.whatsapp,com.instagram.android,org.telegram.messenger,com.facebook.orca"
+    android:settingsActivity=".MainActivity" />

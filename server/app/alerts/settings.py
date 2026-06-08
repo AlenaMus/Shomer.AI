@@ -32,7 +32,7 @@ class AlertSettings(BaseSettings):
 
     # --- Channel selection (string, not enum — keeps settings import cheap) ---
     channel: str = "log"
-    """Which channel adapter to wire: ``"log"`` | ``"fcm"`` | ``"stub"``."""
+    """Which channel adapter to wire: ``"log"`` | ``"ntfy"`` | ``"fcm"`` | ``"stub"``."""
 
     # --- Rate limiter ---
     rate_limit_max_alerts: int = 3
@@ -52,7 +52,25 @@ class AlertSettings(BaseSettings):
     queue_max_size: int = 100
     """Capacity of the in-process LocalRetryQueue (oldest dropped when full)."""
 
-    # --- FcmNotifier (backlog M6-ALERTS-FCM) ----------------------------------
+    # --- NtfyNotifier (free push via ntfy.sh — no account, no Firebase) -------
+    # ntfy publishes a notification to a topic; the parent installs the free
+    # ntfy app and subscribes to the topic to receive proactive pushes.
+    ntfy_server: str = "https://ntfy.sh"
+    """Base URL of the ntfy server (public ntfy.sh or a self-hosted instance)."""
+
+    ntfy_topic: str = ""
+    """ntfy topic to publish to. Empty → NtfyNotifier reports 'not configured'."""
+
+    ntfy_token: str = ""
+    """Optional Bearer token for protected/self-hosted topics (access control)."""
+
+    ntfy_click_url: str = ""
+    """Optional URL opened when the push is tapped (e.g. the parent dashboard)."""
+
+    ntfy_timeout_s: float = 10.0
+    """Per-request HTTP timeout for publishing to ntfy."""
+
+    # --- FcmNotifier (M6-ALERTS-FCM) ------------------------------------------
     # NOTE: FCM_SERVICE_ACCOUNT_PATH does NOT share the ALERTS_ prefix because
     # it is a Firebase-level credential, not an alerts-behaviour setting.
     # pydantic-settings ignores env vars with non-matching prefixes by default.

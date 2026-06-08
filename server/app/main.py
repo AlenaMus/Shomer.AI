@@ -43,8 +43,13 @@ from .alerts import NotificationChannel, derive_severity
 from .audit_log import AuditStore
 from .classifier import TextClassifier
 from .context_agent import ContextReasoner
+from .dedup import DedupStore
+from .digest import DigestScheduler, DigestStore, register_digest
+from .flagged import FlaggedEventStore, register_parent_review
 from .gateway import GatekeeperSettings, register_gateway
+from .identity import IdentityStore, register_identity
 from .middleware import AuditLoggingMiddleware
+from .monitor import MonitorIngest, register_monitor
 from .ocr import OcrBackend
 from .triage import TriageEngine
 from .schemas import (
@@ -219,6 +224,168 @@ def _build_context_agent(audit: AuditStore) -> ContextReasoner | None:
     )
 
 
+async def _build_identity() -> "IdentityStore":
+    """Build and initialize an IdentityStore adapter.
+
+    Adapter selection is driven by ``IDENTITY_BACKEND`` env var:
+      - "sqlite" (default) → SqliteIdentityStore (persistent, production)
+      - "memory"           → InMemoryIdentityStore (tests, no I/O)
+    """
+    from .identity import IdentitySettings, InMemoryIdentityStore, SqliteIdentityStore
+
+    settings = IdentitySettings()
+    if settings.backend == "memory":
+        store = InMemoryIdentityStore(
+            pairing_code_ttl_s=settings.pairing_code_ttl_s,
+        )
+        log.info("identity_select", adapter="InMemoryIdentityStore")
+    else:
+        store = SqliteIdentityStore(
+            db_path=settings.db_path,
+            busy_timeout_ms=settings.busy_timeout_ms,
+            device_token_ttl_days=settings.device_token_ttl_days,
+            pairing_code_ttl_s=settings.pairing_code_ttl_s,
+        )
+        await store.initialize()
+        log.info(
+            "identity_select",
+            adapter="SqliteIdentityStore",
+            db=settings.db_path,
+        )
+    return store
+
+
+async def _build_digest(
+    flagged_store: "FlaggedEventStore",
+    notifier: "NotificationChannel",
+    identity: "IdentityStore",
+) -> "tuple[DigestScheduler, DigestStore]":
+    """Build DigestScheduler + DigestStore from env.
+
+    Adapter selection driven by ``DIGEST_BACKEND``:
+      - "asyncio" → AsyncioCronDigestScheduler (in-process cron, production)
+      - "manual"  → ManualDigestRunner (on-demand, tests + external cron)
+
+    Concrete adapters are imported lazily.  The composition root wires all
+    collaborator callbacks here so ManualDigestRunner remains import-clean of
+    identity/flagged concretes.
+    """
+    from .digest import (
+        AsyncioCronDigestScheduler,
+        DigestSettings,
+        InMemoryDigestStore,
+        ManualDigestRunner,
+        SqliteDigestStore,
+    )
+
+    settings = DigestSettings()
+
+    if not settings.enabled:
+        log.info("digest_disabled")
+        # Return stub objects that satisfy the Protocol shape for health checks.
+        from .digest import InMemoryDigestStore
+
+        return None, InMemoryDigestStore()
+
+    # --- DigestStore ---
+    digest_store: DigestStore
+    if settings.backend == "asyncio":
+        db_store = SqliteDigestStore(
+            db_path=settings.db_path,
+            busy_timeout_ms=settings.busy_timeout_ms,
+        )
+        await db_store.initialize()
+        digest_store = db_store
+        log.info("digest_store_select", adapter="SqliteDigestStore", db=settings.db_path)
+    else:
+        digest_store = InMemoryDigestStore()
+        log.info("digest_store_select", adapter="InMemoryDigestStore")
+
+    # --- Callbacks (injected so ManualDigestRunner stays import-clean) ---
+    async def _parent_for_child(child_id: str) -> str | None:
+        return await identity.parent_for_child(child_id)
+
+    async def _fcm_token_for_parent(parent_id: str) -> str | None:
+        return await identity.fcm_token_for_parent(parent_id)
+
+    async def _active_child_ids(since: float) -> list[str]:
+        return await flagged_store.child_ids_with_events_since(since)
+
+    runner = ManualDigestRunner(
+        flagged=flagged_store,
+        digest_store=digest_store,
+        channel=notifier,
+        parent_for_child_fn=_parent_for_child,
+        fcm_token_for_parent_fn=_fcm_token_for_parent,
+        active_child_ids_fn=_active_child_ids,
+        max_entries=settings.max_entries,
+    )
+
+    scheduler: DigestScheduler
+    if settings.backend == "asyncio":
+        scheduler = AsyncioCronDigestScheduler(runner=runner, hour=settings.hour)
+        log.info("digest_scheduler_select", adapter="AsyncioCronDigestScheduler", hour=settings.hour)
+    else:
+        scheduler = runner
+        log.info("digest_scheduler_select", adapter="ManualDigestRunner")
+
+    return scheduler, digest_store
+
+
+async def _build_monitor(app: FastAPI):
+    """Build DedupStore, FlaggedEventStore, and MonitorIngest.
+
+    Adapter selection is driven by ``DEDUP_BACKEND`` and ``FLAGGED_BACKEND``
+    env vars, mirroring the ``_build_ocr`` pattern.  The SqliteFlaggedEventStore
+    is initialized here (async) when selected.
+
+    Returns (dedup, flagged, monitor_ingest) — all stored on app.state.
+    """
+    from .dedup import DedupSettings, InMemoryTtlDedupStore, NullDedupStore
+    from .flagged import (
+        FlaggedSettings,
+        InMemoryFlaggedEventStore,
+        SqliteFlaggedEventStore,
+    )
+    from .monitor import MonitorIngest
+
+    dedup_settings = DedupSettings()
+    if dedup_settings.backend == "null":
+        dedup = NullDedupStore()
+        log.info("dedup_select", adapter="NullDedupStore")
+    else:
+        dedup = InMemoryTtlDedupStore(max_per_child=dedup_settings.max_per_child)
+        log.info(
+            "dedup_select",
+            adapter="InMemoryTtlDedupStore",
+            max_per_child=dedup_settings.max_per_child,
+            ttl_s=dedup_settings.ttl_s,
+        )
+
+    flagged_settings = FlaggedSettings()
+    if flagged_settings.backend == "sqlite":
+        flagged_store = SqliteFlaggedEventStore(
+            db_path=flagged_settings.db_path,
+            busy_timeout_ms=flagged_settings.busy_timeout_ms,
+        )
+        await flagged_store.initialize()
+        log.info("flagged_select", adapter="SqliteFlaggedEventStore", db=flagged_settings.db_path)
+    else:
+        flagged_store = InMemoryFlaggedEventStore()
+        log.info("flagged_select", adapter="InMemoryFlaggedEventStore")
+
+    monitor = MonitorIngest(
+        pipeline_fn=_run_pipeline,
+        dedup=dedup,
+        flagged=flagged_store,
+        derive_severity=derive_severity,
+        dedup_ttl_s=dedup_settings.ttl_s,
+        # on_critical_flag is wired by lifespan() after digest scheduler is built.
+        on_critical_flag=None,
+    )
+    return dedup, flagged_store, monitor
+
+
 def _alert_status(res: AlertResult) -> str:
     """Map an ``AlertResult`` to the ``alerts.fcm_status`` enum string."""
     if res.sent:
@@ -242,9 +409,12 @@ async def lifespan(app: FastAPI):
     # Concrete adapters — lazily imported so module load stays light.
     from .alerts import (
         AlertSettings,
+        FcmNotifier,
         InMemoryAlertRateLimiter,
         LocalRetryQueue,
         LogNotifier,
+        NtfyNotifier,
+        StubNotifier,
     )
     from .audit_log import AuditSettings, RetentionSweeper, SqliteAuditStore
     from .triage import ThresholdTriageEngine, TriageSettings
@@ -273,7 +443,10 @@ async def lifespan(app: FastAPI):
     # --- Triage: the deterministic gate (was the inline _triage()).
     app.state.triage: TriageEngine = ThresholdTriageEngine(TriageSettings())
 
-    # --- Alerts: LogNotifier default (FcmNotifier is backlog M6-ALERTS-FCM).
+    # --- Alerts: channel chosen by ALERTS_CHANNEL (default "log").
+    #     "ntfy" needs ALERTS_NTFY_TOPIC (free push via ntfy.sh, no account);
+    #     "fcm" needs firebase-admin + FCM_SERVICE_ACCOUNT_PATH. Both degrade to
+    #     a sent=False "not configured" result rather than crashing if unset.
     alert_settings = AlertSettings()
     rate_limiter = InMemoryAlertRateLimiter(
         max_alerts=alert_settings.rate_limit_max_alerts,
@@ -297,14 +470,92 @@ async def lifespan(app: FastAPI):
         except Exception as exc:  # noqa: BLE001 — audit is best-effort
             log.warning("alert_audit_failed", error=str(exc))
 
-    app.state.notifier: NotificationChannel = LogNotifier(
-        alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
-    )
+    _alert_channel = alert_settings.channel.strip().lower()
+    notifier: NotificationChannel
+    if _alert_channel == "ntfy":
+        notifier = NtfyNotifier(
+            alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
+        )
+    elif _alert_channel == "fcm":
+        notifier = FcmNotifier(
+            alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
+        )
+    elif _alert_channel == "stub":
+        notifier = StubNotifier()
+    else:
+        notifier = LogNotifier(
+            alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
+        )
+    app.state.notifier = notifier
 
     # --- Context Agent (borderline reasoning; reads conversation history).
     app.state.context_agent: ContextReasoner | None = _build_context_agent(
         audit_store
     )
+
+    # --- Dedup store + FlaggedEventStore + MonitorIngest (S1 monitor path).
+    app.state.dedup, app.state.flagged, app.state.monitor = await _build_monitor(app)
+
+    # --- Identity store (S2 — child/parent identity + device-token auth).
+    app.state.identity: IdentityStore = await _build_identity()
+
+    # --- DigestScheduler + DigestStore (S3 — daily digest + FCM push).
+    app.state.digest_scheduler, app.state.digest_store = await _build_digest(
+        flagged_store=app.state.flagged,
+        notifier=notifier,
+        identity=app.state.identity,
+    )
+
+    # Wire the critical-immediate callback into MonitorIngest.
+    # The callback is a closure over the digest scheduler + notifier — it fires
+    # an immediate single-event push for critical/high severity alerted events,
+    # bypassing the daily digest cadence.  MonitorIngest stays import-clean of
+    # digest/identity concretes (only sees this Callable).
+    from .digest.settings import DigestSettings as _DigestSettings
+
+    _digest_settings = _DigestSettings()
+    if _digest_settings.enabled and _digest_settings.critical_immediate:
+        async def _on_critical_flag(flagged_event) -> None:
+            """Immediate push for a critical/high severity alerted event."""
+            parent_id = await app.state.identity.parent_for_child(flagged_event.child_id)
+            if parent_id is None:
+                return
+            fcm_token = await app.state.identity.fcm_token_for_parent(parent_id)
+            from .schemas import AlertRequest as _AlertRequest
+
+            req = _AlertRequest(
+                child_id=flagged_event.child_id,
+                message_id=f"critical:{flagged_event.flag_id}",
+                label=flagged_event.label,
+                severity=flagged_event.severity,
+                explanation=flagged_event.explanation[:280],
+                quote=flagged_event.quote,
+                source=flagged_event.source,
+                trace_id=flagged_event.trace_id,
+                parent_fcm_token=fcm_token or "",
+            )
+            try:
+                result = await notifier.send_alert(req)
+                log.info(
+                    "digest.critical_immediate_sent",
+                    flag_id=flagged_event.flag_id,
+                    child_id=flagged_event.child_id,
+                    severity=flagged_event.severity,
+                    sent=result.sent,
+                )
+            except Exception as exc:  # noqa: BLE001
+                log.warning("digest.critical_immediate_failed", error=str(exc))
+
+        app.state.monitor._on_critical_flag = _on_critical_flag
+        log.info("digest.critical_immediate_enabled")
+
+    # Start the asyncio cron scheduler background task if applicable.
+    from .digest import AsyncioCronDigestScheduler as _AsyncioCronScheduler
+
+    app.state._digest_task = None
+    if isinstance(app.state.digest_scheduler, _AsyncioCronScheduler):
+        app.state._digest_task = asyncio.create_task(app.state.digest_scheduler.run())
+        log.info("digest_cron_task_started")
 
     log.info(
         "server_ready",
@@ -314,18 +565,51 @@ async def lifespan(app: FastAPI):
         notifier=app.state.notifier.__class__.__name__,
         context_agent_enabled=app.state.context_agent is not None,
         audit="SqliteAuditStore",
-        version="0.6.0-fullflow",
+        monitor="MonitorIngest",
+        dedup=app.state.dedup.__class__.__name__,
+        flagged=app.state.flagged.__class__.__name__,
+        identity=app.state.identity.__class__.__name__,
+        digest=app.state.digest_scheduler.__class__.__name__ if app.state.digest_scheduler else "disabled",
+        version="0.6.3-parent-review",
     )
 
     yield
 
-    # --- Shutdown — stop the sweeper, close the DB connection cleanly.
+    # --- Shutdown — stop the sweeper, close the DB connections cleanly.
     sweeper.stop()
     try:
         await app.state._retention_task
     except Exception as exc:  # noqa: BLE001
         log.warning("retention_task_shutdown_error", error=str(exc))
+
+    # Stop the digest cron task if running.
+    if app.state._digest_task is not None:
+        if hasattr(app.state.digest_scheduler, "stop"):
+            app.state.digest_scheduler.stop()
+        try:
+            await app.state._digest_task
+        except Exception as exc:  # noqa: BLE001
+            log.warning("digest_task_shutdown_error", error=str(exc))
+
     await audit_store.close()
+    # Close the flagged store if it has a close() method (SqliteFlaggedEventStore does).
+    if hasattr(app.state.flagged, "close"):
+        try:
+            await app.state.flagged.close()
+        except Exception as exc:  # noqa: BLE001
+            log.warning("flagged_store_close_error", error=str(exc))
+    # Close the identity store (SqliteIdentityStore checkpoints WAL on close).
+    if hasattr(app.state, "identity") and hasattr(app.state.identity, "close"):
+        try:
+            await app.state.identity.close()
+        except Exception as exc:  # noqa: BLE001
+            log.warning("identity_store_close_error", error=str(exc))
+    # Close the digest store if it has a close() method (SqliteDigestStore does).
+    if hasattr(app.state, "digest_store") and hasattr(app.state.digest_store, "close"):
+        try:
+            await app.state.digest_store.close()
+        except Exception as exc:  # noqa: BLE001
+            log.warning("digest_store_close_error", error=str(exc))
     log.info("server_shutdown")
 
 
@@ -348,6 +632,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 register_gateway(app, GatekeeperSettings.from_env())
+register_monitor(app)
+register_identity(app)
+register_digest(app)
+register_parent_review(app)
 
 
 # ---------------------------------------------------------------------------

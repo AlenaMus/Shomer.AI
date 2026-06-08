@@ -5,12 +5,18 @@ Reference: docs/design/classifier/design.md §2.5 ("HuggingFaceClassifier"),
 
 Two construction paths:
 
-- If ``DICTABERT_MODEL_PATH`` exists on disk, load the fine-tuned
-  classification checkpoint from there. ``model_version`` = ``"v1.1-dictabert"``.
+- If ``DICTABERT_MODEL_PATH`` exists on disk, load the fine-tuned checkpoint
+  using the custom ``DictaBertWithMlpHead`` class from
+  ``classifier.dictabert_model``.  The checkpoint has ``model_type =
+  "dictabert_mlp"`` in its config.json — attempting to load it via
+  ``AutoModelForSequenceClassification`` raises an unknown-model-type error.
+  ``model_version`` = ``"v1.1-dictabert"``.
+
 - Otherwise, fall back to the HF base model (``dicta-il/dictabert``) with a
-  RANDOMLY-INITIALISED 5-label classification head. ``model_version`` =
+  RANDOMLY-INITIALISED 5-label classification head loaded via
+  ``AutoModelForSequenceClassification``.  ``model_version`` =
   ``"v1.1-dictabert-base-untrained"`` so the audit log captures this state.
-  Confidence will be ~0.2 / class until the Meeting-5 fine-tune lands.
+  Confidence will be ~0.2 / class until the fine-tune lands.
 
 Inference runs on CPU (the server box has no dedicated inference GPU); the
 forward pass is wrapped in ``torch.no_grad()`` and the heavy call is pushed
@@ -86,13 +92,26 @@ class HuggingFaceClassifier:
 
         # First call triggers download / first-use cache hydration.
         self._tokenizer = AutoTokenizer.from_pretrained(load_from)
-        self._model = AutoModelForSequenceClassification.from_pretrained(
-            load_from,
-            num_labels=len(_LABEL_ORDER),
-            id2label=_ID2LABEL,
-            label2id=_LABEL2ID,
-            ignore_mismatched_sizes=True,
-        )
+
+        if self._source == "checkpoint":
+            # The fine-tuned checkpoint has model_type="dictabert_mlp" and was
+            # saved with the custom DictaBertWithMlpHead class.
+            # AutoModelForSequenceClassification cannot resolve this model_type —
+            # we must call from_pretrained on the concrete class directly.
+            # No AutoClass registration is required when loading this way.
+            from .dictabert_model import DictaBertWithMlpHead
+
+            self._model = DictaBertWithMlpHead.from_pretrained(load_from)
+        else:
+            # Base-only path: randomly-initialized head, standard AutoModel load.
+            self._model = AutoModelForSequenceClassification.from_pretrained(
+                load_from,
+                num_labels=len(_LABEL_ORDER),
+                id2label=_ID2LABEL,
+                label2id=_LABEL2ID,
+                ignore_mismatched_sizes=True,
+            )
+
         self._model.eval()
         # Force CPU — server box is inference-only.
         self._device = torch.device("cpu")

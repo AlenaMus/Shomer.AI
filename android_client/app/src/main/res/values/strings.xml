@@ -1,4 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Offensive Hebrew</string>
+    <!-- app_name is overridden per-flavor via resValue() in build.gradle.kts -->
+    <string name="app_name">Shomer.AI</string>
+
+    <!-- Accessibility service -->
+    <string name="accessibility_service_label">Shomer.AI Monitoring Service</string>
+    <string name="accessibility_service_description">Reads Hebrew text from messaging apps to detect offensive content and protect children from cyberbullying.</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_monitoring_name">Monitoring Active</string>
+    <string name="notification_channel_monitoring_desc">Persistent indicator that Shomer.AI monitoring is running</string>
+    <string name="notification_monitoring_title">Shomer.AI is monitoring</string>
+    <string name="notification_monitoring_text">Protecting your child from harmful content</string>
+
+    <!-- Onboarding -->
+    <string name="consent_title">Parental Monitoring Consent</string>
+    <string name="consent_body">This app monitors Hebrew text messages in WhatsApp, Instagram, Telegram, and Messenger on this device.\n\nBoth messages your child receives (inbound) and messages they send (outbound) are checked for offensive, abusive, hate, violent, or inappropriate content.\n\nCaptured text is processed on our secure server and results are sent to the parent\'s device. Message text is not stored permanently.\n\nBy continuing, the guardian confirms they have explained this monitoring to the child and have obtained consent from all parties as required by applicable law.</string>
+    <string name="consent_guardian_checkbox">I am the guardian of the child using this device and I consent to monitoring</string>
+    <string name="consent_child_checkbox">The child has been informed that this device is monitored</string>
+    <string name="consent_continue">I Understand — Continue</string>
+
+    <string name="pairing_title">Pair This Device</string>
+    <string name="pairing_hint">Enter pairing code from parent dashboard</string>
+    <string name="pairing_button">Pair Device</string>
+    <string name="pairing_success">Device paired successfully</string>
+
+    <string name="permission_accessibility_title">Enable Accessibility Access</string>
+    <string name="permission_accessibility_body">Shomer.AI needs Accessibility access to read text from messaging apps. Tap the button below, find \"Shomer.AI Monitoring Service\" in the list, and enable it.</string>
+    <string name="permission_accessibility_button">Open Accessibility Settings</string>
+    <string name="permission_accessibility_enabled">Accessibility access is enabled</string>
+    <string name="permission_accessibility_disabled">Accessibility access is NOT enabled</string>
+
+    <string name="permission_notification_title">Allow Notifications</string>
+    <string name="permission_notification_body">Allow notifications so Shomer.AI can show the monitoring indicator and alert the parent device.</string>
+    <string name="permission_notification_button">Allow Notifications</string>
+
+    <string name="permission_battery_title">Disable Battery Optimization</string>
+    <string name="permission_battery_body">To monitor continuously, Shomer.AI must not be stopped by the battery optimizer. Tap below and select \"Don\'t optimize\" for Shomer.AI.</string>
+    <string name="permission_battery_button">Open Battery Settings</string>
+
+    <!-- Status screen -->
+    <string name="status_monitoring_on">Monitoring Active</string>
+    <string name="status_monitoring_off">Monitoring Paused</string>
+    <string name="status_child_id">Child ID: %s</string>
+    <string name="status_captured">Captured: %d events</string>
+    <string name="status_uploaded">Uploaded: %d events</string>
+    <string name="status_start_monitoring">Start Monitoring</string>
+    <string name="status_stop_monitoring">Stop Monitoring</string>
+    <string name="status_target_apps">Monitored Apps</string>
+
+    <!-- Settings -->
+    <string name="settings_server_url">Server URL</string>
+    <string name="settings_server_url_hint">http://10.0.2.2:8000/</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_test_connection">Test Connection</string>
 </resources>

@@ -59,7 +59,10 @@ def test_isinstance_protocol() -> None:
 
 
 def test_model_version_default() -> None:
-    assert _make_adapter().model_version == "v1.0-standin"
+    # Pass explicit settings so the test is independent of the active .env
+    # (CLASSIFIER_MODEL_VERSION may be set to v1.1-dictabert in production).
+    settings = ClassifierSettings(CLASSIFIER_MODEL_VERSION="v1.0-standin")
+    assert _make_adapter(settings=settings).model_version == "v1.0-standin"
 
 
 # ---------------------------------------------------------------------------
@@ -69,7 +72,9 @@ def test_model_version_default() -> None:
 
 @pytest.mark.asyncio
 async def test_classify_abusive_confident() -> None:
-    adapter = _make_adapter()
+    # Pass explicit settings so the test is independent of the active .env.
+    settings = ClassifierSettings(CLASSIFIER_MODEL_VERSION="v1.0-standin")
+    adapter = _make_adapter(settings=settings)
     async with respx.mock(assert_all_called=True) as router:
         router.post("http://localhost:11434/api/generate").mock(
             return_value=_ollama_response("abusive", 0.88)

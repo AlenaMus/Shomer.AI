@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Network security configuration — cleartext HTTP for the local dev server.
+
+    The <base-config cleartextTrafficPermitted="true"> allows cleartext to ALL
+    hosts. This is intentional for the MVP / academic demo where the server runs
+    on the LAN without TLS. The user configures the server IP via Settings.
+
+    PRODUCTION (A6 / S5): replace this with a domain-config that:
+      1. Pins the production server domain.
+      2. Sets cleartextTrafficPermitted="false" in base-config.
+      3. Adds a domain-config for dev environments only (via a separate
+         src/debug/ override of this file).
+
+    Why not restrict to 10.0.2.2 only: the physical phone uses whatever LAN IP
+    the user's PC has (e.g. 192.168.1.50). We cannot whitelist a fixed IP at
+    build time without knowing it. The Settings screen + this permissive config
+    is the correct pattern for a configurable LAN test tool.
+-->
 <network-security-config>
-    <!--
-        Allow cleartext HTTP to the local dev server.
-        Tighten this to your specific LAN subnet before any production use, e.g.:
-            <domain includeSubdomains="true">192.168.1.0/24</domain>
-    -->
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />

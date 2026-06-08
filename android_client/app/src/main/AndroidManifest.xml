@@ -2,33 +2,85 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Foreground service: keeps the capture process alive.
+         FOREGROUND_SERVICE_SPECIAL_USE is required for monitoring-type services. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <!-- Notifications: required on Android 13+ for the monitoring indicator.
+         Runtime permission requested in onboarding, never at launch. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Boot receiver: restarts capture after device reboot. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Battery optimization exemption: required for ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <!-- Camera: kept for the POC debug classify screen (image upload). -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- Camera is nice to have but not required: device without one can still pick from gallery. -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
-        android:label="Offensive Hebrew"
+        android:name=".ShomerApplication"
+        android:label="@string/app_name"
         android:icon="@android:drawable/sym_def_app_icon"
         android:roundIcon="@android:drawable/sym_def_app_icon"
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/Theme.OffensiveHebrew">
+        android:theme="@style/Theme.ShomerClient">
+
+        <!-- Main activity: single-Activity host, Compose Navigation handles all routing. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Offensive Hebrew">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!--
-            Exposes camera-capture files under <app>/files/captures/ via
-            content:// URIs so the camera app (a separate process) can write
-            into them. Authority must be unique per-app; convention is
-            ${applicationId}.fileprovider.
-        -->
+        <!-- AccessibilityService: reads text nodes from monitored apps.
+             Cannot be granted programmatically; onboarding deep-links to
+             Settings.ACTION_ACCESSIBILITY_SETTINGS. -->
+        <service
+            android:name=".accessibility.ShomerAccessibilityService"
+            android:exported="false"
+            android:label="@string/accessibility_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- CaptureForegroundService: keeps the process alive and owns the
+             mandatory non-dismissible monitoring-active notification.
+             android:foregroundServiceType="specialUse" is mandatory on API 34+. -->
+        <service
+            android:name=".capture.CaptureForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="monitoring" />
+        </service>
+
+        <!-- BootReceiver: restarts CaptureForegroundService after device reboot. -->
+        <receiver
+            android:name=".capture.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- FileProvider: exposes captured images under files/captures/ via
+             content:// URIs for the POC camera path. -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -38,5 +90,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+
+        <!-- parent/ package placeholder: ShomerFcmService will go here in pass 2.
+             Notification channels are already registered in ShomerApplication. -->
+
     </application>
 </manifest>

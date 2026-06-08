@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shomer.AI — לוח הורים</title>
+<!--
+  Shomer.AI parent dashboard — the web parent surface (parent-surface.decision.md D1).
+  Self-contained: no build step, no framework. Open directly or have FastAPI serve it.
+  Reads the S4 parent API:
+    GET  /v1/parent/alerts?child_id&status&include_acked&limit   (Bearer parent token)
+    GET  /v1/parent/alerts/{flag_id}
+    POST /v1/parent/alerts/{flag_id}/react  {action, label?, severity?}
+    GET  /v1/parent/digests/{date}?child_id
+  Config (base URL + parent token) persisted in localStorage. Hebrew RTL.
+-->
+<style>
+  :root {
+    --bg: #0f1419; --panel: #1a2129; --panel-2: #222c37; --line: #2d3a47;
+    --ink: #e6edf3; --muted: #8b9aa8; --accent: #4f9cf9; --accent-ink: #fff;
+    --crit: #ff5c5c; --high: #ff9f43; --med: #ffd43b; --low: #74c0fc;
+    --ok: #51cf66; --review: #c084fc; --radius: 12px;
+    --font: "Segoe UI", Arial, "Noto Sans Hebrew", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; }
+  header {
+    display: flex; align-items: center; gap: 12px; padding: 14px 20px;
+    background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
+  }
+  header .logo { font-weight: 700; font-size: 20px; letter-spacing: .3px; }
+  header .logo span { color: var(--accent); }
+  header .spacer { flex: 1; }
+  .tabbar { display: flex; gap: 6px; }
+  .tab { padding: 7px 14px; border-radius: 999px; cursor: pointer; color: var(--muted); border: 1px solid transparent; }
+  .tab.active { background: var(--panel-2); color: var(--ink); border-color: var(--line); }
+  main { max-width: 1040px; margin: 0 auto; padding: 20px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  label.fld { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+  input, select {
+    background: var(--panel-2); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 10px; font-family: var(--font); font-size: 14px; min-width: 140px;
+  }
+  button {
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px;
+    padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font);
+  }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  button.ghost:hover { background: var(--panel-2); }
+  button:disabled { opacity: .5; cursor: default; }
+  .muted { color: var(--muted); }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .grid { display: grid; gap: 10px; margin-top: 16px; }
+  .alert {
+    display: grid; grid-template-columns: 6px 1fr auto; gap: 14px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 0; overflow: hidden; cursor: pointer; transition: border-color .15s;
+  }
+  .alert:hover { border-color: var(--accent); }
+  .alert .bar { width: 6px; height: 100%; min-height: 64px; }
+  .alert .body { padding: 12px 0; min-width: 0; }
+  .alert .meta { padding: 12px 14px; text-align: left; white-space: nowrap; }
+  .alert .quote { font-size: 15px; margin: 0 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .alert .sub { font-size: 12px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .chip.crit { background: rgba(255,92,92,.16); color: var(--crit); }
+  .chip.high { background: rgba(255,159,67,.16); color: var(--high); }
+  .chip.med  { background: rgba(255,212,59,.15); color: var(--med); }
+  .chip.low  { background: rgba(116,192,252,.15); color: var(--low); }
+  .chip.review { background: rgba(192,132,252,.16); color: var(--review); }
+  .chip.ack { background: rgba(81,207,102,.15); color: var(--ok); }
+  .chip.label { background: rgba(79,156,249,.16); color: var(--accent); }
+  .empty { text-align: center; color: var(--muted); padding: 48px 0; }
+  /* modal */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 20; }
+  .overlay.show { display: flex; }
+  .modal { width: min(560px, 94vw); max-height: 88vh; overflow: auto; }
+  .modal h2 { margin: 0 0 4px; font-size: 18px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 14px; margin: 14px 0; }
+  .kv .k { color: var(--muted); }
+  .bigquote { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; font-size: 16px; line-height: 1.5; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    background: var(--panel-2); border: 1px solid var(--line); color: var(--ink);
+    padding: 10px 18px; border-radius: 10px; opacity: 0; transition: opacity .25s; z-index: 30;
+  }
+  .toast.show { opacity: 1; }
+  .digest-stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
+  .stat { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; min-width: 120px; }
+  .stat .n { font-size: 26px; font-weight: 700; }
+  .stat .l { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">שומר<span>.AI</span></div>
+  <div class="tabbar">
+    <div class="tab active" data-tab="alerts">התראות</div>
+    <div class="tab" data-tab="digest">סיכום יומי</div>
+    <div class="tab" data-tab="settings">הגדרות</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="ghost" id="refreshBtn">רענון</button>
+</header>
+
+<main>
+  <!-- ALERTS -->
+  <section id="tab-alerts">
+    <div class="card">
+      <div class="row">
+        <label class="fld">סטטוס
+          <select id="fStatus">
+            <option value="">הכול</option>
+            <option value="review_needed">לבדיקה (גבולי)</option>
+            <option value="alerted">התראה</option>
+            <option value="acknowledged">טופל</option>
+            <option value="labeled">סומן</option>
+          </select>
+        </label>
+        <label class="fld">מזהה ילד (אופציונלי)
+          <input id="fChild" placeholder="כל הילדים" />
+        </label>
+        <label class="fld">כולל שטופלו
+          <select id="fAcked"><option value="false">לא</option><option value="true">כן</option></select>
+        </label>
+        <label class="fld">&nbsp;<button id="applyFilters">סינון</button></label>
+      </div>
+    </div>
+    <div class="grid" id="alertList"></div>
+  </section>
+
+  <!-- DIGEST -->
+  <section id="tab-digest" style="display:none">
+    <div class="card">
+      <div class="row">
+        <label class="fld">תאריך
+          <input type="date" id="dDate" />
+        </label>
+        <label class="fld">מזהה ילד (אופציונלי)
+          <input id="dChild" placeholder="כל הילדים" />
+        </label>
+        <label class="fld">&nbsp;<button id="loadDigest">טען סיכום</button></label>
+      </div>
+      <p class="hint">הסיכום היומי נשלח אוטומטית פעם ביום (התראה אחת מרוכזת). כאן אפשר לצפות בכל יום.</p>
+    </div>
+    <div id="digestBody"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="tab-settings" style="display:none">
+    <div class="card" style="max-width:560px">
+      <h2 style="margin-top:0">חיבור לשרת</h2>
+      <div class="grid">
+        <label class="fld">כתובת השרת (Base URL)
+          <input id="sBase" placeholder="http://10.0.2.2:8000" />
+        </label>
+        <label class="fld">טוקן הורה (Bearer)
+          <input id="sToken" placeholder="הדבק את טוקן ההורה מהתהליך ההתאמה" />
+        </label>
+        <div class="row">
+          <button id="saveSettings">שמירה</button>
+          <button class="ghost" id="testConn">בדיקת חיבור</button>
+        </div>
+      </div>
+      <p class="hint">
+        הטוקן מתקבל ב־<code>POST /v1/parent/register</code> (אתחול MVP) או דרך תהליך ההתאמה.
+        הנתונים נשמרים מקומית בדפדפן בלבד (localStorage).
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="overlay">
+  <div class="card modal" id="modal"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const LABELS_HE = {
+  abusive: "פוגעני", hate: "שנאה", violence: "אלימות",
+  pornographic: "תוכן מיני", non_offensive: "תקין"
+};
+const SEV_HE = { critical: "קריטי", high: "גבוה", medium: "בינוני", low: "נמוך" };
+const SEV_CLASS = { critical: "crit", high: "high", medium: "med", low: "low" };
+const STATUS_HE = { review_needed: "לבדיקה", alerted: "התראה", acknowledged: "טופל", labeled: "סומן" };
+
+const store = {
+  get base() { return (localStorage.getItem("shomer.base") || "http://10.0.2.2:8000").replace(/\/+$/,""); },
+  get token() { return localStorage.getItem("shomer.token") || ""; },
+  set base(v) { localStorage.setItem("shomer.base", v); },
+  set token(v) { localStorage.setItem("shomer.token", v); },
+};
+
+function toast(msg, ms=2200) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), ms);
+}
+
+async function api(path, opts={}) {
+  if (!store.token) { toast("חסר טוקן הורה — עבור להגדרות"); switchTab("settings"); throw new Error("no token"); }
+  const res = await fetch(store.base + path, {
+    ...opts,
+    headers: { "Authorization": "Bearer " + store.token, "Content-Type": "application/json", ...(opts.headers||{}) },
+  });
+  if (res.status === 401) { toast("טוקן לא תקף (401)"); throw new Error("401"); }
+  if (res.status === 403) { toast("אין הרשאה (403)"); throw new Error("403"); }
+  if (!res.ok && res.status !== 404) { toast("שגיאת שרת: " + res.status); throw new Error(res.status); }
+  return res;
+}
+
+function fmtTime(epoch) {
+  if (!epoch) return "";
+  const d = new Date(epoch * 1000);
+  return d.toLocaleString("he-IL", { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+}
+
+function sevChip(sev) { return `<span class="chip ${SEV_CLASS[sev]||'low'}">${SEV_HE[sev]||sev}</span>`; }
+function statusChip(st) {
+  const cls = st==="review_needed" ? "review" : st==="acknowledged" ? "ack" : st==="labeled" ? "label" : "high";
+  return `<span class="chip ${cls}">${STATUS_HE[st]||st}</span>`;
+}
+
+// ---- Alerts ----
+async function loadAlerts() {
+  const list = document.getElementById("alertList");
+  list.innerHTML = `<div class="empty">טוען…</div>`;
+  const p = new URLSearchParams();
+  const child = document.getElementById("fChild").value.trim();
+  const status = document.getElementById("fStatus").value;
+  const acked = document.getElementById("fAcked").value;
+  if (child) p.set("child_id", child);
+  if (status) p.set("status", status);
+  p.set("include_acked", acked);
+  p.set("limit", "100");
+  let data;
+  try { data = await (await api("/v1/parent/alerts?" + p.toString())).json(); }
+  catch { list.innerHTML = `<div class="empty">לא ניתן לטעון התראות</div>`; return; }
+  const items = Array.isArray(data) ? data : (data.alerts || data.items || []);
+  if (!items.length) { list.innerHTML = `<div class="empty">אין התראות 🎉</div>`; return; }
+  list.innerHTML = items.map(renderAlertRow).join("");
+  list.querySelectorAll("[data-flag]").forEach(el =>
+    el.addEventListener("click", () => openDetail(el.dataset.flag)));
+}
+
+function renderAlertRow(a) {
+  const barColor = `var(--${SEV_CLASS[a.severity]||'low'})`;
+  return `<div class="alert" data-flag="${a.flag_id}">
+    <div class="bar" style="background:${barColor}"></div>
+    <div class="body">
+      <p class="quote">${escapeHtml(a.quote || a.explanation || "(ללא תוכן)")}</p>
+      <div class="sub">
+        ${statusChip(a.status)} ${sevChip(a.severity)}
+        <span class="chip">${LABELS_HE[a.label]||a.label}</span>
+        <span>${a.app_package||""}</span>
+        <span>${a.direction==="outbound"?"נשלח":"התקבל"}</span>
+      </div>
+    </div>
+    <div class="meta muted">${fmtTime(a.created_at)}</div>
+  </div>`;
+}
+
+// ---- Detail + react ----
+async function openDetail(flagId) {
+  const modal = document.getElementById("modal");
+  modal.innerHTML = `<div class="empty">טוען…</div>`;
+  document.getElementById("overlay").classList.add("show");
+  let a;
+  try { a = await (await api("/v1/parent/alerts/" + encodeURIComponent(flagId))).json(); }
+  catch { modal.innerHTML = `<div class="empty">לא נמצא</div>`; return; }
+  modal.innerHTML = `
+    <h2>פרטי התראה</h2>
+    <div class="row" style="gap:6px">${statusChip(a.status)} ${sevChip(a.severity)}
+      <span class="chip">${LABELS_HE[a.label]||a.label}</span></div>
+    <div class="bigquote" style="margin-top:14px">${escapeHtml(a.quote || "(ללא ציטוט)")}</div>
+    <div class="kv">
+      <div class="k">הסבר</div><div>${escapeHtml(a.explanation||"")}</div>
+      <div class="k">אפליקציה</div><div>${a.app_package||""}</div>
+      <div class="k">כיוון</div><div>${a.direction==="outbound"?"הילד שלח":"הילד קיבל"}</div>
+      <div class="k">זמן</div><div>${fmtTime(a.created_at)}</div>
+      <div class="k">מזהה ילד</div><div>${a.child_id||""}</div>
+      <div class="k">מקור</div><div>${a.source||""}</div>
+      ${a.parent_label?`<div class="k">סומן ע"י הורה</div><div>${a.parent_label==="offensive"?"פוגעני":"תקין"}</div>`:""}
+    </div>
+    <p class="hint">עבור מקרים גבוליים ("לבדיקה") — קביעת ההורה משמשת לשיפור המסווג.</p>
+    <div class="actions">
+      <button data-act="acknowledge">סמן כטופל</button>
+      <button class="ghost" data-act="label" data-label="offensive">סמן: פוגעני</button>
+      <button class="ghost" data-act="label" data-label="not_offensive">סמן: תקין</button>
+      <select id="sevPick">
+        <option value="">חומרה…</option>
+        <option value="low">נמוך</option><option value="medium">בינוני</option>
+        <option value="high">גבוה</option><option value="critical">קריטי</option>
+      </select>
+      <button class="ghost" data-act="severity">עדכן חומרה</button>
+      <div class="spacer" style="flex:1"></div>
+      <button class="ghost" id="closeModal">סגירה</button>
+    </div>`;
+  modal.querySelector("#closeModal").onclick = closeModal;
+  modal.querySelectorAll("[data-act]").forEach(btn => btn.onclick = () => react(flagId, btn));
+}
+
+async function react(flagId, btn) {
+  const act = btn.dataset.act;
+  const body = { action: act };
+  if (act === "label") body.label = btn.dataset.label;
+  if (act === "severity") {
+    const v = document.getElementById("sevPick").value;
+    if (!v) { toast("בחר חומרה"); return; }
+    body.severity = v;
+  }
+  try {
+    await api(`/v1/parent/alerts/${encodeURIComponent(flagId)}/react`, { method: "POST", body: JSON.stringify(body) });
+    toast("נשמר ✓");
+    closeModal(); loadAlerts();
+  } catch { /* toast already shown */ }
+}
+
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+document.getElementById("overlay").addEventListener("click", e => { if (e.target.id === "overlay") closeModal(); });
+
+// ---- Digest ----
+async function loadDigest() {
+  const date = document.getElementById("dDate").value;
+  const child = document.getElementById("dChild").value.trim();
+  const body = document.getElementById("digestBody");
+  if (!date) { toast("בחר תאריך"); return; }
+  body.innerHTML = `<div class="empty">טוען…</div>`;
+  const p = new URLSearchParams(); if (child) p.set("child_id", child);
+  let res;
+  try { res = await api(`/v1/parent/digests/${date}?` + p.toString()); }
+  catch { body.innerHTML = `<div class="empty">שגיאה</div>`; return; }
+  if (res.status === 404) { body.innerHTML = `<div class="empty">אין סיכום לתאריך זה</div>`; return; }
+  const data = await res.json();
+  const digests = Array.isArray(data) ? data : (data.digests || [data]);
+  body.innerHTML = digests.map(renderDigest).join("") || `<div class="empty">אין נתונים</div>`;
+}
+
+function renderDigest(d) {
+  const sev = d.by_severity || {};
+  const entries = (d.entries || []);
+  return `<div class="card" style="margin-top:16px">
+    <div class="row" style="justify-content:space-between">
+      <h2 style="margin:0">סיכום ${d.date||""} ${d.child_id?`· ${d.child_id}`:""}</h2>
+      <span class="muted">${fmtTime(d.generated_at)}</span>
+    </div>
+    <div class="digest-stats">
+      <div class="stat"><div class="n">${d.total_flagged??0}</div><div class="l">סה"כ התראות</div></div>
+      <div class="stat"><div class="n" style="color:var(--review)">${d.review_needed??0}</div><div class="l">ממתינות לבדיקה</div></div>
+      <div class="stat"><div class="n" style="color:var(--crit)">${(sev.critical||0)+(sev.high||0)}</div><div class="l">חומרה גבוהה</div></div>
+    </div>
+    <div class="grid">
+      ${entries.map(e => `<div class="alert" data-flag="${e.flag_id}" style="grid-template-columns:6px 1fr auto">
+        <div class="bar" style="background:var(--${SEV_CLASS[e.severity]||'low'})"></div>
+        <div class="body"><p class="quote">${escapeHtml(e.quote||"")}</p>
+          <div class="sub">${statusChip(e.status)} ${sevChip(e.severity)} <span>${e.app_package||""}</span></div></div>
+        <div class="meta muted">${fmtTime(e.created_at)}</div>
+      </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+// ---- Tabs / settings ----
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab===name));
+  ["alerts","digest","settings"].forEach(n =>
+    document.getElementById("tab-"+n).style.display = n===name ? "" : "none");
+  if (name==="alerts") loadAlerts();
+}
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => switchTab(t.dataset.tab));
+document.getElementById("applyFilters").onclick = loadAlerts;
+document.getElementById("refreshBtn").onclick = () => {
+  const active = document.querySelector(".tab.active").dataset.tab;
+  if (active==="alerts") loadAlerts(); else if (active==="digest") loadDigest();
+};
+document.getElementById("loadDigest").onclick = loadDigest;
+document.getElementById("saveSettings").onclick = () => {
+  store.base = document.getElementById("sBase").value.trim();
+  store.token = document.getElementById("sToken").value.trim();
+  toast("נשמר ✓"); switchTab("alerts");
+};
+document.getElementById("testConn").onclick = async () => {
+  try { const r = await fetch(store.base + "/health"); toast(r.ok ? "השרת זמין ✓" : "השרת החזיר " + r.status); }
+  catch { toast("אין חיבור לשרת"); }
+};
+
+function escapeHtml(s) { return (s||"").replace(/[&<>"']/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+// init
+document.getElementById("sBase").value = store.base;
+document.getElementById("sToken").value = store.token;
+document.getElementById("dDate").value = new Date().toISOString().slice(0,10);
+switchTab(store.token ? "alerts" : "settings");
+</script>
+</body>
+</html>

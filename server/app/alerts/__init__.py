@@ -12,10 +12,12 @@ Concrete adapters and helpers are re-exported here so the composition root
 
 See docs/design/alerts/design.md for the full LLD.
 
-Sprint decision D1 (decisions/meeting-6-server-flow.decision.md):
-    Default channel = LogNotifier.  FcmNotifier is a deferred backlog task
-    (M6-ALERTS-FCM) — importable but returns a "not enabled" result until
-    firebase-admin is installed and credentials are configured.
+Channel selection (``ALERTS_CHANNEL``, wired in ``main.py`` lifespan()):
+    "log" (default, no setup) | "fcm" | "stub".  ``FcmNotifier`` is implemented
+    (M6-ALERTS-FCM); it lazy-imports firebase-admin and degrades to a
+    ``sent=False`` "not configured" result when the library or service-account
+    credentials are absent, so the package imports and the server runs without
+    Firebase installed.
 """
 
 from __future__ import annotations
@@ -33,6 +35,7 @@ from .rate_limiter import (
 # --- Notification-channel adapters -------------------------------------------
 from .log_notifier import LogNotifier, compute_alert_id
 from .stub_notifier import StubNotifier
+from .ntfy_notifier import NtfyNotifier
 from .fcm_notifier import FcmNotifier
 
 # --- Supporting infrastructure -----------------------------------------------
@@ -47,6 +50,7 @@ __all__ = [
     # Adapters — NotificationChannel
     "LogNotifier",
     "StubNotifier",
+    "NtfyNotifier",
     "FcmNotifier",
     # Adapters — AlertRateLimiter
     "InMemoryAlertRateLimiter",

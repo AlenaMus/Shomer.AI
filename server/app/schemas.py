@@ -182,3 +182,64 @@ class AlertResult(BaseModel):
     latency_ms: int = 0
     error: str | None = None
     timestamp: datetime = Field(default_factory=lambda: datetime.now())
+
+
+# ---------------------------------------------------------------------------
+# Monitor module — batch ingest value types (schemas only; FlaggedEvent lives
+# in server/app/flagged/protocol.py, mirroring how ConversationTurn lives in
+# audit_log/protocol.py rather than here).
+# ---------------------------------------------------------------------------
+
+FlaggedStatus = Literal["alerted", "review_needed", "acknowledged", "labeled"]
+
+
+class MonitorEvent(BaseModel):
+    """A single captured message event sent by the child-device SDK."""
+
+    client_msg_id: str = Field(..., max_length=128, description="Device idempotency key")
+    app_package: str = Field(
+        ...,
+        max_length=128,
+        description="Source app package name, e.g. 'com.whatsapp'. No message content.",
+    )
+    text: str = Field(..., min_length=1, max_length=4000, description="Captured Hebrew text")
+    text_hash: str = Field(
+        ...,
+        max_length=64,
+        description="Client-computed sha256 hex of the text for dedup.",
+    )
+    captured_at: float = Field(..., description="Epoch seconds from the client clock")
+    direction: Literal["inbound", "outbound"] = Field(
+        "inbound",
+        description="Whether the child received (inbound) or sent (outbound) the message.",
+    )
+
+
+class MonitorBatchRequest(BaseModel):
+    """Batch of monitor events posted by the child device."""
+
+    session_id: str = Field(..., max_length=128, description="Client session identifier")
+    child_id: str = Field(..., max_length=128, description="Opaque child identifier (no PII)")
+    events: list[MonitorEvent] = Field(
+        ...,
+        max_length=50,
+        description="Up to 50 captured events per batch.",
+    )
+
+
+class MonitorEventAck(BaseModel):
+    """Per-event acknowledgement returned in a batch response."""
+
+    client_msg_id: str
+    status: Literal["processed", "deduped", "filtered", "error"]
+    flagged: bool = False
+    flag_id: str | None = None
+
+
+class MonitorBatchResponse(BaseModel):
+    """Summary response for a POST /v1/monitor/events batch."""
+
+    accepted: int
+    deduped: int
+    flagged: int
+    acks: list[MonitorEventAck]

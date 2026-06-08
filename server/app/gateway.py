@@ -7,6 +7,7 @@ call Ollama, and does NOT write to the Audit Log. It owns:
   - Request size enforcement (413 on Content-Length > max_body_bytes)
   - Request timeout enforcement (408 on stalled client upload)
   - Prometheus metrics (/metrics endpoint via prometheus-fastapi-instrumentator)
+  - Device/parent token auth (S2) — populates request.state.device_context
 
 Public entry point: ``register_gateway(app, settings)`` — called once from
 ``main.py`` to install all middleware in the correct order.
@@ -16,6 +17,8 @@ Isolation contract (LLD §2.5):
     prometheus_fastapi_instrumentator, pydantic_settings.
   - MUST NOT import: classifier, ocr, triage, context_agent, alerts, audit_log,
     or server.app.main.
+  - MAY read app.state.identity via the IdentityStore Protocol (never a concrete
+    adapter). The identity module's protocol is a pure Protocol interface.
 """
 
 from __future__ import annotations
@@ -439,6 +442,97 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
 
 # ---------------------------------------------------------------------------
+# Device / parent token auth middleware (S2)
+# ---------------------------------------------------------------------------
+
+# Paths that do NOT require a valid device token.  Includes:
+#   - Health / metrics / docs — operational + monitoring
+#   - Bootstrap / pairing endpoints — cannot require auth (they issue auth)
+#   - Legacy single-shot endpoints — kept open for back-compat + dev tooling
+#     (tightening them is out of S2 scope; document this if auditing)
+_AUTH_ALLOWLIST: frozenset[str] = frozenset(
+    {
+        "/health",
+        "/metrics",
+        "/docs",
+        "/openapi.json",
+        "/redoc",
+        # Identity bootstrap (S2)
+        "/v1/parent/register",
+        "/v1/pair",
+        # Legacy single-shot dev/back-compat endpoints — kept open
+        "/classify",
+        "/classify-image",
+        "/model/info",
+    }
+)
+
+
+class DeviceAuthMiddleware(BaseHTTPMiddleware):
+    """Resolve ``Authorization: Bearer <token>`` → ``request.state.device_context``.
+
+    Behavior:
+      - Always sets ``request.state.device_context = None`` first.
+      - If no ``app.state.identity`` is configured (e.g. pre-S2 tests), passes
+        through silently (fail-open by design — existing tests must not break).
+      - Reads the Bearer token; if missing, leaves device_context as None (the
+        individual resource handler enforces whether auth is required).
+      - On a recognized token, sets ``device_context`` to the resolved
+        ``DeviceContext``.  The middleware does NOT return 401 by itself — the
+        router enforces auth requirements per-resource (monitor endpoint enforces
+        presence + child_id match; parent endpoints enforce role="parent").
+
+    This middleware is content-blind: it imports the IdentityStore *Protocol*
+    off ``app.state.identity``, never a concrete adapter.
+
+    Position in the Gatekeeper stack: runs AFTER TraceIdMiddleware (so trace_id
+    is already set) and BEFORE the rate limiter from the perspective of the
+    request path — i.e., registered AFTER RateLimitMiddleware in add_middleware
+    order (Starlette reverse registration).
+    """
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        # Default: no identity resolved.
+        request.state.device_context = None
+
+        # Skip if identity store is not configured (graceful degradation).
+        identity = getattr(getattr(request.app, "state", None), "identity", None)
+        if identity is None:
+            return await call_next(request)
+
+        # Skip allowlisted paths — they bootstrap auth or are public.
+        path = request.url.path
+        if path in _AUTH_ALLOWLIST:
+            return await call_next(request)
+
+        # Extract Bearer token.
+        auth_header = request.headers.get("Authorization", "")
+        if not auth_header.startswith("Bearer "):
+            return await call_next(request)
+
+        raw_token = auth_header[len("Bearer "):].strip()
+        if not raw_token:
+            return await call_next(request)
+
+        # Resolve: try device token first, then parent token.
+        try:
+            ctx = await identity.authenticate_device(raw_token)
+            if ctx is None:
+                ctx = await identity.authenticate_parent(raw_token)
+            if ctx is not None:
+                request.state.device_context = ctx
+        except Exception as exc:  # noqa: BLE001 — auth is best-effort
+            log.warning(
+                "auth_middleware_error",
+                path=path,
+                error=str(exc),
+                note="Continuing with no device_context (fail-open)",
+            )
+
+        return await call_next(request)
+
+
+# ---------------------------------------------------------------------------
 # Rate limit exception handler
 # ---------------------------------------------------------------------------
 
@@ -582,6 +676,18 @@ def register_gateway(app: FastAPI, settings: GatekeeperSettings) -> None:
     # --- Step 3: TraceIdMiddleware ---
     # Runs before SlowAPI on the request path so the 429 response carries trace_id.
     app.add_middleware(TraceIdMiddleware)
+
+    # --- Step 3b: DeviceAuthMiddleware (S2) ---
+    # Runs AFTER TraceIdMiddleware on the request path (trace_id is set when auth
+    # resolves) but BEFORE the resource handler.  Registration order: added after
+    # TraceIdMiddleware so it is further out in Starlette's reverse stack.
+    #
+    # Desired request-path execution order:
+    #   Timeout → Size → TraceId → DeviceAuth → RateLimit → Prometheus → handler
+    #
+    # Registration order (first = innermost):
+    #   Prometheus, RateLimit, TraceId, DeviceAuth (this step), Size, Timeout
+    app.add_middleware(DeviceAuthMiddleware)
 
     # --- Step 4: RequestSizeMiddleware ---
     # Runs before TraceId on request path so it is outermost of those two.

@@ -13,7 +13,7 @@ Separating them lets the channel (FCM, SMS, log-line) and the rate limiter
 Concrete adapters for NotificationChannel:
     LogNotifier    (default, no Firebase setup required)
     StubNotifier   (tests)
-    FcmNotifier    (backlog task M6-ALERTS-FCM)
+    FcmNotifier    (real FCM delivery; opt-in via ALERTS_CHANNEL=fcm)
 
 Concrete adapters for AlertRateLimiter:
     InMemoryAlertRateLimiter  (default, sliding-window deque)

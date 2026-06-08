@@ -62,6 +62,15 @@ class ClassifierSettings(BaseSettings):
         alias="DICTABERT_HF_NAME",
         description="HuggingFace model name used when DICTABERT_MODEL_PATH is missing.",
     )
+    dictabert_max_length: int = Field(
+        default=96,
+        alias="DICTABERT_MAX_LENGTH",
+        description=(
+            "Tokenizer max_length for the HF adapter.  Must match the value used "
+            "during training (96 for the D10 checkpoint per metadata.json §hyperparameters). "
+            "Inputs are truncated at this boundary; Hebrew chat messages are well under it."
+        ),
+    )
 
     # --- Timeout & borderline thresholds --------------------------------------
     classifier_timeout_s: float = Field(

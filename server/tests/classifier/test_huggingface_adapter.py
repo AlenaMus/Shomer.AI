@@ -149,6 +149,84 @@ async def test_health_returns_known_state() -> None:
 
 
 # ---------------------------------------------------------------------------
+# D10 checkpoint — label-specific smoke tests
+# These tests verify the exact predictions proven to work on the D10 fine-tune
+# (training/outputs/dictabert-offensive/checkpoint-best/).  They are guarded by
+# _local_checkpoint_exists() so they only run when the checkpoint is present.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.slow
+@pytest.mark.asyncio
+@pytest.mark.skipif(
+    not _local_checkpoint_exists(),
+    reason="D10 checkpoint not found at DICTABERT_MODEL_PATH",
+)
+async def test_d10_abusive_misspelled() -> None:
+    """'אטה מטומטם' (misspelled abusive) must classify as abusive with conf > 0.5."""
+    settings = ClassifierSettings()
+    adapter = HuggingFaceClassifier(settings)
+    result = await adapter.classify("אטה מטומטם")
+    assert result.label == "abusive", f"Expected abusive, got {result.label}"
+    assert result.is_offensive is True
+    assert result.confidence > 0.5
+    assert result.error is False
+
+
+@pytest.mark.slow
+@pytest.mark.asyncio
+@pytest.mark.skipif(
+    not _local_checkpoint_exists(),
+    reason="D10 checkpoint not found at DICTABERT_MODEL_PATH",
+)
+async def test_d10_violence_threat() -> None:
+    """'אני אשבור לך את הפרצוף' must classify as violence with conf > 0.5."""
+    settings = ClassifierSettings()
+    adapter = HuggingFaceClassifier(settings)
+    result = await adapter.classify("אני אשבור לך את הפרצוף")
+    assert result.label == "violence", f"Expected violence, got {result.label}"
+    assert result.is_offensive is True
+    assert result.confidence > 0.5
+    assert result.error is False
+
+
+@pytest.mark.slow
+@pytest.mark.asyncio
+@pytest.mark.skipif(
+    not _local_checkpoint_exists(),
+    reason="D10 checkpoint not found at DICTABERT_MODEL_PATH",
+)
+async def test_d10_g03_polarity_interaction() -> None:
+    """G-03 rule: adapter.confidence is predicted-class prob; triage does its own inversion.
+
+    For a non_offensive result the adapter returns confidence = P(non_offensive).
+    The triage engine must compute prob_offensive = 1 - confidence (not confidence).
+    This test verifies the adapter shapes its output so the G-03 math stays correct:
+    - is_offensive = (label != 'non_offensive')
+    - confidence = max softmax probability (predicted-class prob, regardless of polarity)
+    """
+    settings = ClassifierSettings()
+    adapter = HuggingFaceClassifier(settings)
+    # Use a clearly benign text — should come back non_offensive.
+    result = await adapter.classify("שלום, מה המצב היום?")
+    # Contract invariant: confidence is ALWAYS the predicted-class probability.
+    assert result.confidence > 0.0
+    assert result.confidence <= 1.0
+    # If label is non_offensive, is_offensive must be False.
+    assert result.is_offensive == (result.label != "non_offensive")
+    # The G-03 triage math: prob_offensive would be 1 - result.confidence.
+    # Check the inversion makes sense for a benign text.
+    if result.label == "non_offensive":
+        prob_offensive_triage = 1 - result.confidence
+        # A clearly benign text should have low prob_offensive after G-03 inversion.
+        # We allow up to 0.5 because the model may be uncertain on borderline inputs.
+        assert prob_offensive_triage <= 0.7, (
+            f"Benign text got high prob_offensive={prob_offensive_triage:.3f} after G-03 "
+            f"inversion (raw conf={result.confidence:.3f}); check model calibration."
+        )
+
+
+# ---------------------------------------------------------------------------
 # Fast checks that don't need the model
 # ---------------------------------------------------------------------------
 

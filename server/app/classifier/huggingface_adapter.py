@@ -21,11 +21,35 @@ Two construction paths:
 Inference runs on CPU (the server box has no dedicated inference GPU); the
 forward pass is wrapped in ``torch.no_grad()`` and the heavy call is pushed
 to a thread via ``asyncio.to_thread`` so it doesn't block the FastAPI loop.
+
+Calibration note (D10 checkpoint — training/outputs/dictabert-offensive/checkpoint-best/):
+  The D10 checkpoint was trained and evaluated with isotonic calibration
+  (ECE_before=0.248, ECE_after=0.033) but the fitted calibrators were NOT
+  saved alongside the checkpoint — they were reporting-only.  The adapter
+  therefore serves raw softmax probabilities, which are known to be
+  over-confident (ECE ~0.25 without correction).
+
+  Practical impact on triage routing (G-03 rule):
+  - Raw softmax can push predicted-class probabilities toward 0.95–0.99 for
+    high-confidence inputs.
+  - The triage engine converts them correctly via
+    ``prob_offensive = conf if is_offensive else 1 - conf`` before thresholding.
+  - The TriageSettings thresholds were set conservatively (violence always
+    escalates to CA; alert_direct fires at prob_offensive >= 0.65 — see
+    TriageSettings.alert_direct_threshold) so a few extra high-confidence
+    predictions do not cause false-positive alerts in practice.
+
+  To apply post-hoc calibration, fit an sklearn IsotonicRegression or
+  temperature scalar on the validation set, pickle it to
+  ``CALIBRATION_PKL_PATH`` (default: server/models/calibrator.pkl), and set
+  ``CALIBRATION_METHOD=isotonic`` (or ``temperature``) in server/.env.
+  The ConfidenceCalibrator wraps this transparently with no code changes.
 """
 
 from __future__ import annotations
 
 import asyncio
+import logging
 import time
 from typing import Any, cast
 
@@ -35,12 +59,26 @@ from .logging import bind_context
 from .metrics import record_classification, record_error
 from .settings import ClassifierSettings
 
+# Suppress noisy transformers 5.x startup messages emitted through Python
+# logging (not transformers' own print-based logger):
+# - "model of type dictabert_mlp to instantiate model of type ''" — benign; we
+#   load via the concrete class, not Auto classes.
+# - "use_return_dict is deprecated" — config field renamed in transformers 5;
+#   the checkpoint was saved by transformers 5 so this is training-time noise.
+# The "[transformers] The following layers were not sharded" message is emitted
+# via a direct print() in transformers 5.x and cannot be suppressed through
+# Python logging — it is cosmetic startup noise only, not an error.
+logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)
+logging.getLogger("transformers.configuration_utils").setLevel(logging.ERROR)
+logging.getLogger("transformers.modeling_utils_new").setLevel(logging.ERROR)
+
 # Hard input cap for chars; the tokenizer's 512 token cap is the real one.
 _MAX_INPUT_CHARS = 4096
 
-# Canonical 5-label order — matches docs/design/classifier/design.md §5.2.
-# Index 0 must be "non_offensive" so that label_ids that the random head
-# happens to emit for "all-zero" inputs land on the safe class.
+# Canonical 5-label order — matches docs/design/classifier/design.md §5.2 and
+# training/outputs/dictabert-offensive/checkpoint-best/config.json id2label.
+# Used only for the base-untrained fallback path; the checkpoint path reads
+# id2label from the loaded model's config (authoritative per task spec).
 _LABEL_ORDER: tuple[Category, ...] = (
     "non_offensive",
     "abusive",
@@ -49,8 +87,8 @@ _LABEL_ORDER: tuple[Category, ...] = (
     "pornographic",
 )
 
-_ID2LABEL: dict[int, str] = {i: lbl for i, lbl in enumerate(_LABEL_ORDER)}
-_LABEL2ID: dict[str, int] = {lbl: i for i, lbl in enumerate(_LABEL_ORDER)}
+_ID2LABEL_FALLBACK: dict[int, str] = {i: lbl for i, lbl in enumerate(_LABEL_ORDER)}
+_LABEL2ID_FALLBACK: dict[str, int] = {lbl: i for i, lbl in enumerate(_LABEL_ORDER)}
 
 
 class HuggingFaceClassifier:
@@ -102,15 +140,23 @@ class HuggingFaceClassifier:
             from .dictabert_model import DictaBertWithMlpHead
 
             self._model = DictaBertWithMlpHead.from_pretrained(load_from)
+            # Read id2label from the checkpoint's config — this is authoritative.
+            # Keys are int (id) → str (label).  The checkpoint's config.json
+            # stores them as string keys so we normalise to int here.
+            self._id2label: dict[int, str] = {
+                int(k): v
+                for k, v in self._model.config.id2label.items()
+            }
         else:
             # Base-only path: randomly-initialized head, standard AutoModel load.
             self._model = AutoModelForSequenceClassification.from_pretrained(
                 load_from,
                 num_labels=len(_LABEL_ORDER),
-                id2label=_ID2LABEL,
-                label2id=_LABEL2ID,
+                id2label=_ID2LABEL_FALLBACK,
+                label2id=_LABEL2ID_FALLBACK,
                 ignore_mismatched_sizes=True,
             )
+            self._id2label = _ID2LABEL_FALLBACK
 
         self._model.eval()
         # Force CPU — server box is inference-only.
@@ -174,7 +220,9 @@ class HuggingFaceClassifier:
         probs = self._softmax_1d(logits)
         pred_idx = int(probs.argmax())
         raw_conf = float(probs[pred_idx])
-        label = cast(Category, _ID2LABEL.get(pred_idx, "non_offensive"))
+        # Use the instance-level id2label that was read from the checkpoint
+        # config at construction time (authoritative source of label order).
+        label = cast(Category, self._id2label.get(pred_idx, "non_offensive"))
 
         cal_conf = self._calibrator.transform(raw_conf)
         is_borderline = (
@@ -228,12 +276,18 @@ class HuggingFaceClassifier:
         """Synchronous forward pass — call from a worker thread.
 
         Returns a 1-D tensor of length ``len(_LABEL_ORDER)``.
+
+        ``max_length`` must match the value used during training (96 for the
+        D10 checkpoint).  Using a larger value (e.g. 512) is functionally safe
+        because the position embeddings support up to 512 tokens, but it
+        produces different length distributions than training and wastes ~5×
+        compute for Hebrew chat inputs that are almost always under 50 tokens.
         """
         torch = self._torch
         inputs = self._tokenizer(
             text,
             truncation=True,
-            max_length=512,
+            max_length=self._settings.dictabert_max_length,
             return_tensors="pt",
         )
         inputs = {k: v.to(self._device) for k, v in inputs.items()}

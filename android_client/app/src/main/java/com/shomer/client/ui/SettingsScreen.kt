@@ -57,10 +57,17 @@ fun SettingsScreen(
         initialValue = SettingsRepository.DEFAULT_SERVER_URL,
     )
 
+    val savedInterval by vm.uploadIntervalMinutes.collectAsStateWithLifecycle(
+        initialValue = SettingsRepository.DEFAULT_UPLOAD_INTERVAL_MIN,
+    )
+
     var url by remember { mutableStateOf(savedUrl) }
     var status by remember { mutableStateOf<String?>(null) }
+    var intervalText by remember { mutableStateOf(savedInterval.toString()) }
+    var intervalStatus by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(savedUrl) { url = savedUrl }
+    LaunchedEffect(savedInterval) { intervalText = savedInterval.toString() }
 
     Column(
         modifier = modifier
@@ -95,7 +102,7 @@ fun SettingsScreen(
             Button(onClick = {
                 scope.launch {
                     vm.saveServerUrl(url.trim())
-                    status = "Saved. Restart the app for the new URL to take effect."
+                    status = "Saved — applies immediately (no restart needed)."
                 }
             }) { Text("Save") }
             OutlinedButton(onClick = {
@@ -113,6 +120,39 @@ fun SettingsScreen(
 
         Spacer(Modifier.height(12.dp))
         status?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
+
+        Spacer(Modifier.height(32.dp))
+
+        // --- Upload interval ---
+        Text("Upload interval (minutes)", style = MaterialTheme.typography.titleSmall)
+        Text(
+            "How often captured messages are flushed to the server. Lower = more responsive (and more battery/data). Captures also upload immediately when detected.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            value = intervalText,
+            onValueChange = { new -> intervalText = new.filter { it.isDigit() }.take(4); intervalStatus = null },
+            singleLine = true,
+            label = { Text("Minutes (1–1440)") },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(Modifier.height(12.dp))
+        Button(onClick = {
+            val minutes = intervalText.toLongOrNull()?.coerceIn(1L, 1440L)
+            if (minutes == null) {
+                intervalStatus = "Enter a number between 1 and 1440."
+            } else {
+                scope.launch {
+                    vm.saveUploadInterval(minutes)
+                    intervalText = minutes.toString()
+                    intervalStatus = "Saved. Uploading every $minutes min (applied now)."
+                }
+            }
+        }) { Text("Save interval") }
+        Spacer(Modifier.height(8.dp))
+        intervalStatus?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
 
         Spacer(Modifier.height(32.dp))
         Text(

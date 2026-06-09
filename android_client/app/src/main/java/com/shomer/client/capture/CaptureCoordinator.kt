@@ -1,7 +1,11 @@
 package com.shomer.client.capture
 
+import android.content.Context
 import android.util.Log
 import com.shomer.client.accessibility.TargetAppRegistry
+import com.shomer.client.monitor.MonitorActivityLog
+import com.shomer.client.monitor.MonitorUploader
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,6 +36,8 @@ import javax.inject.Singleton
 class CaptureCoordinator @Inject constructor(
     private val preFilter: PreFilter,
     private val eventDao: EventDao,
+    private val activityLog: MonitorActivityLog,
+    @ApplicationContext private val appContext: Context,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default + Job())
 
@@ -65,6 +71,10 @@ class CaptureCoordinator @Inject constructor(
         text: String,
         direction: String,
     ) {
+        // Privacy-safe diagnostic: metadata only, never the message content.
+        val hasHebrew = text.any { it in '֐'..'׿' }
+        Log.d(TAG, "candidate len=${text.length} hebrew=$hasHebrew dir=$direction")
+
         val result = preFilter.filter(text)
         when (result) {
             is PreFilter.FilterResult.Drop -> {
@@ -83,6 +93,15 @@ class CaptureCoordinator @Inject constructor(
                     eventDao.insert(entity)
                     insertedCount.incrementAndGet()
                     Log.d(TAG, "Buffered event pkg=$packageName dir=$direction hash=${result.textHash.take(8)}")
+                    // Record it in the device-side activity log (PENDING until the
+                    // server confirms receipt), then push to the server right away.
+                    activityLog.recordCaptured(
+                        clientMsgId = entity.clientMsgId,
+                        text = entity.text,
+                        direction = direction,
+                        capturedAtMs = (entity.capturedAt * 1000).toLong(),
+                    )
+                    MonitorUploader.scheduleExpedited(appContext)
                 } catch (e: Exception) {
                     Log.e(TAG, "Failed to insert event into buffer", e)
                 }

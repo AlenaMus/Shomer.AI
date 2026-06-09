@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.shomer.client.data.TokenStore
+import com.shomer.client.monitor.MonitorUploader
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,6 +42,9 @@ class BootReceiver : BroadcastReceiver() {
         } else {
             context.startService(serviceIntent)
         }
+
+        // Restart the recurring upload loop (the one-time-work chain doesn't survive reboot).
+        MonitorUploader.startUploadLoop(context)
     }
 
     companion object {

@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.shomer.client.R
 
 /**
@@ -55,7 +55,7 @@ import com.shomer.client.R
  */
 @Composable
 fun PermissionFlowScreen(
-    vm: OnboardingViewModel = viewModel(),
+    vm: OnboardingViewModel = hiltViewModel(),
     onPermissionsDone: () -> Unit,
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
@@ -125,12 +125,33 @@ fun PermissionFlowScreen(
             isGranted = state.batteryOptimizationExempt,
             buttonText = stringResource(R.string.permission_battery_button),
             onButtonClick = {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    val intent = Intent(
-                        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                        Uri.parse("package:${context.packageName}"),
+                // Some OEMs (e.g. Huawei/EMUI) don't handle the per-app battery
+                // intent — fall back to the generic optimization list, then to the
+                // app-details page, so the button always opens *something*.
+                val intents = buildList {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        add(
+                            Intent(
+                                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                                Uri.parse("package:${context.packageName}"),
+                            ),
+                        )
+                        add(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                    }
+                    add(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.parse("package:${context.packageName}"),
+                        ),
                     )
-                    context.startActivity(intent)
+                }
+                for (intent in intents) {
+                    try {
+                        context.startActivity(intent)
+                        break
+                    } catch (e: android.content.ActivityNotFoundException) {
+                        // Try the next fallback.
+                    }
                 }
             },
         )

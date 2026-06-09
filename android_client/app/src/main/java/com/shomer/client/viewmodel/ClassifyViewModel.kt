@@ -11,6 +11,7 @@ import com.shomer.client.data.ClassifyImageResponse
 import com.shomer.client.data.ClassifyRequest
 import com.shomer.client.data.ClassifyResponse
 import com.shomer.client.data.SettingsRepository
+import com.shomer.client.monitor.MonitorUploader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +50,13 @@ class ClassifyViewModel @Inject constructor(
     val state: StateFlow<ClassifyUiState> = _state
 
     val serverUrl = settings.serverUrl
+    val uploadIntervalMinutes = settings.uploadIntervalMinutes
+
+    /** Persist a new upload cadence and apply it immediately by restarting the loop. */
+    suspend fun saveUploadInterval(minutes: Long) {
+        settings.setUploadIntervalMinutes(minutes)
+        MonitorUploader.startUploadLoop(getApplication(), delayMinutes = minutes)
+    }
 
     fun classifyText(text: String) {
         if (text.isBlank()) {
@@ -100,15 +108,20 @@ class ClassifyViewModel @Inject constructor(
      */
     suspend fun testConnection(url: String): String = withContext(Dispatchers.IO) {
         val stored = settings.serverUrl.first()
-        val testUrl = url.trim().ifBlank { stored }
+        val base = url.trim().ifBlank { stored }.let { if (it.endsWith("/")) it else "$it/" }
+        // Build a one-off client so we test exactly the typed URL, even before saving.
+        val client = okhttp3.OkHttpClient.Builder()
+            .connectTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .build()
         try {
-            // Use the injected apiService for testing the stored URL.
-            // For testing a *new* URL before saving, we'd need to build a fresh Retrofit.
-            // For the MVP, test only confirms the stored URL works.
-            val h = apiService.health()
-            "OK — status=${h.status}, ollama=${h.ollamaReachable}, model=${h.model}"
+            val req = okhttp3.Request.Builder().url("${base}health").get().build()
+            client.newCall(req).execute().use { resp ->
+                if (resp.isSuccessful) "✓ Connected — $base (HTTP ${resp.code})"
+                else "Reached $base but HTTP ${resp.code}"
+            }
         } catch (t: Throwable) {
-            "Failed: ${t.message ?: t.javaClass.simpleName}"
+            "✗ Failed: ${t.message ?: t.javaClass.simpleName}"
         }
     }
 

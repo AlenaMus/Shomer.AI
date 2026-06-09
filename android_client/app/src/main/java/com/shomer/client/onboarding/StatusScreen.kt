@@ -60,6 +60,7 @@ fun StatusScreen(
     vm: OnboardingViewModel = hiltViewModel(),
     captureCoordinator: CaptureCoordinator,
     onOpenSettings: () -> Unit,
+    onOpenActivity: () -> Unit,
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -69,7 +70,9 @@ fun StatusScreen(
     var pendingUpload by remember { mutableLongStateOf(0L) }
     LaunchedEffect(Unit) {
         while (true) {
-            captured = captureCoordinator.capturedCount.get()
+            // Show events that PASSED the Hebrew pre-filter and were buffered for
+            // upload — not the raw capture count (which includes dropped UI labels).
+            captured = captureCoordinator.insertedCount.get()
             delay(5_000)
         }
     }
@@ -161,6 +164,16 @@ fun StatusScreen(
             ) {
                 Text(stringResource(R.string.status_start_monitoring))
             }
+        }
+
+        Spacer(Modifier.height(12.dp))
+
+        // View the per-message activity log (with server-receipt confirmation).
+        OutlinedButton(
+            onClick = onOpenActivity,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text("View monitored messages")
         }
 
         Spacer(Modifier.height(24.dp))

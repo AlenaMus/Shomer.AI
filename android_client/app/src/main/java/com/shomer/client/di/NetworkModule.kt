@@ -6,6 +6,7 @@ import com.shomer.client.capture.EventDatabase
 import com.shomer.client.capture.PreFilter
 import com.shomer.client.data.ApiService
 import com.shomer.client.data.AuthInterceptor
+import com.shomer.client.data.BaseUrlInterceptor
 import com.shomer.client.data.MonitorApi
 import com.shomer.client.data.PairingApi
 import com.shomer.client.data.ParentApi
@@ -50,13 +51,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        baseUrlInterceptor: BaseUrlInterceptor,
+    ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             // BODY-level logging for the MVP. Set Level.NONE in production to avoid
             // logging captured message text to logcat.
             level = HttpLoggingInterceptor.Level.BODY
         }
         return OkHttpClient.Builder()
+            // baseUrlInterceptor first: it rewrites host/port to the live setting,
+            // so a URL change in Settings/onboarding applies without an app restart.
+            .addInterceptor(baseUrlInterceptor)
             .addInterceptor(logging)
             .addInterceptor(authInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)

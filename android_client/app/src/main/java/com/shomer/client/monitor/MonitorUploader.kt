@@ -6,18 +6,21 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
-import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.shomer.client.capture.EventDao
 import com.shomer.client.data.MonitorApi
 import com.shomer.client.data.MonitorBatchRequest
 import com.shomer.client.data.MonitorEvent
+import com.shomer.client.data.SettingsRepository
 import com.shomer.client.data.TokenStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.first
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -54,9 +57,18 @@ class MonitorUploader @AssistedInject constructor(
     private val eventDao: EventDao,
     private val monitorApi: MonitorApi,
     private val tokenStore: TokenStore,
+    private val settings: SettingsRepository,
+    private val activityLog: MonitorActivityLog,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
+        // If this run is part of the recurring loop, schedule the next run before
+        // doing anything else — so the loop keeps ticking even if this run no-ops.
+        if (inputData.getBoolean(KEY_IS_LOOP, false)) {
+            val intervalMin = settings.uploadIntervalMinutes.first()
+            startUploadLoop(applicationContext, delayMinutes = intervalMin)
+        }
+
         // Guard: skip if device is not paired.
         val childId = tokenStore.getChildId()
         if (!tokenStore.isPaired() || childId == null) {
@@ -91,9 +103,10 @@ class MonitorUploader @AssistedInject constructor(
                 ),
             )
 
-            // Delete the successfully uploaded rows.
+            // Delete the successfully uploaded rows + mark them SENT in the activity log.
             val uploadedIds = batch.map { it.clientMsgId }
             eventDao.deleteByIds(uploadedIds)
+            activityLog.markSent(uploadedIds)
 
             Log.i(
                 TAG,
@@ -108,6 +121,7 @@ class MonitorUploader @AssistedInject constructor(
                 code == 401 || code == 403 -> {
                     // Auth failure: not paired or wrong child_id. Stop retrying.
                     Log.e(TAG, "Auth failure ($code) — device may need to re-pair")
+                    activityLog.markFailed(batch.map { it.clientMsgId })
                     Result.failure()
                 }
                 code in 500..599 -> Result.retry()
@@ -123,37 +137,64 @@ class MonitorUploader @AssistedInject constructor(
         private const val TAG = "MonitorUploader"
         private const val MAX_BATCH_SIZE = 50
         private const val BACKOFF_DELAY_SECONDS = 30L
-        private const val PERIODIC_INTERVAL_MINUTES = 15L
-        private const val WORK_NAME_PERIODIC = "shomer.monitor.periodic"
+        private const val WORK_NAME_LOOP = "shomer.monitor.loop"
         private const val WORK_NAME_EXPEDITED = "shomer.monitor.expedited"
+        private const val KEY_IS_LOOP = "is_loop"
+
+        private fun networkConstraints() = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
         /**
-         * Schedule the periodic background upload worker.
-         * Called once from onboarding (after pairing) and from BootReceiver.
+         * Start (or restart) the recurring upload loop. Each run reschedules the
+         * next one after the user-configured interval (see SettingsRepository), so
+         * the cadence can be as low as 1 minute — unlike a PeriodicWorkRequest,
+         * which WorkManager floors at 15 minutes.
+         *
+         * Called after pairing (onboarding), from BootReceiver, and whenever the
+         * user changes the interval in Settings. The first run fires after
+         * [delayMinutes] (0 = immediately).
          */
-        fun schedulePeriodicUpload(context: Context) {
-            val request = PeriodicWorkRequestBuilder<MonitorUploader>(
-                PERIODIC_INTERVAL_MINUTES,
-                TimeUnit.MINUTES,
-            )
-                .setConstraints(
-                    Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build(),
-                )
+        fun startUploadLoop(context: Context, delayMinutes: Long = 0L) {
+            val builder = OneTimeWorkRequestBuilder<MonitorUploader>()
+                .setConstraints(networkConstraints())
+                .setInputData(workDataOf(KEY_IS_LOOP to true))
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,
                     BACKOFF_DELAY_SECONDS,
                     TimeUnit.SECONDS,
                 )
-                .build()
+            if (delayMinutes > 0L) {
+                builder.setInitialDelay(delayMinutes, TimeUnit.MINUTES)
+            }
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                WORK_NAME_LOOP,
+                ExistingWorkPolicy.REPLACE,
+                builder.build(),
+            )
+            Log.d(TAG, "Upload loop scheduled (next run in ${delayMinutes}m)")
+        }
 
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-                WORK_NAME_PERIODIC,
-                ExistingPeriodicWorkPolicy.KEEP,
+        /**
+         * Fire a one-off upload as soon as possible — called by CaptureCoordinator
+         * right after an event is buffered, so a captured message reaches the server
+         * within seconds instead of waiting for the next loop tick. KEEP policy means
+         * a burst of captures coalesces into a single pending upload.
+         */
+        fun scheduleExpedited(context: Context) {
+            // NOTE: do NOT use setExpedited() here — that requires overriding
+            // getForegroundInfo() (foreground notification), and without it WorkManager
+            // throws IllegalStateException("Not implemented") on a worker thread, which
+            // crashes the whole process. A plain one-time request runs ASAP anyway.
+            val request = OneTimeWorkRequestBuilder<MonitorUploader>()
+                .setConstraints(networkConstraints())
+                .build()
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                WORK_NAME_EXPEDITED,
+                ExistingWorkPolicy.KEEP,
                 request,
             )
-            Log.d(TAG, "Periodic upload scheduled every ${PERIODIC_INTERVAL_MINUTES}m")
+            Log.d(TAG, "Upload enqueued (run-soon)")
         }
     }
 }

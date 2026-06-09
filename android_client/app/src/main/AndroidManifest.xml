@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -70,6 +71,19 @@
                 android:value="monitoring" />
         </service>
 
+        <!-- NotificationListenerService: captures INCOMING messages from monitored
+             apps by reading their posted notifications (the accessibility tree hides
+             received chat bubbles). Requires the user to grant "Notification access". -->
+        <service
+            android:name=".notification.ShomerNotificationListener"
+            android:exported="false"
+            android:label="@string/accessibility_service_label"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
         <!-- BootReceiver: restarts CaptureForegroundService after device reboot. -->
         <receiver
             android:name=".capture.BootReceiver"
@@ -89,6 +103,22 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
+        </provider>
+
+        <!-- Disable the default WorkManager initializer so WorkManager uses the
+             on-demand Configuration.Provider in ShomerApplication (which supplies the
+             HiltWorkerFactory). Without this, the default factory tries to build
+             @HiltWorker MonitorUploader via a plain (Context, WorkerParameters)
+             constructor and fails with NoSuchMethodException. -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
         </provider>
 
         <!-- parent/ package placeholder: ShomerFcmService will go here in pass 2.

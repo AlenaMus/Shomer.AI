@@ -1,6 +1,7 @@
 package com.shomer.client.onboarding
 
 import android.app.Application
+import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
@@ -10,13 +11,22 @@ import androidx.lifecycle.viewModelScope
 import com.shomer.client.capture.CaptureForegroundService
 import com.shomer.client.data.PairingApi
 import com.shomer.client.data.PairRequest
+import com.shomer.client.data.SettingsRepository
 import com.shomer.client.data.TokenStore
+import com.shomer.client.monitor.MonitorActivityLog
 import com.shomer.client.monitor.MonitorUploader
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 data class OnboardingUiState(
@@ -43,10 +53,47 @@ class OnboardingViewModel @Inject constructor(
     app: Application,
     private val pairingApi: PairingApi,
     private val tokenStore: TokenStore,
+    private val settings: SettingsRepository,
+    private val activityLog: MonitorActivityLog,
 ) : AndroidViewModel(app) {
 
     private val _state = MutableStateFlow(OnboardingUiState())
     val state: StateFlow<OnboardingUiState> = _state
+
+    /** Device-side log of recent captured messages + their server-upload status. */
+    val monitorActivity: StateFlow<List<MonitorActivityLog.Entry>> = activityLog.entries
+
+    /** Live server URL (for the connection editor on the pairing screen). */
+    val serverUrl: StateFlow<String> = settings.serverUrl
+        .stateIn(viewModelScope, SharingStarted.Eagerly, SettingsRepository.DEFAULT_SERVER_URL)
+
+    /** Persist a new server URL. Takes effect immediately (BaseUrlInterceptor reads it live). */
+    fun saveServerUrl(url: String) {
+        viewModelScope.launch { settings.setServerUrl(url.trim()) }
+    }
+
+    /**
+     * Test reachability of [rawUrl] by hitting its /health endpoint with a short
+     * timeout. Returns a human-readable status. Does not change the stored URL.
+     */
+    suspend fun testConnection(rawUrl: String): String = withContext(Dispatchers.IO) {
+        val base = rawUrl.trim().let { if (it.endsWith("/")) it else "$it/" }
+        val client = OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .build()
+        try {
+            val req = Request.Builder().url("${base}health").get().build()
+            client.newCall(req).execute().use { resp ->
+                if (resp.isSuccessful) "✓ Connected — server is reachable (HTTP ${resp.code})"
+                else "Reached $base but got HTTP ${resp.code}"
+            }
+        } catch (e: IllegalArgumentException) {
+            "Invalid URL: ${e.message}"
+        } catch (e: Exception) {
+            "✗ Cannot reach $base — ${e.message ?: e.javaClass.simpleName}"
+        }
+    }
 
     init {
         // If already consented + paired, skip to the status screen (handled in MainActivity).
@@ -99,8 +146,8 @@ class OnboardingViewModel @Inject constructor(
                     childId = response.childId,
                     role = response.role,
                 )
-                // Schedule periodic upload now that we have a token.
-                MonitorUploader.schedulePeriodicUpload(getApplication())
+                // Start the recurring upload loop now that we have a token.
+                MonitorUploader.startUploadLoop(getApplication())
                 _state.update {
                     it.copy(
                         isPairing = false,
@@ -143,12 +190,19 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun isAccessibilityEnabled(context: Context): Boolean {
-        val serviceName = "${context.packageName}/.accessibility.ShomerAccessibilityService"
+        // Android stores the fully-qualified flattened component name, e.g.
+        //   com.shomer.client/com.shomer.client.accessibility.ShomerAccessibilityService
+        // Build the same form via ComponentName and compare by unflattening each entry
+        // (string compare against a short "/.accessibility.X" form silently fails).
+        val expected = ComponentName(
+            context.packageName,
+            "com.shomer.client.accessibility.ShomerAccessibilityService",
+        )
         val enabled = Settings.Secure.getString(
             context.contentResolver,
             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
         ) ?: return false
-        return enabled.split(':').any { it.equals(serviceName, ignoreCase = true) }
+        return enabled.split(':').any { ComponentName.unflattenFromString(it) == expected }
     }
 
     private fun isBatteryOptimizationExempt(context: Context): Boolean {

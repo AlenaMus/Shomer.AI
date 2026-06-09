@@ -18,6 +18,7 @@ import com.shomer.client.capture.CaptureCoordinator
 import com.shomer.client.data.SettingsRepository
 import com.shomer.client.data.TokenStore
 import com.shomer.client.onboarding.ConsentScreen
+import com.shomer.client.onboarding.MonitorActivityScreen
 import com.shomer.client.onboarding.OnboardingViewModel
 import com.shomer.client.onboarding.PairingScreen
 import com.shomer.client.onboarding.PermissionFlowScreen
@@ -44,6 +45,7 @@ private object Routes {
     const val PERMISSIONS = "permissions"
     const val STATUS = "status"
     const val SETTINGS = "settings"
+    const val MONITOR_ACTIVITY = "monitor_activity"
     const val DEBUG_CLASSIFY = "debug_classify"
 
     // Parent-mode flow
@@ -87,6 +89,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // If this device is already paired, make sure the recurring upload loop is
+        // running — it's otherwise only started right after pairing / on reboot, so a
+        // plain app reopen would leave buffered events un-flushed until the next capture.
+        if (tokenStore.isPaired()) {
+            com.shomer.client.monitor.MonitorUploader.startUploadLoop(this)
+        }
 
         val role = tokenStore.getRole()
         val startDest = when {
@@ -189,11 +198,20 @@ private fun ShomerNavHost(
                 onOpenSettings = {
                     navController.navigate(Routes.SETTINGS)
                 },
+                onOpenActivity = {
+                    navController.navigate(Routes.MONITOR_ACTIVITY)
+                },
             )
         }
 
         composable(Routes.SETTINGS) {
             com.shomer.client.ui.SettingsScreen(
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Routes.MONITOR_ACTIVITY) {
+            MonitorActivityScreen(
                 onBack = { navController.popBackStack() },
             )
         }

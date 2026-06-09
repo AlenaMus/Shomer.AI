@@ -48,6 +48,9 @@ class CaptureCoordinator @Inject constructor(
     val capturedCount = AtomicLong(0L)
     val insertedCount = AtomicLong(0L)
 
+    /** Events still buffered locally (not yet uploaded). Drops to 0 once all are sent. */
+    suspend fun pendingCount(): Int = eventDao.pendingCount()
+
     /**
      * Submit a raw text candidate from the accessibility service.
      * Debounces per packageName, then runs through the PreFilter pipeline.

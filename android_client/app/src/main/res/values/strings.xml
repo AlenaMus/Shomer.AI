@@ -43,7 +43,8 @@
     <string name="status_monitoring_on">Monitoring Active</string>
     <string name="status_monitoring_off">Monitoring Paused</string>
     <string name="status_child_id">Child ID: %s</string>
-    <string name="status_captured">Captured: %d events</string>
+    <string name="status_captured">Monitored: %d events</string>
+    <string name="status_pending">Pending upload: %d (clears when server receives)</string>
     <string name="status_uploaded">Uploaded: %d events</string>
     <string name="status_start_monitoring">Start Monitoring</string>
     <string name="status_stop_monitoring">Stop Monitoring</string>

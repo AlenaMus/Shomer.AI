@@ -65,14 +65,15 @@ fun StatusScreen(
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    // Refresh live counters every 5s
-    var captured by remember { mutableLongStateOf(0L) }
-    var pendingUpload by remember { mutableLongStateOf(0L) }
+    // Refresh live counters every 5s.
+    var captured by remember { mutableLongStateOf(0L) }      // lifetime total monitored
+    var pendingUpload by remember { mutableLongStateOf(0L) }  // still waiting to upload
     LaunchedEffect(Unit) {
         while (true) {
-            // Show events that PASSED the Hebrew pre-filter and were buffered for
-            // upload — not the raw capture count (which includes dropped UI labels).
             captured = captureCoordinator.insertedCount.get()
+            // Pending drops to 0 once the server has received the events (immediate
+            // push on capture, or the periodic upload loop ~1 min).
+            pendingUpload = captureCoordinator.pendingCount().toLong()
             delay(5_000)
         }
     }
@@ -133,6 +134,11 @@ fun StatusScreen(
                 Text(
                     text = stringResource(R.string.status_captured, captured),
                     style = MaterialTheme.typography.bodySmall,
+                )
+                Text(
+                    text = stringResource(R.string.status_pending, pendingUpload),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (pendingUpload > 0L) Color(0xFFE65100) else Color(0xFF1B5E20),
                 )
             }
         }

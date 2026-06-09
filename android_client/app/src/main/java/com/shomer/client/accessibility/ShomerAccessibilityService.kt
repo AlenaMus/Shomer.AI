@@ -33,6 +33,10 @@ class ShomerAccessibilityService : AccessibilityService() {
     @Inject
     lateinit var captureCoordinator: CaptureCoordinator
 
+    // Per-app latest in-progress compose text. Submitted once when the box clears
+    // (= the message was sent), so a sentence isn't captured word-by-word as it grows.
+    private val pendingOutbound = HashMap<String, String>()
+
     override fun onServiceConnected() {
         super.onServiceConnected()
         Log.i(TAG, "ShomerAccessibilityService connected")
@@ -71,38 +75,52 @@ class ShomerAccessibilityService : AccessibilityService() {
         // Fast path: skip events from packages not in the registry.
         if (!TargetAppRegistry.isEnabled(pkg)) return
 
-        // 0. Incoming messages arrive as notifications (WhatsApp hides chat bubbles
-        //    from the view tree). Read the message text from the Notification extras.
-        //    These are always inbound (a received message).
-        if (event.eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
-            extractFromNotification(event, pkg)
-            return
-        }
+        when (event.eventType) {
+            // Incoming messages arrive as notifications (WhatsApp hides chat bubbles
+            // from the view tree). Read the message text from the Notification extras.
+            AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED ->
+                extractFromNotification(event, pkg)
 
-        // 1. The event's own text. For TYPE_VIEW_TEXT_CHANGED (typing) and many
-        //    content-changed events this carries the actual message text directly —
-        //    far more reliable than walking the tree, which often only exposes
-        //    control labels. This is the primary capture source.
-        val eventText = event.text
+            // Typing in the compose box. We do NOT submit on every keystroke/pause
+            // (that produced word-by-word fragments of the same sentence); we submit
+            // once when the box clears, i.e. when the message is actually sent.
+            AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED ->
+                handleOutboundTyping(event, pkg)
+
+            // Window/content changes: best-effort scan of on-screen text (WhatsApp
+            // blocks this, but other apps may expose received messages this way).
+            else -> {
+                val rootNode = rootInActiveWindow ?: return
+                try {
+                    extractTextFromNode(rootNode, pkg)
+                } finally {
+                    @Suppress("DEPRECATION")
+                    rootNode.recycle()
+                }
+            }
+        }
+    }
+
+    /**
+     * Outbound (typed) capture with send-detection. A sentence typed with pauses fires
+     * many TYPE_VIEW_TEXT_CHANGED events carrying the growing text; submitting each one
+     * produced fragments. Instead we keep only the latest in-progress text per app and
+     * submit it once when the compose box clears (the message was sent).
+     */
+    private fun handleOutboundTyping(event: AccessibilityEvent, packageName: String) {
+        val text = event.text
             ?.mapNotNull { it?.toString() }
             ?.joinToString(" ")
             ?.trim()
-        if (!eventText.isNullOrBlank()) {
-            val direction = TargetAppRegistry.inferDirection(
-                packageName = pkg,
-                viewClassName = event.className?.toString(),
-                viewId = null,
-            )
-            captureCoordinator.submit(pkg, eventText, direction)
-        }
-
-        // 2. Walk the active window for on-screen message text (received messages).
-        val rootNode = rootInActiveWindow ?: return
-        try {
-            extractTextFromNode(rootNode, pkg)
-        } finally {
-            @Suppress("DEPRECATION")
-            rootNode.recycle()
+            .orEmpty()
+        if (text.isBlank()) {
+            // Compose box cleared -> message sent. Submit the last typed text once.
+            pendingOutbound.remove(packageName)?.let { sent ->
+                captureCoordinator.submit(packageName, sent, "outbound")
+            }
+        } else {
+            // Still typing: remember the latest snapshot; don't submit yet.
+            pendingOutbound[packageName] = text
         }
     }
 

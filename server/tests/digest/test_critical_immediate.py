@@ -75,7 +75,7 @@ async def _make_pipeline(decision: TriageDecision, label: str = "abusive", confi
     """Async pipeline_fn that returns a fixed (ClassificationResult, decision)."""
     result = _clf_result(label=label, confidence=confidence)
 
-    async def _fn(request, text, *, trace_id, child_id, message_id, input_type="monitor"):
+    async def _fn(request, text, *, trace_id, child_id, message_id, input_type="monitor", **kwargs):
         return result, decision
 
     return _fn

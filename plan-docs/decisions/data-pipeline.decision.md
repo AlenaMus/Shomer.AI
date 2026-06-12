@@ -280,3 +280,93 @@ misread as hate) and macro-F1 −0.015 (0.834→0.819) — an unfavorable trade 
 probe. **Decision: reverted** — step 7c (heavy-noise pass) removed from `prepare_data_dictabert.py`;
 **D10 is the final model** (macro-F1 0.834, hate 0.74, poor_spelling 0.58, all gates pass). poor_spelling
 tuning is closed; further gains need real misspelled data, not synthetic noise.
+
+## D12 — Round 7: targeted kid-register noise (scoped to synth_kids pool only)
+
+**Question:** `poor_spelling` (0.6150) and `children_mistakes` (0.7436) lag because kid-phonetic
+corruption is under-represented in training. D11 tried noising the full pool — it protected hate.
+Can we lift the slices without the D11 hate regression?
+
+**Root cause (diagnosed 2026-06-08):**
+- `synth_kids.jsonl` (820 rows, the only kid-register training source) was generated in a *clean*
+  chat register: `avg_final_form=0.05, avg_phonetic=0.01` per sentence.
+- The eval slices test *dense* corruption: poor_spelling has `avg_final_form=0.62, avg_phonetic=0.51`.
+  The gap is 10-15× across every feature.
+- Light-noise augmentation adds only 40 noisy kid rows (insufficient).
+- D11 failed because it noised the *entire* pool (including sinalab/jigsaw hate rows) → the noisy
+  hate-labelled text started resembling noisy non_offensive text → hate F1 dropped −0.08.
+
+**Choice (2026-06-08, implemented):**
+- Add 1,205 targeted noise rows generated **only from synth_kids.jsonl** (not sinalab/jigsaw).
+  Script: `training/augment_kids_noise.py`. Output: `training/data/interim/synth_kids_noised_d12.jsonl`.
+- Two noise tiers:
+  - Tier-1 (820 rows, n_ops=3, ~45% word corruption): targets `children_mistakes` profile
+    (moderate final-form errors, light phonetic subs).
+  - Tier-2 (385 rows, heavy mode, ~65% word corruption): targets `poor_spelling` profile
+    (dense phonetic corruption matching the slice density).
+- Label-balanced across all 5 classes (28% non_off, matching the slice distribution, NOT offensive-biased).
+- Injected into `prepare_data_dictabert.py` step 2 alongside other sources; standard dedup applied.
+- D10 train pool grows from ~7,974 → ~9,100-9,300 rows after dedup.
+
+**Why this approach avoids D11's hate regression:**
+- The noise is applied to ~820 kid rows (which contain 102 abusive, 60 hate, 77 violence examples).
+  These are *already synthetic*, already diverse, already in the kid register.
+- Sinalab hate/violence rows (the clean-signal source for the hate classifier boundary) are NOT
+  touched — they remain as clean-text anchor points for what hate/violence looks like.
+- D11 failed because noising sinalab hate examples made them look like misspelled non_offensive text.
+  D12 avoids this entirely by scoping the noise injection to the synthetic kid pool only.
+
+**Alternatives considered:**
+- *Re-run synthesize_kids.py with misspelling prompts* — better long-term but requires Gemini API
+  call and can't run offline; D12 noise is deterministic and free.
+- *Full-pool heavy noise (D11)* — reverted; this IS the alternative that was tried and failed.
+- *Arch fallback (arch §10, step 1: MLP head variation)* — next rung if D12 also fails the gate;
+  not justified yet since the data root cause is identified.
+
+**Ship/no-ship criteria (predetermined):**
+- KEEP D12 if: macro-F1 >= 0.78 AND hate F1 >= 0.72 AND violence recall >= 0.50 AND at least one of
+  poor_spelling or children_mistakes improves vs D10.
+- REVERT to D10 if hate F1 < 0.72 or macro-F1 < 0.78. Document as D12-reverted in this file.
+
+**OUTCOME: RETRAINED 2026-06-08 → REVERTED.** Ran the full pipeline in WSL2 (RTX 5080, seed=42,
+best epoch 7). D12 source = 1,205 kid-noise rows injected. **Result: D12 is strictly worse than D10
+on every minority class — the D11 failure mode repeated.**
+
+| metric (test) | D10 | D12 | Δ |
+|---|---|---|---|
+| macro-F1 | 0.836 | 0.7845 | **−0.052** |
+| hate F1 | 0.739 | **0.638** | **−0.101** |
+| violence F1 | 0.712 | 0.633 | **−0.079** |
+| non_off F1 | 0.931 | 0.899 | −0.032 |
+| abusive F1 | 0.831 | 0.812 | −0.019 |
+| porn F1 | 0.970 | 0.941 | −0.029 |
+| poor_spelling slice (target) | 0.615 | **0.578** | **−0.037** |
+| children_mistakes slice (target) | 0.744 | 0.788 | +0.044 |
+| clear_hebrew slice | 0.787 | 0.803 | +0.016 |
+| code_switching slice | 0.803 | 0.812 | +0.009 |
+
+The ship gate technically passed (macro 0.7845 ≥ 0.78; violence recall 0.7576; non_off precision 0.9283),
+but **both revert conditions fired**: hate F1 0.638 < 0.72, and the *primary* target poor_spelling
+**regressed**. Confusion matrix showed 10/33 hate examples leaking to non_offensive — kid-noise blurred
+the offense boundary despite keeping real sinalab/jigsaw hate rows clean (the per-class 900-row train cap
+diluted the injection AND the noised synthetic-offensive kid rows still read as misspelled-benign). Only
+children_mistakes improved (+0.044) — not worth a −0.10 hate / −0.05 macro loss.
+
+**Action taken:** renamed `training/data/interim/synth_kids_noised_d12.jsonl → .reverted` (prepare_data's
+warn-if-missing guard then skips it), re-ran prepare+validate+train → restored D10 exactly (deterministic).
+The D12 injection hook remains in `prepare_data_dictabert.py` but is inert (same pattern as D11's unused
+`add_noise_to_pool_heavy`). **D10 remains the final model.** Run logs: `training/outputs/d12_run.log`
+(D12) + `training/outputs/d10_restore.log` (restore).
+
+**Conclusion (confirms D11):** synthetic character-noise — full-pool (D11) OR kid-pool-scoped (D12) —
+cannot lift poor_spelling without costing hate. The data lever is exhausted for this slice. Real options
+left: (a) collect ~100 real misspelled Hebrew child messages (field data), or (b) re-frame the gate with
+the advisor (the slice is a near-maximally-corrupted controlled probe, not natural child text), or
+(c) arch §10 fallback. **poor_spelling 0.615 / children_mistakes 0.744 (D10) stand as the shipped numbers.**
+
+**Revisit:** If D12 also regresses hate, the data lever is exhausted for the poor_spelling slice
+(the slice is near-maximally corrupted for a controlled probe, not real child text). Next step would
+be arch §10 fallback step 1 (MLP head variation) or re-framing the gate with the advisor.
+Note from D11 docs: "further gains need real misspelled data, not synthetic noise" — if the synthetic
+kid noise approach is insufficient, the only alternative is collecting ~100 real misspelled Hebrew
+messages from the field, which is a different data-collection task.

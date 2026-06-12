@@ -5,7 +5,7 @@
 
     <!-- Accessibility service -->
     <string name="accessibility_service_label">Shomer.AI Monitoring Service</string>
-    <string name="accessibility_service_description">Reads Hebrew text from messaging apps to detect offensive content and protect children from cyberbullying.</string>
+    <string name="accessibility_service_description">Reads on-screen Hebrew text from chat and social apps to detect offensive content and protect children from cyberbullying.</string>
 
     <!-- Notification channels -->
     <string name="notification_channel_monitoring_name">Monitoring Active</string>
@@ -15,7 +15,7 @@
 
     <!-- Onboarding -->
     <string name="consent_title">Parental Monitoring Consent</string>
-    <string name="consent_body">This app monitors Hebrew text messages in WhatsApp, Instagram, Telegram, and Messenger on this device.\n\nBoth messages your child receives (inbound) and messages they send (outbound) are checked for offensive, abusive, hate, violent, or inappropriate content.\n\nCaptured text is processed on our secure server and results are sent to the parent\'s device. Message text is not stored permanently.\n\nBy continuing, the guardian confirms they have explained this monitoring to the child and have obtained consent from all parties as required by applicable law.</string>
+    <string name="consent_body">Shomer.AI helps protect your child from cyberbullying by checking Hebrew text shown on this device for offensive, abusive, hateful, violent, or inappropriate content.\n\nHow it works: Shomer.AI reads on-screen text in supported chat and social apps — WhatsApp, Instagram, Facebook, Messenger, and Telegram — including open chats and comments. Because many apps hide their messages from standard accessibility tools, Shomer.AI mainly uses periodic screen capture together with text recognition (OCR) on our server to read what is visible on screen. Screen capture requires your explicit consent through a separate Android system dialog and may be declined.\n\nBoth messages your child receives and messages they send may be checked. Captured text is processed on our secure server and results are sent to the parent\'s device. Screenshots and message text are not permanently stored unless harmful content is detected.\n\nBy continuing, the guardian confirms they have explained this monitoring to the child and have obtained consent from all parties as required by applicable law.</string>
     <string name="consent_guardian_checkbox">I am the guardian of the child using this device and I consent to monitoring</string>
     <string name="consent_child_checkbox">The child has been informed that this device is monitored</string>
     <string name="consent_continue">I Understand — Continue</string>
@@ -55,4 +55,11 @@
     <string name="settings_server_url_hint">http://10.0.2.2:8000/</string>
     <string name="settings_save">Save</string>
     <string name="settings_test_connection">Test Connection</string>
+
+    <!-- Screen capture (MediaProjection) -->
+    <string name="screen_capture_enable_button">Enable Screen Capture for Open Chats</string>
+    <string name="screen_capture_active">Screen capture active — open chats monitored</string>
+    <string name="screen_capture_inactive">Screen capture inactive — only notifications/accessibility captured</string>
+    <string name="screen_capture_rationale">Many apps (WhatsApp, Instagram, Facebook) hide their messages and comments from accessibility services. Screen capture lets Shomer.AI read on-screen text — open chats and comments — that is not accessible any other way, using text recognition (OCR) on the server. A system consent dialog will appear. This requires Android 5+ (API 21). You may decline — notification/accessibility monitoring will continue working.</string>
+    <string name="screen_capture_consent_updated">Monitoring now includes periodic screenshots of messaging app screens. Screenshots are processed on the server for OCR text analysis and are not retained if no harmful content is found.</string>
 </resources>

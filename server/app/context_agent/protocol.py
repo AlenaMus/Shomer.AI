@@ -35,8 +35,21 @@ class ContextReasoner(Protocol):
         text: str,
         classifier_result: ClassificationResult,
         child_id: str | None = None,
+        trace_id: str | None = None,
+        child_age: int = 13,
+        provided_history: list[dict] | None = None,
     ) -> ContextDecision:
         """Apply context-aware reasoning to a borderline classification.
+
+        Parameters
+        ----------
+        provided_history:
+            When not None, use these turns directly as conversation context
+            and skip the ``read_history`` tool call.  Each dict must have
+            ``role`` and ``text`` keys.  This is the screenshot path: the
+            visible conversation in the screenshot IS the context, so the DB
+            store must not be consulted.  When None (text-event path), the
+            existing DB-history behaviour is used.
 
         Contract:
         - NEVER raises. On total failure (every LLM unreachable, budget

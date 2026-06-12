@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS flagged_events (
     source           TEXT    NOT NULL,
     trace_id         TEXT    NOT NULL,
     status           TEXT    NOT NULL DEFAULT 'alerted',
+    confidence       REAL,
     parent_label     TEXT,
     parent_severity  TEXT,
     acknowledged_at  REAL
@@ -51,6 +52,13 @@ CREATE TABLE IF NOT EXISTS flagged_events (
 CREATE INDEX IF NOT EXISTS idx_flagged_child_created
     ON flagged_events(child_id, created_at DESC);
 """
+
+# Migration: add confidence column to existing databases that were created
+# before this column was added.  SQLite does not support IF NOT EXISTS for
+# ALTER TABLE ADD COLUMN in all versions; the error is caught and ignored.
+_MIGRATION_ADD_CONFIDENCE = (
+    "ALTER TABLE flagged_events ADD COLUMN confidence REAL;"
+)
 
 
 class SqliteFlaggedEventStore:
@@ -76,6 +84,12 @@ class SqliteFlaggedEventStore:
         await self._conn.execute("PRAGMA synchronous=NORMAL")
         await self._conn.executescript(_SCHEMA)
         await self._conn.commit()
+        # Migration: add confidence column when upgrading an existing database.
+        try:
+            await self._conn.execute(_MIGRATION_ADD_CONFIDENCE)
+            await self._conn.commit()
+        except Exception:  # noqa: BLE001 — column already exists, ignore
+            pass
         logger.info("flagged_store.initialized", db_path=self._db_path)
 
     async def close(self) -> None:
@@ -98,8 +112,9 @@ class SqliteFlaggedEventStore:
                 INSERT OR IGNORE INTO flagged_events
                     (flag_id, child_id, created_at, app_package, direction,
                      label, severity, quote, explanation, source, trace_id,
-                     status, parent_label, parent_severity, acknowledged_at)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                     status, confidence, parent_label, parent_severity,
+                     acknowledged_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 """,
                 (
                     event.flag_id,
@@ -114,6 +129,7 @@ class SqliteFlaggedEventStore:
                     event.source,
                     event.trace_id,
                     event.status,
+                    event.confidence,
                     event.parent_label,
                     event.parent_severity,
                     event.acknowledged_at,
@@ -128,6 +144,7 @@ class SqliteFlaggedEventStore:
         since: float | None = None,
         limit: int = 50,
         include_acked: bool = False,
+        status: str | None = None,
     ) -> list[FlaggedEvent]:
         assert self._conn is not None, "Call initialize() first"
         where = "child_id = ?"
@@ -135,7 +152,11 @@ class SqliteFlaggedEventStore:
         if since is not None:
             where += " AND created_at >= ?"
             params.append(since)
-        if not include_acked:
+        if status is not None:
+            # Exact-match filter — overrides include_acked semantics.
+            where += " AND status = ?"
+            params.append(status)
+        elif not include_acked:
             where += " AND status NOT IN ('acknowledged','labeled')"
         params.append(limit)
 
@@ -229,6 +250,7 @@ class SqliteFlaggedEventStore:
 
 
 def _row_to_event(row: dict) -> FlaggedEvent:
+    conf = row.get("confidence")
     return FlaggedEvent(
         flag_id=row["flag_id"],
         child_id=row["child_id"],
@@ -242,6 +264,7 @@ def _row_to_event(row: dict) -> FlaggedEvent:
         source=row["source"],  # type: ignore[arg-type]
         trace_id=row["trace_id"],
         status=row["status"],  # type: ignore[arg-type]
+        confidence=float(conf) if conf is not None else None,
         parent_label=row.get("parent_label"),
         parent_severity=row.get("parent_severity"),
         acknowledged_at=row.get("acknowledged_at"),

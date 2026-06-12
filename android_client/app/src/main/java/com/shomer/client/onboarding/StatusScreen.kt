@@ -1,7 +1,11 @@
 package com.shomer.client.onboarding
 
+import android.app.Activity
 import android.content.Intent
+import android.media.projection.MediaProjectionManager
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,6 +44,7 @@ import com.shomer.client.R
 import com.shomer.client.accessibility.TargetAppRegistry
 import com.shomer.client.capture.CaptureForegroundService
 import com.shomer.client.capture.CaptureCoordinator
+import com.shomer.client.capture.ScreenCaptureService
 import kotlinx.coroutines.delay
 
 /**
@@ -68,14 +74,33 @@ fun StatusScreen(
     // Refresh live counters every 5s.
     var captured by remember { mutableLongStateOf(0L) }      // lifetime total monitored
     var pendingUpload by remember { mutableLongStateOf(0L) }  // still waiting to upload
+    var screenCaptureActive by remember { mutableStateOf(ScreenCaptureService.isRunning()) }
     LaunchedEffect(Unit) {
         while (true) {
             captured = captureCoordinator.insertedCount.get()
             // Pending drops to 0 once the server has received the events (immediate
             // push on capture, or the periodic upload loop ~1 min).
             pendingUpload = captureCoordinator.pendingCount().toLong()
+            screenCaptureActive = ScreenCaptureService.isRunning()
             delay(5_000)
         }
+    }
+
+    // MediaProjection consent launcher.
+    // The system shows "Start now?" with the app name.  The result carries the
+    // projection data we pass to ScreenCaptureService to create the VirtualDisplay.
+    val mpm = remember {
+        context.getSystemService(MediaProjectionManager::class.java) as MediaProjectionManager
+    }
+    val screenCaptureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            ScreenCaptureService.startWith(context, result.resultCode, result.data!!)
+            screenCaptureActive = true
+        }
+        // User tapped "Cancel" → result.resultCode == RESULT_CANCELED.
+        // Core monitoring is unaffected; we just don't start the projection service.
     }
 
     // Re-check accessibility on each composition (user might toggle in settings)
@@ -180,6 +205,62 @@ fun StatusScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("View monitored messages")
+        }
+
+        Spacer(Modifier.height(12.dp))
+
+        // Screen capture opt-in button.
+        // Only shown when monitoring is active (paired + accessibility enabled).
+        // The MediaProjection consent dialog is shown by the system — we only
+        // provide a way to launch it.  If the user declines, nothing changes.
+        if (state.accessibilityEnabled && state.pairingDone) {
+            if (screenCaptureActive) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFE3F2FD),
+                    ),
+                ) {
+                    Text(
+                        text = stringResource(R.string.screen_capture_active),
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF0D47A1),
+                    )
+                }
+                Spacer(Modifier.height(4.dp))
+                OutlinedButton(
+                    onClick = {
+                        ScreenCaptureService.stop(context)
+                        screenCaptureActive = false
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("Disable Screen Capture")
+                }
+            } else {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    ),
+                ) {
+                    Text(
+                        text = stringResource(R.string.screen_capture_rationale),
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+                Spacer(Modifier.height(4.dp))
+                FilledTonalButton(
+                    onClick = {
+                        screenCaptureLauncher.launch(mpm.createScreenCaptureIntent())
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(stringResource(R.string.screen_capture_enable_button))
+                }
+            }
         }
 
         Spacer(Modifier.height(24.dp))

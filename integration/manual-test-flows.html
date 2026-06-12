@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="he">
+<head><meta charset="utf-8"><title>manual-test-flows</title>
+<style>
+@page { size: A4; margin: 1.6cm; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "David", "Frank Ruehl CLM", "Times New Roman", "Segoe UI", Arial, sans-serif;
+  font-size: 11.5pt; line-height: 1.6; color: #1a1a1a; max-width: 100%;
+}
+h1 { font-size: 21pt; border-bottom: 3px solid #2c5f8a; padding-bottom: 6px; color: #1f3f5f; }
+h2 { font-size: 16pt; border-bottom: 1px solid #cdd9e5; padding-bottom: 3px; color: #2c5f8a; margin-top: 1.4em; }
+h3 { font-size: 13pt; color: #34618a; }
+h1, h2, h3 { page-break-after: avoid; }
+table { border-collapse: collapse; width: 100%; margin: 0.8em 0; page-break-inside: avoid; font-size: 10.5pt; }
+th, td { border: 1px solid #b9c4d0; padding: 5px 8px; text-align: start; vertical-align: top; }
+th { background: #dee9f7; font-weight: 700; }
+tr:nth-child(even) td { background: #f5f8fc; }
+blockquote { border-inline-start: 4px solid #e0a800; background: #fffbe9; margin: 0.8em 0; padding: 6px 14px; }
+code { background: #f0f0f3; padding: 1px 5px; border-radius: 3px; font-size: 0.9em; }
+pre { background: #f6f8fa; border: 1px solid #d9dde2; border-radius: 6px; padding: 10px 14px;
+      direction: ltr; text-align: left; overflow-x: auto; font-size: 9.5pt; }
+pre code { background: none; padding: 0; }
+a { color: #1a56c4; }
+ul, ol { padding-inline-start: 1.4em; }
+hr { border: none; border-top: 1px solid #d0d7de; margin: 1.4em 0; }
+</style>
+
+</head>
+<body><h1 id="shomerai-manual-test-flows-android-phone-emulator-live-server">Shomer.AI — Manual Test Flows (Android phone / emulator + live server)</h1>
+<p><strong>Use this when:</strong> you sit down with the Android client (physical phone <strong>or</strong> emulator) and a
+locally-running FastAPI server, and want to walk the whole monitoring loop by hand and tick it off.
+<strong>Companion (authoritative, scriptable):</strong> <code>integration/integration-monitor.md</code>.
+<strong>Classifier under test:</strong> trained <strong>DictaBERT D10</strong> (<code>CLASSIFIER_MODEL_VERSION=v1.1-dictabert</code>,
+macro-F1 0.836) — this is the <em>real</em> model now, not the old Ollama stand-in.</p>
+<p>Print this, fill the <strong>Result / PASS-FAIL</strong> column as you go, note the date + device at the top.</p>
+<pre><code>Tester: ______________   Date: 2026-06-09   Device: ☐ physical phone  ☐ emulator   Server port: ______
+</code></pre>
+<hr>
+<h2 id="0-one-time-setup-do-once-before-the-flows">0. One-time setup (do once before the flows)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Command / action</th>
+<th>Done</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>Start the server from the <strong>repo root</strong> (<code>--host 0.0.0.0</code> so a phone can reach it; fresh port avoids orphaned <code>:8000</code>)</td>
+<td><code>cd C:\AIDevelopmentCourse\Shomer.AI</code><br><code>$env:DIGEST_ALLOW_MANUAL_TRIGGER="true"</code><br><code>.\server\.venv\Scripts\python.exe -m uvicorn server.app.main:app --host 0.0.0.0 --port 8011</code></td>
+<td>☐</td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>Confirm the model loaded</td>
+<td>In the startup log, look for the DictaBERT checkpoint load (no Ollama fallback warning). <code>irm http://localhost:8011/v1/model/info</code> → version <code>v1.1-dictabert</code>.</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td>Find the PC's LAN IP (physical phone only)</td>
+<td><code>ipconfig</code> → IPv4 Address, e.g. <code>192.168.1.40</code></td>
+<td>☐</td>
+</tr>
+<tr>
+<td>0.4</td>
+<td>Open the firewall once (physical phone only)</td>
+<td><code>New-NetFirewallRule -DisplayName "OffensiveHebrew" -Direction Inbound -LocalPort 8011 -Protocol TCP -Action Allow</code></td>
+<td>☐</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>Build + install the <strong><code>client</code></strong> flavor (uninstall any old <code>poc</code> APK first — different applicationId)</td>
+<td>Android Studio → run <code>client</code> flavor, <strong>or</strong> <code>cd android_client; .\gradlew :app:installClientDebug</code></td>
+<td>☐</td>
+</tr>
+<tr>
+<td>0.6</td>
+<td>Set the app's base URL</td>
+<td>Emulator → <code>http://10.0.2.2:8011</code> &nbsp;·&nbsp; Physical phone → <code>http://&lt;PC-LAN-IP&gt;:8011</code></td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Real alerts vs. silent:</strong> <code>violence</code> always escalates to the Context Agent first. With <strong>no LLM key</strong>
+the CA is a mock that resolves to "not a threat" → <strong>silent</strong> (no alert). To see a real violence alert,
+put a <code>GEMINI_API_KEY</code> (or OpenAI/Anthropic) in <code>server/.env</code> and keep <code>CONTEXT_AGENT_ENABLED=true</code>.
+<code>abusive</code> / <code>hate</code> (high-confidence) and <code>pornographic</code> fire <strong>direct</strong> alerts without the CA.</p>
+</blockquote>
+<hr>
+<h2 id="1-provision-a-parent-pairing-code-server-side">1. Provision a parent + pairing code (server side)</h2>
+<p>Run on the PC; keep the three tokens for the rest of the flows.</p>
+<pre><code class="language-powershell">$base = &quot;http://localhost:8011&quot;
+$p  = irm &quot;$base/v1/parent/register&quot; -Method Post -ContentType application/json -Body '{&quot;display_name&quot;:&quot;Test Parent&quot;}'
+$ph = @{ Authorization = &quot;Bearer $($p.parent_token)&quot; }
+$c  = irm &quot;$base/v1/parent/children&quot; -Method Post -Headers $ph -ContentType application/json -Body '{&quot;display_name&quot;:&quot;Test Child&quot;}'
+$code = (irm &quot;$base/v1/parent/pairing-code&quot; -Method Post -Headers $ph -ContentType application/json -Body (@{child_id=$c.child_id}|ConvertTo-Json)).code
+&quot;parent_token=$($p.parent_token)`nchild_id=$($c.child_id)`npairing_code=$code&quot;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register</code> returns a <code>parent_token</code></td>
+<td>non-empty opaque token</td>
+<td></td>
+</tr>
+<tr>
+<td><code>children</code> returns a <code>child_id</code></td>
+<td>non-empty</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pairing-code</code> returns a short <code>code</code> (OTP)</td>
+<td>6-ish chars, time-limited</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Record:</strong> <code>parent_token = ____________________</code>  <code>child_id = ____________________</code>  <code>code = ________</code></p>
+<hr>
+<h2 id="2-flow-a-onboarding-pairing-child-mode-on-the-device">2. FLOW A — Onboarding &amp; pairing (child mode, on the device)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>Launch the app, pick <strong>Child</strong> role</td>
+<td>Role chooser → consent screen</td>
+<td></td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Read + accept <strong>Consent</strong></td>
+<td>Screen discloses <strong>both inbound and outbound</strong> message capture; Accept enabled only after scroll/consent</td>
+<td></td>
+</tr>
+<tr>
+<td>A3</td>
+<td><strong>Pairing</strong>: enter the OTP <code>code</code> from §1</td>
+<td>App reports paired; shows the <code>child_id</code> matching §1</td>
+<td></td>
+</tr>
+<tr>
+<td>A4</td>
+<td>Watch the server log</td>
+<td>A line like <code>identity.pair_endpoint_success</code> for that child</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>PASS</strong> = app is paired and displays the same <code>child_id</code> the server issued.</p>
+<blockquote>
+<p>Behind the scenes A3 calls <code>POST /v1/pair</code> (OTP → opaque <strong>device token</strong>). The app stores that token
+and uses it as the <code>Bearer</code> for every upload — no parent token ever lives on the child device.</p>
+</blockquote>
+<hr>
+<h2 id="3-flow-b-permissions-the-monitoring-indicator">3. FLOW B — Permissions &amp; the monitoring indicator</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1</td>
+<td>Grant the <strong>AccessibilityService</strong> (app deep-links to Settings → Shomer → enable)</td>
+<td>Toggle on; back in app it shows "monitoring active"</td>
+<td></td>
+</tr>
+<tr>
+<td>B2</td>
+<td>Grant <strong>POST_NOTIFICATIONS</strong> (Android 13+)</td>
+<td>Permission dialog accepted</td>
+<td></td>
+</tr>
+<tr>
+<td>B3</td>
+<td>Grant <strong>battery exemption</strong> (so WorkManager uploads aren't deferred)</td>
+<td>Allowed</td>
+<td></td>
+</tr>
+<tr>
+<td>B4</td>
+<td>Confirm the <strong>non-dismissible</strong> "monitoring active" notification</td>
+<td>Persistent notification present; cannot be swiped away</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>PASS</strong> = accessibility on + persistent indicator visible. (This is the consent/transparency guarantee.)</p>
+<hr>
+<h2 id="4-flow-c-capture-an-offensive-hebrew-message-flag">4. FLOW C — Capture an offensive Hebrew message → flag</h2>
+<p>Use a target app the service can read (WhatsApp recommended). Send/receive these one at a time and watch
+the server. <strong>Tip:</strong> keep <code>irm "$base/v1/parent/alerts" -Headers $ph</code> handy in a second PowerShell window.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Send/receive in WhatsApp (Hebrew)</th>
+<th>Meaning</th>
+<th>Expected server outcome</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td><code>אתה מטומטם ואני שונא אותך</code></td>
+<td>"you're an idiot, I hate you" — <strong>abusive</strong></td>
+<td><code>monitor.batch_received</code> → <code>monitor.flagged</code>; flag label ≈ <code>abusive</code>, <strong>direct alert</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>C2</td>
+<td><code>אני אהרוג אותך מחר</code></td>
+<td>"I'll kill you tomorrow" — <strong>violence</strong></td>
+<td>flagged + <strong>escalates to Context Agent</strong>. Alert only if an LLM key is set (else silent — by design)</td>
+<td></td>
+</tr>
+<tr>
+<td>C3</td>
+<td><code>מה נשמע? נתראה מחר בבית הספר</code></td>
+<td>"what's up? see you at school" — <strong>benign</strong></td>
+<td>captured, classified <code>non_offensive</code>, <strong>NOT flagged</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>C4</td>
+<td>re-send the <strong>exact</strong> C1 text again</td>
+<td>duplicate</td>
+<td><strong>deduped</strong> (no new flag) — <code>accepted</code> but <code>deduped=1</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>App counters increment</td>
+<td>captured / uploaded counters go up after the upload interval</td>
+<td></td>
+</tr>
+<tr>
+<td>C1 produces a flag</td>
+<td>appears in <code>/v1/parent/alerts</code> with <code>quote</code> matching, <code>app_package=com.whatsapp</code></td>
+<td></td>
+</tr>
+<tr>
+<td>C3 does <strong>not</strong> produce a flag</td>
+<td>benign text stays unflagged (low false-positive behavior)</td>
+<td></td>
+</tr>
+<tr>
+<td>C4 dedups</td>
+<td>no second flag for identical text</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>PASS</strong> = offensive captured + flagged, benign not flagged, duplicate deduped.</p>
+<blockquote>
+<p>Uploads are batched by WorkManager, so allow up to the upload interval (not instant). If nothing
+arrives, see Troubleshooting (network reachability is the usual cause).</p>
+</blockquote>
+<hr>
+<h2 id="5-flow-d-flag-appears-server-side-in-the-daily-digest">5. FLOW D — Flag appears server-side &amp; in the daily digest</h2>
+<pre><code class="language-powershell">irm &quot;$base/v1/parent/alerts&quot; -Headers $ph                 # the C1 flag should be here
+irm &quot;$base/internal/digest/run&quot; -Method Post              # force the once-a-day digest now
+$today = Get-Date -Format &quot;yyyy-MM-dd&quot;
+irm &quot;$base/v1/parent/digests/$today&quot; -Headers $ph
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alert list contains the C1 capture</td>
+<td><code>quote</code>, <code>label</code>, <code>severity</code>, <code>direction</code> populated</td>
+<td></td>
+</tr>
+<tr>
+<td><code>digest/run</code> returns <code>digests_built</code> ≥ 1</td>
+<td>digest built for today</td>
+<td></td>
+</tr>
+<tr>
+<td>Digest body</td>
+<td>lists <code>total_flagged</code>, <code>review_needed</code>, <code>by_severity</code>, <code>by_label</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>PASS</strong> = flag is queryable and rolls up into today's digest.</p>
+<hr>
+<h2 id="6-flow-e-parent-review-react-web-dashboard">6. FLOW E — Parent review &amp; react (web dashboard)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td>Open <code>dashboard/index.html</code> (double-click or serve via the app's StaticFiles)</td>
+<td>Hebrew RTL parent surface loads</td>
+<td></td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Settings → Base URL <code>http://localhost:8011</code> + paste the <code>parent_token</code> from §1</td>
+<td>Saved to localStorage; alert list populates</td>
+<td></td>
+</tr>
+<tr>
+<td>E3</td>
+<td>The C1 flag is in the list</td>
+<td>shows quote + label + severity</td>
+<td></td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Open it → <strong>acknowledge</strong></td>
+<td>status flips to acknowledged on re-list</td>
+<td></td>
+</tr>
+<tr>
+<td>E5</td>
+<td><strong>Label</strong> it (e.g. <code>offensive</code>)</td>
+<td><code>parent_label</code> persists</td>
+<td></td>
+</tr>
+<tr>
+<td>E6</td>
+<td><strong>Change severity</strong></td>
+<td>new severity persists</td>
+<td></td>
+</tr>
+<tr>
+<td>E7</td>
+<td>Confirm the human label is exportable</td>
+<td><code>irm "$base/v1/parent/labels/export" -Headers $ph</code> includes the labeled item</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>PASS</strong> = each reaction (ack / label / severity) persists across a refresh and the label exports for training.</p>
+<hr>
+<h2 id="7-flow-f-parent-review-on-the-android-app-parent-mode">7. FLOW F — Parent review on the Android app (parent mode)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>On a second device/emulator (or after re-pairing as parent), pick <strong>Parent</strong> role</td>
+<td>Parent auth screen</td>
+<td></td>
+</tr>
+<tr>
+<td>F2</td>
+<td>Register or paste the <code>parent_token</code> from §1</td>
+<td>Authenticated; alert list loads</td>
+<td></td>
+</tr>
+<tr>
+<td>F3</td>
+<td>Alert list shows the C1 flag</td>
+<td>quote + label visible</td>
+<td></td>
+</tr>
+<tr>
+<td>F4</td>
+<td>Open detail → react (ack / label / severity)</td>
+<td>persists (poll refresh shows new status)</td>
+<td></td>
+</tr>
+<tr>
+<td>F5</td>
+<td>Open the digest screen</td>
+<td>today's digest renders</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>PASS</strong> = parent mode shows the same flags the dashboard does and reactions persist server-side.</p>
+<hr>
+<h2 id="8-flow-g-security-negative-checks-must-hold">8. FLOW G — Security / negative checks (must hold)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Action</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1</td>
+<td><code>POST /v1/monitor/events</code> with <strong>no</strong> <code>Authorization</code> header</td>
+<td><strong>401</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>G2</td>
+<td><code>POST /v1/monitor/events</code> with a valid device token but a <strong>different</strong> <code>child_id</code> in the body</td>
+<td><strong>403</strong> (a child can't post for another child)</td>
+<td></td>
+</tr>
+<tr>
+<td>G3</td>
+<td><code>GET /v1/parent/alerts</code> with <strong>no</strong> parent token</td>
+<td><strong>401</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>G4</td>
+<td>Inspect the wire (Studio Logcat / server log): does any raw monitored text leave the device except via the authenticated <code>/v1/monitor/events</code> call?</td>
+<td><strong>No</strong> other egress of raw text</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-powershell"># G1 — no auth
+try { irm &quot;$base/v1/monitor/events&quot; -Method Post -ContentType application/json -Body '{}' } catch { $_.Exception.Response.StatusCode.value__ }
+# G2 — wrong child id (use the device token from a pairing + a bogus child_id)
+</code></pre>
+<p><strong>PASS</strong> = 401 without a token, 403 cross-child, and no unauthenticated raw-text egress.</p>
+<hr>
+<h2 id="sign-off">Sign-off</h2>
+<ul>
+<li>[ ] <strong>Flow A</strong> — pairing works (device token issued, child_id matches)</li>
+<li>[ ] <strong>Flow B</strong> — permissions granted + persistent monitoring indicator</li>
+<li>[ ] <strong>Flow C</strong> — offensive captured &amp; flagged, benign unflagged, duplicate deduped</li>
+<li>[ ] <strong>Flow D</strong> — flag queryable + in today's digest</li>
+<li>[ ] <strong>Flow E</strong> — dashboard react loop persists + label exports</li>
+<li>[ ] <strong>Flow F</strong> — parent-mode app shows flags + reacts (optional if only one device)</li>
+<li>[ ] <strong>Flow G</strong> — 401 / 403 / no-raw-egress all hold</li>
+</ul>
+<pre><code>Overall:  ☐ PASS   ☐ PASS WITH NOTES   ☐ FAIL        Notes: ___________________________________
+</code></pre>
+<hr>
+<h2 id="troubleshooting-the-usual-suspects">Troubleshooting (the usual suspects)</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>App can't reach server</td>
+<td>wrong base URL / firewall</td>
+<td>Emulator must use <code>10.0.2.2</code> (not <code>localhost</code>); phone uses the PC LAN IP + the firewall rule (§0.4); both must be on the same Wi-Fi</td>
+</tr>
+<tr>
+<td><code>CLEARTEXT communication not permitted</code></td>
+<td>HTTP (not HTTPS) on a release-ish config</td>
+<td>dev <code>network_security_config.xml</code> must allow cleartext to the LAN host — it does in the <code>client</code> debug flavor</td>
+</tr>
+<tr>
+<td>Pairing fails / code rejected</td>
+<td>OTP expired</td>
+<td>pairing codes are time-limited; mint a fresh one (§1)</td>
+</tr>
+<tr>
+<td>Nothing captured from WhatsApp</td>
+<td>AccessibilityService off or app killed</td>
+<td>re-enable in Settings (§B1); grant battery exemption (§B3) so WorkManager runs</td>
+</tr>
+<tr>
+<td>Captured but never uploaded</td>
+<td>upload is batched</td>
+<td>wait for the upload interval; check Logcat for <code>MonitorUploader</code></td>
+</tr>
+<tr>
+<td>Violence message didn't alert</td>
+<td>CA mock with no LLM key</td>
+<td>expected — set <code>GEMINI_API_KEY</code> + <code>CONTEXT_AGENT_ENABLED=true</code> for real violence alerts</td>
+</tr>
+<tr>
+<td>Server log crashes on Hebrew</td>
+<td>cp1252 console</td>
+<td><code>main.py</code> forces UTF-8; if you wrapped it, run via the venv python directly</td>
+</tr>
+<tr>
+<td>Switching <code>poc</code> ↔ <code>client</code> flavor fails to install</td>
+<td>different applicationId</td>
+<td>uninstall the other flavor's APK first</td>
+</tr>
+<tr>
+<td>Port <code>:8000</code> won't bind</td>
+<td>orphaned background uvicorn</td>
+<td>use a fresh port (8011) as in §0.1</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="known-limitations-by-design-at-this-stage-not-failures">Known limitations (by design at this stage — not failures)</h2>
+<ul>
+<li><strong>Daily digest scheduler is manual</strong> by default — forced via <code>POST /internal/digest/run</code>
+  (<code>DIGEST_BACKEND=asyncio</code> + <code>DIGEST_HOUR</code> enables the real once-a-day cron).</li>
+<li><strong>FCM push is <code>LogNotifier</code></strong> — digest/alert delivery is <em>logged</em>, not pushed to a device, until a
+  Firebase project + service-account JSON exist (<code>ALERTS_CHANNEL=fcm</code>). <code>ntfy</code> is a no-account alternative.</li>
+<li><strong><code>MONITOR_STORE_RAW</code> enforcement is pending (S5)</strong> — non-flagged raw text is still persisted
+  server-side until the classify-and-discard blanking lands.</li>
+<li><strong>Direction inference is heuristic</strong> — defaults to <code>inbound</code>; per-app accuracy improves in Android A5.</li>
+<li><strong>MediaProjection / ML-Kit OCR fallback</strong> (for apps that block accessibility) is Android A5, not covered here.</li>
+<li><strong>Minority-class accuracy caveat</strong> — porn/violence eval data was partly synthetic; in-the-wild labels
+  may differ from the reported macro-F1.</li>
+</ul></body></html>

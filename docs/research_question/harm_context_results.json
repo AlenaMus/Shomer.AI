@@ -1,0 +1,1363 @@
+{
+  "meta": {
+    "timestamp": "2026-06-11 14:07:28",
+    "gold": "data/gold/context_harm_v2.jsonl",
+    "n": 143,
+    "k": 5,
+    "llm": "gemini-2.5-flash",
+    "n_alert_worthy": 95,
+    "relabel": "self_or_report split: victim_disclosure=alert, self_deprecation=not (2026-06-11)"
+  },
+  "harm_target": {
+    "fpr_blind": 0.020833333333333332,
+    "fpr_aware": 0.020833333333333332,
+    "fpr_delta_pp": 0.0,
+    "fpr_b": 1,
+    "fpr_c": 1,
+    "fpr_p": 1.0,
+    "rec_blind": 0.5894736842105263,
+    "rec_aware": 0.8210526315789474,
+    "rec_delta_pp": 23.15789473684211,
+    "n_neg": 48,
+    "n_pos": 95
+  },
+  "offensive_target": {
+    "fpr_blind": 0.19444444444444445,
+    "fpr_aware": 0.5833333333333334,
+    "fpr_delta_pp": -38.88888888888889,
+    "fpr_b": 14,
+    "fpr_c": 0,
+    "fpr_p": 0.0001220703125,
+    "rec_blind": 0.4672897196261682,
+    "rec_aware": 0.5420560747663551,
+    "rec_delta_pp": 7.476635514018687,
+    "n_neg": 36,
+    "n_pos": 107
+  },
+  "per_group": {
+    "harmful": {
+      "n": 72,
+      "alert_b": 49,
+      "alert_a": 58,
+      "ok_b": 49,
+      "ok_a": 58
+    },
+    "veiled_harmful": {
+      "n": 12,
+      "alert_b": 0,
+      "alert_a": 12,
+      "ok_b": 0,
+      "ok_a": 12
+    },
+    "offensive_not_harmful": {
+      "n": 35,
+      "alert_b": 1,
+      "alert_a": 0,
+      "ok_b": 34,
+      "ok_a": 35
+    },
+    "benign": {
+      "n": 13,
+      "alert_b": 0,
+      "alert_a": 1,
+      "ok_b": 13,
+      "ok_a": 12
+    },
+    "victim_disclosure": {
+      "n": 11,
+      "alert_b": 7,
+      "alert_a": 8,
+      "ok_b": 7,
+      "ok_a": 8
+    }
+  },
+  "scores": [
+    {
+      "id": "HV-sustained_pileon-01",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-sustained_pileon-02",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sustained_pileon-03",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sustained_pileon-04",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-sustained_pileon-05",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sustained_pileon-06",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sustained_pileon-07",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-sustained_pileon-08",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sustained_pileon-09",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sustained_pileon-10",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sustained_pileon-11",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-sustained_pileon-12",
+      "group": "harmful",
+      "subtype": "sustained_pileon",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-escalation_to_threat-01",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-02",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-03",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-04",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-05",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-06",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-07",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-08",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-09",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-10",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-11",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-escalation_to_threat-12",
+      "group": "harmful",
+      "subtype": "escalation_to_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-01",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-02",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-03",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-04",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-05",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-06",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-07",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-08",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-09",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-10",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-11",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-explicit_threat-12",
+      "group": "harmful",
+      "subtype": "explicit_threat",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-01",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-02",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-03",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-04",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-05",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-06",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-07",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-08",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-09",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-10",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-11",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-sexual_coercion-12",
+      "group": "harmful",
+      "subtype": "sexual_coercion",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-01",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-02",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-03",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-04",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-05",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-06",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-07",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-08",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-09",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-10",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-11",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-exclusion_campaign-12",
+      "group": "harmful",
+      "subtype": "exclusion_campaign",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-doxxing-01",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-doxxing-02",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-doxxing-03",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-doxxing-04",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": false
+    },
+    {
+      "id": "HV-doxxing-05",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-doxxing-06",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-doxxing-07",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-doxxing-08",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-doxxing-09",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-doxxing-10",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-doxxing-11",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-doxxing-12",
+      "group": "harmful",
+      "subtype": "doxxing",
+      "alert_worthy": true,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-veiled_in_context-01",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-02",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-03",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-04",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-05",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-06",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-07",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-08",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-09",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-10",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-11",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-veiled_in_context-12",
+      "group": "veiled_harmful",
+      "subtype": "veiled_in_context",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-mutual_banter-01",
+      "group": "offensive_not_harmful",
+      "subtype": "mutual_banter",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-01",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-02",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-03",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-04",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-05",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-06",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-07",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-08",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-09",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-10",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-isolated_jab-11",
+      "group": "offensive_not_harmful",
+      "subtype": "isolated_jab",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-01",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-02",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-03",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-04",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-05",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-06",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-07",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-08",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-09",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-10",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-sarcasm_friendly-11",
+      "group": "offensive_not_harmful",
+      "subtype": "sarcasm_friendly",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-01",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-02",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-03",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-04",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-05",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-06",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-07",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-08",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-09",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": true,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-10",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-11",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-reclaimed_slang-12",
+      "group": "offensive_not_harmful",
+      "subtype": "reclaimed_slang",
+      "alert_worthy": false,
+      "offensive_content": true,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-01",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-02",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-03",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-04",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-05",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-06",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-07",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-08",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-09",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-10",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-11",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-friendly_chat-12",
+      "group": "benign",
+      "subtype": "friendly_chat",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-self_or_report-01",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-02",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-self_or_report-03",
+      "group": "benign",
+      "subtype": "self_deprecation",
+      "alert_worthy": false,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-04",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-05",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-06",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-07",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-08",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-09",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": true,
+      "aware": true
+    },
+    {
+      "id": "HV-self_or_report-10",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-self_or_report-11",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": false,
+      "aware": false
+    },
+    {
+      "id": "HV-self_or_report-12",
+      "group": "victim_disclosure",
+      "subtype": "victim_disclosure",
+      "alert_worthy": true,
+      "offensive_content": false,
+      "blind": true,
+      "aware": true
+    }
+  ]
+}

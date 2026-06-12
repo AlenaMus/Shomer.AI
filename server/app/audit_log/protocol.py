@@ -42,6 +42,7 @@ class ConversationTurn:
     role: str          # "child_outbound" | "child_inbound"
     text: str
     timestamp: float   # epoch seconds
+    conversation_id: str = "default"  # stable chat-thread id; "default" = fallback bucket
 
 
 @dataclass(frozen=True)
@@ -123,6 +124,7 @@ class AuditStore(Protocol):
         turn_index: int,
         role: str,
         text: str,
+        conversation_id: str = "default",
     ) -> None: ...
 
     # --- Read side -----------------------------------------------------------
@@ -131,8 +133,31 @@ class AuditStore(Protocol):
         self,
         child_id: str,
         last_n_turns: int = 5,
+        conversation_id: str = "default",
     ) -> list[ConversationTurn]:
-        """Used by the Context Agent's ``read_history`` tool."""
+        """Used by the Context Agent's ``read_history`` tool.
+
+        Scoped to ``(child_id, conversation_id)`` — different chat threads for
+        the same child do NOT share history.  When ``conversation_id`` is
+        ``"default"`` the call behaves exactly as the pre-scoping API so old
+        adapters and tests remain unaffected.
+        """
+        ...
+
+    async def read_agent_trace_for(
+        self,
+        trace_id: str,
+    ) -> dict[str, Any] | None:
+        """Return the most-recent agent_traces row for ``trace_id`` as a plain
+        dict, or ``None`` if no CA ran for this trace.
+
+        Keys returned (matching the ``agent_traces`` schema):
+          ``is_real_threat``, ``severity``, ``explanation``, ``review_flag``,
+          ``model_used``, ``tools_called_json``, ``reasoning_trace``.
+
+        Used by ``GET /v1/parent/alerts/{flag_id}`` to expose CA reasoning to
+        the parent dashboard without adding a direct DB dependency to the router.
+        """
         ...
 
     def query_for_evaluation(

@@ -63,6 +63,22 @@ from .protocol import AuditRow, ConversationTurn
 logger = structlog.get_logger("shomer.audit")
 
 
+# Idempotent migration: add conversation_id to the conversations table on
+# existing databases that were created before this column existed.
+# The IF NOT EXISTS guard (via PRAGMA table_info) prevents the ALTER TABLE
+# from failing on databases that already have the column.
+_MIGRATION_ADD_CONVERSATION_ID = """
+    ALTER TABLE conversations ADD COLUMN conversation_id TEXT NOT NULL DEFAULT 'default';
+"""
+
+# Index created separately so it can also be added idempotently; CREATE INDEX
+# IF NOT EXISTS is standard SQLite and never fails on re-run.
+_MIGRATION_ADD_CONVERSATION_ID_INDEX = (
+    "CREATE INDEX IF NOT EXISTS idx_conv_child_conv_turn "
+    "ON conversations(child_id, conversation_id, turn_index);"
+)
+
+
 # Time-stamped tables swept by retention. ``created_at`` is an epoch float on
 # every one of these, so the retention DELETE is uniform.
 _TIMESTAMPED_TABLES: tuple[str, ...] = (
@@ -140,14 +156,15 @@ CREATE INDEX IF NOT EXISTS idx_alerts_child_ts       ON alerts(child_id, created
 CREATE INDEX IF NOT EXISTS idx_alerts_created_at     ON alerts(created_at);
 
 CREATE TABLE IF NOT EXISTS conversations (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    child_id    TEXT    NOT NULL,
-    turn_index  INTEGER NOT NULL,
-    role        TEXT    NOT NULL,
-    text        TEXT    NOT NULL,
-    created_at  REAL    NOT NULL
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    child_id        TEXT    NOT NULL,
+    conversation_id TEXT    NOT NULL DEFAULT 'default',
+    turn_index      INTEGER NOT NULL,
+    role            TEXT    NOT NULL,
+    text            TEXT    NOT NULL,
+    created_at      REAL    NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_conv_child_turn ON conversations(child_id, turn_index);
+CREATE INDEX IF NOT EXISTS idx_conv_child_conv_turn ON conversations(child_id, conversation_id, turn_index);
 CREATE INDEX IF NOT EXISTS idx_conv_created_at ON conversations(created_at);
 
 CREATE TABLE IF NOT EXISTS gold_set_metadata (
@@ -200,6 +217,22 @@ class SqliteAuditStore:
         await conn.execute(f"PRAGMA busy_timeout={int(self._busy_timeout_ms)};")
         await conn.executescript(_SCHEMA)
         await conn.commit()
+
+        # Idempotent migration: add conversation_id column if it doesn't exist.
+        # PRAGMA table_info is zero-cost and avoids the ALTER TABLE error on
+        # databases that already have the column.
+        cur = await conn.execute("PRAGMA table_info(conversations);")
+        cols = await cur.fetchall()
+        await cur.close()
+        existing_col_names = {row[1] for row in cols}
+        if "conversation_id" not in existing_col_names:
+            await conn.execute(_MIGRATION_ADD_CONVERSATION_ID)
+            await conn.commit()
+            logger.info("audit_store_migration_applied", column="conversation_id")
+        # The index is always idempotent (CREATE INDEX IF NOT EXISTS).
+        await conn.execute(_MIGRATION_ADD_CONVERSATION_ID_INDEX)
+        await conn.commit()
+
         self._conn = conn
         logger.info("audit_store_initialized", db_path=self._db_path)
 
@@ -375,19 +408,21 @@ class SqliteAuditStore:
         turn_index: int,
         role: str,
         text: str,
+        conversation_id: str = "default",
     ) -> None:
         conn = self._require_conn()
         await conn.execute(
             """
-            INSERT INTO conversations (child_id, turn_index, role, text, created_at)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO conversations (child_id, conversation_id, turn_index, role, text, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (child_id, int(turn_index), role, text, time.time()),
+            (child_id, conversation_id, int(turn_index), role, text, time.time()),
         )
         await conn.commit()
         logger.info(
             "record_conversation_turn",
             child_id=child_id,
+            conversation_id=conversation_id,
             turn_index=turn_index,
         )
 
@@ -397,8 +432,12 @@ class SqliteAuditStore:
         self,
         child_id: str,
         last_n_turns: int = 5,
+        conversation_id: str = "default",
     ) -> list[ConversationTurn]:
         """Return the most-recent ``last_n_turns`` turns, in ascending turn order.
+
+        Scoped to ``(child_id, conversation_id)`` — different chat threads for
+        the same child do NOT share history.
 
         Selects the newest N rows by ``(turn_index, id)`` DESC, then reverses so
         the caller sees them oldest-first (matching InMemoryAuditStore semantics).
@@ -406,13 +445,13 @@ class SqliteAuditStore:
         conn = self._require_conn()
         cur = await conn.execute(
             """
-            SELECT child_id, turn_index, role, text, created_at
+            SELECT child_id, turn_index, role, text, created_at, conversation_id
             FROM conversations
-            WHERE child_id = ?
+            WHERE child_id = ? AND conversation_id = ?
             ORDER BY turn_index DESC, id DESC
             LIMIT ?
             """,
-            (child_id, int(last_n_turns)),
+            (child_id, conversation_id, int(last_n_turns)),
         )
         rows = await cur.fetchall()
         await cur.close()
@@ -424,10 +463,44 @@ class SqliteAuditStore:
                 role=row[2],
                 text=row[3],
                 timestamp=float(row[4]),
+                conversation_id=row[5],
             )
             for row in reversed(rows)
         ]
         return turns
+
+    async def read_agent_trace_for(self, trace_id: str) -> dict | None:
+        """Return the most-recent agent_traces row for trace_id as a plain dict.
+
+        Returns None if no agent trace exists for this trace_id.  The dict
+        keys match the agent_traces schema columns needed by the parent-API
+        detail endpoint: is_real_threat, severity, explanation, review_flag,
+        model_used, tools_called_json, reasoning_trace.
+        """
+        conn = self._require_conn()
+        async with conn.execute(
+            """
+            SELECT is_real_threat, severity, explanation, review_flag,
+                   model_used, tools_called_json, reasoning_trace
+            FROM agent_traces
+            WHERE trace_id = ?
+            ORDER BY agent_trace_id DESC
+            LIMIT 1
+            """,
+            (trace_id,),
+        ) as cur:
+            row = await cur.fetchone()
+        if row is None:
+            return None
+        return {
+            "is_real_threat": row[0],
+            "severity": row[1],
+            "explanation": row[2],
+            "review_flag": row[3],
+            "model_used": row[4],
+            "tools_called_json": row[5],
+            "reasoning_trace": row[6],
+        }
 
     def query_for_evaluation(
         self,

@@ -1,6 +1,7 @@
 package com.shomer.client.data
 
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -42,6 +43,31 @@ interface MonitorApi {
      */
     @POST("v1/monitor/events")
     suspend fun ingest(@Body batch: MonitorBatchRequest): MonitorBatchResponse
+
+    /**
+     * Upload a screenshot (JPEG) for server-side OCR + pipeline ingest.
+     *
+     * multipart/form-data fields (all snake_case, matching the server contract):
+     *   image          — JPEG file bytes
+     *   child_id       — opaque child identifier
+     *   session_id     — UUID4 (groups this upload; not an auth boundary)
+     *   client_msg_id  — UUID4 idempotency key
+     *   captured_at    — epoch seconds as string
+     *   direction      — "screen"
+     *
+     * Response extends MonitorBatchResponse with an additional ocr_text_len field.
+     * Auth: Bearer added by AuthInterceptor. Base URL rewritten by BaseUrlInterceptor.
+     */
+    @Multipart
+    @POST("v1/monitor/image")
+    suspend fun ingestImage(
+        @Part image: MultipartBody.Part,
+        @Part("child_id") childId: RequestBody,
+        @Part("session_id") sessionId: RequestBody,
+        @Part("client_msg_id") clientMsgId: RequestBody,
+        @Part("captured_at") capturedAt: RequestBody,
+        @Part("direction") direction: RequestBody,
+    ): ScreenshotIngestResponse
 }
 
 // ---------------------------------------------------------------------------

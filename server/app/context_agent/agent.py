@@ -98,8 +98,19 @@ class LlmContextAgent:
         child_id: str | None = None,
         trace_id: str | None = None,
         child_age: int = 13,
+        provided_history: list[dict] | None = None,
     ) -> ContextDecision:
         """Evaluate a borderline classification. NEVER raises.
+
+        Parameters
+        ----------
+        provided_history:
+            When not None, use these turns directly as ``conversation_history``
+            and skip the ``read_history`` tool call (the DB store is not hit).
+            Each dict must have ``role`` and ``text`` keys, matching the shape
+            that ``build_user_prompt`` / ``_format_history`` expect.
+            When None (the default), history is fetched from the audit store
+            via ``read_history`` as normal.
 
         Returns ``ContextDecision(review_flag=True)`` on any failure.
         """
@@ -110,7 +121,8 @@ class LlmContextAgent:
 
         try:
             return await self._evaluate_inner(
-                text, classifier_result, child_id, _tid, child_age, t0
+                text, classifier_result, child_id, _tid, child_age, t0,
+                provided_history=provided_history,
             )
         except Exception as exc:
             latency_ms = (time.perf_counter() - t0) * 1000
@@ -141,18 +153,34 @@ class LlmContextAgent:
         trace_id: str,
         child_age: int,
         t0: float,
+        *,
+        provided_history: list[dict] | None = None,
     ) -> ContextDecision:
 
         # --- Step 1: Run tools deterministically (pre-LLM) --------------- #
         tools_called: list[str] = []
 
-        history_result = await self._read_history_tool.run(
-            {"child_id": child_id or "", "last_n_turns": self._max_history_turns}
-        )
-        tools_called.append(self._read_history_tool.name)
-        context_agent_tool_calls_total.labels(tool=self._read_history_tool.name).inc()
-        logger.debug(EVT_TOOL_CALLED, trace_id=trace_id, tool=self._read_history_tool.name)
+        if provided_history is not None:
+            # Screenshot path: the caller supplies the visible conversation
+            # directly. We skip the DB read_history tool and use the provided
+            # turns as-is. Record "provided_history" in tools_called so the
+            # audit trace shows the source clearly.
+            history_turns: list[dict] = provided_history
+            tools_called.append("provided_history")
+            context_agent_tool_calls_total.labels(tool="provided_history").inc()
+            logger.debug(EVT_TOOL_CALLED, trace_id=trace_id, tool="provided_history")
+        else:
+            # Text path: fetch last-N turns from the audit store (existing behaviour).
+            history_result = await self._read_history_tool.run(
+                {"child_id": child_id or "", "last_n_turns": self._max_history_turns}
+            )
+            tools_called.append(self._read_history_tool.name)
+            context_agent_tool_calls_total.labels(tool=self._read_history_tool.name).inc()
+            logger.debug(EVT_TOOL_CALLED, trace_id=trace_id, tool=self._read_history_tool.name)
+            # Convert history turns to dicts for the prompt builder
+            history_turns = history_result.get("result", {}).get("turns", [])
 
+        # Slang + age tools run in both paths (independent of history source).
         slang_result = await self._lookup_slang_tool.run({"text": text})
         tools_called.append(self._lookup_slang_tool.name)
         context_agent_tool_calls_total.labels(tool=self._lookup_slang_tool.name).inc()
@@ -162,9 +190,6 @@ class LlmContextAgent:
         tools_called.append(self._check_age_tool.name)
         context_agent_tool_calls_total.labels(tool=self._check_age_tool.name).inc()
         logger.debug(EVT_TOOL_CALLED, trace_id=trace_id, tool=self._check_age_tool.name)
-
-        # Convert history turns to dicts for the prompt builder
-        history_turns = history_result.get("result", {}).get("turns", [])
 
         # --- Step 2: Budget pre-check ------------------------------------ #
         allowed, reason = await self._budget.before_call(

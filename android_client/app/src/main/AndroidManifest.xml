@@ -19,6 +19,12 @@
     <!-- Battery optimization exemption: required for ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS. -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!-- Screen capture via MediaProjection.
+         FOREGROUND_SERVICE_MEDIA_PROJECTION is required on API 34+ for any service
+         that uses MediaProjection (Android 14 enforcement, introduced in API 34).
+         On API 29+ the foreground service type must be declared in the manifest. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+
     <!-- Camera: kept for the POC debug classify screen (image upload). -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
@@ -70,6 +76,17 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="monitoring" />
         </service>
+
+        <!-- ScreenCaptureService: holds the MediaProjection + VirtualDisplay that
+             powers screenshot-based open-chat capture.
+             foregroundServiceType="mediaProjection" is required on API 29+ for
+             services that create a MediaProjection.  On API 34+ the
+             FOREGROUND_SERVICE_MEDIA_PROJECTION permission is also required (declared
+             above in the uses-permission block). -->
+        <service
+            android:name=".capture.ScreenCaptureService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
 
         <!-- NotificationListenerService: captures INCOMING messages from monitored
              apps by reading their posted notifications (the accessibility tree hides

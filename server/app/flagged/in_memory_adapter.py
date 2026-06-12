@@ -40,17 +40,27 @@ class InMemoryFlaggedEventStore:
         since: float | None = None,
         limit: int = 50,
         include_acked: bool = False,
+        status: str | None = None,
     ) -> list[FlaggedEvent]:
         """Return events for child_id, newest-first."""
         with self._lock:
             events = list(self._events.values())
 
-        filtered = [
-            e for e in events
-            if e.child_id == child_id
-            and (since is None or e.created_at >= since)
-            and (include_acked or e.status not in ("acknowledged", "labeled"))
-        ]
+        if status is not None:
+            # Exact-match filter — overrides include_acked semantics.
+            filtered = [
+                e for e in events
+                if e.child_id == child_id
+                and (since is None or e.created_at >= since)
+                and e.status == status
+            ]
+        else:
+            filtered = [
+                e for e in events
+                if e.child_id == child_id
+                and (since is None or e.created_at >= since)
+                and (include_acked or e.status not in ("acknowledged", "labeled"))
+            ]
         # Sort newest-first.
         filtered.sort(key=lambda e: e.created_at, reverse=True)
         return filtered[:limit]

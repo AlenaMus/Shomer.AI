@@ -53,6 +53,10 @@ class FlaggedEventOut(BaseModel):
     Maps the frozen ``FlaggedEvent`` dataclass to a Pydantic response model.
     All fields the dashboard needs are included; ``parent_label``,
     ``parent_severity``, and ``acknowledged_at`` are nullable.
+
+    ``confidence`` is the classifier confidence (0.0–1.0) persisted when the
+    event was recorded.  It is ``None`` for events recorded before this field
+    was added (graceful degradation).
     """
 
     flag_id: str
@@ -66,9 +70,26 @@ class FlaggedEventOut(BaseModel):
     explanation: str
     source: str
     status: str
+    confidence: float | None = None
     parent_label: str | None = None
     parent_severity: str | None = None
     acknowledged_at: float | None = None
+
+
+class FlaggedEventDetailOut(FlaggedEventOut):
+    """Extended detail model for GET /v1/parent/alerts/{flag_id}.
+
+    Adds Context-Agent fields that are only available on the per-event detail
+    view (joined from ``agent_traces`` by ``trace_id``).  All CA fields are
+    ``None`` when no CA ran for this event.
+    """
+
+    # Context-Agent detail (null when CA did not run)
+    context_used: bool | None = None        # True if CA called read_history
+    is_real_threat: bool | None = None      # CA's verdict
+    ca_severity: str | None = None          # CA's severity assessment
+    ca_reasoning: str | None = None         # CA's explanation / reasoning_trace
+    ca_model: str | None = None             # model_used by the CA
 
 
 class ReactRequest(BaseModel):
@@ -126,10 +147,40 @@ def _event_to_out(event) -> FlaggedEventOut:
         explanation=event.explanation,
         source=event.source,
         status=event.status,
+        confidence=event.confidence,
         parent_label=event.parent_label,
         parent_severity=event.parent_severity,
         acknowledged_at=event.acknowledged_at,
     )
+
+
+def _event_to_detail(event, ca_row: dict | None) -> FlaggedEventDetailOut:
+    """Convert a FlaggedEvent to the extended detail model including CA fields."""
+    base = _event_to_out(event)
+    detail = FlaggedEventDetailOut(**base.model_dump())
+
+    if ca_row is not None:
+        import json as _json
+
+        tools_raw = ca_row.get("tools_called_json") or "[]"
+        try:
+            tools: list = _json.loads(tools_raw)
+        except Exception:  # noqa: BLE001
+            tools = []
+
+        tool_names = [
+            t.get("name") if isinstance(t, dict) else str(t) for t in tools
+        ]
+        detail.context_used = "read_history" in tool_names
+        detail.is_real_threat = bool(ca_row.get("is_real_threat"))
+        detail.ca_severity = ca_row.get("severity")
+        # Prefer reasoning_trace when non-empty; fall back to explanation.
+        reasoning = (ca_row.get("reasoning_trace") or "").strip()
+        explanation = (ca_row.get("explanation") or "").strip()
+        detail.ca_reasoning = reasoning if reasoning else explanation or None
+        detail.ca_model = ca_row.get("model_used")
+
+    return detail
 
 
 async def _owned_child_ids(request: Request, parent_id: str) -> set[str]:
@@ -200,23 +251,27 @@ async def list_alerts(
         target_ids = list(owned_ids)
 
     # Fetch from each child; merge newest-first.
+    # Bug A fix: push the ``status`` filter directly to the store query so
+    # acknowledged/labeled events are fetched correctly.  When ``status`` is
+    # provided, the store-level ``include_acked`` flag is forced to True to
+    # avoid the acknowledged/labeled exclusion clause silently hiding those
+    # rows (the status-exact-match clause in the store takes over).
+    effective_include_acked = include_acked or (status is not None)
+
     all_events = []
     for cid in target_ids:
         events = await flagged.list_for_child(
             cid,
             since=since,
             limit=limit,
-            include_acked=include_acked,
+            include_acked=effective_include_acked,
+            status=status,
         )
         all_events.extend(events)
 
     # Sort merged list newest-first, then cap.
     all_events.sort(key=lambda e: e.created_at, reverse=True)
     all_events = all_events[:limit]
-
-    # Optional post-filter by status.
-    if status is not None:
-        all_events = [e for e in all_events if e.status == status]
 
     log.info(
         "parent.alerts.listed",
@@ -229,14 +284,19 @@ async def list_alerts(
 
 @router.get(
     "/alerts/{flag_id}",
-    response_model=FlaggedEventOut,
-    summary="Get a single flagged event by flag_id",
+    response_model=FlaggedEventDetailOut,
+    summary="Get a single flagged event by flag_id (includes CA reasoning when available)",
 )
-async def get_alert(flag_id: str, request: Request) -> FlaggedEventOut:
-    """Return a single flagged event.
+async def get_alert(flag_id: str, request: Request) -> FlaggedEventDetailOut:
+    """Return a single flagged event with optional Context-Agent detail.
 
     Returns 404 if the flag_id does not exist OR if it belongs to a child not
     owned by this parent (ownership-blind 404 to avoid enumeration attacks).
+
+    The ``context_used``, ``is_real_threat``, ``ca_severity``, ``ca_reasoning``,
+    and ``ca_model`` fields are populated when the Context Agent ran for this
+    event (joined from ``agent_traces`` via ``trace_id``).  They are ``None``
+    for frontline-only events.
     """
     ctx = _require_parent(request)
     flagged = request.app.state.flagged
@@ -251,13 +311,29 @@ async def get_alert(flag_id: str, request: Request) -> FlaggedEventOut:
         # Return 404 rather than 403 to avoid enumerating flag IDs across parents.
         raise HTTPException(status_code=404, detail=f"flag_id '{flag_id}' not found")
 
+    # Bug C fix: join the CA trace from the audit store (best-effort — if
+    # the audit store doesn't have ``read_agent_trace_for``, degrade to None).
+    ca_row: dict | None = None
+    audit_store = getattr(request.app.state, "audit_store", None)
+    if audit_store is not None and hasattr(audit_store, "read_agent_trace_for"):
+        try:
+            ca_row = await audit_store.read_agent_trace_for(event.trace_id)
+        except Exception as exc:  # noqa: BLE001 — best-effort
+            log.warning(
+                "parent.alert.ca_trace_lookup_failed",
+                flag_id=flag_id,
+                trace_id=event.trace_id,
+                error=str(exc),
+            )
+
     log.info(
         "parent.alert.retrieved",
         parent_id=ctx.parent_id,
         flag_id=flag_id,
         child_id=event.child_id,
+        has_ca_trace=ca_row is not None,
     )
-    return _event_to_out(event)
+    return _event_to_detail(event, ca_row)
 
 
 @router.post(

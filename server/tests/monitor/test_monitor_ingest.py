@@ -86,7 +86,7 @@ class _StubPipeline:
         self._responses = responses
         self._call_index = 0
 
-    async def __call__(self, request, text, *, trace_id, child_id, message_id, input_type):
+    async def __call__(self, request, text, *, trace_id, child_id, message_id, input_type, **kwargs):
         resp = self._responses[self._call_index % len(self._responses)]
         self._call_index += 1
         if isinstance(resp, Exception):
@@ -290,7 +290,7 @@ async def test_batch_error_event_acks_error_without_failing_batch():
     flagged_store = InMemoryFlaggedEventStore()
 
     class _ErrorPipeline:
-        async def __call__(self, request, text, *, trace_id, child_id, message_id, input_type):
+        async def __call__(self, request, text, *, trace_id, child_id, message_id, input_type, **kwargs):
             raise RuntimeError("simulated pipeline failure")
 
     ingest = MonitorIngest(

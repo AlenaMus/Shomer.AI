@@ -255,6 +255,8 @@ function renderAlertRow(a) {
       <div class="sub">
         ${statusChip(a.status)} ${sevChip(a.severity)}
         <span class="chip">${LABELS_HE[a.label]||a.label}</span>
+        ${a.confidence!=null?`<span class="chip">${Math.round(a.confidence*100)}% ביטחון</span>`:""}
+        ${a.source==="context_agent"?`<span class="chip review">🧠 הקשר</span>`:""}
         <span>${a.app_package||""}</span>
         <span>${a.direction==="outbound"?"נשלח":"התקבל"}</span>
       </div>
@@ -277,14 +279,27 @@ async function openDetail(flagId) {
       <span class="chip">${LABELS_HE[a.label]||a.label}</span></div>
     <div class="bigquote" style="margin-top:14px">${escapeHtml(a.quote || "(ללא ציטוט)")}</div>
     <div class="kv">
+      <div class="k">קטגוריה (מסווג)</div><div>${LABELS_HE[a.label]||a.label}</div>
+      <div class="k">ביטחון המסווג</div><div>${a.confidence!=null?Math.round(a.confidence*100)+"%":"—"}</div>
       <div class="k">הסבר</div><div>${escapeHtml(a.explanation||"")}</div>
       <div class="k">אפליקציה</div><div>${a.app_package||""}</div>
       <div class="k">כיוון</div><div>${a.direction==="outbound"?"הילד שלח":"הילד קיבל"}</div>
       <div class="k">זמן</div><div>${fmtTime(a.created_at)}</div>
       <div class="k">מזהה ילד</div><div>${a.child_id||""}</div>
-      <div class="k">מקור</div><div>${a.source||""}</div>
+      <div class="k">מקור</div><div>${a.source==="context_agent"?"סוכן הקשר (Context Agent)":a.source==="frontline_direct"?"מסווג ישיר":(a.source||"")}</div>
       ${a.parent_label?`<div class="k">סומן ע"י הורה</div><div>${a.parent_label==="offensive"?"פוגעני":"תקין"}</div>`:""}
     </div>
+    ${(a.context_used!=null||a.ca_model||a.ca_reasoning)?`
+    <div style="margin-top:12px;padding:10px 12px;border:1px solid #4a3f6b;border-radius:10px;background:rgba(120,90,200,.10)">
+      <div style="font-weight:600;margin-bottom:6px">🧠 סוכן ההקשר (Context Agent)</div>
+      <div class="kv">
+        <div class="k">השתמש בהקשר</div><div>${a.context_used?"כן — נקראה היסטוריית השיחה":"לא"}</div>
+        <div class="k">איום אמיתי?</div><div>${a.is_real_threat==null?"—":(a.is_real_threat?"כן":"לא")}</div>
+        <div class="k">חומרה (הקשר)</div><div>${a.ca_severity||"—"}</div>
+        <div class="k">מודל</div><div>${a.ca_model||"—"}</div>
+        <div class="k">נימוק (Gemini)</div><div>${escapeHtml(a.ca_reasoning||"")}</div>
+      </div>
+    </div>`:""}
     <p class="hint">עבור מקרים גבוליים ("לבדיקה") — קביעת ההורה משמשת לשיפור המסווג.</p>
     <div class="actions">
       <button data-act="acknowledge">סמן כטופל</button>

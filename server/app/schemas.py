@@ -105,6 +105,13 @@ class OcrResult:
     bbox_count: int
     image_unreadable: bool = False
     backend: str = "tesseract"
+    # Per-line text segments (one entry per detected text line), reconstructed
+    # from Tesseract's block/paragraph/line numbering.  Empty for backends that
+    # do not segment.  Consumers that need message-granular text (e.g. the
+    # screenshot → monitor pipeline) classify each segment independently so a
+    # single offensive line in a multi-message screenshot is not diluted by the
+    # surrounding benign text.  ``extracted_text`` remains the flat join.
+    line_segments: tuple[str, ...] = ()
 
 
 class TriageDecision(str, Enum):
@@ -209,9 +216,22 @@ class MonitorEvent(BaseModel):
         description="Client-computed sha256 hex of the text for dedup.",
     )
     captured_at: float = Field(..., description="Epoch seconds from the client clock")
-    direction: Literal["inbound", "outbound"] = Field(
+    direction: Literal["inbound", "outbound", "screen"] = Field(
         "inbound",
-        description="Whether the child received (inbound) or sent (outbound) the message.",
+        description=(
+            "Whether the child received (inbound) or sent (outbound) the message, "
+            "or 'screen' for screenshot-OCR captures."
+        ),
+    )
+    conversation_id: str | None = Field(
+        None,
+        max_length=128,
+        description=(
+            "Stable id for the chat thread (same contact/group in same app = same id over time). "
+            "TEXT events: set by the client. SCREENSHOT events: omitted; server mints one per "
+            "screenshot. When absent, the server falls back to app_package or 'default' for "
+            "scoping conversation history."
+        ),
     )
 
 
@@ -243,3 +263,18 @@ class MonitorBatchResponse(BaseModel):
     deduped: int
     flagged: int
     acks: list[MonitorEventAck]
+
+
+class MonitorImageResponse(BaseModel):
+    """Response for POST /v1/monitor/image (screenshot OCR → ingest).
+
+    Extends ``MonitorBatchResponse`` fields with ``ocr_text_len`` so the
+    caller can distinguish "no text found" (ocr_text_len=0, accepted=0) from
+    "text found and processed" without inspecting acks.
+    """
+
+    accepted: int
+    deduped: int
+    flagged: int
+    acks: list[MonitorEventAck]
+    ocr_text_len: int

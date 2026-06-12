@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import com.shomer.client.accessibility.ShomerAccessibilityService
 import com.shomer.client.accessibility.TargetAppRegistry
 import com.shomer.client.capture.CaptureCoordinator
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +52,18 @@ class ShomerNotificationListener : NotificationListenerService() {
         val unique = texts.map { it.trim() }.filter { it.isNotBlank() }.distinct()
         if (unique.isNotEmpty()) {
             Log.d(TAG, "Notification from $pkg: ${unique.size} text(s)")
-            unique.forEach { captureCoordinator.submit(pkg, it, "inbound") }
+
+            // Derive conversation_id from the notification's thread/contact title.
+            // MessagingStyle puts the group/contact in EXTRA_CONVERSATION_TITLE;
+            // plain notifications use EXTRA_TITLE ("Daria", "Family group", etc.).
+            // stableConversationId hashes "$pkg:$title" to 32 hex chars — same
+            // formula as ShomerAccessibilityService so both paths produce the same id
+            // for the same contact/group.
+            val threadTitle = (extras.getCharSequence(Notification.EXTRA_CONVERSATION_TITLE)
+                ?: extras.getCharSequence(Notification.EXTRA_TITLE))?.toString()?.trim()
+            val convId = ShomerAccessibilityService.stableConversationId(pkg, threadTitle)
+
+            unique.forEach { captureCoordinator.submit(pkg, it, "inbound", convId) }
         }
     }
 

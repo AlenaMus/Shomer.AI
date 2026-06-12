@@ -204,9 +204,13 @@ class TesseractOcrBackend:
 
         # --- tesseract ---
         try:
-            text, confidence, lang_detected, bbox_count = self._runner.run(
-                preprocessed
-            )
+            (
+                text,
+                confidence,
+                lang_detected,
+                bbox_count,
+                line_segments,
+            ) = self._runner.run(preprocessed)
         except pytesseract.TesseractNotFoundError as exc:
             latency = time.perf_counter() - t0
             logger.error(
@@ -289,6 +293,7 @@ class TesseractOcrBackend:
             bbox_count=bbox_count,
             image_unreadable=image_unreadable,
             backend=self.backend_name,
+            line_segments=line_segments,
         )
 
     def _unreadable_result(

@@ -53,12 +53,17 @@ data class ClassifyImageResponse(
  * A single captured message event.
  *
  * Mapping to server MonitorEvent schema:
- *   client_msg_id : String   — device idempotency key, UUID per event
- *   app_package   : String   — source app, e.g. "com.whatsapp"
- *   text          : String   — captured Hebrew text (1–4000 chars)
- *   text_hash     : String   — sha256(text) hex, for server dedup
- *   captured_at   : Double   — epoch seconds from client clock
- *   direction     : String   — "inbound" | "outbound"
+ *   client_msg_id   : String   — device idempotency key, UUID per event
+ *   app_package     : String   — source app, e.g. "com.whatsapp"
+ *   text            : String   — captured Hebrew text (1–4000 chars)
+ *   text_hash       : String   — sha256(text) hex, for server dedup
+ *   captured_at     : Double   — epoch seconds from client clock
+ *   direction       : String   — "inbound" | "outbound"
+ *   conversation_id : String?  — stable per-thread key: sha256(package:windowTitle)[:32].
+ *                                 Null when the window title is not available; the server
+ *                                 falls back to app_package for history scoping in that case.
+ *                                 NEVER set on screenshot/OCR events — the server mints
+ *                                 its own conversation_id per screenshot.
  */
 @JsonClass(generateAdapter = true)
 data class MonitorEvent(
@@ -68,6 +73,7 @@ data class MonitorEvent(
     @Json(name = "text_hash") val textHash: String,
     @Json(name = "captured_at") val capturedAt: Double,
     val direction: String = "inbound",   // "inbound" | "outbound"
+    @Json(name = "conversation_id") val conversationId: String? = null,
 )
 
 /**
@@ -117,6 +123,30 @@ data class MonitorBatchResponse(
     val deduped: Int,
     val flagged: Int,
     val acks: List<MonitorEventAck>,
+)
+
+/**
+ * Response from POST /v1/monitor/image (screenshot OCR ingest).
+ *
+ * Extends the shape of MonitorBatchResponse with an extra ocr_text_len field
+ * (the number of characters the server's Tesseract OCR extracted from the image).
+ * A value of 0 means the screenshot contained no recognizable text; the upload was
+ * accepted but nothing was ingested into the pipeline.
+ *
+ * Mapping to server ScreenshotIngestResponse (to be added alongside the endpoint):
+ *   accepted     : Int
+ *   deduped      : Int
+ *   flagged      : Int
+ *   acks         : List<MonitorEventAck>
+ *   ocr_text_len : Int — 0 if OCR found no text
+ */
+@JsonClass(generateAdapter = true)
+data class ScreenshotIngestResponse(
+    val accepted: Int,
+    val deduped: Int,
+    val flagged: Int,
+    val acks: List<MonitorEventAck>,
+    @Json(name = "ocr_text_len") val ocrTextLen: Int = 0,
 )
 
 // ---------------------------------------------------------------------------

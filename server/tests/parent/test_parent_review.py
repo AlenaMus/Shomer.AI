@@ -760,3 +760,475 @@ def test_export_labels_only_own_children(parent_client):
     # We can check that f-exp-b's data isn't in the list by checking quote doesn't
     # appear for a cross-parent child; since quotes are the same, check count.
     assert len(data) == 1
+
+
+# ---------------------------------------------------------------------------
+# Bug-fix tests (A–D)
+# ---------------------------------------------------------------------------
+# These tests cover the 4 bugs fixed in the 2026-06-09 parent-alerts extension:
+#   A — status filter was ignored (post-filtered after include_acked excluded rows)
+#   B — confidence missing from payload
+#   C — CA trace not exposed on detail endpoint
+#   D — source/explanation mis-stamped on CA-escalated events
+
+
+def _make_event_with_confidence(
+    flag_id: str = "f-conf-01",
+    child_id: str = "child-1",
+    status: str = "alerted",
+    confidence: float | None = 0.92,
+    label: str = "abusive",
+) -> FlaggedEvent:
+    """Build a FlaggedEvent with a confidence value set."""
+    return FlaggedEvent(
+        flag_id=flag_id,
+        child_id=child_id,
+        created_at=time.time(),
+        app_package="com.whatsapp",
+        direction="inbound",
+        label=label,  # type: ignore[arg-type]
+        severity="medium",  # type: ignore[arg-type]
+        quote="הודעה פוגענית",
+        explanation="זוהתה הודעה פוגענית מסוג abusive.",
+        source="frontline_direct",  # type: ignore[arg-type]
+        trace_id="trace-conf-01",
+        status=status,  # type: ignore[arg-type]
+        confidence=confidence,
+    )
+
+
+# --- Bug A: status filter ---
+
+def test_status_filter_alerted_returns_only_alerted(parent_client):
+    """?status=alerted returns ONLY alerted events — not acknowledged ones."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    _seed_event(flagged, _make_event("f-sa-alerted", child_id=child_id, status="alerted"))
+    _seed_event(flagged, _make_event("f-sa-acked", child_id=child_id, status="acknowledged"))
+    _seed_event(flagged, _make_event("f-sa-review", child_id=child_id, status="review_needed"))
+
+    resp = client.get(
+        "/v1/parent/alerts",
+        params={"status": "alerted"},
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    flag_ids = {e["flag_id"] for e in data}
+    assert flag_ids == {"f-sa-alerted"}, (
+        f"Expected only alerted events; got {flag_ids}"
+    )
+
+
+def test_status_filter_acknowledged_returns_only_acknowledged(parent_client):
+    """?status=acknowledged returns ONLY acknowledged events (bug A regression)."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    _seed_event(flagged, _make_event("f-sack-alerted", child_id=child_id, status="alerted"))
+    _seed_event(flagged, _make_event("f-sack-acked", child_id=child_id, status="acknowledged"))
+
+    resp = client.get(
+        "/v1/parent/alerts",
+        params={"status": "acknowledged"},
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    flag_ids = {e["flag_id"] for e in data}
+    assert flag_ids == {"f-sack-acked"}, (
+        f"Expected only acknowledged events; got {flag_ids}"
+    )
+
+
+def test_status_filter_review_needed_returns_only_review_needed(parent_client):
+    """?status=review_needed returns ONLY review_needed events."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    _seed_event(flagged, _make_event("f-srn-alerted", child_id=child_id, status="alerted"))
+    _seed_event(flagged, _make_event("f-srn-review", child_id=child_id, status="review_needed"))
+    _seed_event(flagged, _make_event("f-srn-labeled", child_id=child_id, status="labeled"))
+
+    resp = client.get(
+        "/v1/parent/alerts",
+        params={"status": "review_needed"},
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    flag_ids = {e["flag_id"] for e in data}
+    assert flag_ids == {"f-srn-review"}, (
+        f"Expected only review_needed events; got {flag_ids}"
+    )
+
+
+def test_status_filter_labeled_returns_only_labeled(parent_client):
+    """?status=labeled returns ONLY labeled events."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    _seed_event(
+        flagged,
+        _make_event("f-slb-labeled", child_id=child_id, status="labeled", parent_label="offensive"),
+    )
+    _seed_event(flagged, _make_event("f-slb-alerted", child_id=child_id, status="alerted"))
+
+    resp = client.get(
+        "/v1/parent/alerts",
+        params={"status": "labeled"},
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    flag_ids = {e["flag_id"] for e in data}
+    assert flag_ids == {"f-slb-labeled"}, (
+        f"Expected only labeled events; got {flag_ids}"
+    )
+
+
+def test_status_filter_unknown_value_returns_empty(parent_client):
+    """?status=<nonexistent_value> returns an empty list (no match)."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    _seed_event(flagged, _make_event("f-sunk-alerted", child_id=child_id, status="alerted"))
+
+    resp = client.get(
+        "/v1/parent/alerts",
+        params={"status": "nonexistent_status"},
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == []
+
+
+# --- Bug B: confidence in payload ---
+
+def test_list_alerts_includes_confidence_when_set(parent_client):
+    """confidence field is present and correct in the list payload."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    evt = _make_event_with_confidence("f-conf-list", child_id=child_id, confidence=0.87)
+    _seed_event(flagged, evt)
+
+    resp = client.get(
+        "/v1/parent/alerts",
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    assert len(data) == 1
+    assert "confidence" in data[0], "confidence field missing from list payload"
+    assert abs(data[0]["confidence"] - 0.87) < 0.001
+
+
+def test_list_alerts_confidence_is_null_when_not_set(parent_client):
+    """confidence is null (not missing) when the event has no confidence stored."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    # FlaggedEvent with confidence=None (old-style events before this field was added).
+    evt = _make_event_with_confidence("f-noconf", child_id=child_id, confidence=None)
+    _seed_event(flagged, evt)
+
+    resp = client.get(
+        "/v1/parent/alerts",
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    assert len(data) == 1
+    assert "confidence" in data[0], "confidence key missing from payload"
+    assert data[0]["confidence"] is None
+
+
+def test_detail_includes_confidence(parent_client):
+    """confidence is also present in the GET detail payload."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    evt = _make_event_with_confidence("f-conf-det", child_id=child_id, confidence=0.65)
+    _seed_event(flagged, evt)
+
+    resp = client.get(
+        "/v1/parent/alerts/f-conf-det",
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    assert "confidence" in data
+    assert abs(data["confidence"] - 0.65) < 0.001
+
+
+# --- Bug C: CA trace on detail ---
+
+def test_detail_ca_fields_are_null_when_no_ca_ran(parent_client):
+    """CA fields (context_used, is_real_threat, etc.) are null when no CA ran."""
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    evt = _make_event("f-noca", child_id=child_id, status="alerted")
+    _seed_event(flagged, evt)
+
+    resp = client.get(
+        "/v1/parent/alerts/f-noca",
+        headers={"Authorization": f"Bearer {parent_token}"},
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    # All CA fields must be present as keys (not absent) and null.
+    for field in ("context_used", "is_real_threat", "ca_severity", "ca_reasoning", "ca_model"):
+        assert field in data, f"field '{field}' missing from detail payload"
+        assert data[field] is None, f"expected null for '{field}' when no CA ran"
+
+
+def test_detail_ca_fields_populated_when_audit_store_has_trace(parent_client, monkeypatch):
+    """CA fields are populated from the audit store when an agent trace exists."""
+    import asyncio
+
+    client, identity, flagged = parent_client
+    _, parent_token, child_id = _setup_parent_and_child(identity)
+
+    trace_id = "trace-ca-test-001"
+    evt = FlaggedEvent(
+        flag_id="f-ca-trace",
+        child_id=child_id,
+        created_at=time.time(),
+        app_package="com.telegram",
+        direction="inbound",
+        label="violence",  # type: ignore[arg-type]
+        severity="high",  # type: ignore[arg-type]
+        quote="הודעה אלימה",
+        explanation="ה-CA זיהה איום ממשי.",
+        source="context_agent",  # type: ignore[arg-type]
+        trace_id=trace_id,
+        status="alerted",  # type: ignore[arg-type]
+        confidence=0.88,
+    )
+    _seed_event(flagged, evt)
+
+    # Patch the audit store on the running app to return a fake CA trace.
+    ca_trace = {
+        "is_real_threat": 1,
+        "severity": "high",
+        "explanation": "ה-CA זיהה שהייתה כוונה אמיתית לאלימות.",
+        "review_flag": 0,
+        "model_used": "gemini-2.5-flash",
+        "tools_called_json": '[{"name": "read_history"}, {"name": "is_real_threat"}]',
+        "reasoning_trace": "ניתחתי את ההקשר וזיהיתי איום ממשי.",
+    }
+
+    class _MockAuditStore:
+        async def read_agent_trace_for(self, tid: str):
+            if tid == trace_id:
+                return ca_trace
+            return None
+
+    loop = asyncio.new_event_loop()
+    try:
+        # Inject the mock audit store into app.state.
+        client.app.state.audit_store = _MockAuditStore()
+
+        resp = client.get(
+            "/v1/parent/alerts/f-ca-trace",
+            headers={"Authorization": f"Bearer {parent_token}"},
+        )
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+
+        assert data["context_used"] is True, "read_history was called → context_used must be True"
+        assert data["is_real_threat"] is True
+        assert data["ca_severity"] == "high"
+        assert data["ca_model"] == "gemini-2.5-flash"
+        assert data["ca_reasoning"] is not None and len(data["ca_reasoning"]) > 0
+    finally:
+        loop.close()
+
+
+# --- Bug D: source + explanation stamping in MonitorIngest ---
+
+def test_ingest_source_stamping_frontline_direct():
+    """MonitorIngest stamps source=frontline_direct when no CA ran (ALERT_DIRECT)."""
+    import asyncio
+    from app.flagged.in_memory_adapter import InMemoryFlaggedEventStore
+    from app.dedup.null_adapter import NullDedupStore
+    from app.monitor.ingest import MonitorIngest
+    from app.schemas import (
+        ClassificationResult,
+        MonitorBatchRequest,
+        MonitorEvent,
+        TriageDecision,
+    )
+    from app.alerts.severity import derive_severity
+
+    flagged_store = InMemoryFlaggedEventStore()
+    captured: list = []
+
+    async def fake_pipeline(request, text, *, trace_id, child_id, message_id, input_type, **kwargs):
+        result = ClassificationResult(
+            label="abusive",
+            confidence=0.95,
+            is_offensive=True,
+            model_version="stub",
+            latency_ms=1.0,
+            is_borderline=False,
+            raw_confidence=0.95,
+        )
+        # No CA ran → 3-tuple with ctx_decision=None
+        return result, TriageDecision.ALERT_DIRECT, None
+
+    monitor = MonitorIngest(
+        pipeline_fn=fake_pipeline,
+        dedup=NullDedupStore(),
+        flagged=flagged_store,
+        derive_severity=derive_severity,
+    )
+
+    class _FakeRequest:
+        class app:
+            class state:
+                pass
+        class state:
+            audit = {}
+
+    batch = MonitorBatchRequest(
+        session_id="s1",
+        child_id="child-d1",
+        events=[
+            MonitorEvent(
+                client_msg_id="msg-d1",
+                app_package="com.whatsapp",
+                text="אני אהרוג אותך",
+                text_hash="abc123",
+                captured_at=time.time(),
+                direction="inbound",
+            )
+        ],
+    )
+
+    loop = asyncio.new_event_loop()
+    try:
+        resp = loop.run_until_complete(
+            monitor.ingest_batch(_FakeRequest(), batch, trace_id="trace-d1")
+        )
+    finally:
+        loop.close()
+
+    assert resp.flagged == 1
+
+    loop2 = asyncio.new_event_loop()
+    try:
+        events = loop2.run_until_complete(
+            flagged_store.list_for_child("child-d1", include_acked=True)
+        )
+    finally:
+        loop2.close()
+
+    assert len(events) == 1
+    evt = events[0]
+    assert evt.source == "frontline_direct", f"Expected frontline_direct, got {evt.source}"
+    assert evt.confidence is not None
+    assert abs(evt.confidence - 0.95) < 0.001
+
+
+def test_ingest_source_stamping_context_agent():
+    """MonitorIngest stamps source=context_agent when the CA ran and confirmed a threat."""
+    import asyncio
+    from app.flagged.in_memory_adapter import InMemoryFlaggedEventStore
+    from app.dedup.null_adapter import NullDedupStore
+    from app.monitor.ingest import MonitorIngest
+    from app.schemas import (
+        ClassificationResult,
+        ContextDecision,
+        MonitorBatchRequest,
+        MonitorEvent,
+        TriageDecision,
+    )
+    from app.alerts.severity import derive_severity
+
+    flagged_store = InMemoryFlaggedEventStore()
+    ca_explanation = "ה-CA זיהה איום ממשי בהקשר הצ'אט."
+
+    async def fake_pipeline_with_ca(request, text, *, trace_id, child_id, message_id, input_type, **kwargs):
+        result = ClassificationResult(
+            label="violence",
+            confidence=0.72,
+            is_offensive=True,
+            model_version="stub",
+            latency_ms=1.0,
+            is_borderline=True,
+            raw_confidence=0.72,
+        )
+        ctx = ContextDecision(
+            is_real_threat=True,
+            severity="high",
+            explanation=ca_explanation,
+            model_used="gemini-2.5-flash",
+            tools_called=("read_history", "is_real_threat"),
+        )
+        # CA ran → 3-tuple with ctx_decision set
+        return result, TriageDecision.ALERT_DIRECT, ctx
+
+    monitor = MonitorIngest(
+        pipeline_fn=fake_pipeline_with_ca,
+        dedup=NullDedupStore(),
+        flagged=flagged_store,
+        derive_severity=derive_severity,
+    )
+
+    class _FakeRequest:
+        class app:
+            class state:
+                pass
+        class state:
+            audit = {}
+
+    batch = MonitorBatchRequest(
+        session_id="s2",
+        child_id="child-d2",
+        events=[
+            MonitorEvent(
+                client_msg_id="msg-d2",
+                app_package="com.telegram",
+                text="אני אהרוג אותך",
+                text_hash="xyz789",
+                captured_at=time.time(),
+                direction="inbound",
+            )
+        ],
+    )
+
+    loop = asyncio.new_event_loop()
+    try:
+        resp = loop.run_until_complete(
+            monitor.ingest_batch(_FakeRequest(), batch, trace_id="trace-d2")
+        )
+    finally:
+        loop.close()
+
+    assert resp.flagged == 1
+
+    loop2 = asyncio.new_event_loop()
+    try:
+        events = loop2.run_until_complete(
+            flagged_store.list_for_child("child-d2", include_acked=True)
+        )
+    finally:
+        loop2.close()
+
+    assert len(events) == 1
+    evt = events[0]
+    assert evt.source == "context_agent", (
+        f"Expected context_agent, got {evt.source!r}. "
+        "This is bug D: source was mis-stamped as frontline_direct."
+    )
+    assert evt.explanation == ca_explanation, (
+        f"Expected CA explanation, got {evt.explanation!r}. "
+        "This is bug D: explanation was the generic template instead of CA's."
+    )
+    assert evt.severity == "high", (
+        f"Expected CA severity 'high', got {evt.severity!r}"
+    )

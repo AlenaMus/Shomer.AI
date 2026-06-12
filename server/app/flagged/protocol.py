@@ -58,6 +58,7 @@ class FlaggedEvent:
     source: AlertSource
     trace_id: str
     status: FlaggedStatus
+    confidence: float | None = None        # classifier confidence (0.0–1.0)
     parent_label: str | None = None        # parent verdict label (S4)
     parent_severity: str | None = None     # parent severity override (S4)
     acknowledged_at: float | None = None   # epoch seconds when parent acked
@@ -87,6 +88,7 @@ class FlaggedEventStore(Protocol):
         since: float | None = None,
         limit: int = 50,
         include_acked: bool = False,
+        status: str | None = None,
     ) -> list[FlaggedEvent]:
         """Return flagged events for a child, newest-first.
 
@@ -102,6 +104,11 @@ class FlaggedEventStore(Protocol):
             When False (default), exclude events with status "acknowledged" or
             "labeled" — only show pending items to the parent dashboard.
             When True, return all events (for export / training data).
+        status:
+            If provided, return only events whose ``status`` exactly matches this
+            value.  Overrides the ``include_acked`` filter — callers that pass
+            ``status`` get exactly the events with that status, regardless of the
+            acknowledged/labeled semantics.
         """
         ...
 

@@ -60,11 +60,22 @@ def _white_png(width: int = 100, height: int = 50) -> bytes:
 def _mock_tesseract_data(
     words: list[str],
     confs: list[int],
+    line_nums: list[int] | None = None,
 ) -> dict:
-    """Build a pytesseract.image_to_data DICT that matches the expected shape."""
+    """Build a pytesseract.image_to_data DICT that matches the expected shape.
+
+    Includes the block/paragraph/line numbering that real pytesseract emits so
+    line-segment reconstruction (TesseractRunner) is exercised.  ``line_nums``
+    lets a test place words on distinct lines; when omitted all words share
+    line 1 (a single segment).
+    """
+    nums = line_nums if line_nums is not None else [1] * len(words)
     return {
         "text": words + [""],
         "conf": confs + [-1],
+        "block_num": [1] * len(words) + [1],
+        "par_num": [1] * len(words) + [1],
+        "line_num": nums + [0],
     }
 
 

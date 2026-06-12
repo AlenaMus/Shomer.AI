@@ -104,8 +104,30 @@ class MonitorIngest:
         batch: MonitorBatchRequest,
         *,
         trace_id: str,
+        conversation_turns: list[dict] | None = None,
+        conversation_id: str | None = None,
     ) -> MonitorBatchResponse:
-        """Process a batch of MonitorEvents; return per-event acks + tallies."""
+        """Process a batch of MonitorEvents; return per-event acks + tallies.
+
+        Parameters
+        ----------
+        conversation_turns:
+            When not None (screenshot path), these turns represent the full
+            visible conversation in the screenshot.  They are forwarded to
+            ``_run_pipeline`` / the Context Agent as ``provided_history`` and
+            the individual text segments are NOT persisted to the conversations
+            table.  All segments of one screenshot share the same
+            ``conversation_turns`` (batch-level), which is correct: they all
+            come from the same screenshot context.
+            When None (text-event path), the existing DB-history behaviour is
+            used and turns ARE persisted.
+        conversation_id:
+            Overrides per-event ``conversation_id`` resolution for the whole
+            batch.  Used by the screenshot path so all segments of one
+            screenshot share the same ``conversation_id`` (e.g.
+            ``"screenshot:{client_msg_id}"``).  When None, each event's own
+            ``conversation_id`` (or its resolved fallback) is used.
+        """
         child_id = batch.child_id
         accepted = 0
         deduped = 0
@@ -113,9 +135,23 @@ class MonitorIngest:
         acks: list[MonitorEventAck] = []
 
         for event in batch.events:
+            # Resolve effective conversation_id for this event.
+            # Priority: caller-supplied batch-level override → event field →
+            # app_package fallback → "default".
+            if conversation_id is not None:
+                effective_conv_id = conversation_id
+            elif getattr(event, "conversation_id", None):
+                effective_conv_id = event.conversation_id
+            elif getattr(event, "app_package", None):
+                effective_conv_id = event.app_package
+            else:
+                effective_conv_id = "default"
+
             try:
                 ack = await self._process_event(
-                    request, child_id, event, trace_id=trace_id
+                    request, child_id, event, trace_id=trace_id,
+                    conversation_turns=conversation_turns,
+                    conversation_id=effective_conv_id,
                 )
             except Exception as exc:  # noqa: BLE001 — one bad event must not fail batch
                 log.warning(
@@ -168,6 +204,8 @@ class MonitorIngest:
         event: Any,
         *,
         trace_id: str,
+        conversation_turns: list[dict] | None = None,
+        conversation_id: str = "default",
     ) -> MonitorEventAck:
         """Process one MonitorEvent and return its ack."""
 
@@ -189,14 +227,24 @@ class MonitorIngest:
         await self._dedup.mark(child_id, event.text_hash, self._dedup_ttl_s)
 
         # Step 3 — run through the existing classify → triage → CA pipeline.
-        result, decision = await self._pipeline(
+        # _run_pipeline returns a 3-tuple: (result, decision, ctx_decision).
+        # ctx_decision is None when no CA ran; non-None when CA was consulted.
+        pipeline_out = await self._pipeline(
             request,
             event.text,
             trace_id=trace_id,
             child_id=child_id,
             message_id=event.client_msg_id,
             input_type="monitor",
+            conversation_turns=conversation_turns,
+            conversation_id=conversation_id,
         )
+        # Support both old 2-tuple and new 3-tuple return shapes.
+        if len(pipeline_out) == 3:
+            result, decision, ctx_decision = pipeline_out
+        else:
+            result, decision = pipeline_out
+            ctx_decision = None
 
         # Step 4 — decide whether to flag and build the FlaggedEvent.
         flag_id: str | None = None
@@ -212,14 +260,35 @@ class MonitorIngest:
 
         if flagged:
             flag_id = _make_flag_id(child_id, event.client_msg_id)
-            explanation = _make_explanation(flag_status, result.label)
 
-            # Determine the source based on the triage path.
+            # Bug D fix: when the CA ran and escalated to ALERT_DIRECT, use
+            # the CA's explanation and mark source="context_agent".
+            # When the CA ran and set REVIEW_NEEDED (review_flag), use CA
+            # explanation and source="context_agent".
+            # Frontline-only ALERT_DIRECT (no CA) keeps source="frontline_direct".
             source: AlertSource
-            if decision == TriageDecision.ALERT_DIRECT:
+            explanation: str
+            severity_str = self._derive_severity(result.label, result.confidence)
+
+            if ctx_decision is not None:
+                # CA was consulted — use its judgment.
+                source = "context_agent"
+                explanation = ctx_decision.explanation or _make_explanation(flag_status, result.label)
+                # Use CA severity if available and the event is alerted.
+                if flag_status == "alerted" and ctx_decision.severity:
+                    severity_str = ctx_decision.severity  # type: ignore[assignment]
+            elif decision == TriageDecision.ALERT_DIRECT:
+                # Frontline-only direct alert (no CA path was taken).
                 source = "frontline_direct"
+                # Only use the generic explanation when the label is actually
+                # offensive — guard against "non_offensive" appearing here.
+                if result.is_offensive:
+                    explanation = f"זוהתה הודעה פוגענית מסוג {result.label}."
+                else:
+                    explanation = "זוהתה הודעה חשודה שדורשת בדיקה."
             else:
                 source = "fallback_review"
+                explanation = _make_explanation(flag_status, result.label)
 
             flagged_event = FlaggedEvent(
                 flag_id=flag_id,
@@ -228,12 +297,13 @@ class MonitorIngest:
                 app_package=event.app_package,
                 direction=event.direction,
                 label=result.label,
-                severity=self._derive_severity(result.label, result.confidence),
+                severity=severity_str,  # type: ignore[arg-type]
                 quote=event.text[:200],
                 explanation=explanation,
-                source=source,
+                source=source,  # type: ignore[arg-type]
                 trace_id=trace_id,
                 status=flag_status,
+                confidence=result.confidence,
             )
 
             # Step 5 — record (best-effort; error is logged, not propagated).

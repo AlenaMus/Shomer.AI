@@ -22,5 +22,5 @@
     android:accessibilityFeedbackType="feedbackGeneric"
     android:canRetrieveWindowContent="true"
     android:notificationTimeout="300"
-    android:packageNames="com.whatsapp,com.instagram.android,org.telegram.messenger,com.facebook.orca"
+    android:packageNames="com.whatsapp,com.instagram.android,org.telegram.messenger,com.facebook.orca,com.facebook.katana"
     android:settingsActivity=".MainActivity" />

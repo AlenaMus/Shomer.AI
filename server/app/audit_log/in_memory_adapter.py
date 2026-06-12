@@ -125,23 +125,56 @@ class InMemoryAuditStore:
         }
 
     async def record_conversation_turn(
-        self, child_id: str, turn_index: int, role: str, text: str
+        self,
+        child_id: str,
+        turn_index: int,
+        role: str,
+        text: str,
+        conversation_id: str = "default",
     ) -> None:
-        self._conversations[child_id].append(
+        key = (child_id, conversation_id)
+        self._conversations[key].append(
             ConversationTurn(
                 child_id=child_id,
                 turn_index=turn_index,
                 role=role,
                 text=text,
                 timestamp=time.time(),
+                conversation_id=conversation_id,
             )
         )
 
     async def read_conversation_history(
-        self, child_id: str, last_n_turns: int = 5
+        self,
+        child_id: str,
+        last_n_turns: int = 5,
+        conversation_id: str = "default",
     ) -> list[ConversationTurn]:
-        turns = self._conversations.get(child_id, [])
+        key = (child_id, conversation_id)
+        turns = self._conversations.get(key, [])
         return list(turns[-last_n_turns:])
+
+    async def read_agent_trace_for(self, trace_id: str) -> dict[str, Any] | None:
+        """Return the most-recent agent trace for trace_id as a plain dict."""
+        import json as _json
+
+        # Scan from the end — newest traces are appended last.
+        for trace in reversed(self._agent_traces):
+            if trace.get("trace_id") == trace_id:
+                decision = trace.get("decision")
+                tools = trace.get("tools_called", [])
+                tools_json = _json.dumps(tools, ensure_ascii=False)
+                if decision is not None:
+                    return {
+                        "is_real_threat": 1 if decision.is_real_threat else 0,
+                        "severity": decision.severity,
+                        "explanation": decision.explanation,
+                        "review_flag": 1 if decision.review_flag else 0,
+                        "model_used": decision.model_used,
+                        "tools_called_json": tools_json,
+                        "reasoning_trace": decision.reasoning_trace,
+                    }
+        return None
 
     def query_for_evaluation(
         self,
@@ -191,9 +224,9 @@ class InMemoryAuditStore:
         self._classifications = [r for r in self._classifications if r["created_at"] >= cutoff]
         self._agent_traces = [t for t in self._agent_traces if t["created_at"] >= cutoff]
         self._alerts = {k: v for k, v in self._alerts.items() if v["created_at"] >= cutoff}
-        for child_id in list(self._conversations.keys()):
-            self._conversations[child_id] = [
-                t for t in self._conversations[child_id] if t.timestamp >= cutoff
+        for key in list(self._conversations.keys()):
+            self._conversations[key] = [
+                t for t in self._conversations[key] if t.timestamp >= cutoff
             ]
         return before - len(self._classifications)
 
@@ -201,5 +234,5 @@ class InMemoryAuditStore:
         return (
             HealthState.OK,
             f"in-memory; {len(self._classifications)} classifications, "
-            f"{len(self._conversations)} children",
+            f"{len(self._conversations)} conversation threads",
         )

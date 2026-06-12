@@ -52,6 +52,13 @@ object TargetAppRegistry {
             displayName = "Messenger",
             directionStrategy = DirectionStrategy.DEFAULT_INBOUND,
         ),
+        // Main Facebook app — comments/feed are pixel-only (hidden from the a11y
+        // tree), so this app is monitored via the screen-capture + OCR path.
+        "com.facebook.katana" to AppProfile(
+            packageName = "com.facebook.katana",
+            displayName = "Facebook",
+            directionStrategy = DirectionStrategy.DEFAULT_INBOUND,
+        ),
     )
 
     fun isEnabled(packageName: String): Boolean =

@@ -18,6 +18,12 @@ import androidx.room.PrimaryKey
  * because the individual fields contain no counterparty PII — only the message text,
  * source package name, direction, and hash). Full SQLCipher encryption is a
  * plan-docs/decisions TODO for A6 privacy hardening.
+ *
+ * DB version 2: added conversation_id column (nullable). The EventDatabase uses
+ * fallbackToDestructiveMigration() so the buffer is wiped on version bump. This
+ * is acceptable because the buffer only holds pending-upload events; any unflushed
+ * events at upgrade time are lost (the server will not have seen them anyway).
+ * See design.md "Room migration — conversation_id" for the decision rationale.
  */
 @Entity(tableName = "pending_events")
 data class EventEntity(
@@ -37,4 +43,7 @@ data class EventEntity(
     val capturedAt: Double,            // epoch seconds
 
     val direction: String,             // "inbound" | "outbound"
+
+    @ColumnInfo(name = "conversation_id")
+    val conversationId: String? = null, // sha256(package:windowTitle)[:32] or null
 )

@@ -91,6 +91,7 @@ class MonitorUploader @AssistedInject constructor(
                 textHash = entity.textHash,
                 capturedAt = entity.capturedAt,
                 direction = entity.direction,
+                conversationId = entity.conversationId,
             )
         }
 

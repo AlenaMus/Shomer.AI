@@ -54,18 +54,24 @@ class CaptureCoordinator @Inject constructor(
     /**
      * Submit a raw text candidate from the accessibility service.
      * Debounces per packageName, then runs through the PreFilter pipeline.
+     *
+     * @param conversationId Stable per-thread key derived from the window title by
+     *   the AccessibilityService. Null when the title is unavailable; the server
+     *   falls back to app_package for history scoping in that case. NEVER set for
+     *   screenshot/OCR events (those are submitted via MonitorApi.ingestImage, not here).
      */
     fun submit(
         packageName: String,
         text: String,
         direction: String,
+        conversationId: String? = null,
     ) {
         // Cancel any existing debounce job for this package — new content resets the timer.
         debounceJobs[packageName]?.cancel()
         debounceJobs[packageName] = scope.launch {
             delay(DEBOUNCE_MS)
             capturedCount.incrementAndGet()
-            processCandidate(packageName, text, direction)
+            processCandidate(packageName, text, direction, conversationId)
         }
     }
 
@@ -73,10 +79,11 @@ class CaptureCoordinator @Inject constructor(
         packageName: String,
         text: String,
         direction: String,
+        conversationId: String?,
     ) {
         // Privacy-safe diagnostic: metadata only, never the message content.
         val hasHebrew = text.any { it in '֐'..'׿' }
-        Log.d(TAG, "candidate len=${text.length} hebrew=$hasHebrew dir=$direction")
+        Log.d(TAG, "candidate len=${text.length} hebrew=$hasHebrew dir=$direction convId=${conversationId?.take(8)}")
 
         val result = preFilter.filter(text)
         when (result) {
@@ -91,6 +98,7 @@ class CaptureCoordinator @Inject constructor(
                     textHash = result.textHash,
                     capturedAt = System.currentTimeMillis() / 1000.0,
                     direction = direction,
+                    conversationId = conversationId,
                 )
                 try {
                     eventDao.insert(entity)

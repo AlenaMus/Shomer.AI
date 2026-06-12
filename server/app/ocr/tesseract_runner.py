@@ -85,12 +85,12 @@ class TesseractRunner:
 
     def run(
         self, img: Image.Image
-    ) -> tuple[str, float, tuple[str, ...], int]:
+    ) -> tuple[str, float, tuple[str, ...], int, tuple[str, ...]]:
         """Extract text from a preprocessed image.
 
         Returns
         -------
-        (text, mean_confidence, lang_detected, bbox_count)
+        (text, mean_confidence, lang_detected, bbox_count, line_segments)
 
         - ``text``: joined, stripped word text; empty string when nothing
           detected.
@@ -98,6 +98,10 @@ class TesseractRunner:
           normalised to [0.0, 1.0].  Returns 0.0 when no confident words.
         - ``lang_detected``: tuple of detected script tags from the text.
         - ``bbox_count``: number of non-empty word bounding boxes.
+        - ``line_segments``: one entry per detected text line (words grouped by
+          Tesseract's ``(block_num, par_num, line_num)``), NFC-normalised and
+          stripped.  Empty lines are dropped.  This lets message-granular
+          consumers classify each chat line independently instead of one blob.
 
         Does NOT swallow exceptions — the caller must catch
         ``pytesseract.TesseractNotFoundError`` and
@@ -111,18 +115,53 @@ class TesseractRunner:
         )
 
         # Each row in data is a detected element (page/block/para/line/word).
-        # Filter to word-level entries: non-empty text and conf >= 0.
+        # Filter to word-level entries: non-empty text and conf >= 0.  Track the
+        # (block, paragraph, line) key per word so we can reconstruct lines.
+        #
+        # block_num/par_num/line_num are always present in real pytesseract
+        # output; guard with .get() so partial mocks (and any pytesseract
+        # version that omits them) degrade to a single line group instead of
+        # raising KeyError.
+        block_nums = data.get("block_num")
+        par_nums = data.get("par_num")
+        line_nums = data.get("line_num")
+        has_line_keys = (
+            block_nums is not None
+            and par_nums is not None
+            and line_nums is not None
+        )
+
         words: list[str] = []
         confs: list[int] = []
-        for word_text, conf in zip(data["text"], data["conf"]):
+        # Ordered grouping of words into lines keyed by (block, par, line).
+        line_words: "dict[tuple[int, int, int], list[str]]" = {}
+        n = len(data["text"])
+        for i in range(n):
+            word_text = data["text"][i]
+            conf = data["conf"][i]
             # Tesseract uses -1 for non-word rows (block/para/line aggregates).
             if isinstance(conf, int) and conf >= 0 and str(word_text).strip():
-                words.append(str(word_text).strip())
+                w = str(word_text).strip()
+                words.append(w)
                 confs.append(conf)
+                key = (
+                    (block_nums[i], par_nums[i], line_nums[i])
+                    if has_line_keys
+                    else (0, 0, 0)
+                )
+                line_words.setdefault(key, []).append(w)
 
         text = " ".join(words).strip()
         # Normalise Unicode (NFC) — important for Hebrew combining characters.
         text = unicodedata.normalize("NFC", text)
+
+        # Reconstruct per-line segments in reading order (dict preserves
+        # insertion order, which follows Tesseract's top-to-bottom scan).
+        line_segments = tuple(
+            seg
+            for words_in_line in line_words.values()
+            if (seg := unicodedata.normalize("NFC", " ".join(words_in_line).strip()))
+        )
 
         if confs:
             # Tesseract returns confidence as 0–100 integers; normalise to [0,1].
@@ -133,4 +172,4 @@ class TesseractRunner:
         lang_detected = _detect_scripts(text)
         bbox_count = len(words)
 
-        return text, mean_conf, lang_detected, bbox_count
+        return text, mean_conf, lang_detected, bbox_count, line_segments

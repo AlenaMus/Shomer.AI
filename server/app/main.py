@@ -706,17 +706,29 @@ async def _dispatch_alert(
         log.warning("alert_dispatch_failed", trace_id=trace_id, error=str(exc))
 
 
-async def _persist_turn(request: Request, child_id: str, text: str) -> None:
-    """Persist the child's message so the Context Agent's read_history works."""
+async def _persist_turn(
+    request: Request,
+    child_id: str,
+    text: str,
+    conversation_id: str = "default",
+) -> None:
+    """Persist the child's message so the Context Agent's read_history works.
+
+    Scoped to ``(child_id, conversation_id)`` so different chat threads never
+    bleed into each other's history.
+    """
     store = request.app.state.audit_store
     try:
-        prev = await store.read_conversation_history(child_id, last_n_turns=1)
+        prev = await store.read_conversation_history(
+            child_id, last_n_turns=1, conversation_id=conversation_id
+        )
         next_index = (prev[-1].turn_index + 1) if prev else 0
         await store.record_conversation_turn(
             child_id=child_id,
             turn_index=next_index,
             role="child_outbound",
             text=text,
+            conversation_id=conversation_id,
         )
     except Exception as exc:  # noqa: BLE001 — best-effort
         log.warning("conversation_persist_failed", error=str(exc))
@@ -732,8 +744,18 @@ async def _run_pipeline(
     input_type: str = "text",
     ocr_extracted_text: str | None = None,
     image_hash: str | None = None,
-) -> tuple[ClassificationResult, TriageDecision]:
-    """Run the full text pipeline; return (classifier result, final decision)."""
+    conversation_turns: list[dict] | None = None,
+    conversation_id: str = "default",
+) -> tuple[ClassificationResult, TriageDecision, ContextDecision | None]:
+    """Run the full text pipeline; return (classifier result, final decision).
+
+    ``conversation_id`` scopes the conversation history lookup to a single chat
+    thread.  When ``conversation_turns`` is None AND the caller is a text-event
+    monitor event with a ``child_id``, this function fetches the scoped history
+    from the audit store and passes it as ``provided_history`` to the Context
+    Agent — so the CA NEVER uses its unscoped ``read_history`` tool for monitor
+    events (which caused the Daria cross-thread bleed bug).
+    """
     app = request.app
 
     # 1. Frontline classifier (UNCHANGED — Ollama stand-in by default).
@@ -744,14 +766,49 @@ async def _run_pipeline(
     triage_decision = app.state.triage.decide(result, context_agent_enabled)
     frontline_only_decision = triage_decision  # snapshot BEFORE the CA runs
 
-    # 3. Context Agent — only on borderline (ESCALATE_TO_CA).
+    # 3. Resolve history for the Context Agent.
+    #
+    # For TEXT monitor events (conversation_turns is None) with a child_id, we
+    # fetch the scoped conversation history from the audit store and pass it as
+    # provided_history.  This prevents the CA from using its unscoped
+    # read_history tool which would see the child's ENTIRE message stream across
+    # all chats — the root cause of the cross-thread false-alarm bug.
+    #
+    # For SCREENSHOT events, conversation_turns is already provided by the
+    # router (the OCR segments serve as the context).  For /classify (no
+    # child_id), we leave conversation_turns as-is (None → CA uses its tool).
+    resolved_history: list[dict] | None = conversation_turns
+    if resolved_history is None and child_id and input_type == "monitor":
+        # Text monitor event: fetch scoped thread history.
+        try:
+            turns = await app.state.audit_store.read_conversation_history(
+                child_id,
+                last_n_turns=app.state.context_agent.max_history_turns
+                if hasattr(app.state.context_agent, "max_history_turns")
+                else 5,
+                conversation_id=conversation_id,
+            )
+            resolved_history = [
+                {"role": t.role, "text": t.text} for t in turns
+            ]
+        except Exception as exc:  # noqa: BLE001 — best-effort, CA runs with no history
+            log.warning(
+                "scoped_history_fetch_failed",
+                child_id=child_id,
+                conversation_id=conversation_id,
+                error=str(exc),
+            )
+            resolved_history = []
+
+    # 4. Context Agent — only on borderline (ESCALATE_TO_CA).
     ctx_decision: ContextDecision | None = None
     if (
         triage_decision == TriageDecision.ESCALATE_TO_CA
         and context_agent_enabled
     ):
         ctx_decision = await app.state.context_agent.evaluate(
-            text, result, child_id=child_id, trace_id=trace_id
+            text, result, child_id=child_id, trace_id=trace_id,
+            provided_history=resolved_history,
         )
         if ctx_decision.review_flag:
             triage_decision = TriageDecision.REVIEW_NEEDED
@@ -766,7 +823,7 @@ async def _run_pipeline(
             "cost_usd": ctx_decision.cost_usd,
         }
 
-    # 4. Alert on a confirmed threat.
+    # 5. Alert on a confirmed threat.
     if triage_decision == TriageDecision.ALERT_DIRECT:
         await _dispatch_alert(
             request,
@@ -778,7 +835,7 @@ async def _run_pipeline(
             message_id=message_id,
         )
 
-    # 5. Record the decision + the CA reasoning trace (best-effort — a DB
+    # 6. Record the decision + the CA reasoning trace (best-effort — a DB
     #    hiccup must never 500 a classification).
     try:
         classification_id = await app.state.audit_store.record_classification(
@@ -803,6 +860,7 @@ async def _run_pipeline(
                     "label": result.label,
                     "confidence": result.confidence,
                     "child_id": child_id,
+                    "conversation_id": conversation_id,
                 },
                 decision=ctx_decision,
                 tools_called=[
@@ -812,13 +870,21 @@ async def _run_pipeline(
     except Exception as exc:  # noqa: BLE001 — audit is best-effort
         log.warning("audit_record_failed", trace_id=trace_id, error=str(exc))
 
-    # 6. Persist conversation turn (only when a child_id was supplied).
-    if child_id:
-        await _persist_turn(request, child_id, text)
+    # 7. Persist conversation turn — only for single-text events (not screenshots).
+    #    When ``conversation_turns`` is provided the text is an OCR segment from
+    #    a screenshot; those segments must NOT be written to the per-child
+    #    ``conversations`` table because:
+    #      a) the screenshot already contains both sides of the conversation, so
+    #         the wrong role would be persisted, and
+    #      b) UI chrome lines (contact names, timestamps) would pollute history.
+    #    Scoped by ``conversation_id`` so turns from different chat threads are
+    #    kept separate (the fix for the cross-thread Daria bleed bug).
+    if child_id and conversation_turns is None:
+        await _persist_turn(request, child_id, text, conversation_id=conversation_id)
 
     request.state.audit["triage_decision"] = triage_decision.value
     request.state.audit["classifier_model"] = result.model_version
-    return result, triage_decision
+    return result, triage_decision, ctx_decision
 
 
 # ---------------------------------------------------------------------------
@@ -871,7 +937,7 @@ async def classify(req: ClassifyRequest, request: Request) -> ClassifyResponse:
     started = time.perf_counter()
     trace_id = _trace_id(request)
 
-    result, _ = await _run_pipeline(
+    result, _, _ctx = await _run_pipeline(
         request,
         req.text,
         trace_id=trace_id,
@@ -962,7 +1028,7 @@ async def classify_image(
         )
 
     # 3. Run the OCR text through the same pipeline as /classify.
-    result, _ = await _run_pipeline(
+    result, _, _ctx = await _run_pipeline(
         request,
         ocr_result.extracted_text,
         trace_id=trace_id,

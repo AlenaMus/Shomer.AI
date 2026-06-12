@@ -223,3 +223,65 @@ android_client/app/src/main/java/com/shomer/client/
 - **Battery/data drain from over-capture** → the pre-filter aggressiveness is the lever (tune in A6
   against server-measured volume).
 ```
+
+---
+
+## Decision — conversation_id derivation and Room migration (2026-06-12)
+
+**Context:** The server's Context Agent scoped conversation history by `(child_id)` alone. All of a
+child's captured messages — regardless of which app or which chat thread — were mixed into one
+context window. This caused false alarms: a benign WhatsApp line was flagged because threatening
+test messages from an entirely different thread appeared in the "same conversation."
+
+The fix adds a `conversation_id` field to the `MonitorEvent` wire schema. The server already accepted
+it (field present in `schemas.py`). The client needed to derive and send it.
+
+**contract (shared with backend-developer, must match server exactly):**
+- Field name (JSON): `conversation_id`
+- Type: `String?` (nullable)
+- Max length: 128 chars
+- TEXT events (AccessibilityService): client sets it (or null if title unavailable)
+- SCREENSHOT/OCR events: client does NOT set it; server mints one per screenshot
+
+**Derivation formula (TEXT events):**
+```
+threadKey = windowTitle (contact or group name from the active chat window)
+conversationId = sha256("$packageName:$threadKey").hex.take(32)
+```
+The raw contact/group name is never stored or sent — only the 32-char hash. The server only uses
+`conversation_id` as an opaque bucket key for grouping conversation turns; it does not interpret it.
+
+**threadKey extraction strategy (heuristic — may miss on some app versions):**
+1. `TYPE_WINDOW_STATE_CHANGED` event text list (sometimes carries the chat title).
+2. Tree walk: DFS to depth 6 looking for a node whose `viewIdResourceName` or `className` contains
+   "title", "contact_name", or "toolbar" — returns its text.
+3. `TYPE_NOTIFICATION_STATE_CHANGED`: reads `EXTRA_CONVERSATION_TITLE` (MessagingStyle) or
+   `EXTRA_TITLE` (plain notification) — most reliable source because WhatsApp always populates it.
+4. Fallback: `null` — the server scopes history by `app_package` alone.
+
+**WhatsApp-specific caveats:**
+- WhatsApp renders chat bubbles in a SurfaceView/TextureView (or custom canvas) on many device
+  builds, making the accessibility tree empty for received messages. Most WhatsApp captures
+  therefore go through the notification path (step 3 above), which is reliable.
+- The compose box (`EditText` / `AppCompatEditText`) fires `TYPE_VIEW_TEXT_CHANGED` on outbound
+  typing; the `TYPE_WINDOW_STATE_CHANGED` on chat open populates `currentConversationId`, which
+  is reused for all outbound submits in that session.
+- WhatsApp's internal view IDs (e.g. `com.whatsapp:id/conversation_contact_name`) change across
+  versions. The tree-walk heuristic covers known patterns but may miss future versions. The
+  notification path (step 3) is the robust fallback.
+
+**On-device verification status:** NOT YET VERIFIED on a real device. The implementation compiles
+and the hash derivation is correct by inspection, but the actual WhatsApp thread → same
+`conversation_id` across multiple messages in the same chat requires a live WhatsApp session on
+an emulator or physical phone with the AccessibilityService enabled. This is explicitly left as
+a manual integration test step per the agent's output format.
+
+**Room migration — DB version 1 → 2:**
+The `EventDatabase` already uses `fallbackToDestructiveMigration()`. Bumping the version to 2
+wipes the pending-event buffer on first install of the updated APK. This is acceptable because:
+- The buffer only holds events that have not yet been uploaded to the server (typically < 50 rows).
+- Events that are wiped have not been server-acknowledged, so the server has no record of them.
+- Re-capture is automatic: the AccessibilityService continues running and any active chat session
+  will re-emit new events.
+- The alternative (writing an ALTER TABLE migration for one nullable column) adds complexity and
+  test surface with no user-visible benefit for a monitoring buffer.

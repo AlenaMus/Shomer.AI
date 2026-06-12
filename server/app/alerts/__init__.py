@@ -13,11 +13,11 @@ Concrete adapters and helpers are re-exported here so the composition root
 See docs/design/alerts/design.md for the full LLD.
 
 Channel selection (``ALERTS_CHANNEL``, wired in ``main.py`` lifespan()):
-    "log" (default, no setup) | "fcm" | "stub".  ``FcmNotifier`` is implemented
-    (M6-ALERTS-FCM); it lazy-imports firebase-admin and degrades to a
-    ``sent=False`` "not configured" result when the library or service-account
-    credentials are absent, so the package imports and the server runs without
-    Firebase installed.
+    "log" (default, no setup) | "ntfy" | "fcm" | "email" | "smtp" | "stub".
+    ``FcmNotifier`` lazy-imports firebase-admin and degrades gracefully when
+    not installed.  ``GmailApiNotifier`` lazy-imports google-auth / google-api-
+    python-client and degrades gracefully when creds are absent.
+    ``SmtpEmailNotifier`` uses stdlib smtplib only (no new deps required).
 """
 
 from __future__ import annotations
@@ -37,6 +37,8 @@ from .log_notifier import LogNotifier, compute_alert_id
 from .stub_notifier import StubNotifier
 from .ntfy_notifier import NtfyNotifier
 from .fcm_notifier import FcmNotifier
+from .gmail_notifier import GmailApiNotifier
+from .smtp_notifier import SmtpEmailNotifier
 
 # --- Supporting infrastructure -----------------------------------------------
 from .retry_queue import LocalRetryQueue
@@ -52,6 +54,8 @@ __all__ = [
     "StubNotifier",
     "NtfyNotifier",
     "FcmNotifier",
+    "GmailApiNotifier",
+    "SmtpEmailNotifier",
     # Adapters — AlertRateLimiter
     "InMemoryAlertRateLimiter",
     "NoOpAlertRateLimiter",

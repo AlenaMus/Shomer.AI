@@ -34,6 +34,16 @@ from ..schemas import HealthState
 
 
 @dataclass(frozen=True)
+class ParentAuth:
+    """Returned by ``authenticate_parent_credentials`` on success."""
+
+    parent_id: str
+    parent_token: str   # the existing opaque token (valid for all parent endpoints)
+    display_name: str
+    email: str | None = None   # present when parent registered with email+password
+
+
+@dataclass(frozen=True)
 class ChildRecord:
     """A registered child — server-minted opaque IDs, display name only."""
 
@@ -80,11 +90,34 @@ class IdentityStore(Protocol):
 
     # --- Parent ------------------------------------------------------------------
 
-    async def register_parent(self, display_name: str = "") -> tuple[str, str]:
+    async def register_parent(
+        self,
+        display_name: str = "",
+        email: str | None = None,
+        password: str | None = None,
+    ) -> tuple[str, str]:
         """Mint and store a parent record.
 
         Returns ``(parent_id, parent_token)`` — both opaque; parent_token is a
         long-lived credential for authenticating parent-role requests.
+
+        Optional ``email`` / ``password`` enable web-login for parents.
+        If ``email`` is given, ``password`` is required; the email is stored
+        normalised to lowercase; the password is stored as a PBKDF2 hash (see
+        ``identity/passwords.py``).
+        Raises ``ValueError("email_taken")`` when the email already exists.
+        """
+        ...
+
+    async def authenticate_parent_credentials(
+        self, email: str, password: str
+    ) -> "ParentAuth | None":
+        """Validate email + password.
+
+        Returns a ``ParentAuth`` (parent_id, parent_token, display_name, email)
+        on success, or ``None`` if the email does not exist or the password is
+        wrong.  Uses ``hmac.compare_digest`` internally — the return is
+        deliberately the same ``None`` for both cases to prevent user enumeration.
         """
         ...
 
@@ -147,6 +180,14 @@ class IdentityStore(Protocol):
         """Return the parent_id for a given child_id, or None if not found.
 
         Used by DigestScheduler (S3) to resolve the FCM target.
+        """
+        ...
+
+    async def get_parent_email(self, parent_id: str) -> str | None:
+        """Return the stored (normalised) email for a parent, or None.
+
+        Returns None for parents registered with display-name-only (no email).
+        Used by the pairing-code endpoint to fire-and-forget an OTP email.
         """
         ...
 

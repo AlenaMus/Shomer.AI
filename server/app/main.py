@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import os
 import sys
 import time
 import uuid
@@ -35,8 +36,12 @@ for _stream in (sys.stdout, sys.stderr):
 
 import structlog
 from dotenv import load_dotenv
+import pathlib
+
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 # Module Protocols (the only cross-module imports allowed outside lifespan()).
 from .alerts import NotificationChannel, derive_severity
@@ -48,6 +53,7 @@ from .digest import DigestScheduler, DigestStore, register_digest
 from .flagged import FlaggedEventStore, register_parent_review
 from .gateway import GatekeeperSettings, register_gateway
 from .identity import IdentityStore, register_identity
+from .mailer import EmailSender
 from .middleware import AuditLoggingMiddleware
 from .monitor import MonitorIngest, register_monitor
 from .ocr import OcrBackend
@@ -255,6 +261,29 @@ async def _build_identity() -> "IdentityStore":
     return store
 
 
+def _build_mailer() -> "EmailSender":
+    """Build an EmailSender adapter.
+
+    Adapter selection driven by ``MAILER_BACKEND`` env var:
+      - "log"  (default) → LogEmailSender  (structlog; no external deps)
+      - "smtp"            → SmtpEmailSender (stdlib STARTTLS SMTP)
+    """
+    from .mailer import LogEmailSender, MailerSettings, SmtpEmailSender
+
+    settings = MailerSettings()
+    backend = settings.mailer_backend.strip().lower()
+    if backend == "smtp":
+        log.info(
+            "mailer_select",
+            adapter="SmtpEmailSender",
+            host=settings.smtp_host,
+            port=settings.smtp_port,
+        )
+        return SmtpEmailSender(settings)
+    log.info("mailer_select", adapter="LogEmailSender")
+    return LogEmailSender()
+
+
 async def _build_digest(
     flagged_store: "FlaggedEventStore",
     notifier: "NotificationChannel",
@@ -410,10 +439,12 @@ async def lifespan(app: FastAPI):
     from .alerts import (
         AlertSettings,
         FcmNotifier,
+        GmailApiNotifier,
         InMemoryAlertRateLimiter,
         LocalRetryQueue,
         LogNotifier,
         NtfyNotifier,
+        SmtpEmailNotifier,
         StubNotifier,
     )
     from .audit_log import AuditSettings, RetentionSweeper, SqliteAuditStore
@@ -480,6 +511,21 @@ async def lifespan(app: FastAPI):
         notifier = FcmNotifier(
             alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
         )
+    elif _alert_channel == "email":
+        notifier = GmailApiNotifier(
+            alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
+        )
+        log.info("alerts_channel_email_selected")
+    elif _alert_channel == "smtp":
+        notifier = SmtpEmailNotifier(
+            alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
+        )
+        log.info(
+            "alerts_channel_smtp_selected",
+            host=os.environ.get("SMTP_HOST", "smtp.gmail.com"),
+            port=os.environ.get("SMTP_PORT", "587"),
+            user=os.environ.get("SMTP_USER", "<not set>"),
+        )
     elif _alert_channel == "stub":
         notifier = StubNotifier()
     else:
@@ -498,6 +544,9 @@ async def lifespan(app: FastAPI):
 
     # --- Identity store (S2 — child/parent identity + device-token auth).
     app.state.identity: IdentityStore = await _build_identity()
+
+    # --- Mailer (transactional email: OTP codes, future notifications).
+    app.state.mailer: EmailSender = _build_mailer()
 
     # --- DigestScheduler + DigestStore (S3 — daily digest + FCM push).
     app.state.digest_scheduler, app.state.digest_store = await _build_digest(
@@ -637,6 +686,25 @@ register_identity(app)
 register_digest(app)
 register_parent_review(app)
 
+# ---------------------------------------------------------------------------
+# Dashboard: serve the static web UI at /dashboard/
+#
+# Resolved relative to this file (server/app/main.py → ../../dashboard).
+# The auth middleware DOES NOT block GET /dashboard* — static pages are public;
+# data API calls carry their own Bearer token.
+# ---------------------------------------------------------------------------
+
+_DASHBOARD_DIR = pathlib.Path(__file__).resolve().parents[2] / "dashboard"
+if _DASHBOARD_DIR.exists():
+    app.mount("/dashboard", StaticFiles(directory=str(_DASHBOARD_DIR), html=True), name="dashboard")
+    log.info("dashboard_mounted", path=str(_DASHBOARD_DIR))
+
+
+@app.get("/", include_in_schema=False)
+async def root_redirect() -> RedirectResponse:
+    """Redirect bare root to the dashboard."""
+    return RedirectResponse(url="/dashboard/", status_code=302)
+
 
 # ---------------------------------------------------------------------------
 # Request-state audit dict — set by AuditLoggingMiddleware; defensive init
@@ -677,7 +745,16 @@ async def _dispatch_alert(
 
     The notifier records the disposition to the audit store via its injected
     recorder, and never raises — we still guard defensively.
+
+    When the active notifier is any email-type notifier (``GmailApiNotifier``
+    or ``SmtpEmailNotifier``), this function resolves the parent email via
+    identity → child_id → parent_id → email and passes it as the ``to_email``
+    keyword argument.  If no email is registered, it logs a warning and
+    returns without sending.
     """
+    from .alerts import GmailApiNotifier as _GmailApiNotifier
+    from .alerts import SmtpEmailNotifier as _SmtpEmailNotifier
+
     if ctx is not None:
         explanation, source = ctx.explanation, "context_agent"
     else:
@@ -695,7 +772,34 @@ async def _dispatch_alert(
         trace_id=trace_id,
     )
     try:
-        res = await request.app.state.notifier.send_alert(alert_req)
+        notifier = request.app.state.notifier
+        if isinstance(notifier, (_GmailApiNotifier, _SmtpEmailNotifier)):
+            # Resolve child → parent → email for any email-type channel.
+            to_email: str | None = None
+            if child_id:
+                try:
+                    identity = request.app.state.identity
+                    parent_id = await identity.parent_for_child(child_id)
+                    if parent_id:
+                        to_email = await identity.get_parent_email(parent_id)
+                except Exception as _exc:  # noqa: BLE001
+                    log.warning(
+                        "alert_email_resolve_failed",
+                        trace_id=trace_id,
+                        error=str(_exc),
+                    )
+            if not to_email:
+                log.warning(
+                    "alert_email_no_recipient",
+                    trace_id=trace_id,
+                    child_id=child_id,
+                    note="no parent email registered — alert not sent via email",
+                )
+                return
+            res = await notifier.send_alert(alert_req, to_email=to_email)
+        else:
+            res = await notifier.send_alert(alert_req)
+
         request.state.audit["alert"] = {
             "alert_id": res.alert_id,
             "sent": res.sent,

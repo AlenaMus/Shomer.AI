@@ -164,7 +164,11 @@ CREATE TABLE IF NOT EXISTS conversations (
     text            TEXT    NOT NULL,
     created_at      REAL    NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_conv_child_conv_turn ON conversations(child_id, conversation_id, turn_index);
+-- NOTE: idx_conv_child_conv_turn (which includes conversation_id) is created
+-- separately after the idempotent migration, so it is safe on both new and
+-- existing databases.  The legacy idx_conv_child_turn is kept for back-compat
+-- on databases that haven't run the migration yet.
+CREATE INDEX IF NOT EXISTS idx_conv_child_turn ON conversations(child_id, turn_index);
 CREATE INDEX IF NOT EXISTS idx_conv_created_at ON conversations(created_at);
 
 CREATE TABLE IF NOT EXISTS gold_set_metadata (

@@ -14,7 +14,8 @@ from dataclasses import replace
 import structlog
 
 from ..schemas import HealthState
-from .protocol import ChildRecord, DeviceContext, IdentityStore, PairingCode
+from .protocol import ChildRecord, DeviceContext, IdentityStore, PairingCode, ParentAuth
+from .passwords import hash_password, verify_password
 
 log = structlog.get_logger("shomer.identity.memory")
 
@@ -28,6 +29,14 @@ class InMemoryIdentityStore:
         self._parents: dict[str, tuple[str, str]] = {}
         # parent_token → parent_id
         self._parent_tokens: dict[str, str] = {}
+        # email (lowercase) → parent_id (for login)
+        self._emails: dict[str, str] = {}
+        # parent_id → normalised email (for ParentAuth)
+        self._parent_emails: dict[str, str] = {}
+        # parent_id → password_hash
+        self._password_hashes: dict[str, str] = {}
+        # parent_id → display_name (separate for credential lookup)
+        self._parent_display_names: dict[str, str] = {}
         # child_id → ChildRecord
         self._children: dict[str, ChildRecord] = {}
         # parent_id → list[child_id]
@@ -43,19 +52,52 @@ class InMemoryIdentityStore:
 
     # --- Parent ------------------------------------------------------------------
 
-    async def register_parent(self, display_name: str = "") -> tuple[str, str]:
+    async def register_parent(
+        self,
+        display_name: str = "",
+        email: str | None = None,
+        password: str | None = None,
+    ) -> tuple[str, str]:
+        normalised_email = email.strip().lower() if email else None
+        if normalised_email is not None and normalised_email in self._emails:
+            raise ValueError("email_taken")
         parent_id = str(uuid.uuid4())
         token = secrets.token_urlsafe(32)
         self._parents[parent_id] = (token, display_name)
         self._parent_tokens[token] = parent_id
+        self._parent_display_names[parent_id] = display_name
+        if normalised_email is not None:
+            self._emails[normalised_email] = parent_id
+            self._parent_emails[parent_id] = normalised_email
+        if password is not None:
+            self._password_hashes[parent_id] = hash_password(password)
         # Track parent token in device meta so fcm_token_for_parent can find it.
         self._parent_device_meta.append((parent_id, token, time.time()))
         log.info(
             "identity.parent_registered",
             parent_id=parent_id,
             token_prefix=token[:8],
+            has_email=normalised_email is not None,
         )
         return parent_id, token
+
+    async def authenticate_parent_credentials(
+        self, email: str, password: str
+    ) -> "ParentAuth | None":
+        normalised_email = email.strip().lower() if email else ""
+        parent_id = self._emails.get(normalised_email)
+        if not parent_id:
+            return None
+        stored_hash = self._password_hashes.get(parent_id)
+        if not stored_hash or not verify_password(password, stored_hash):
+            return None
+        token, display_name = self._parents[parent_id]
+        return ParentAuth(
+            parent_id=parent_id,
+            parent_token=token,
+            display_name=display_name,
+            email=normalised_email,
+        )
 
     async def authenticate_parent(self, token: str) -> DeviceContext | None:
         parent_id = self._parent_tokens.get(token)
@@ -169,6 +211,10 @@ class InMemoryIdentityStore:
     async def parent_for_child(self, child_id: str) -> str | None:
         record = self._children.get(child_id)
         return record.parent_id if record else None
+
+    async def get_parent_email(self, parent_id: str) -> str | None:
+        """Return the stored email for a parent, or None."""
+        return self._parent_emails.get(parent_id)
 
     # --- FCM token (S3) ----------------------------------------------------------
 

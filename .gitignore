@@ -88,3 +88,8 @@ test-sessions/
 # Local-only gap analysis (not for the canonical repo)
 gaps.md
 .claude/gaps.md
+
+# Gmail OAuth secrets — never commit
+gmail_credentials/
+*token.json
+.~lock.*#

@@ -297,9 +297,12 @@ def test_text_event_is_still_persisted_to_conversations_table(
         )
 
         # Read conversation history from the live audit store.
+        # The text event has app_package="com.example.app" and no explicit
+        # conversation_id, so MonitorIngest resolves it to "com.example.app"
+        # (the app_package fallback).  We must read with the same key.
         async def _check_history():
             return await app.state.audit_store.read_conversation_history(
-                child_id, last_n_turns=10
+                child_id, last_n_turns=10, conversation_id="com.example.app"
             )
 
         loop2 = asyncio.new_event_loop()
@@ -310,6 +313,7 @@ def test_text_event_is_still_persisted_to_conversations_table(
 
     assert resp.status_code == 202, f"Got {resp.status_code}: {resp.text}"
     assert len(history) == 1, (
-        f"Expected 1 conversation turn for text event, got {len(history)}"
+        f"Expected 1 conversation turn for text event, got {len(history)}. "
+        f"(Turn is stored under conversation_id='com.example.app' — the app_package fallback)"
     )
     assert history[0].text == test_text

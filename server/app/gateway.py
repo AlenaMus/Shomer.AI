@@ -452,6 +452,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 #     (tightening them is out of S2 scope; document this if auditing)
 _AUTH_ALLOWLIST: frozenset[str] = frozenset(
     {
+        "/",
         "/health",
         "/metrics",
         "/docs",
@@ -459,6 +460,7 @@ _AUTH_ALLOWLIST: frozenset[str] = frozenset(
         "/redoc",
         # Identity bootstrap (S2)
         "/v1/parent/register",
+        "/v1/parent/login",
         "/v1/pair",
         # Legacy single-shot dev/back-compat endpoints — kept open
         "/classify",
@@ -466,6 +468,13 @@ _AUTH_ALLOWLIST: frozenset[str] = frozenset(
         "/model/info",
     }
 )
+
+# Path prefixes that are always public (static assets, root redirect).
+# The DeviceAuthMiddleware checks this in addition to _AUTH_ALLOWLIST.
+_AUTH_ALLOWLIST_PREFIXES: tuple[str, ...] = (
+    "/dashboard",  # static web UI — public; data API calls carry their own token
+)
+
 
 
 class DeviceAuthMiddleware(BaseHTTPMiddleware):
@@ -503,6 +512,9 @@ class DeviceAuthMiddleware(BaseHTTPMiddleware):
         # Skip allowlisted paths — they bootstrap auth or are public.
         path = request.url.path
         if path in _AUTH_ALLOWLIST:
+            return await call_next(request)
+        # Skip paths matching a public prefix (e.g. /dashboard/...).
+        if any(path == prefix or path.startswith(prefix + "/") for prefix in _AUTH_ALLOWLIST_PREFIXES):
             return await call_next(request)
 
         # Extract Bearer token.

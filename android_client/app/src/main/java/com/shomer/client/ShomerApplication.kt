@@ -15,6 +15,9 @@ import javax.inject.Inject
  * Notification channels are idempotent (safe to call every launch on API 26+).
  * Channels must be registered before any notification is posted; doing it in
  * onCreate() is the correct pattern.
+ *
+ * This app is CHILD-MODE ONLY — the parent alert channels have been removed.
+ * Decision: plan-docs/decisions/child-only-and-email-alerts.decision.md (D-CO-1).
  */
 @HiltAndroidApp
 class ShomerApplication : Application(), Configuration.Provider {
@@ -37,50 +40,20 @@ class ShomerApplication : Application(), Configuration.Provider {
         val nm = getSystemService(NotificationManager::class.java) ?: return
 
         // Monitoring-active indicator — low importance (no sound/vibration).
-        // This is the mandatory non-dismissible foreground-service notification.
-        nm.createNotificationChannel(
-            NotificationChannel(
-                CHANNEL_MONITORING,
-                getString(R.string.notification_channel_monitoring_name),
-                NotificationManager.IMPORTANCE_LOW,
-            ).apply {
-                description = getString(R.string.notification_channel_monitoring_desc)
-                setShowBadge(false)
-            },
-        )
-
-        // Parent-alert channels (for pass 2 — registered now so the channel IDs
-        // are available even before FCM receiver is wired).
-        // shomer.alerts.escalated — high severity
-        nm.createNotificationChannel(
-            NotificationChannel(
-                CHANNEL_ALERTS_ESCALATED,
-                "Alerts — Escalated",
-                NotificationManager.IMPORTANCE_HIGH,
-            ),
-        )
-        // shomer.alerts.direct — medium severity
-        nm.createNotificationChannel(
-            NotificationChannel(
-                CHANNEL_ALERTS_DIRECT,
-                "Alerts — Direct",
-                NotificationManager.IMPORTANCE_DEFAULT,
-            ),
-        )
-        // shomer.alerts.silent — audit-only, no notification
-        nm.createNotificationChannel(
-            NotificationChannel(
-                CHANNEL_ALERTS_SILENT,
-                "Alerts — Silent",
-                NotificationManager.IMPORTANCE_NONE,
-            ),
-        )
+        // This is the mandatory non-dismissible foreground-service notification
+        // shown on the child's device while monitoring is running.
+        val monitoringChannel = NotificationChannel(
+            CHANNEL_MONITORING,
+            getString(R.string.notification_channel_monitoring_name),
+            NotificationManager.IMPORTANCE_LOW,
+        ).apply {
+            description = getString(R.string.notification_channel_monitoring_desc)
+            setShowBadge(false)
+        }
+        nm.createNotificationChannel(monitoringChannel)
     }
 
     companion object {
         const val CHANNEL_MONITORING = "shomer.monitoring.active"
-        const val CHANNEL_ALERTS_ESCALATED = "shomer.alerts.escalated"
-        const val CHANNEL_ALERTS_DIRECT = "shomer.alerts.direct"
-        const val CHANNEL_ALERTS_SILENT = "shomer.alerts.silent"
     }
 }

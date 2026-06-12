@@ -49,6 +49,15 @@ aiosqlite>=0.20.0
 firebase-admin>=6.5.0
 
 # -----------------------------------------------------------------------------
+# Alerts — GmailApiNotifier (NotificationChannel adapter). OPT-IN: only needed
+# when ALERTS_CHANNEL=email. Lazy-imported inside the adapter so the server
+# runs without these packages when the email channel is not selected.
+# -----------------------------------------------------------------------------
+google-auth>=2.29.0
+google-auth-oauthlib>=1.2.0
+google-api-python-client>=2.130.0
+
+# -----------------------------------------------------------------------------
 # Resilience
 # -----------------------------------------------------------------------------
 tenacity>=9.0.0

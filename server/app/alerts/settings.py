@@ -2,9 +2,10 @@
 
 Reference: docs/design/alerts/design.md §6 (Config table).
 
-All settings have an ``ALERTS_`` env-prefix EXCEPT ``FCM_SERVICE_ACCOUNT_PATH``
-which uses the ``FCM_`` prefix because it is a Firebase credential, not an
-alerts-behaviour knob.  This matches the LLD §6 config table.
+All settings have an ``ALERTS_`` env-prefix EXCEPT credential paths that belong
+to external services (``FCM_SERVICE_ACCOUNT_PATH``, ``GMAIL_CLIENT_JSON``,
+``GMAIL_TOKEN_JSON``, ``ALERT_FROM``) which use their own prefixes because they
+are infrastructure credentials, not alerts-behaviour knobs.
 
 Usage in tests:
     AlertSettings(rate_limit_max_alerts=1, rate_limit_window_seconds=60)
@@ -16,10 +17,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AlertSettings(BaseSettings):
-    """Settings consumed by LogNotifier, FcmNotifier, and rate limiters.
+    """Settings consumed by LogNotifier, FcmNotifier, GmailApiNotifier, and rate limiters.
 
     Pydantic-settings reads these from environment variables (``ALERTS_``
     prefix) or from a ``.env`` file in the working directory.
+
+    Gmail credential paths (``GMAIL_CLIENT_JSON``, ``GMAIL_TOKEN_JSON``,
+    ``ALERT_FROM``) do NOT carry the ``ALERTS_`` prefix — they are Google
+    credential artefacts and are read directly from ``os.environ`` inside
+    ``GmailApiNotifier`` rather than via this settings object.  This mirrors
+    how ``FcmNotifier`` reads ``FCM_SERVICE_ACCOUNT_PATH`` directly.
     """
 
     model_config = SettingsConfigDict(
@@ -32,7 +39,7 @@ class AlertSettings(BaseSettings):
 
     # --- Channel selection (string, not enum — keeps settings import cheap) ---
     channel: str = "log"
-    """Which channel adapter to wire: ``"log"`` | ``"ntfy"`` | ``"fcm"`` | ``"stub"``."""
+    """Which channel adapter to wire: ``"log"`` | ``"ntfy"`` | ``"fcm"`` | ``"email"`` | ``"stub"``."""
 
     # --- Rate limiter ---
     rate_limit_max_alerts: int = 3
@@ -77,3 +84,12 @@ class AlertSettings(BaseSettings):
     # FcmNotifier reads FCM_SERVICE_ACCOUNT_PATH via a separate bare read.
     fcm_channel_id: str = "shomer_alerts"
     """Android notification channel ID — shown in system settings."""
+
+    # --- GmailApiNotifier (ALERTS_CHANNEL=email) ------------------------------
+    # These keys do NOT carry the ALERTS_ prefix — they are Gmail credential
+    # paths and are read directly from os.environ inside GmailApiNotifier,
+    # following the same pattern as FCM_SERVICE_ACCOUNT_PATH in FcmNotifier.
+    #
+    # GMAIL_CLIENT_JSON (default: gmail_credentials/gmailcredentials.json)
+    # GMAIL_TOKEN_JSON  (default: gmail_credentials/token.json)
+    # ALERT_FROM        (optional: sender address; resolved from Gmail profile if empty)

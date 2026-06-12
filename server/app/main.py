@@ -52,6 +52,7 @@ from .digest import DigestScheduler, DigestStore, register_digest
 from .flagged import FlaggedEventStore, register_parent_review
 from .gateway import GatekeeperSettings, register_gateway
 from .identity import IdentityStore, register_identity
+from .mailer import EmailSender
 from .middleware import AuditLoggingMiddleware
 from .monitor import MonitorIngest, register_monitor
 from .ocr import OcrBackend
@@ -259,6 +260,29 @@ async def _build_identity() -> "IdentityStore":
     return store
 
 
+def _build_mailer() -> "EmailSender":
+    """Build an EmailSender adapter.
+
+    Adapter selection driven by ``MAILER_BACKEND`` env var:
+      - "log"  (default) → LogEmailSender  (structlog; no external deps)
+      - "smtp"            → SmtpEmailSender (stdlib STARTTLS SMTP)
+    """
+    from .mailer import LogEmailSender, MailerSettings, SmtpEmailSender
+
+    settings = MailerSettings()
+    backend = settings.mailer_backend.strip().lower()
+    if backend == "smtp":
+        log.info(
+            "mailer_select",
+            adapter="SmtpEmailSender",
+            host=settings.smtp_host,
+            port=settings.smtp_port,
+        )
+        return SmtpEmailSender(settings)
+    log.info("mailer_select", adapter="LogEmailSender")
+    return LogEmailSender()
+
+
 async def _build_digest(
     flagged_store: "FlaggedEventStore",
     notifier: "NotificationChannel",
@@ -414,6 +438,7 @@ async def lifespan(app: FastAPI):
     from .alerts import (
         AlertSettings,
         FcmNotifier,
+        GmailApiNotifier,
         InMemoryAlertRateLimiter,
         LocalRetryQueue,
         LogNotifier,
@@ -484,6 +509,11 @@ async def lifespan(app: FastAPI):
         notifier = FcmNotifier(
             alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
         )
+    elif _alert_channel == "email":
+        notifier = GmailApiNotifier(
+            alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
+        )
+        log.info("alerts_channel_email_selected")
     elif _alert_channel == "stub":
         notifier = StubNotifier()
     else:
@@ -502,6 +532,9 @@ async def lifespan(app: FastAPI):
 
     # --- Identity store (S2 — child/parent identity + device-token auth).
     app.state.identity: IdentityStore = await _build_identity()
+
+    # --- Mailer (transactional email: OTP codes, future notifications).
+    app.state.mailer: EmailSender = _build_mailer()
 
     # --- DigestScheduler + DigestStore (S3 — daily digest + FCM push).
     app.state.digest_scheduler, app.state.digest_store = await _build_digest(
@@ -700,7 +733,14 @@ async def _dispatch_alert(
 
     The notifier records the disposition to the audit store via its injected
     recorder, and never raises — we still guard defensively.
+
+    When the active notifier is ``GmailApiNotifier``, this function resolves
+    the parent email via identity → child_id → parent_id → email and passes
+    it as the ``to_email`` keyword argument.  If no email is registered, it
+    logs a warning and falls back to ``LogNotifier``-style log-only behaviour.
     """
+    from .alerts import GmailApiNotifier as _GmailApiNotifier
+
     if ctx is not None:
         explanation, source = ctx.explanation, "context_agent"
     else:
@@ -718,7 +758,34 @@ async def _dispatch_alert(
         trace_id=trace_id,
     )
     try:
-        res = await request.app.state.notifier.send_alert(alert_req)
+        notifier = request.app.state.notifier
+        if isinstance(notifier, _GmailApiNotifier):
+            # Resolve child → parent → email for the Gmail channel.
+            to_email: str | None = None
+            if child_id:
+                try:
+                    identity = request.app.state.identity
+                    parent_id = await identity.parent_for_child(child_id)
+                    if parent_id:
+                        to_email = await identity.get_parent_email(parent_id)
+                except Exception as _exc:  # noqa: BLE001
+                    log.warning(
+                        "alert_email_resolve_failed",
+                        trace_id=trace_id,
+                        error=str(_exc),
+                    )
+            if not to_email:
+                log.warning(
+                    "alert_email_no_recipient",
+                    trace_id=trace_id,
+                    child_id=child_id,
+                    note="no parent email registered — alert not sent via email",
+                )
+                return
+            res = await notifier.send_alert(alert_req, to_email=to_email)
+        else:
+            res = await notifier.send_alert(alert_req)
+
         request.state.audit["alert"] = {
             "alert_id": res.alert_id,
             "sent": res.sent,

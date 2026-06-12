@@ -9,7 +9,6 @@ import com.shomer.client.data.AuthInterceptor
 import com.shomer.client.data.BaseUrlInterceptor
 import com.shomer.client.data.MonitorApi
 import com.shomer.client.data.PairingApi
-import com.shomer.client.data.ParentApi
 import com.shomer.client.data.SettingsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -101,11 +100,6 @@ object NetworkModule {
     @Singleton
     fun providePairingApi(retrofit: Retrofit): PairingApi =
         retrofit.create(PairingApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideParentApi(retrofit: Retrofit): ParentApi =
-        retrofit.create(ParentApi::class.java)
 
     @Provides
     @Singleton

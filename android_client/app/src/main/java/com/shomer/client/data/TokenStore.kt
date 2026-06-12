@@ -91,28 +91,6 @@ class TokenStore @Inject constructor(
     }
 
     // -------------------------------------------------------------------------
-    // Parent-mode auth (parent token is separate from the child device token)
-    // -------------------------------------------------------------------------
-
-    /**
-     * Save the parent token returned by POST /v1/parent/register.
-     * The parent token is stored as the device token with role="parent"
-     * so AuthInterceptor picks it up automatically for all /v1/ calls.
-     */
-    fun saveParentToken(parentToken: String, parentId: String) {
-        prefs.edit()
-            .putString(KEY_DEVICE_TOKEN, parentToken)
-            .putString(KEY_CHILD_ID, parentId)   // parent_id stored in child_id slot
-            .putString(KEY_ROLE, ROLE_PARENT)
-            .apply()
-    }
-
-    fun getParentId(): String? {
-        // parent_id is stored in the KEY_CHILD_ID slot for parent role devices
-        return if (getRole() == ROLE_PARENT) prefs.getString(KEY_CHILD_ID, null) else null
-    }
-
-    // -------------------------------------------------------------------------
     // Consent flag (written after ConsentScreen)
     // -------------------------------------------------------------------------
 
@@ -131,6 +109,5 @@ class TokenStore @Inject constructor(
         private const val KEY_CONSENTED = "consented"
 
         const val ROLE_CHILD = "child"
-        const val ROLE_PARENT = "parent"
     }
 }

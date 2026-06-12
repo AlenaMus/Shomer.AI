@@ -1,26 +1,35 @@
 # Android Client — Low-Level Design (Real Monitoring App)
 
-**Status:** design (build = backlog task "Android child-capture + parent-mode").
+**Status:** CHILD-MODE ONLY (2026-06-12). Parent-mode UI removed per D-CO-1.
 **Supersedes:** the POC client (`com.dima.offensivehebrew`: MainActivity + Classify/Settings
 screens + Retrofit `ApiService`). The POC's networking/settings layer is *reused*; the capture
-engine + parent surface are net-new.
+engine is the real implementation.
 **Contract source of truth:** `server/app/schemas.py` (`MonitorEvent`/`MonitorBatch*`),
 `server/app/monitor/router.py` (`POST /v1/monitor/events`), `server/app/identity/router.py`
-(pairing), and the parent API (S4). Decisions: `plan-docs/decisions/{monitor-architecture,
-privacy,parent-surface}.decision.md`. Plan: `~/.claude/plans/linked-yawning-sifakis.md`.
+(pairing). Decision: `plan-docs/decisions/child-only-and-email-alerts.decision.md` (D-CO-1).
+Plan: `~/.claude/plans/linked-yawning-sifakis.md`.
+
+> **Child-only architectural note (2026-06-12):** The Android client is now exclusively
+> the child's monitoring device. Parents use the web dashboard (`dashboard/index.html`)
+> and receive email notifications. The role-chooser screen, all parent-mode UI
+> (AlertListScreen, AlertDetailScreen, DigestScreen, ParentAuthScreen), the ParentApi
+> Retrofit interface, and the ShomerFcmService have been removed. The `parent/` package
+> directory is gone. POST_NOTIFICATIONS permission is KEPT — it is required for the
+> non-dismissible foreground-service monitoring indicator on Android 13+, which is
+> child-side infrastructure. The parent alert notification channels (shomer.alerts.*) have
+> been removed from ShomerApplication; only CHANNEL_MONITORING remains.
 
 ---
 
 ## 1. Purpose & scope
 
-A single Android app, **two runtime roles chosen at pairing**, separate installs:
+A single Android app installed on the **child's device only**. Parents use the web dashboard
+(`dashboard/index.html`) and receive email notifications (D-CO-1).
 
 - **child-mode** — passively reads Hebrew text shown *inside other apps* (WhatsApp, Instagram,
   Telegram, Messenger, social posts/comments), pre-filters on-device, batches, and uploads to the
   server for bullying/offensive classification. Monitors **inbound + outbound** (text the child
   receives *and* sends). Runs a non-dismissible "monitoring active" indicator.
-- **parent-mode** — receives the **once-a-day digest** (FCM), reviews flagged + borderline events,
-  and reacts (acknowledge · label offensive/not · severity). Mirrors the web dashboard, same API.
 
 Package rename `com.dima.offensivehebrew` → **`com.shomer.client`** (requires APK uninstall — POC
 and client cannot coexist under the same `applicationId` without product flavors).

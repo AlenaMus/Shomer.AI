@@ -92,3 +92,4 @@ gaps.md
 # Gmail OAuth secrets — never commit
 gmail_credentials/
 *token.json
+.~lock.*#

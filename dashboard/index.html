@@ -10,8 +10,13 @@
   /dashboard/ (same origin as the API) or opened as file:// with a base-URL override.
 
   API surface (Bearer parent token unless noted):
-    POST /v1/parent/login            {username,password}                (no auth)
-    POST /v1/parent/register         {display_name,username,password}   (no auth)
+    POST /v1/parent/login            {email,password}                              (no auth)
+    POST /v1/parent/register         {display_name,email,password,child_name?}     (no auth)
+                                     -> 201 may include child_id + pairing_code
+                                        (+ pairing_expires_in_s); the code is ALSO
+                                        emailed to the parent by the server
+    POST /v1/parent/children         {display_name}        -> 201 {child_id,...}
+    POST /v1/parent/pairing-code     {child_id}            -> {code, ...} (also emailed)
     GET  /v1/parent/children
     GET  /v1/parent/alerts?child_id&status&include_acked&limit
     GET  /v1/parent/alerts/{flag_id}
@@ -125,6 +130,38 @@
   }
   .login-foot a { color: var(--faint); cursor: pointer; text-decoration: none; }
   .login-foot a:hover { color: var(--muted); text-decoration: underline; }
+  .auth-error a { color: var(--accent); cursor: pointer; font-weight: 700; text-decoration: none; }
+  .auth-error a:hover { text-decoration: underline; }
+
+  /* ---------- onboarding / pairing ---------- */
+  #view-pairing {
+    min-height: 100vh; min-height: 100dvh;
+    display: none; align-items: center; justify-content: center; padding: 24px;
+  }
+  #view-pairing.show { display: flex; }
+  .pair-card { width: min(480px, 100%); }
+  .pair-success {
+    display: flex; align-items: center; gap: 9px; justify-content: center;
+    color: var(--ok); font-weight: 800; font-size: 17px; margin: 2px 0 10px;
+  }
+  .pair-lead { text-align: center; color: var(--muted); font-size: 14px; margin: 0 0 16px; line-height: 1.6; }
+  .pair-lead b { color: var(--ink); }
+  .pair-code {
+    direction: ltr; text-align: center; font-family: Consolas, "Courier New", monospace;
+    font-size: 34px; font-weight: 800; letter-spacing: .35em; text-indent: .35em;
+    color: var(--accent-strong); background: var(--surface-3);
+    border: 1px dashed rgba(52, 195, 177, .55); border-radius: var(--radius-sm);
+    padding: 16px 12px; user-select: all;
+  }
+  .pair-copy-row { display: flex; justify-content: center; margin-top: 10px; }
+  .pair-expiry { text-align: center; font-size: 12.5px; color: var(--faint); margin-top: 8px; min-height: 18px; }
+  .pair-steps {
+    margin: 16px 0 2px; padding: 13px 16px; background: var(--surface-3);
+    border: 1px solid var(--line-soft); border-radius: var(--radius-sm);
+  }
+  .pair-steps .ttl { font-weight: 700; font-size: 13.5px; margin-bottom: 8px; }
+  .pair-steps ol { margin: 0; padding-inline-start: 20px; font-size: 13.5px; color: var(--muted); display: grid; gap: 6px; }
+  .pair-continue { width: 100%; margin-top: 18px; padding: 12px; font-size: 15px; }
 
   /* ---------- app shell ---------- */
   #view-app { display: none; min-height: 100vh; }
@@ -161,6 +198,9 @@
   .menu button:hover { background: var(--surface-2); }
   .menu button.danger { color: var(--danger); }
   .menu .sep { height: 1px; background: var(--line-soft); margin: 5px 4px; }
+  .menu .menu-id { padding: 9px 12px 7px; }
+  .menu .menu-id .mname { font-weight: 700; font-size: 14px; }
+  .menu .menu-id .memail { font-size: 12px; color: var(--muted); direction: ltr; text-align: end; overflow: hidden; text-overflow: ellipsis; }
 
   /* child selector bar */
   .childbar {
@@ -176,6 +216,8 @@
   }
   .chip-btn:hover { color: var(--ink); border-color: #2e4254; }
   .chip-btn.selected { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .chip-btn.add { border-style: dashed; color: var(--accent); border-color: rgba(52, 195, 177, .45); background: transparent; }
+  .chip-btn.add:hover { background: var(--accent-dim); color: var(--accent-strong); }
   .context-line { font-size: 13px; color: var(--muted); margin-inline-start: auto; }
   .context-line b { color: var(--ink); font-weight: 700; }
 
@@ -207,6 +249,7 @@
   .empty svg { display: block; margin: 0 auto 14px; opacity: .75; }
   .empty h3 { margin: 0 0 6px; color: var(--ink); font-size: 17px; }
   .empty p { margin: 0; font-size: 14px; }
+  .empty button { margin-top: 16px; }
 
   /* skeleton loading */
   @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
@@ -297,11 +340,14 @@
       <label class="fld" id="nameFld" style="display:none">שם תצוגה
         <input id="inName" autocomplete="name" placeholder="למשל: דנה כהן" />
       </label>
-      <label class="fld">שם משתמש
-        <input id="inUser" autocomplete="username" dir="ltr" style="text-align:left" placeholder="username" />
+      <label class="fld">אימייל
+        <input id="inEmail" type="email" inputmode="email" autocomplete="email" dir="ltr" style="text-align:left" placeholder="parent@example.com" />
       </label>
       <label class="fld">סיסמה
         <input id="inPass" type="password" autocomplete="current-password" dir="ltr" style="text-align:left" placeholder="••••••••" />
+      </label>
+      <label class="fld" id="childFld" style="display:none">שם הילד/ה
+        <input id="inChild" autocomplete="off" placeholder="למשל: יואב" />
       </label>
       <button type="submit" id="authSubmit">התחברות</button>
     </form>
@@ -315,6 +361,11 @@
       <a id="loginAdvanced" role="button" tabindex="0">הגדרות חיבור</a>
     </div>
   </div>
+</div>
+
+<!-- ====================== ONBOARDING (post-register pairing step) ====================== -->
+<div id="view-pairing">
+  <div class="card login-card pair-card" id="pairOnboardCard"></div>
 </div>
 
 <!-- ====================== APP ====================== -->
@@ -339,6 +390,11 @@
         <span class="uname" id="userName"></span>
       </button>
       <div class="menu" id="userMenu" role="menu">
+        <div class="menu-id">
+          <div class="mname" id="menuName"></div>
+          <div class="memail" id="menuEmail" dir="ltr"></div>
+        </div>
+        <div class="sep"></div>
         <button id="menuSettings" role="menuitem">הגדרות חיבור מתקדמות</button>
         <div class="sep"></div>
         <button class="danger" id="menuLogout" role="menuitem">התנתקות</button>
@@ -349,6 +405,8 @@
   <div class="childbar" id="childBar">
     <span class="lbl">ילד:</span>
     <div class="chips" id="childChips"><div class="skel sm"></div></div>
+    <button class="chip-btn add" id="addChildBtn" style="display:none">+ הוסף ילד/ה</button>
+    <button class="subtle" id="pairCodeBtn" style="display:none" title="הפקת קוד התאמה חדש לילד הנבחר">קוד התאמה</button>
     <span class="context-line" id="contextLine"></span>
   </div>
 
@@ -420,6 +478,11 @@
   </div>
 </div>
 
+<!-- ====================== PAIRING MODAL (in-app: add child / regenerate code) ====================== -->
+<div class="overlay" id="pairOverlay">
+  <div class="card modal" id="pairModal" style="width:min(480px,100%)"></div>
+</div>
+
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -458,6 +521,8 @@ const store = {
   set parentId(v) { v ? localStorage.setItem("shomer.parent_id", v) : localStorage.removeItem("shomer.parent_id"); },
   get parentName() { return localStorage.getItem("shomer.parent_name") || ""; },
   set parentName(v) { v ? localStorage.setItem("shomer.parent_name", v) : localStorage.removeItem("shomer.parent_name"); },
+  get email() { return localStorage.getItem("shomer.email") || ""; },
+  set email(v) { v ? localStorage.setItem("shomer.email", v) : localStorage.removeItem("shomer.email"); },
   childKey() { return "shomer.child." + (this.parentId || "anon"); },
   get childId() { return localStorage.getItem(this.childKey()) || ""; },
   set childId(v) { v ? localStorage.setItem(this.childKey(), v) : localStorage.removeItem(this.childKey()); },
@@ -527,15 +592,19 @@ async function api(path, opts = {}) {
 }
 
 /* ============================== auth ============================== */
-function authError(msg) {
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/; // mirrors the server-side regex
+
+function authError(msg, isHtml) {
   const el = $("authError");
   if (!msg) { el.classList.remove("show"); el.textContent = ""; return; }
-  el.textContent = msg; el.classList.add("show");
+  if (isHtml) el.innerHTML = msg; else el.textContent = msg;
+  el.classList.add("show");
 }
 
 function setRegisterMode(reg) {
   registerMode = reg;
   $("nameFld").style.display = reg ? "" : "none";
+  $("childFld").style.display = reg ? "" : "none";
   $("authSubmit").textContent = reg ? "הרשמה" : "התחברות";
   $("authToggleLine").innerHTML = reg
     ? `כבר יש לך חשבון? <a id="authToggle" role="button" tabindex="0">התחברות</a>`
@@ -548,17 +617,16 @@ function setRegisterMode(reg) {
 async function submitAuth(e) {
   e.preventDefault();
   authError("");
-  const username = $("inUser").value.trim();
+  const email = $("inEmail").value.trim();
   const password = $("inPass").value;
   const displayName = $("inName").value.trim();
+  const childNameVal = $("inChild").value.trim();
 
-  if (!username || !password) { authError("יש למלא שם משתמש וסיסמה"); return; }
+  if (!email || !password) { authError("יש למלא אימייל וסיסמה"); return; }
+  if (!EMAIL_RE.test(email)) { authError("כתובת האימייל אינה תקינה"); return; }
   if (registerMode) {
     if (!displayName) { authError("יש למלא שם תצוגה"); return; }
-    if (!/^[a-z0-9._-]{3,32}$/.test(username)) {
-      authError("שם משתמש: 3–32 תווים — אותיות לטיניות קטנות, ספרות, נקודה, מקף או קו תחתון");
-      return;
-    }
+    if (!childNameVal) { authError("יש למלא את שם הילד/ה — ניצור עבורו/ה קוד התאמה"); return; }
     if (password.length < 8) { authError("הסיסמה חייבת להכיל לפחות 8 תווים"); return; }
   }
 
@@ -567,8 +635,8 @@ async function submitAuth(e) {
   try {
     const path = registerMode ? "/v1/parent/register" : "/v1/parent/login";
     const body = registerMode
-      ? { display_name: displayName, username, password }
-      : { username, password };
+      ? { display_name: displayName, email, password, child_name: childNameVal }
+      : { email, password };
     let res;
     try {
       res = await fetch(store.base + path, {
@@ -580,40 +648,249 @@ async function submitAuth(e) {
       authError("אין חיבור לשרת — בדקו את כתובת השרת (הגדרות חיבור)");
       return;
     }
-    if (res.status === 401) { authError("שם משתמש או סיסמה שגויים"); return; }
-    if (res.status === 409) { authError("שם המשתמש כבר תפוס — בחרו שם אחר"); return; }
-    if (res.status === 422) { authError("קלט לא תקין — בדקו את שם המשתמש והסיסמה"); return; }
+    if (res.status === 401) { authError("אימייל או סיסמה שגויים"); return; }
+    if (res.status === 409) {
+      authError(`האימייל כבר רשום במערכת — <a id="goLogin" role="button" tabindex="0">להתחברות</a>`, true);
+      $("goLogin").addEventListener("click", () => {
+        setRegisterMode(false); // email field keeps its value → prefilled for login
+        $("inPass").value = "";
+        $("inPass").focus();
+      });
+      return;
+    }
+    if (res.status === 422) { authError("קלט לא תקין — בדקו את כתובת האימייל ושהסיסמה באורך 8 תווים לפחות"); return; }
     if (!res.ok) { authError("שגיאת שרת (" + res.status + ") — נסו שוב"); return; }
     const data = await res.json();
     if (!data.parent_token) { authError("תגובת שרת לא צפויה"); return; }
     store.token = data.parent_token;
     store.parentId = data.parent_id || "";
-    store.parentName = data.display_name || displayName || username;
+    store.parentName = data.display_name || displayName || email;
+    store.email = data.email || email;
     $("inPass").value = "";
-    enterApp();
+    if (registerMode && (data.pairing_code || data.child_id)) {
+      showOnboarding(data, childNameVal);
+    } else {
+      enterApp();
+    }
   } finally {
     btn.disabled = false;
   }
 }
 
 function logout(msg) {
+  stopPairCountdown();
+  pairModalNewChildId = "";
   store.token = "";
   store.parentId = "";
   store.parentName = "";
+  store.email = "";
   children = []; currentChild = null;
   $("view-app").classList.remove("show");
+  $("view-pairing").classList.remove("show");
+  $("pairOverlay").classList.remove("show");
   $("view-login").style.display = "";
   setRegisterMode(false);
   if (msg) authError(msg);
 }
 
+/* ============================== pairing / onboarding ============================== */
+let pairTimerH = null;          // countdown interval handle
+let pairModalNewChildId = "";   // set when the in-app modal just created a child
+
+function stopPairCountdown() {
+  if (pairTimerH) { clearInterval(pairTimerH); pairTimerH = null; }
+}
+
+function startPairCountdown(seconds) {
+  stopPairCountdown();
+  const el = document.getElementById("pairExpiry");
+  let left = Math.floor(Number(seconds));
+  if (!el || !isFinite(left) || left <= 0) return;
+  const tick = () => {
+    if (left <= 0) {
+      el.textContent = "הקוד פג תוקף — ניתן להפיק קוד חדש בלחיצה על ״קוד התאמה״";
+      stopPairCountdown();
+      return;
+    }
+    const m = Math.floor(left / 60), s = left % 60;
+    el.textContent = `הקוד בתוקף עוד ${m}:${String(s).padStart(2, "0")} דקות`;
+    left--;
+  };
+  tick();
+  pairTimerH = setInterval(tick, 1000);
+}
+
+async function copyPairCode(code) {
+  try {
+    await navigator.clipboard.writeText(code);
+    toast("הקוד הועתק");
+  } catch {
+    // clipboard API unavailable (e.g. file:// / http LAN) — select the code for manual copy
+    const el = document.querySelector(".pair-code");
+    if (el && window.getSelection) {
+      const r = document.createRange();
+      r.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(r);
+    }
+    toast("העתיקו ידנית (Ctrl+C)");
+  }
+}
+
+// Shared pairing-instructions block (onboarding screen + in-app modal).
+function pairingBlockHTML(code, childDisplayName) {
+  const emailLine = store.email
+    ? `קוד התאמה נשלח לאימייל <b dir="ltr">${escapeHtml(store.email)}</b>`
+    : `קוד התאמה נשלח לאימייל הרשום בחשבון`;
+  const codeBox = code ? `
+    <div class="pair-code" dir="ltr" id="pairCodeText">${escapeHtml(code)}</div>
+    <div class="pair-copy-row"><button type="button" class="ghost" id="pairCopyBtn">העתקת הקוד</button></div>
+    <div class="pair-expiry" id="pairExpiry"></div>` : "";
+  return `
+    <p class="pair-lead">${emailLine}${code ? " — והוא מוצג גם כאן:" : "."}</p>
+    ${codeBox}
+    <div class="pair-steps">
+      <div class="ttl">חיבור המכשיר של ${escapeHtml(childDisplayName || "הילד/ה")}:</div>
+      <ol>
+        <li>התקינו ופתחו את אפליקציית <b>Shomer.AI</b> במכשיר של הילד/ה ובחרו ״מצב ילד״.</li>
+        <li>הזינו את קוד ההתאמה (מהמסך הזה או מהאימייל).</li>
+        <li>אשרו את הרשאת הניטור (שירות הנגישות) כשתתבקשו.</li>
+      </ol>
+    </div>`;
+}
+
+function wirePairingBlock(code, expiresS) {
+  const cp = document.getElementById("pairCopyBtn");
+  if (cp && code) cp.addEventListener("click", () => copyPairCode(code));
+  if (expiresS != null) startPairCountdown(expiresS);
+}
+
+// Post-register onboarding step (full-screen centered card).
+function showOnboarding(data, childDisplayName) {
+  stopPairCountdown();
+  $("view-login").style.display = "none";
+  $("view-app").classList.remove("show");
+  const card = $("pairOnboardCard");
+  card.innerHTML = `
+    <div class="logo" dir="ltr" aria-label="Shomer.AI" style="display:flex;justify-content:center;margin-bottom:10px">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2l8 3.1v5.7c0 5.1-3.4 9.4-8 11.2-4.6-1.8-8-6.1-8-11.2V5.1L12 2z" fill="rgba(52,195,177,.16)" stroke="#34c3b1" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M8.6 12.1l2.4 2.4 4.6-5" stroke="#43d6c4" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="word">Shomer<span class="ai">.AI</span></span>
+    </div>
+    <div class="pair-success">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="#51cf66" stroke-width="1.8"/>
+        <path d="M8 12.4l2.6 2.6L16 9.6" stroke="#51cf66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      החשבון נוצר בהצלחה!
+    </div>
+    ${pairingBlockHTML(data.pairing_code, childDisplayName)}
+    <button type="button" class="pair-continue" id="pairContinueBtn">המשך ללוח הבקרה</button>`;
+  wirePairingBlock(data.pairing_code, data.pairing_expires_in_s);
+  $("pairContinueBtn").addEventListener("click", () => {
+    stopPairCountdown();
+    if (data.child_id) store.childId = data.child_id; // auto-select the new child
+    $("view-pairing").classList.remove("show");
+    enterApp();
+  });
+  $("view-pairing").classList.add("show");
+  $("inName").value = "";
+  $("inChild").value = "";
+}
+
+/* ---- in-app pairing modal (add child / regenerate code) ---- */
+function openPairModal(html) {
+  $("pairModal").innerHTML = html;
+  $("pairOverlay").classList.add("show");
+}
+
+function closePairModal() {
+  if (!$("pairOverlay").classList.contains("show")) return;
+  stopPairCountdown();
+  $("pairOverlay").classList.remove("show");
+  if (pairModalNewChildId) {
+    store.childId = pairModalNewChildId; // loadChildren() restores + selects it
+    pairModalNewChildId = "";
+    loadChildren();
+  }
+}
+
+function openAddChild() {
+  pairModalNewChildId = "";
+  openPairModal(`
+    <h2>הוספת ילד/ה</h2>
+    <p class="hint" style="margin-top:2px">ניצור קוד התאמה ונשלח אותו גם לאימייל שלך —
+      מזינים אותו באפליקציית Shomer.AI במכשיר של הילד/ה.</p>
+    <form id="addChildForm" class="grid" style="margin-top:14px">
+      <label class="fld">שם הילד/ה
+        <input id="addChildName" autocomplete="off" placeholder="למשל: יואב" />
+      </label>
+      <div class="row">
+        <button type="submit">יצירת קוד התאמה</button>
+        <div style="flex:1"></div>
+        <button type="button" class="subtle" id="addChildCancel">ביטול</button>
+      </div>
+    </form>`);
+  $("addChildCancel").addEventListener("click", closePairModal);
+  $("addChildForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = $("addChildName").value.trim();
+    if (!name) { toast("יש למלא את שם הילד/ה"); return; }
+    openPairModal(`<div class="empty"><div class="spinner"></div></div>`);
+    let child;
+    try {
+      child = await (await api("/v1/parent/children", {
+        method: "POST", body: JSON.stringify({ display_name: name }),
+      })).json();
+    } catch { closePairModal(); return; } // toast shown by api()
+    pairModalNewChildId = child.child_id || "";
+    await showPairCodeFor({ child_id: child.child_id, display_name: child.display_name || name });
+  });
+  $("addChildName").focus();
+}
+
+// Request + display a pairing code for an existing child (also used right after add-child).
+async function showPairCodeFor(child) {
+  openPairModal(`<div class="empty"><div class="spinner"></div></div>`);
+  let data;
+  try {
+    data = await (await api("/v1/parent/pairing-code", {
+      method: "POST", body: JSON.stringify({ child_id: child.child_id }),
+    })).json();
+  } catch { closePairModal(); return; }
+  // defensive: only `code` is guaranteed; expiry field name may vary or be absent
+  const code = data.code || data.pairing_code || "";
+  const expires = data.pairing_expires_in_s ?? data.expires_in_s ?? data.expires_in ?? data.ttl_s ?? null;
+  openPairModal(`
+    <h2>קוד התאמה — ${escapeHtml(child.display_name || child.child_id)}</h2>
+    ${pairingBlockHTML(code, child.display_name)}
+    <div class="actions">
+      <div style="flex:1"></div>
+      <button class="subtle" id="pairModalClose">סגירה</button>
+    </div>`);
+  wirePairingBlock(code, expires);
+  $("pairModalClose").addEventListener("click", closePairModal);
+  toast("קוד ההתאמה נשלח גם לאימייל");
+}
+
+$("pairOverlay").addEventListener("click", e => { if (e.target.id === "pairOverlay") closePairModal(); });
+$("addChildBtn").addEventListener("click", openAddChild);
+$("pairCodeBtn").addEventListener("click", () => { if (currentChild) showPairCodeFor(currentChild); });
+
 /* ============================== app shell ============================== */
 async function enterApp() {
   $("view-login").style.display = "none";
+  $("view-pairing").classList.remove("show");
   $("view-app").classList.add("show");
   const name = store.parentName || "הורה";
   $("userName").textContent = name;
   $("userAvatar").textContent = name.trim().charAt(0).toUpperCase() || "?";
+  $("menuName").textContent = name;
+  $("menuEmail").textContent = store.email;
+  $("menuEmail").style.display = store.email ? "" : "none";
   switchTab("alerts", /*skipLoad*/ true);
   await loadChildren();
 }
@@ -621,22 +898,31 @@ async function enterApp() {
 async function loadChildren() {
   $("childChips").innerHTML = `<div class="skel sm"></div><div class="skel sm"></div>`;
   $("contextLine").innerHTML = "";
+  $("pairCodeBtn").style.display = "none";
   let data;
   try {
     data = await (await api("/v1/parent/children")).json();
   } catch {
     $("childChips").innerHTML = "";
+    $("addChildBtn").style.display = "none";
     renderNoChildState("לא ניתן לטעון את רשימת הילדים", "בדקו את החיבור לשרת ונסו לרענן.");
     return;
   }
   children = Array.isArray(data) ? data : (data.children || []);
+  $("addChildBtn").style.display = "";
 
   if (!children.length) {
+    currentChild = null;
     $("childChips").innerHTML = `<span class="muted" style="font-size:13.5px">עדיין לא חובר ילד</span>`;
-    renderNoChildState(
-      "עדיין לא חובר ילד לחשבון",
-      "החיבור מתבצע מאפליקציית Shomer.AI במכשיר של הילד: בוחרים ״מצב ילד״ ומזינים את קוד ההתאמה. לאחר ההתאמה הילד יופיע כאן אוטומטית."
-    );
+    $("alertList").innerHTML = `<div class="empty">${SHIELD_SVG}
+      <h3>עדיין לא חובר ילד לחשבון</h3>
+      <p>מוסיפים כאן ילד/ה ומקבלים קוד התאמה (נשלח גם לאימייל) —<br>
+         מזינים אותו באפליקציית Shomer.AI במכשיר של הילד/ה, והילד/ה יופיעו כאן אוטומטית.</p>
+      <button id="emptyAddChild">+ הוסף ילד/ה</button>
+    </div>`;
+    $("digestBody").innerHTML = "";
+    $("contextLine").innerHTML = "";
+    $("emptyAddChild").addEventListener("click", openAddChild);
     return;
   }
 
@@ -669,6 +955,7 @@ function renderChildChips() {
   }).join("");
   wrap.querySelectorAll("[data-child]").forEach(btn =>
     btn.addEventListener("click", () => selectChild(btn.dataset.child)));
+  $("pairCodeBtn").style.display = currentChild ? "" : "none";
   $("contextLine").innerHTML = currentChild
     ? `מציג נתונים עבור: <b>${escapeHtml(currentChild.display_name || currentChild.child_id)}</b>`
     : "";
@@ -939,7 +1226,7 @@ $("refreshBtn").addEventListener("click", () => {
 $("authForm").addEventListener("submit", submitAuth);
 $("loginAdvanced").addEventListener("click", openSettings);
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape") { closeModal(); closeSettings(); closeUserMenu(); }
+  if (e.key === "Escape") { closeModal(); closeSettings(); closeUserMenu(); closePairModal(); }
 });
 // keyboard activation for alert rows (role=button)
 document.addEventListener("keydown", e => {

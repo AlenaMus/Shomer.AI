@@ -82,7 +82,8 @@ _MIGRATE_FCM_TOKEN = """
 ALTER TABLE device_tokens ADD COLUMN fcm_token TEXT;
 """
 
-# Idempotent migrations: add username/password_hash to parents table + unique index.
+# Idempotent migrations: add username/password_hash to parents table (old column
+# kept for existing DBs — SQLite can't drop columns; harmless unused).
 _MIGRATE_USERNAME = """
 ALTER TABLE parents ADD COLUMN username TEXT;
 """
@@ -92,6 +93,15 @@ ALTER TABLE parents ADD COLUMN password_hash TEXT;
 _MIGRATE_USERNAME_INDEX = """
 CREATE UNIQUE INDEX IF NOT EXISTS idx_parents_username
     ON parents(username) WHERE username IS NOT NULL;
+"""
+
+# Idempotent migration: add email column (replaces username as the login identifier).
+_MIGRATE_EMAIL = """
+ALTER TABLE parents ADD COLUMN email TEXT;
+"""
+_MIGRATE_EMAIL_INDEX = """
+CREATE UNIQUE INDEX IF NOT EXISTS idx_parents_email
+    ON parents(email) WHERE email IS NOT NULL;
 """
 
 
@@ -154,7 +164,7 @@ class SqliteIdentityStore:
         except Exception:  # noqa: BLE001 — column already exists → ignore
             pass
 
-        # Idempotent migrations: username + password_hash + unique index.
+        # Idempotent migrations: username + password_hash + unique index (old schema).
         for _sql in (_MIGRATE_USERNAME, _MIGRATE_PASSWORD_HASH):
             try:
                 await self._conn.execute(_sql)
@@ -163,6 +173,20 @@ class SqliteIdentityStore:
                 pass
         try:
             await self._conn.execute(_MIGRATE_USERNAME_INDEX)
+            await self._conn.commit()
+        except Exception:  # noqa: BLE001 — index already exists → ignore
+            pass
+
+        # Idempotent migration: add email column + partial unique index.
+        # DBs that already have username stay valid — username column is left
+        # in place (SQLite cannot drop columns) but is no longer used.
+        try:
+            await self._conn.execute(_MIGRATE_EMAIL)
+            await self._conn.commit()
+        except Exception:  # noqa: BLE001 — column already exists → ignore
+            pass
+        try:
+            await self._conn.execute(_MIGRATE_EMAIL_INDEX)
             await self._conn.commit()
         except Exception:  # noqa: BLE001 — index already exists → ignore
             pass
@@ -186,27 +210,29 @@ class SqliteIdentityStore:
     async def register_parent(
         self,
         display_name: str = "",
-        username: str | None = None,
+        email: str | None = None,
         password: str | None = None,
     ) -> tuple[str, str]:
         parent_id = str(uuid.uuid4())
         token = secrets.token_urlsafe(32)
+        # Normalise email to lowercase before storage for case-insensitive lookup.
+        normalised_email = email.strip().lower() if email else None
         password_hash: str | None = hash_password(password) if password else None
         conn = self._conn_or_raise()
         async with self._write_lock:
             try:
                 await conn.execute(
-                    "INSERT INTO parents(parent_id, display_name, created_at, username, password_hash) VALUES(?,?,?,?,?)",
-                    (parent_id, display_name, time.time(), username, password_hash),
+                    "INSERT INTO parents(parent_id, display_name, created_at, email, password_hash) VALUES(?,?,?,?,?)",
+                    (parent_id, display_name, time.time(), normalised_email, password_hash),
                 )
             except Exception as exc:
-                # SQLite UNIQUE constraint violation on username — rollback + re-raise.
+                # SQLite UNIQUE constraint violation on email — rollback + re-raise.
                 if "UNIQUE" in str(exc).upper():
                     try:
                         await conn.rollback()
                     except Exception:  # noqa: BLE001
                         pass
-                    raise ValueError("username_taken") from exc
+                    raise ValueError("email_taken") from exc
                 raise
             await conn.execute(
                 "INSERT INTO parent_tokens(token, parent_id) VALUES(?,?)",
@@ -217,18 +243,19 @@ class SqliteIdentityStore:
             "identity.parent_registered",
             parent_id=parent_id,
             token_prefix=token[:8],
-            has_username=username is not None,
+            has_email=normalised_email is not None,
         )
         return parent_id, token
 
     async def authenticate_parent_credentials(
-        self, username: str, password: str
+        self, email: str, password: str
     ) -> "ParentAuth | None":
-        """Validate username + password; return ParentAuth or None."""
+        """Validate email + password; return ParentAuth or None."""
+        normalised_email = email.strip().lower() if email else ""
         conn = self._conn_or_raise()
         async with conn.execute(
-            "SELECT parent_id, display_name, password_hash FROM parents WHERE username=?",
-            (username,),
+            "SELECT parent_id, display_name, email, password_hash FROM parents WHERE email=?",
+            (normalised_email,),
         ) as cur:
             row = await cur.fetchone()
         if not row:
@@ -248,6 +275,7 @@ class SqliteIdentityStore:
             parent_id=row["parent_id"],
             parent_token=token_row["token"],
             display_name=row["display_name"],
+            email=row["email"],
         )
 
     async def authenticate_parent(self, token: str) -> DeviceContext | None:
@@ -414,6 +442,16 @@ class SqliteIdentityStore:
         ) as cur:
             row = await cur.fetchone()
         return row["parent_id"] if row else None
+
+    async def get_parent_email(self, parent_id: str) -> str | None:
+        """Return the stored email for a parent, or None."""
+        conn = self._conn_or_raise()
+        async with conn.execute(
+            "SELECT email FROM parents WHERE parent_id=?",
+            (parent_id,),
+        ) as cur:
+            row = await cur.fetchone()
+        return row["email"] if row else None
 
     # --- FCM token (S3) ----------------------------------------------------------
 

@@ -1,14 +1,16 @@
-"""Contract tests for username/password methods on IdentityStore.
+"""Contract tests for email/password methods on IdentityStore.
 
 Parametrized over InMemoryIdentityStore and SqliteIdentityStore — any adapter
 implementing the Protocol must pass every test here.
 
 Covers:
-  - register_parent with username+password → authenticate_parent_credentials → ParentAuth
+  - register_parent with email+password → authenticate_parent_credentials → ParentAuth
   - Wrong password → None
-  - Unknown username → None (same return as wrong password — no enumeration)
-  - Duplicate username → ValueError("username_taken") from both adapters
+  - Unknown email → None (same return as wrong password — no enumeration)
+  - Duplicate email → ValueError("email_taken") from both adapters
+  - Email is normalised to lowercase before store and compare
   - passwords.hash_password / verify_password unit tests
+  - get_parent_email helper: present after email register, absent for name-only
 
 Run from repo root:
     server\\.venv\\Scripts\\python.exe -m pytest server/tests/identity/test_parent_credentials_contract.py -q
@@ -83,7 +85,7 @@ def test_two_different_passwords_produce_different_hashes():
 
 
 # ---------------------------------------------------------------------------
-# authenticate_parent_credentials — happy path
+# authenticate_parent_credentials — happy path (email)
 # ---------------------------------------------------------------------------
 
 
@@ -91,14 +93,34 @@ def test_two_different_passwords_produce_different_hashes():
 async def test_authenticate_credentials_happy_path(store):
     parent_id, token = await store.register_parent(
         display_name="Test User",
-        username="testuser",
+        email="testuser@example.com",
         password="longpassword123",
     )
-    auth = await store.authenticate_parent_credentials("testuser", "longpassword123")
+    auth = await store.authenticate_parent_credentials("testuser@example.com", "longpassword123")
     assert auth is not None
     assert auth.parent_id == parent_id
     assert auth.parent_token == token
     assert auth.display_name == "Test User"
+    assert auth.email == "testuser@example.com"
+
+
+# ---------------------------------------------------------------------------
+# Email is normalised to lowercase before store and compare
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_email_case_insensitive_login(store):
+    """Registering with UPPER@EXAMPLE.COM should log in with lower@example.com."""
+    await store.register_parent(
+        display_name="CaseSensitive",
+        email="UPPER@EXAMPLE.COM",
+        password="password12345",
+    )
+    # Login with mixed case
+    auth = await store.authenticate_parent_credentials("upper@Example.com", "password12345")
+    assert auth is not None
+    assert auth.email == "upper@example.com"
 
 
 # ---------------------------------------------------------------------------
@@ -110,46 +132,62 @@ async def test_authenticate_credentials_happy_path(store):
 async def test_wrong_password_returns_none(store):
     await store.register_parent(
         display_name="Test User",
-        username="wrongpwuser",
+        email="wrongpw@example.com",
         password="correctpassword",
     )
-    auth = await store.authenticate_parent_credentials("wrongpwuser", "incorrectpassword")
+    auth = await store.authenticate_parent_credentials("wrongpw@example.com", "incorrectpassword")
     assert auth is None
 
 
 # ---------------------------------------------------------------------------
-# authenticate_parent_credentials — unknown username → None
+# authenticate_parent_credentials — unknown email → None
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.asyncio
-async def test_unknown_username_returns_none(store):
-    auth = await store.authenticate_parent_credentials("no.such.user", "anypassword")
+async def test_unknown_email_returns_none(store):
+    auth = await store.authenticate_parent_credentials("no.such@example.com", "anypassword")
     assert auth is None
 
 
 # ---------------------------------------------------------------------------
-# Duplicate username → ValueError("username_taken")
+# Duplicate email → ValueError("email_taken")
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.asyncio
-async def test_duplicate_username_raises(store):
+async def test_duplicate_email_raises(store):
     await store.register_parent(
         display_name="First",
-        username="duplicate.user",
+        email="duplicate@example.com",
         password="password123",
     )
-    with pytest.raises(ValueError, match="username_taken"):
+    with pytest.raises(ValueError, match="email_taken"):
         await store.register_parent(
             display_name="Second",
-            username="duplicate.user",
+            email="duplicate@example.com",
+            password="password456",
+        )
+
+
+@pytest.mark.asyncio
+async def test_duplicate_email_case_insensitive_raises(store):
+    """Registering the same email in different case should also raise email_taken."""
+    await store.register_parent(
+        display_name="First",
+        email="Dup@Example.COM",
+        password="password123",
+    )
+    with pytest.raises(ValueError, match="email_taken"):
+        await store.register_parent(
+            display_name="Second",
+            email="dup@example.com",
             password="password456",
         )
 
 
 # ---------------------------------------------------------------------------
-# register_parent without username+password still works (back-compat)
+# register_parent without email+password still works (back-compat)
 # ---------------------------------------------------------------------------
 
 
@@ -158,8 +196,8 @@ async def test_register_without_credentials_still_works(store):
     parent_id, token = await store.register_parent(display_name="Legacy")
     assert parent_id
     assert token
-    # authenticate_credentials with no username registered → None
-    auth = await store.authenticate_parent_credentials("legacy", "anything")
+    # authenticate_credentials with no email registered → None
+    auth = await store.authenticate_parent_credentials("legacy@example.com", "anything")
     assert auth is None
 
 
@@ -172,10 +210,33 @@ async def test_register_without_credentials_still_works(store):
 async def test_token_auth_still_works_after_credential_registration(store):
     parent_id, token = await store.register_parent(
         display_name="Alice",
-        username="alice.cred",
+        email="alice@example.com",
         password="alicepassword",
     )
     ctx = await store.authenticate_parent(token)
     assert ctx is not None
     assert ctx.parent_id == parent_id
     assert ctx.role == "parent"
+
+
+# ---------------------------------------------------------------------------
+# get_parent_email helper
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_get_parent_email_present(store):
+    parent_id, _ = await store.register_parent(
+        display_name="Emailer",
+        email="stored@example.com",
+        password="storedpass1",
+    )
+    email = await store.get_parent_email(parent_id)
+    assert email == "stored@example.com"
+
+
+@pytest.mark.asyncio
+async def test_get_parent_email_absent_for_name_only(store):
+    parent_id, _ = await store.register_parent(display_name="NoEmail")
+    email = await store.get_parent_email(parent_id)
+    assert email is None

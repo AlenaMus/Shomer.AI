@@ -58,17 +58,16 @@ network is touched in CI.
 
 from __future__ import annotations
 
-import base64
 import json
 import os
 import time
 from datetime import datetime, timezone
-from email.mime.text import MIMEText
 from typing import Awaitable, Callable
 
 import structlog
 
 from ..schemas import AlertRequest, AlertResult
+from .email_message import build_raw_message_base64url
 from .log_notifier import compute_alert_id
 from .metrics import (
     ALERT_QUEUE_DEPTH,
@@ -87,51 +86,18 @@ log = structlog.get_logger("shomer.alerts.gmail")
 # Signature: (to_address, raw_base64url) → gmail_message_id
 SendFn = Callable[[str, str], str]
 
-_SEVERITY_LABEL = {"low": "נמוכה", "medium": "בינונית", "high": "גבוהה", "critical": "קריטית"}
-_SEVERITY_ICON = {"low": "🟡", "medium": "🟠", "high": "🔴", "critical": "🚨"}
-
 # Scopes required to send email (gmail.modify is a superset of gmail.send).
 _SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
 
-def _build_mime_body(request: AlertRequest, ts: str) -> str:
-    """Return the Hebrew plain-text email body."""
-    icon = _SEVERITY_ICON.get(request.severity, "🔔")
-    sev_he = _SEVERITY_LABEL.get(request.severity, request.severity)
-    return (
-        f"Shomer.AI — התראת תוכן פוגעני\n"
-        f"{'─' * 40}\n\n"
-        f"{icon} רמת חומרה: {sev_he}\n"
-        f"קטגוריה: {request.label}\n"
-        f"ילד: {request.child_id}\n\n"
-        f"ציטוט:\n  \"{request.quote}\"\n\n"
-        f"הסבר:\n  {request.explanation}\n\n"
-        f"מקור: {request.source}\n"
-        f"זמן: {ts}\n"
-        f"מזהה מעקב: {request.trace_id}\n\n"
-        f"{'─' * 40}\n"
-        f"לפרטים נוספים, היכנסו ללוח המחוונים של Shomer.AI.\n"
-    )
-
-
 def _build_raw_message(to_address: str, from_address: str, request: AlertRequest) -> str:
-    """Build an RFC 822 MIME message and return it as a base64url string.
+    """Backward-compat wrapper — delegates to the shared email_message helper.
 
-    Gmail API requires the message to be base64url-encoded (standard base64
-    with +→- and /→_ substitution and no padding stripped — Python's
-    ``urlsafe_b64encode`` produces the correct variant).
+    Tests that import ``_build_raw_message`` directly continue to work unchanged.
+    New code should call ``build_raw_message_base64url`` from ``email_message``
+    directly.
     """
-    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    subject = f"Shomer.AI · התראה: {request.label}"
-    body = _build_mime_body(request, ts)
-
-    msg = MIMEText(body, "plain", "utf-8")
-    msg["To"] = to_address
-    msg["From"] = from_address
-    msg["Subject"] = subject
-
-    raw_bytes = msg.as_bytes()
-    return base64.urlsafe_b64encode(raw_bytes).decode("ascii")
+    return build_raw_message_base64url(to_address, from_address, request)
 
 
 class GmailApiNotifier:

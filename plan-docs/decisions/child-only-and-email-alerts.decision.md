@@ -82,3 +82,67 @@ changes — same port).
 7. `server/.env.example` updated with `GMAIL_CLIENT_JSON`, `GMAIL_TOKEN_JSON`, `ALERT_FROM`.
 
 **Implementation status (2026-06-12):** DONE. All new tests pass. `gmail_credentials/` is git-ignored.
+
+---
+
+## D-CO-2b — SMTP App-Password email (recommended active path, 2026-06-12)
+
+**Question:** The Gmail API path hit restricted-scope verification friction (Google
+requires OAuth consent-screen verification for apps that send email on behalf of
+users). What is the simpler alternative that still delivers email alerts?
+
+**Choice:** `SmtpEmailNotifier` — stdlib `smtplib` STARTTLS (or SSL) + a Gmail
+App Password. Selected with `ALERTS_CHANNEL=smtp`. This is now the **recommended
+and active** email path; `GmailApiNotifier` (`ALERTS_CHANNEL=email`) is kept in
+place but is the secondary path for users who have already completed OAuth setup.
+
+**Why:** No Google Cloud project. No OAuth consent screen. No redirect URIs.
+The user enables 2-Step Verification, generates a 16-char App Password in Google
+Account Security, and sets two env vars. Zero new Python dependencies (stdlib only).
+
+**Implementation:**
+- `server/app/alerts/email_message.py` — DRY shared message builder used by BOTH
+  notifiers: `build_alert_subject`, `build_alert_body`, `build_email_message`
+  (returns `email.message.EmailMessage` for SMTP), `build_raw_message_base64url`
+  (for Gmail API). The existing `_build_raw_message` in `gmail_notifier.py` is now
+  a backward-compat wrapper that delegates here.
+- `server/app/alerts/smtp_notifier.py` — `SmtpEmailNotifier` implementing
+  `NotificationChannel`. Blocking SMTP call in `asyncio.to_thread`. Supports
+  STARTTLS (default, port 587) and SSL (`SMTP_USE_SSL=true`, port 465).
+  Injectable `smtp_factory` for socket-free tests.
+- `main.py lifespan()`: `ALERTS_CHANNEL=smtp` selects `SmtpEmailNotifier`.
+  `_dispatch_alert` generalized to `isinstance(notifier, (GmailApiNotifier,
+  SmtpEmailNotifier))` so both email-type notifiers resolve child→parent→email.
+- Tests: `server/tests/alerts/test_smtp_notifier.py` (17 tests, no real network).
+- `server/.env.example` updated with `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`,
+  `SMTP_APP_PASSWORD`, `SMTP_USE_SSL` (commented Gmail App Password example).
+
+**Env vars required for live use:**
+```
+ALERTS_CHANNEL=smtp
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your.address@gmail.com
+SMTP_APP_PASSWORD=<16-char app password>
+ALERT_FROM=your.address@gmail.com   # optional; defaults to SMTP_USER
+```
+
+**One-line live smoke test (after server is running):**
+```powershell
+python -c "
+import asyncio, os, sys
+sys.path.insert(0, 'server')
+os.environ.update({'SMTP_HOST':'smtp.gmail.com','SMTP_PORT':'587','SMTP_USER':'YOUR_GMAIL@gmail.com','SMTP_APP_PASSWORD':'YOUR_APP_PW','ALERT_FROM':'YOUR_GMAIL@gmail.com'})
+from app.alerts import AlertSettings, SmtpEmailNotifier, NoOpAlertRateLimiter
+from app.schemas import AlertRequest
+n = SmtpEmailNotifier(AlertSettings(channel='smtp',max_retry_attempts=1,retry_base_seconds=0,rate_limit_max_alerts=10,rate_limit_window_seconds=60,queue_max_size=10), NoOpAlertRateLimiter())
+req = AlertRequest(child_id='test',message_id='smoke',label='abusive',severity='medium',explanation='smoke test',quote='test',source='manual',trace_id='smoke-001')
+r = asyncio.run(n.send_alert(req, to_email='RECIPIENT@example.com'))
+print('sent:', r.sent, '| error:', r.error)
+"
+```
+Replace `YOUR_GMAIL`, `YOUR_APP_PW`, `RECIPIENT` with real values before running.
+
+**Revisit:** if App Passwords are ever deprecated or the account requires federated
+SSO, the `GmailApiNotifier` (OAuth2) or a transactional-email service (SendGrid,
+SES) can be wired as a one-line `ALERTS_CHANNEL` swap.

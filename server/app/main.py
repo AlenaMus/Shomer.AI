@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import os
 import sys
 import time
 import uuid
@@ -443,6 +444,7 @@ async def lifespan(app: FastAPI):
         LocalRetryQueue,
         LogNotifier,
         NtfyNotifier,
+        SmtpEmailNotifier,
         StubNotifier,
     )
     from .audit_log import AuditSettings, RetentionSweeper, SqliteAuditStore
@@ -514,6 +516,16 @@ async def lifespan(app: FastAPI):
             alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
         )
         log.info("alerts_channel_email_selected")
+    elif _alert_channel == "smtp":
+        notifier = SmtpEmailNotifier(
+            alert_settings, rate_limiter, retry_queue, _alert_audit_recorder
+        )
+        log.info(
+            "alerts_channel_smtp_selected",
+            host=os.environ.get("SMTP_HOST", "smtp.gmail.com"),
+            port=os.environ.get("SMTP_PORT", "587"),
+            user=os.environ.get("SMTP_USER", "<not set>"),
+        )
     elif _alert_channel == "stub":
         notifier = StubNotifier()
     else:
@@ -734,12 +746,14 @@ async def _dispatch_alert(
     The notifier records the disposition to the audit store via its injected
     recorder, and never raises — we still guard defensively.
 
-    When the active notifier is ``GmailApiNotifier``, this function resolves
-    the parent email via identity → child_id → parent_id → email and passes
-    it as the ``to_email`` keyword argument.  If no email is registered, it
-    logs a warning and falls back to ``LogNotifier``-style log-only behaviour.
+    When the active notifier is any email-type notifier (``GmailApiNotifier``
+    or ``SmtpEmailNotifier``), this function resolves the parent email via
+    identity → child_id → parent_id → email and passes it as the ``to_email``
+    keyword argument.  If no email is registered, it logs a warning and
+    returns without sending.
     """
     from .alerts import GmailApiNotifier as _GmailApiNotifier
+    from .alerts import SmtpEmailNotifier as _SmtpEmailNotifier
 
     if ctx is not None:
         explanation, source = ctx.explanation, "context_agent"
@@ -759,8 +773,8 @@ async def _dispatch_alert(
     )
     try:
         notifier = request.app.state.notifier
-        if isinstance(notifier, _GmailApiNotifier):
-            # Resolve child → parent → email for the Gmail channel.
+        if isinstance(notifier, (_GmailApiNotifier, _SmtpEmailNotifier)):
+            # Resolve child → parent → email for any email-type channel.
             to_email: str | None = None
             if child_id:
                 try:

@@ -17,7 +17,7 @@ Reference: linked-yawning-sifakis.md §S2 "Identity & Auth".
 
 from __future__ import annotations
 
-from .protocol import ChildRecord, DeviceContext, IdentityStore, PairingCode
+from .protocol import ChildRecord, DeviceContext, IdentityStore, PairingCode, ParentAuth
 from .in_memory_adapter import InMemoryIdentityStore
 from .router import register_identity
 from .settings import IdentitySettings
@@ -29,6 +29,7 @@ __all__ = [
     "ChildRecord",
     "PairingCode",
     "DeviceContext",
+    "ParentAuth",
     # Concrete adapters + settings (composition root only)
     "SqliteIdentityStore",
     "InMemoryIdentityStore",

@@ -34,6 +34,15 @@ from ..schemas import HealthState
 
 
 @dataclass(frozen=True)
+class ParentAuth:
+    """Returned by ``authenticate_parent_credentials`` on success."""
+
+    parent_id: str
+    parent_token: str   # the existing opaque token (valid for all parent endpoints)
+    display_name: str
+
+
+@dataclass(frozen=True)
 class ChildRecord:
     """A registered child — server-minted opaque IDs, display name only."""
 
@@ -80,11 +89,33 @@ class IdentityStore(Protocol):
 
     # --- Parent ------------------------------------------------------------------
 
-    async def register_parent(self, display_name: str = "") -> tuple[str, str]:
+    async def register_parent(
+        self,
+        display_name: str = "",
+        username: str | None = None,
+        password: str | None = None,
+    ) -> tuple[str, str]:
         """Mint and store a parent record.
 
         Returns ``(parent_id, parent_token)`` — both opaque; parent_token is a
         long-lived credential for authenticating parent-role requests.
+
+        Optional ``username`` / ``password`` enable web-login for parents.
+        If ``username`` is given, ``password`` is required; the password is
+        stored as a PBKDF2 hash (see ``identity/passwords.py``).
+        Raises ``ValueError("username_taken")`` when the username already exists.
+        """
+        ...
+
+    async def authenticate_parent_credentials(
+        self, username: str, password: str
+    ) -> "ParentAuth | None":
+        """Validate username + password.
+
+        Returns a ``ParentAuth`` (parent_id, parent_token, display_name) on
+        success, or ``None`` if the username does not exist or the password is
+        wrong.  Uses ``hmac.compare_digest`` internally — the return is
+        deliberately the same ``None`` for both cases to prevent user enumeration.
         """
         ...
 

@@ -35,8 +35,12 @@ for _stream in (sys.stdout, sys.stderr):
 
 import structlog
 from dotenv import load_dotenv
+import pathlib
+
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 # Module Protocols (the only cross-module imports allowed outside lifespan()).
 from .alerts import NotificationChannel, derive_severity
@@ -636,6 +640,25 @@ register_monitor(app)
 register_identity(app)
 register_digest(app)
 register_parent_review(app)
+
+# ---------------------------------------------------------------------------
+# Dashboard: serve the static web UI at /dashboard/
+#
+# Resolved relative to this file (server/app/main.py → ../../dashboard).
+# The auth middleware DOES NOT block GET /dashboard* — static pages are public;
+# data API calls carry their own Bearer token.
+# ---------------------------------------------------------------------------
+
+_DASHBOARD_DIR = pathlib.Path(__file__).resolve().parents[2] / "dashboard"
+if _DASHBOARD_DIR.exists():
+    app.mount("/dashboard", StaticFiles(directory=str(_DASHBOARD_DIR), html=True), name="dashboard")
+    log.info("dashboard_mounted", path=str(_DASHBOARD_DIR))
+
+
+@app.get("/", include_in_schema=False)
+async def root_redirect() -> RedirectResponse:
+    """Redirect bare root to the dashboard."""
+    return RedirectResponse(url="/dashboard/", status_code=302)
 
 
 # ---------------------------------------------------------------------------

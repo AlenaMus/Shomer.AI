@@ -21,9 +21,11 @@ the IdentityStore port.
 
 from __future__ import annotations
 
+import re
+
 import structlog
 from fastapi import APIRouter, HTTPException, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 log = structlog.get_logger("shomer.identity.router")
 
@@ -35,13 +37,47 @@ router = APIRouter(prefix="/v1", tags=["identity"])
 # ---------------------------------------------------------------------------
 
 
+_USERNAME_RE = re.compile(r"^[a-z0-9._-]{3,32}$")
+
+
 class ParentRegisterRequest(BaseModel):
     display_name: str = Field(default="", max_length=128)
+    username: str | None = Field(default=None, min_length=3, max_length=32)
+    password: str | None = Field(default=None, min_length=8, max_length=256)
+
+    @field_validator("username")
+    @classmethod
+    def _username_format(cls, v: str | None) -> str | None:
+        if v is not None and not _USERNAME_RE.match(v):
+            raise ValueError(
+                "username must be 3-32 characters, lowercase letters/digits/._- only"
+            )
+        return v
+
+    @field_validator("password")
+    @classmethod
+    def _password_with_username(cls, v: str | None, info) -> str | None:
+        # If username is provided, password must also be provided.
+        # Cross-field validation: we check this in the router since pydantic
+        # validators run field-by-field; we keep this validator minimal.
+        return v
 
 
 class ParentRegisterResponse(BaseModel):
     parent_id: str
     parent_token: str   # opaque; treat as a secret — do NOT log
+    display_name: str = ""
+
+
+class ParentLoginRequest(BaseModel):
+    username: str = Field(..., min_length=1, max_length=32)
+    password: str = Field(..., min_length=1, max_length=256)
+
+
+class ParentLoginResponse(BaseModel):
+    parent_id: str
+    parent_token: str
+    display_name: str
 
 
 class IssueChildRequest(BaseModel):
@@ -131,18 +167,74 @@ async def register_parent(body: ParentRegisterRequest, request: Request) -> Pare
     """Mint a parent_id and a long-lived parent token.
 
     This endpoint is on the auth-middleware ALLOWLIST (no token required).
-    In the MVP, the returned ``parent_token`` is the only credential — store it
-    securely on the client side (e.g. Keychain / EncryptedSharedPreferences).
-    Production-grade email/password flows are out of MVP scope.
+    The returned ``parent_token`` is the opaque credential for all parent-authed
+    endpoints.  Optionally accepts ``username`` + ``password`` for web-login
+    (the dashboard); if ``username`` is given, ``password`` is also required.
+    Display-name-only registration (Android client) remains fully supported.
     """
+    # Cross-field validation: username requires password.
+    if body.username is not None and not body.password:
+        raise HTTPException(
+            status_code=422,
+            detail="password is required when username is provided",
+        )
+
     identity = request.app.state.identity
-    parent_id, token = await identity.register_parent(display_name=body.display_name)
+    try:
+        parent_id, token = await identity.register_parent(
+            display_name=body.display_name,
+            username=body.username,
+            password=body.password,
+        )
+    except ValueError as exc:
+        if "username_taken" in str(exc):
+            raise HTTPException(status_code=409, detail="username already taken")
+        raise
     log.info(
         "identity.parent_registered_endpoint",
         parent_id=parent_id,
         token_prefix=token[:8],
+        has_username=body.username is not None,
     )
-    return ParentRegisterResponse(parent_id=parent_id, parent_token=token)
+    return ParentRegisterResponse(
+        parent_id=parent_id,
+        parent_token=token,
+        display_name=body.display_name,
+    )
+
+
+@router.post(
+    "/parent/login",
+    response_model=ParentLoginResponse,
+    summary="Authenticate a parent with username + password",
+)
+async def login_parent(body: ParentLoginRequest, request: Request) -> ParentLoginResponse:
+    """Exchange username + password for the parent's opaque token.
+
+    Bad username OR bad password both return 401 with the same message to
+    prevent user enumeration.  The returned ``parent_token`` is identical to
+    the one returned at registration and works with all existing parent endpoints.
+
+    This endpoint is on the auth-middleware ALLOWLIST (it issues auth, so it
+    cannot require a token itself).
+    """
+    identity = request.app.state.identity
+    auth = await identity.authenticate_parent_credentials(
+        username=body.username,
+        password=body.password,
+    )
+    if auth is None:
+        raise HTTPException(status_code=401, detail="invalid username or password")
+    log.info(
+        "identity.parent_login_endpoint",
+        parent_id=auth.parent_id,
+        token_prefix=auth.parent_token[:8],
+    )
+    return ParentLoginResponse(
+        parent_id=auth.parent_id,
+        parent_token=auth.parent_token,
+        display_name=auth.display_name,
+    )
 
 
 @router.post(

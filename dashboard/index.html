@@ -6,179 +6,426 @@
 <title>Shomer.AI — לוח הורים</title>
 <!--
   Shomer.AI parent dashboard — the web parent surface (parent-surface.decision.md D1).
-  Self-contained: no build step, no framework. Open directly or have FastAPI serve it.
-  Reads the S4 parent API:
-    GET  /v1/parent/alerts?child_id&status&include_acked&limit   (Bearer parent token)
+  Self-contained: no build step, no framework, no external CDN. Served by FastAPI at
+  /dashboard/ (same origin as the API) or opened as file:// with a base-URL override.
+
+  API surface (Bearer parent token unless noted):
+    POST /v1/parent/login            {username,password}                (no auth)
+    POST /v1/parent/register         {display_name,username,password}   (no auth)
+    GET  /v1/parent/children
+    GET  /v1/parent/alerts?child_id&status&include_acked&limit
     GET  /v1/parent/alerts/{flag_id}
-    POST /v1/parent/alerts/{flag_id}/react  {action, label?, severity?}
-    GET  /v1/parent/digests/{date}?child_id
-  Config (base URL + parent token) persisted in localStorage. Hebrew RTL.
+    POST /v1/parent/alerts/{flag_id}/react   {action, label?, severity?}
+    GET  /v1/parent/digests/{date}?child_id   (404 = no digest that day)
+
+  Base URL: location.origin when served over http(s); localStorage override
+  ("shomer.base") wins when set — required for file:// usage.
 -->
 <style>
   :root {
-    --bg: #0f1419; --panel: #1a2129; --panel-2: #222c37; --line: #2d3a47;
-    --ink: #e6edf3; --muted: #8b9aa8; --accent: #4f9cf9; --accent-ink: #fff;
-    --crit: #ff5c5c; --high: #ff9f43; --med: #ffd43b; --low: #74c0fc;
-    --ok: #51cf66; --review: #c084fc; --radius: 12px;
-    --font: "Segoe UI", Arial, "Noto Sans Hebrew", sans-serif;
+    --bg: #0a0f15;
+    --surface: #121b25;
+    --surface-2: #18232f;
+    --surface-3: #0e151d;
+    --line: #223140;
+    --line-soft: #1b2733;
+    --ink: #e9eff5;
+    --muted: #8da2b5;
+    --faint: #5c7184;
+    --accent: #34c3b1;
+    --accent-strong: #43d6c4;
+    --accent-ink: #03201b;
+    --accent-dim: rgba(52, 195, 177, .14);
+    --crit: #ff6b6b; --high: #ffa94d; --med: #ffd43b; --low: #74c0fc;
+    --ok: #51cf66; --review: #c084fc; --danger: #ff6b6b;
+    --radius: 14px; --radius-sm: 10px;
+    --font: "Segoe UI Variable Text", "Segoe UI", "Noto Sans Hebrew", Arial, sans-serif;
+    --shadow: 0 12px 32px rgba(0, 0, 0, .38);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; }
-  header {
-    display: flex; align-items: center; gap: 12px; padding: 14px 20px;
-    background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
+  html, body { height: 100%; }
+  body {
+    margin: 0; color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5;
+    background:
+      radial-gradient(1100px 540px at 85% -12%, rgba(52, 195, 177, .075), transparent 60%),
+      radial-gradient(820px 480px at 8% 112%, rgba(79, 156, 249, .055), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
   }
-  header .logo { font-weight: 700; font-size: 20px; letter-spacing: .3px; }
-  header .logo span { color: var(--accent); }
-  header .spacer { flex: 1; }
-  .tabbar { display: flex; gap: 6px; }
-  .tab { padding: 7px 14px; border-radius: 999px; cursor: pointer; color: var(--muted); border: 1px solid transparent; }
-  .tab.active { background: var(--panel-2); color: var(--ink); border-color: var(--line); }
-  main { max-width: 1040px; margin: 0 auto; padding: 20px; }
-  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
-  label.fld { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
-  input, select {
-    background: var(--panel-2); color: var(--ink); border: 1px solid var(--line);
-    border-radius: 8px; padding: 8px 10px; font-family: var(--font); font-size: 14px; min-width: 140px;
+  ::selection { background: rgba(52, 195, 177, .30); }
+  :focus { outline: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  /* ---------- shared primitives ---------- */
+  .card {
+    background: linear-gradient(180deg, #141e29, #101924);
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; box-shadow: var(--shadow);
   }
   button {
-    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px;
-    padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font);
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: var(--radius-sm);
+    padding: 10px 18px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: var(--font);
+    transition: background .15s, transform .06s, box-shadow .15s;
   }
-  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  button.ghost:hover { background: var(--panel-2); }
-  button:disabled { opacity: .5; cursor: default; }
+  button:hover { background: var(--accent-strong); }
+  button:active { transform: scale(.98); }
+  button:disabled { opacity: .45; cursor: default; transform: none; }
+  button.ghost {
+    background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 600;
+  }
+  button.ghost:hover { background: var(--surface-2); border-color: #2e4254; }
+  button.subtle { background: transparent; color: var(--muted); border: 0; font-weight: 600; padding: 8px 10px; }
+  button.subtle:hover { color: var(--ink); background: var(--surface-2); }
+  input, select {
+    background: var(--surface-3); color: var(--ink); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 10px 12px; font-family: var(--font); font-size: 14px;
+    min-width: 0; width: 100%; transition: border-color .15s, box-shadow .15s;
+  }
+  input::placeholder { color: var(--faint); }
+  input:focus-visible, select:focus-visible {
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(52, 195, 177, .18);
+  }
+  label.fld { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .muted { color: var(--muted); }
-  .hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
-  .grid { display: grid; gap: 10px; margin-top: 16px; }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .grid { display: grid; gap: 10px; }
+
+  /* ---------- logo wordmark ---------- */
+  .logo { display: inline-flex; align-items: center; gap: 9px; user-select: none; }
+  .logo svg { flex: none; }
+  .logo .word {
+    font-weight: 800; letter-spacing: .2px; font-size: 20px;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: var(--ink);
+  }
+  .logo .word .ai { color: var(--accent); }
+  .logo.big .word { font-size: 30px; }
+
+  /* ---------- login screen ---------- */
+  #view-login {
+    min-height: 100vh; min-height: 100dvh;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  .login-card { width: min(400px, 100%); padding: 32px 30px 24px; }
+  .login-card .logo { display: flex; justify-content: center; margin-bottom: 6px; }
+  .login-tagline { text-align: center; color: var(--muted); font-size: 13.5px; margin: 0 0 24px; }
+  .login-form { display: grid; gap: 14px; }
+  .auth-error {
+    display: none; background: rgba(255, 107, 107, .10); border: 1px solid rgba(255, 107, 107, .35);
+    color: #ffb3b3; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13.5px;
+  }
+  .auth-error.show { display: block; }
+  .login-form button[type="submit"] { margin-top: 4px; padding: 12px; font-size: 15px; }
+  .login-alt { text-align: center; margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+  .login-alt a { color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+  .login-alt a:hover { text-decoration: underline; }
+  .login-foot {
+    margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line-soft);
+    display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: var(--faint);
+  }
+  .login-foot a { color: var(--faint); cursor: pointer; text-decoration: none; }
+  .login-foot a:hover { color: var(--muted); text-decoration: underline; }
+
+  /* ---------- app shell ---------- */
+  #view-app { display: none; min-height: 100vh; }
+  #view-app.show { display: block; }
+  header.appbar {
+    display: flex; align-items: center; gap: 14px; padding: 12px 22px;
+    background: rgba(14, 21, 29, .88); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; flex-wrap: wrap;
+  }
+  .tabbar { display: flex; gap: 4px; background: var(--surface-3); border: 1px solid var(--line-soft); border-radius: 999px; padding: 3px; }
+  .tab {
+    padding: 7px 16px; border-radius: 999px; cursor: pointer; color: var(--muted);
+    font-size: 14px; font-weight: 600; transition: color .15s, background .15s; border: 0; background: transparent;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { background: var(--surface-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+  header .spacer { flex: 1; }
+
+  /* user menu */
+  #userMenuWrap { position: relative; }
+  #userBtn { display: inline-flex; align-items: center; gap: 8px; max-width: 220px; }
+  #userBtn .avatar {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--accent-dim); color: var(--accent);
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex: none;
+  }
+  #userBtn .uname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .menu {
+    position: absolute; top: calc(100% + 8px); inset-inline-end: 0; min-width: 200px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    box-shadow: var(--shadow); padding: 6px; display: none; z-index: 20;
+  }
+  .menu.open { display: block; }
+  .menu button { display: block; width: 100%; text-align: start; background: transparent; color: var(--ink); font-weight: 500; padding: 9px 12px; border-radius: 8px; }
+  .menu button:hover { background: var(--surface-2); }
+  .menu button.danger { color: var(--danger); }
+  .menu .sep { height: 1px; background: var(--line-soft); margin: 5px 4px; }
+
+  /* child selector bar */
+  .childbar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    max-width: 1040px; margin: 0 auto; padding: 16px 22px 0;
+  }
+  .childbar .lbl { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip-btn {
+    padding: 7px 16px; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 600;
+    background: var(--surface-3); color: var(--muted); border: 1px solid var(--line);
+    transition: all .15s;
+  }
+  .chip-btn:hover { color: var(--ink); border-color: #2e4254; }
+  .chip-btn.selected { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .context-line { font-size: 13px; color: var(--muted); margin-inline-start: auto; }
+  .context-line b { color: var(--ink); font-weight: 700; }
+
+  main { max-width: 1040px; margin: 0 auto; padding: 18px 22px 48px; }
+
+  /* ---------- alerts ---------- */
   .alert {
     display: grid; grid-template-columns: 6px 1fr auto; gap: 14px; align-items: center;
-    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 0; overflow: hidden; cursor: pointer; transition: border-color .15s;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 0; overflow: hidden; cursor: pointer;
+    transition: border-color .15s, transform .12s, box-shadow .15s;
   }
-  .alert:hover { border-color: var(--accent); }
-  .alert .bar { width: 6px; height: 100%; min-height: 64px; }
-  .alert .body { padding: 12px 0; min-width: 0; }
-  .alert .meta { padding: 12px 14px; text-align: left; white-space: nowrap; }
-  .alert .quote { font-size: 15px; margin: 0 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .alert .sub { font-size: 12px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
-  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-  .chip.crit { background: rgba(255,92,92,.16); color: var(--crit); }
-  .chip.high { background: rgba(255,159,67,.16); color: var(--high); }
-  .chip.med  { background: rgba(255,212,59,.15); color: var(--med); }
-  .chip.low  { background: rgba(116,192,252,.15); color: var(--low); }
-  .chip.review { background: rgba(192,132,252,.16); color: var(--review); }
-  .chip.ack { background: rgba(81,207,102,.15); color: var(--ok); }
-  .chip.label { background: rgba(79,156,249,.16); color: var(--accent); }
-  .empty { text-align: center; color: var(--muted); padding: 48px 0; }
-  /* modal */
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 20; }
+  .alert:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.30); }
+  .alert .bar { width: 6px; height: 100%; min-height: 66px; }
+  .alert .body { padding: 13px 0; min-width: 0; }
+  .alert .meta { padding: 13px 16px; text-align: left; white-space: nowrap; font-size: 13px; }
+  .alert .quote { font-size: 15px; margin: 0 0 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .alert .sub { font-size: 12px; color: var(--muted); display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+  .chip { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--surface-2); color: var(--muted); }
+  .chip.crit { background: rgba(255,107,107,.15); color: var(--crit); }
+  .chip.high { background: rgba(255,169,77,.15); color: var(--high); }
+  .chip.med  { background: rgba(255,212,59,.13); color: var(--med); }
+  .chip.low  { background: rgba(116,192,252,.14); color: var(--low); }
+  .chip.review { background: rgba(192,132,252,.15); color: var(--review); }
+  .chip.ack { background: rgba(81,207,102,.14); color: var(--ok); }
+  .chip.label { background: var(--accent-dim); color: var(--accent); }
+
+  .empty { text-align: center; color: var(--muted); padding: 52px 16px; }
+  .empty svg { display: block; margin: 0 auto 14px; opacity: .75; }
+  .empty h3 { margin: 0 0 6px; color: var(--ink); font-size: 17px; }
+  .empty p { margin: 0; font-size: 14px; }
+
+  /* skeleton loading */
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  .skel {
+    border-radius: var(--radius); height: 66px; border: 1px solid var(--line-soft);
+    background: linear-gradient(90deg, #131d28 25%, #1a2632 37%, #131d28 63%);
+    background-size: 200% 100%; animation: shimmer 1.4s linear infinite;
+  }
+  .skel.sm { height: 34px; width: 130px; border-radius: 999px; }
+  @media (prefers-reduced-motion: reduce) {
+    .skel { animation: none; }
+    .alert, button, .chip-btn { transition: none; }
+  }
+  .spinner {
+    width: 26px; height: 26px; margin: 0 auto; border-radius: 50%;
+    border: 3px solid var(--line); border-top-color: var(--accent);
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- modal ---------- */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(4, 8, 12, .62); backdrop-filter: blur(3px);
+    display: none; align-items: center; justify-content: center; z-index: 30; padding: 16px;
+  }
   .overlay.show { display: flex; }
-  .modal { width: min(560px, 94vw); max-height: 88vh; overflow: auto; }
-  .modal h2 { margin: 0 0 4px; font-size: 18px; }
-  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 14px; margin: 14px 0; }
+  .modal { width: min(580px, 100%); max-height: 88vh; overflow: auto; }
+  .modal h2 { margin: 0 0 6px; font-size: 18px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 7px 16px; font-size: 14px; margin: 14px 0; }
   .kv .k { color: var(--muted); }
-  .bigquote { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; font-size: 16px; line-height: 1.5; }
-  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
-  .toast {
-    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
-    background: var(--panel-2); border: 1px solid var(--line); color: var(--ink);
-    padding: 10px 18px; border-radius: 10px; opacity: 0; transition: opacity .25s; z-index: 30;
+  .bigquote {
+    background: var(--surface-3); border: 1px solid var(--line); border-inline-start: 3px solid var(--accent);
+    border-radius: var(--radius-sm); padding: 13px 15px; font-size: 16px; line-height: 1.55;
   }
-  .toast.show { opacity: 1; }
+  .ca-panel {
+    margin-top: 14px; padding: 12px 14px; border: 1px solid #44396b; border-radius: var(--radius-sm);
+    background: rgba(120, 90, 200, .09);
+  }
+  .ca-panel .ttl { font-weight: 700; margin-bottom: 6px; color: var(--review); display: flex; align-items: center; gap: 7px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
+  .actions select { width: auto; }
+
+  /* ---------- digest ---------- */
   .digest-stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
-  .stat { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; min-width: 120px; }
-  .stat .n { font-size: 26px; font-weight: 700; }
+  .stat { background: var(--surface-3); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 120px; flex: 1; }
+  .stat .n { font-size: 27px; font-weight: 800; line-height: 1.2; }
   .stat .l { font-size: 12px; color: var(--muted); }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px);
+    background: var(--surface-2); border: 1px solid var(--line); color: var(--ink);
+    padding: 11px 20px; border-radius: 12px; box-shadow: var(--shadow);
+    opacity: 0; pointer-events: none; transition: opacity .22s, transform .22s; z-index: 50; font-size: 14px;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 720px) {
+    header.appbar { padding: 10px 14px; gap: 10px; }
+    .childbar, main { padding-inline: 14px; }
+    .context-line { margin-inline-start: 0; width: 100%; }
+    .alert { grid-template-columns: 5px 1fr; }
+    .alert .meta { grid-column: 2; padding: 0 0 12px; text-align: start; }
+    .alert .quote { white-space: normal; }
+    .kv { grid-template-columns: 1fr; gap: 2px; }
+    .kv .k { margin-top: 8px; }
+    #userBtn .uname { display: none; }
+  }
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">שומר<span>.AI</span></div>
-  <div class="tabbar">
-    <div class="tab active" data-tab="alerts">התראות</div>
-    <div class="tab" data-tab="digest">סיכום יומי</div>
-    <div class="tab" data-tab="settings">הגדרות</div>
+
+<!-- ====================== LOGIN ====================== -->
+<div id="view-login">
+  <div class="card login-card">
+    <div class="logo big" dir="ltr" aria-label="Shomer.AI">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2l8 3.1v5.7c0 5.1-3.4 9.4-8 11.2-4.6-1.8-8-6.1-8-11.2V5.1L12 2z" fill="rgba(52,195,177,.16)" stroke="#34c3b1" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M8.6 12.1l2.4 2.4 4.6-5" stroke="#43d6c4" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="word">Shomer<span class="ai">.AI</span></span>
+    </div>
+    <p class="login-tagline">לוח ההורים — מעקב בטיחות ברשת לילדים</p>
+
+    <form class="login-form" id="authForm" novalidate>
+      <div class="auth-error" id="authError" role="alert"></div>
+      <label class="fld" id="nameFld" style="display:none">שם תצוגה
+        <input id="inName" autocomplete="name" placeholder="למשל: דנה כהן" />
+      </label>
+      <label class="fld">שם משתמש
+        <input id="inUser" autocomplete="username" dir="ltr" style="text-align:left" placeholder="username" />
+      </label>
+      <label class="fld">סיסמה
+        <input id="inPass" type="password" autocomplete="current-password" dir="ltr" style="text-align:left" placeholder="••••••••" />
+      </label>
+      <button type="submit" id="authSubmit">התחברות</button>
+    </form>
+
+    <div class="login-alt" id="authToggleLine">
+      אין לך חשבון? <a id="authToggle" role="button" tabindex="0">הרשמה</a>
+    </div>
+
+    <div class="login-foot">
+      <span>Shomer.AI · MVP</span>
+      <a id="loginAdvanced" role="button" tabindex="0">הגדרות חיבור</a>
+    </div>
   </div>
-  <div class="spacer"></div>
-  <button class="ghost" id="refreshBtn">רענון</button>
-</header>
+</div>
 
-<main>
-  <!-- ALERTS -->
-  <section id="tab-alerts">
-    <div class="card">
-      <div class="row">
-        <label class="fld">סטטוס
-          <select id="fStatus">
-            <option value="">הכול</option>
-            <option value="review_needed">לבדיקה (גבולי)</option>
-            <option value="alerted">התראה</option>
-            <option value="acknowledged">טופל</option>
-            <option value="labeled">סומן</option>
-          </select>
-        </label>
-        <label class="fld">מזהה ילד (אופציונלי)
-          <input id="fChild" placeholder="כל הילדים" />
-        </label>
-        <label class="fld">כולל שטופלו
-          <select id="fAcked"><option value="false">לא</option><option value="true">כן</option></select>
-        </label>
-        <label class="fld">&nbsp;<button id="applyFilters">סינון</button></label>
+<!-- ====================== APP ====================== -->
+<div id="view-app">
+  <header class="appbar">
+    <div class="logo" dir="ltr" aria-label="Shomer.AI">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2l8 3.1v5.7c0 5.1-3.4 9.4-8 11.2-4.6-1.8-8-6.1-8-11.2V5.1L12 2z" fill="rgba(52,195,177,.16)" stroke="#34c3b1" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M8.6 12.1l2.4 2.4 4.6-5" stroke="#43d6c4" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="word">Shomer<span class="ai">.AI</span></span>
+    </div>
+    <nav class="tabbar" aria-label="ניווט ראשי">
+      <button class="tab active" data-tab="alerts">התראות</button>
+      <button class="tab" data-tab="digest">סיכום יומי</button>
+    </nav>
+    <div class="spacer"></div>
+    <button class="ghost" id="refreshBtn">רענון</button>
+    <div id="userMenuWrap">
+      <button class="ghost" id="userBtn" aria-haspopup="true" aria-expanded="false">
+        <span class="avatar" id="userAvatar">?</span>
+        <span class="uname" id="userName"></span>
+      </button>
+      <div class="menu" id="userMenu" role="menu">
+        <button id="menuSettings" role="menuitem">הגדרות חיבור מתקדמות</button>
+        <div class="sep"></div>
+        <button class="danger" id="menuLogout" role="menuitem">התנתקות</button>
       </div>
     </div>
-    <div class="grid" id="alertList"></div>
-  </section>
+  </header>
 
-  <!-- DIGEST -->
-  <section id="tab-digest" style="display:none">
-    <div class="card">
-      <div class="row">
-        <label class="fld">תאריך
-          <input type="date" id="dDate" />
-        </label>
-        <label class="fld">מזהה ילד (אופציונלי)
-          <input id="dChild" placeholder="כל הילדים" />
-        </label>
-        <label class="fld">&nbsp;<button id="loadDigest">טען סיכום</button></label>
-      </div>
-      <p class="hint">הסיכום היומי נשלח אוטומטית פעם ביום (התראה אחת מרוכזת). כאן אפשר לצפות בכל יום.</p>
-    </div>
-    <div id="digestBody"></div>
-  </section>
+  <div class="childbar" id="childBar">
+    <span class="lbl">ילד:</span>
+    <div class="chips" id="childChips"><div class="skel sm"></div></div>
+    <span class="context-line" id="contextLine"></span>
+  </div>
 
-  <!-- SETTINGS -->
-  <section id="tab-settings" style="display:none">
-    <div class="card" style="max-width:560px">
-      <h2 style="margin-top:0">חיבור לשרת</h2>
-      <div class="grid">
-        <label class="fld">כתובת השרת (Base URL)
-          <input id="sBase" placeholder="http://10.0.2.2:8000" />
-        </label>
-        <label class="fld">טוקן הורה (Bearer)
-          <input id="sToken" placeholder="הדבק את טוקן ההורה מהתהליך ההתאמה" />
-        </label>
+  <main>
+    <!-- ALERTS -->
+    <section id="tab-alerts">
+      <div class="card">
         <div class="row">
-          <button id="saveSettings">שמירה</button>
-          <button class="ghost" id="testConn">בדיקת חיבור</button>
+          <label class="fld" style="flex:1;min-width:150px">סטטוס
+            <select id="fStatus">
+              <option value="">הכול</option>
+              <option value="review_needed">לבדיקה (גבולי)</option>
+              <option value="alerted">התראה</option>
+              <option value="acknowledged">טופל</option>
+              <option value="labeled">סומן</option>
+            </select>
+          </label>
+          <label class="fld" style="flex:1;min-width:150px">כולל שטופלו
+            <select id="fAcked"><option value="false">לא</option><option value="true">כן</option></select>
+          </label>
+          <label class="fld">&nbsp;<button id="applyFilters">סינון</button></label>
         </div>
       </div>
-      <p class="hint">
-        הטוקן מתקבל ב־<code>POST /v1/parent/register</code> (אתחול MVP) או דרך תהליך ההתאמה.
-        הנתונים נשמרים מקומית בדפדפן בלבד (localStorage).
-      </p>
-    </div>
-  </section>
-</main>
+      <div class="grid" id="alertList" style="margin-top:14px"></div>
+    </section>
 
-<!-- DETAIL MODAL -->
+    <!-- DIGEST -->
+    <section id="tab-digest" style="display:none">
+      <div class="card">
+        <div class="row">
+          <label class="fld" style="flex:1;min-width:160px">תאריך
+            <input type="date" id="dDate" />
+          </label>
+          <label class="fld">&nbsp;<button id="loadDigestBtn">טען סיכום</button></label>
+        </div>
+        <p class="hint">הסיכום היומי נשלח אוטומטית פעם ביום (התראה אחת מרוכזת). כאן אפשר לצפות בכל יום.</p>
+      </div>
+      <div id="digestBody"></div>
+    </section>
+  </main>
+</div>
+
+<!-- ====================== DETAIL MODAL ====================== -->
 <div class="overlay" id="overlay">
   <div class="card modal" id="modal"></div>
 </div>
-<div class="toast" id="toast"></div>
+
+<!-- ====================== SETTINGS MODAL ====================== -->
+<div class="overlay" id="settingsOverlay">
+  <div class="card modal" style="width:min(440px,100%)">
+    <h2>הגדרות חיבור מתקדמות</h2>
+    <p class="hint" style="margin-top:2px">
+      כאשר הלוח נטען מהשרת (<span dir="ltr">http://&lt;host&gt;:8000/dashboard/</span>)
+      הכתובת נקבעת אוטומטית. שינוי כתובת נדרש רק בפתיחה כקובץ מקומי.
+    </p>
+    <div class="grid" style="margin-top:14px">
+      <label class="fld">כתובת השרת (Base URL)
+        <input id="cfgBase" dir="ltr" style="text-align:left" placeholder="" />
+      </label>
+      <div class="hint">כתובת בפועל כעת: <code id="cfgEffective" dir="ltr"></code></div>
+      <div class="row">
+        <button id="cfgSave">שמירה</button>
+        <button class="ghost" id="cfgTest">בדיקת חיבור</button>
+        <button class="ghost" id="cfgReset">איפוס לברירת מחדל</button>
+        <div style="flex:1"></div>
+        <button class="subtle" id="cfgClose">סגירה</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
 
 <script>
+"use strict";
+
+/* ============================== constants ============================== */
 const LABELS_HE = {
   abusive: "פוגעני", hate: "שנאה", violence: "אלימות",
   pornographic: "תוכן מיני", non_offensive: "תקין"
@@ -187,132 +434,370 @@ const SEV_HE = { critical: "קריטי", high: "גבוה", medium: "בינוני
 const SEV_CLASS = { critical: "crit", high: "high", medium: "med", low: "low" };
 const STATUS_HE = { review_needed: "לבדיקה", alerted: "התראה", acknowledged: "טופל", labeled: "סומן" };
 
+const SHIELD_SVG = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <path d="M12 2l8 3.1v5.7c0 5.1-3.4 9.4-8 11.2-4.6-1.8-8-6.1-8-11.2V5.1L12 2z" fill="rgba(52,195,177,.12)" stroke="#34c3b1" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M8.6 12.1l2.4 2.4 4.6-5" stroke="#43d6c4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+/* ============================== storage ============================== */
+const IS_HTTP = location.protocol === "http:" || location.protocol === "https:";
+
 const store = {
-  get base() { return (localStorage.getItem("shomer.base") || "http://10.0.2.2:8000").replace(/\/+$/,""); },
+  get baseOverride() { return localStorage.getItem("shomer.base") || ""; },
+  set baseOverride(v) {
+    if (v) localStorage.setItem("shomer.base", v.replace(/\/+$/, ""));
+    else localStorage.removeItem("shomer.base");
+  },
+  get base() {
+    if (this.baseOverride) return this.baseOverride;
+    return IS_HTTP ? location.origin : "http://localhost:8000";
+  },
   get token() { return localStorage.getItem("shomer.token") || ""; },
-  set base(v) { localStorage.setItem("shomer.base", v); },
-  set token(v) { localStorage.setItem("shomer.token", v); },
+  set token(v) { v ? localStorage.setItem("shomer.token", v) : localStorage.removeItem("shomer.token"); },
+  get parentId() { return localStorage.getItem("shomer.parent_id") || ""; },
+  set parentId(v) { v ? localStorage.setItem("shomer.parent_id", v) : localStorage.removeItem("shomer.parent_id"); },
+  get parentName() { return localStorage.getItem("shomer.parent_name") || ""; },
+  set parentName(v) { v ? localStorage.setItem("shomer.parent_name", v) : localStorage.removeItem("shomer.parent_name"); },
+  childKey() { return "shomer.child." + (this.parentId || "anon"); },
+  get childId() { return localStorage.getItem(this.childKey()) || ""; },
+  set childId(v) { v ? localStorage.setItem(this.childKey(), v) : localStorage.removeItem(this.childKey()); },
 };
 
-function toast(msg, ms=2200) {
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), ms);
+/* ============================== state ============================== */
+let children = [];        // [{child_id, display_name, created_at}]
+let currentChild = null;  // selected child object or null
+let activeTab = "alerts";
+let registerMode = false;
+
+const $ = (id) => document.getElementById(id);
+
+/* ============================== utils ============================== */
+function escapeHtml(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-async function api(path, opts={}) {
-  if (!store.token) { toast("חסר טוקן הורה — עבור להגדרות"); switchTab("settings"); throw new Error("no token"); }
-  const res = await fetch(store.base + path, {
-    ...opts,
-    headers: { "Authorization": "Bearer " + store.token, "Content-Type": "application/json", ...(opts.headers||{}) },
-  });
-  if (res.status === 401) { toast("טוקן לא תקף (401)"); throw new Error("401"); }
-  if (res.status === 403) { toast("אין הרשאה (403)"); throw new Error("403"); }
-  if (!res.ok && res.status !== 404) { toast("שגיאת שרת: " + res.status); throw new Error(res.status); }
-  return res;
+function toast(msg, ms = 2400) {
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), ms);
 }
 
 function fmtTime(epoch) {
   if (!epoch) return "";
   const d = new Date(epoch * 1000);
-  return d.toLocaleString("he-IL", { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+  return d.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
-function sevChip(sev) { return `<span class="chip ${SEV_CLASS[sev]||'low'}">${SEV_HE[sev]||sev}</span>`; }
+function childName(id) {
+  const c = children.find(x => x.child_id === id);
+  return c ? (c.display_name || c.child_id) : (id || "");
+}
+
+function sevChip(sev) { return `<span class="chip ${SEV_CLASS[sev] || 'low'}">${escapeHtml(SEV_HE[sev] || sev || "")}</span>`; }
 function statusChip(st) {
-  const cls = st==="review_needed" ? "review" : st==="acknowledged" ? "ack" : st==="labeled" ? "label" : "high";
-  return `<span class="chip ${cls}">${STATUS_HE[st]||st}</span>`;
+  const cls = st === "review_needed" ? "review" : st === "acknowledged" ? "ack" : st === "labeled" ? "label" : "high";
+  return `<span class="chip ${cls}">${escapeHtml(STATUS_HE[st] || st || "")}</span>`;
 }
 
-// ---- Alerts ----
+function emptyState(title, sub) {
+  return `<div class="empty">${SHIELD_SVG}<h3>${escapeHtml(title)}</h3><p>${escapeHtml(sub || "")}</p></div>`;
+}
+function skeletons(n) {
+  return Array.from({ length: n }, () => `<div class="skel"></div>`).join("");
+}
+
+/* ============================== API ============================== */
+async function api(path, opts = {}) {
+  const res = await fetch(store.base + path, {
+    ...opts,
+    headers: {
+      "Authorization": "Bearer " + store.token,
+      "Content-Type": "application/json",
+      ...(opts.headers || {}),
+    },
+  });
+  if (res.status === 401) {
+    logout("פג תוקף ההתחברות — יש להתחבר מחדש");
+    throw new Error("401");
+  }
+  if (res.status === 403) { toast("אין הרשאה (403)"); throw new Error("403"); }
+  if (!res.ok && res.status !== 404) { toast("שגיאת שרת: " + res.status); throw new Error(String(res.status)); }
+  return res;
+}
+
+/* ============================== auth ============================== */
+function authError(msg) {
+  const el = $("authError");
+  if (!msg) { el.classList.remove("show"); el.textContent = ""; return; }
+  el.textContent = msg; el.classList.add("show");
+}
+
+function setRegisterMode(reg) {
+  registerMode = reg;
+  $("nameFld").style.display = reg ? "" : "none";
+  $("authSubmit").textContent = reg ? "הרשמה" : "התחברות";
+  $("authToggleLine").innerHTML = reg
+    ? `כבר יש לך חשבון? <a id="authToggle" role="button" tabindex="0">התחברות</a>`
+    : `אין לך חשבון? <a id="authToggle" role="button" tabindex="0">הרשמה</a>`;
+  $("authToggle").addEventListener("click", () => setRegisterMode(!registerMode));
+  $("inPass").setAttribute("autocomplete", reg ? "new-password" : "current-password");
+  authError("");
+}
+
+async function submitAuth(e) {
+  e.preventDefault();
+  authError("");
+  const username = $("inUser").value.trim();
+  const password = $("inPass").value;
+  const displayName = $("inName").value.trim();
+
+  if (!username || !password) { authError("יש למלא שם משתמש וסיסמה"); return; }
+  if (registerMode) {
+    if (!displayName) { authError("יש למלא שם תצוגה"); return; }
+    if (!/^[a-z0-9._-]{3,32}$/.test(username)) {
+      authError("שם משתמש: 3–32 תווים — אותיות לטיניות קטנות, ספרות, נקודה, מקף או קו תחתון");
+      return;
+    }
+    if (password.length < 8) { authError("הסיסמה חייבת להכיל לפחות 8 תווים"); return; }
+  }
+
+  const btn = $("authSubmit");
+  btn.disabled = true;
+  try {
+    const path = registerMode ? "/v1/parent/register" : "/v1/parent/login";
+    const body = registerMode
+      ? { display_name: displayName, username, password }
+      : { username, password };
+    let res;
+    try {
+      res = await fetch(store.base + path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } catch {
+      authError("אין חיבור לשרת — בדקו את כתובת השרת (הגדרות חיבור)");
+      return;
+    }
+    if (res.status === 401) { authError("שם משתמש או סיסמה שגויים"); return; }
+    if (res.status === 409) { authError("שם המשתמש כבר תפוס — בחרו שם אחר"); return; }
+    if (res.status === 422) { authError("קלט לא תקין — בדקו את שם המשתמש והסיסמה"); return; }
+    if (!res.ok) { authError("שגיאת שרת (" + res.status + ") — נסו שוב"); return; }
+    const data = await res.json();
+    if (!data.parent_token) { authError("תגובת שרת לא צפויה"); return; }
+    store.token = data.parent_token;
+    store.parentId = data.parent_id || "";
+    store.parentName = data.display_name || displayName || username;
+    $("inPass").value = "";
+    enterApp();
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function logout(msg) {
+  store.token = "";
+  store.parentId = "";
+  store.parentName = "";
+  children = []; currentChild = null;
+  $("view-app").classList.remove("show");
+  $("view-login").style.display = "";
+  setRegisterMode(false);
+  if (msg) authError(msg);
+}
+
+/* ============================== app shell ============================== */
+async function enterApp() {
+  $("view-login").style.display = "none";
+  $("view-app").classList.add("show");
+  const name = store.parentName || "הורה";
+  $("userName").textContent = name;
+  $("userAvatar").textContent = name.trim().charAt(0).toUpperCase() || "?";
+  switchTab("alerts", /*skipLoad*/ true);
+  await loadChildren();
+}
+
+async function loadChildren() {
+  $("childChips").innerHTML = `<div class="skel sm"></div><div class="skel sm"></div>`;
+  $("contextLine").innerHTML = "";
+  let data;
+  try {
+    data = await (await api("/v1/parent/children")).json();
+  } catch {
+    $("childChips").innerHTML = "";
+    renderNoChildState("לא ניתן לטעון את רשימת הילדים", "בדקו את החיבור לשרת ונסו לרענן.");
+    return;
+  }
+  children = Array.isArray(data) ? data : (data.children || []);
+
+  if (!children.length) {
+    $("childChips").innerHTML = `<span class="muted" style="font-size:13.5px">עדיין לא חובר ילד</span>`;
+    renderNoChildState(
+      "עדיין לא חובר ילד לחשבון",
+      "החיבור מתבצע מאפליקציית Shomer.AI במכשיר של הילד: בוחרים ״מצב ילד״ ומזינים את קוד ההתאמה. לאחר ההתאמה הילד יופיע כאן אוטומטית."
+    );
+    return;
+  }
+
+  // restore persisted selection, or auto-select the single child
+  const saved = store.childId;
+  currentChild = children.find(c => c.child_id === saved) || null;
+  if (!currentChild && children.length === 1) currentChild = children[0];
+  if (currentChild) store.childId = currentChild.child_id;
+
+  renderChildChips();
+  if (currentChild) {
+    reloadActiveView();
+  } else {
+    $("alertList").innerHTML = emptyState("בחרו ילד", "בחרו ילד מהרשימה למעלה כדי לצפות בנתונים שלו.");
+    $("digestBody").innerHTML = "";
+  }
+}
+
+function renderNoChildState(title, sub) {
+  $("alertList").innerHTML = emptyState(title, sub);
+  $("digestBody").innerHTML = "";
+  $("contextLine").innerHTML = "";
+}
+
+function renderChildChips() {
+  const wrap = $("childChips");
+  wrap.innerHTML = children.map(c => {
+    const sel = currentChild && c.child_id === currentChild.child_id;
+    return `<button class="chip-btn${sel ? " selected" : ""}" data-child="${escapeHtml(c.child_id)}">${escapeHtml(c.display_name || c.child_id)}</button>`;
+  }).join("");
+  wrap.querySelectorAll("[data-child]").forEach(btn =>
+    btn.addEventListener("click", () => selectChild(btn.dataset.child)));
+  $("contextLine").innerHTML = currentChild
+    ? `מציג נתונים עבור: <b>${escapeHtml(currentChild.display_name || currentChild.child_id)}</b>`
+    : "";
+}
+
+function selectChild(childId) {
+  const c = children.find(x => x.child_id === childId);
+  if (!c) return;
+  currentChild = c;
+  store.childId = c.child_id;
+  renderChildChips();
+  reloadActiveView();
+}
+
+function reloadActiveView() {
+  if (activeTab === "alerts") loadAlerts();
+  else if (activeTab === "digest") loadDigest();
+}
+
+function switchTab(name, skipLoad) {
+  activeTab = name;
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  ["alerts", "digest"].forEach(n =>
+    $("tab-" + n).style.display = n === name ? "" : "none");
+  if (!skipLoad && currentChild) reloadActiveView();
+}
+
+/* ============================== alerts ============================== */
 async function loadAlerts() {
-  const list = document.getElementById("alertList");
-  list.innerHTML = `<div class="empty">טוען…</div>`;
+  const list = $("alertList");
+  if (!currentChild) {
+    list.innerHTML = emptyState("בחרו ילד", "בחרו ילד מהרשימה למעלה כדי לצפות בהתראות.");
+    return;
+  }
+  list.innerHTML = skeletons(4);
   const p = new URLSearchParams();
-  const child = document.getElementById("fChild").value.trim();
-  const status = document.getElementById("fStatus").value;
-  const acked = document.getElementById("fAcked").value;
-  if (child) p.set("child_id", child);
+  p.set("child_id", currentChild.child_id);
+  const status = $("fStatus").value;
   if (status) p.set("status", status);
-  p.set("include_acked", acked);
+  p.set("include_acked", $("fAcked").value);
   p.set("limit", "100");
   let data;
-  try { data = await (await api("/v1/parent/alerts?" + p.toString())).json(); }
-  catch { list.innerHTML = `<div class="empty">לא ניתן לטעון התראות</div>`; return; }
+  try {
+    data = await (await api("/v1/parent/alerts?" + p.toString())).json();
+  } catch {
+    list.innerHTML = emptyState("לא ניתן לטעון התראות", "בדקו את החיבור לשרת ונסו שוב.");
+    return;
+  }
   const items = Array.isArray(data) ? data : (data.alerts || data.items || []);
-  if (!items.length) { list.innerHTML = `<div class="empty">אין התראות 🎉</div>`; return; }
+  if (!items.length) {
+    list.innerHTML = emptyState("אין התראות", `הכול רגוע אצל ${currentChild.display_name || ""} — אין פריטים בהתאם לסינון.`);
+    return;
+  }
   list.innerHTML = items.map(renderAlertRow).join("");
   list.querySelectorAll("[data-flag]").forEach(el =>
     el.addEventListener("click", () => openDetail(el.dataset.flag)));
 }
 
 function renderAlertRow(a) {
-  const barColor = `var(--${SEV_CLASS[a.severity]||'low'})`;
-  return `<div class="alert" data-flag="${a.flag_id}">
+  const barColor = `var(--${SEV_CLASS[a.severity] || 'low'})`;
+  return `<div class="alert" data-flag="${escapeHtml(a.flag_id)}" role="button" tabindex="0">
     <div class="bar" style="background:${barColor}"></div>
     <div class="body">
       <p class="quote">${escapeHtml(a.quote || a.explanation || "(ללא תוכן)")}</p>
       <div class="sub">
         ${statusChip(a.status)} ${sevChip(a.severity)}
-        <span class="chip">${LABELS_HE[a.label]||a.label}</span>
-        ${a.confidence!=null?`<span class="chip">${Math.round(a.confidence*100)}% ביטחון</span>`:""}
-        ${a.source==="context_agent"?`<span class="chip review">🧠 הקשר</span>`:""}
-        <span>${a.app_package||""}</span>
-        <span>${a.direction==="outbound"?"נשלח":"התקבל"}</span>
+        <span class="chip">${escapeHtml(LABELS_HE[a.label] || a.label || "")}</span>
+        ${a.confidence != null ? `<span class="chip">${Math.round(a.confidence * 100)}% ביטחון</span>` : ""}
+        ${a.source === "context_agent" ? `<span class="chip review">סוכן הקשר</span>` : ""}
+        <span>${escapeHtml(a.app_package || "")}</span>
+        <span>${a.direction === "outbound" ? "נשלח" : "התקבל"}</span>
       </div>
     </div>
     <div class="meta muted">${fmtTime(a.created_at)}</div>
   </div>`;
 }
 
-// ---- Detail + react ----
+/* ============================== detail + react ============================== */
 async function openDetail(flagId) {
-  const modal = document.getElementById("modal");
-  modal.innerHTML = `<div class="empty">טוען…</div>`;
-  document.getElementById("overlay").classList.add("show");
+  const modal = $("modal");
+  modal.innerHTML = `<div class="empty"><div class="spinner"></div></div>`;
+  $("overlay").classList.add("show");
   let a;
-  try { a = await (await api("/v1/parent/alerts/" + encodeURIComponent(flagId))).json(); }
-  catch { modal.innerHTML = `<div class="empty">לא נמצא</div>`; return; }
+  try {
+    a = await (await api("/v1/parent/alerts/" + encodeURIComponent(flagId))).json();
+  } catch {
+    modal.innerHTML = emptyState("לא נמצא", "ההתראה אינה זמינה.");
+    return;
+  }
   modal.innerHTML = `
     <h2>פרטי התראה</h2>
     <div class="row" style="gap:6px">${statusChip(a.status)} ${sevChip(a.severity)}
-      <span class="chip">${LABELS_HE[a.label]||a.label}</span></div>
+      <span class="chip">${escapeHtml(LABELS_HE[a.label] || a.label || "")}</span></div>
     <div class="bigquote" style="margin-top:14px">${escapeHtml(a.quote || "(ללא ציטוט)")}</div>
     <div class="kv">
-      <div class="k">קטגוריה (מסווג)</div><div>${LABELS_HE[a.label]||a.label}</div>
-      <div class="k">ביטחון המסווג</div><div>${a.confidence!=null?Math.round(a.confidence*100)+"%":"—"}</div>
-      <div class="k">הסבר</div><div>${escapeHtml(a.explanation||"")}</div>
-      <div class="k">אפליקציה</div><div>${a.app_package||""}</div>
-      <div class="k">כיוון</div><div>${a.direction==="outbound"?"הילד שלח":"הילד קיבל"}</div>
+      <div class="k">קטגוריה (מסווג)</div><div>${escapeHtml(LABELS_HE[a.label] || a.label || "")}</div>
+      <div class="k">ביטחון המסווג</div><div>${a.confidence != null ? Math.round(a.confidence * 100) + "%" : "—"}</div>
+      <div class="k">הסבר</div><div>${escapeHtml(a.explanation || "")}</div>
+      <div class="k">אפליקציה</div><div>${escapeHtml(a.app_package || "")}</div>
+      <div class="k">כיוון</div><div>${a.direction === "outbound" ? "הילד שלח" : "הילד קיבל"}</div>
       <div class="k">זמן</div><div>${fmtTime(a.created_at)}</div>
-      <div class="k">מזהה ילד</div><div>${a.child_id||""}</div>
-      <div class="k">מקור</div><div>${a.source==="context_agent"?"סוכן הקשר (Context Agent)":a.source==="frontline_direct"?"מסווג ישיר":(a.source||"")}</div>
-      ${a.parent_label?`<div class="k">סומן ע"י הורה</div><div>${a.parent_label==="offensive"?"פוגעני":"תקין"}</div>`:""}
+      <div class="k">ילד</div><div>${escapeHtml(childName(a.child_id))}</div>
+      <div class="k">מקור</div><div>${a.source === "context_agent" ? "סוכן הקשר (Context Agent)" : a.source === "frontline_direct" ? "מסווג ישיר" : escapeHtml(a.source || "")}</div>
+      ${a.parent_label ? `<div class="k">סומן ע"י הורה</div><div>${a.parent_label === "offensive" ? "פוגעני" : "תקין"}</div>` : ""}
     </div>
-    ${(a.context_used!=null||a.ca_model||a.ca_reasoning)?`
-    <div style="margin-top:12px;padding:10px 12px;border:1px solid #4a3f6b;border-radius:10px;background:rgba(120,90,200,.10)">
-      <div style="font-weight:600;margin-bottom:6px">🧠 סוכן ההקשר (Context Agent)</div>
-      <div class="kv">
-        <div class="k">השתמש בהקשר</div><div>${a.context_used?"כן — נקראה היסטוריית השיחה":"לא"}</div>
-        <div class="k">איום אמיתי?</div><div>${a.is_real_threat==null?"—":(a.is_real_threat?"כן":"לא")}</div>
-        <div class="k">חומרה (הקשר)</div><div>${a.ca_severity||"—"}</div>
-        <div class="k">מודל</div><div>${a.ca_model||"—"}</div>
-        <div class="k">נימוק (Gemini)</div><div>${escapeHtml(a.ca_reasoning||"")}</div>
+    ${(a.context_used != null || a.ca_model || a.ca_reasoning) ? `
+    <div class="ca-panel">
+      <div class="ttl">סוכן ההקשר (Context Agent)</div>
+      <div class="kv" style="margin:0">
+        <div class="k">השתמש בהקשר</div><div>${a.context_used ? "כן — נקראה היסטוריית השיחה" : "לא"}</div>
+        <div class="k">איום אמיתי?</div><div>${a.is_real_threat == null ? "—" : (a.is_real_threat ? "כן" : "לא")}</div>
+        <div class="k">חומרה (הקשר)</div><div>${escapeHtml(a.ca_severity || "—")}</div>
+        <div class="k">מודל</div><div>${escapeHtml(a.ca_model || "—")}</div>
+        <div class="k">נימוק</div><div>${escapeHtml(a.ca_reasoning || "")}</div>
       </div>
-    </div>`:""}
+    </div>` : ""}
     <p class="hint">עבור מקרים גבוליים ("לבדיקה") — קביעת ההורה משמשת לשיפור המסווג.</p>
     <div class="actions">
       <button data-act="acknowledge">סמן כטופל</button>
       <button class="ghost" data-act="label" data-label="offensive">סמן: פוגעני</button>
       <button class="ghost" data-act="label" data-label="not_offensive">סמן: תקין</button>
-      <select id="sevPick">
+      <select id="sevPick" aria-label="בחירת חומרה">
         <option value="">חומרה…</option>
         <option value="low">נמוך</option><option value="medium">בינוני</option>
         <option value="high">גבוה</option><option value="critical">קריטי</option>
       </select>
       <button class="ghost" data-act="severity">עדכן חומרה</button>
-      <div class="spacer" style="flex:1"></div>
-      <button class="ghost" id="closeModal">סגירה</button>
+      <div style="flex:1"></div>
+      <button class="subtle" id="closeModal">סגירה</button>
     </div>`;
   modal.querySelector("#closeModal").onclick = closeModal;
   modal.querySelectorAll("[data-act]").forEach(btn => btn.onclick = () => react(flagId, btn));
@@ -323,35 +808,50 @@ async function react(flagId, btn) {
   const body = { action: act };
   if (act === "label") body.label = btn.dataset.label;
   if (act === "severity") {
-    const v = document.getElementById("sevPick").value;
-    if (!v) { toast("בחר חומרה"); return; }
+    const v = $("sevPick").value;
+    if (!v) { toast("בחרו חומרה"); return; }
     body.severity = v;
   }
   try {
-    await api(`/v1/parent/alerts/${encodeURIComponent(flagId)}/react`, { method: "POST", body: JSON.stringify(body) });
-    toast("נשמר ✓");
-    closeModal(); loadAlerts();
-  } catch { /* toast already shown */ }
+    await api(`/v1/parent/alerts/${encodeURIComponent(flagId)}/react`,
+      { method: "POST", body: JSON.stringify(body) });
+    toast("נשמר");
+    closeModal();
+    loadAlerts();
+  } catch { /* toast already shown by api() */ }
 }
 
-function closeModal() { document.getElementById("overlay").classList.remove("show"); }
-document.getElementById("overlay").addEventListener("click", e => { if (e.target.id === "overlay") closeModal(); });
+function closeModal() { $("overlay").classList.remove("show"); }
+$("overlay").addEventListener("click", e => { if (e.target.id === "overlay") closeModal(); });
 
-// ---- Digest ----
+/* ============================== digest ============================== */
 async function loadDigest() {
-  const date = document.getElementById("dDate").value;
-  const child = document.getElementById("dChild").value.trim();
-  const body = document.getElementById("digestBody");
-  if (!date) { toast("בחר תאריך"); return; }
-  body.innerHTML = `<div class="empty">טוען…</div>`;
-  const p = new URLSearchParams(); if (child) p.set("child_id", child);
+  const body = $("digestBody");
+  if (!currentChild) {
+    body.innerHTML = emptyState("בחרו ילד", "בחרו ילד מהרשימה למעלה כדי לצפות בסיכום היומי.");
+    return;
+  }
+  const date = $("dDate").value;
+  if (!date) { toast("בחרו תאריך"); return; }
+  body.innerHTML = skeletons(2);
+  const p = new URLSearchParams();
+  p.set("child_id", currentChild.child_id);
   let res;
-  try { res = await api(`/v1/parent/digests/${date}?` + p.toString()); }
-  catch { body.innerHTML = `<div class="empty">שגיאה</div>`; return; }
-  if (res.status === 404) { body.innerHTML = `<div class="empty">אין סיכום לתאריך זה</div>`; return; }
+  try {
+    res = await api(`/v1/parent/digests/${date}?` + p.toString());
+  } catch {
+    body.innerHTML = emptyState("שגיאה", "לא ניתן לטעון את הסיכום — נסו שוב.");
+    return;
+  }
+  if (res.status === 404) {
+    body.innerHTML = emptyState("אין סיכום לתאריך זה", `לא נוצר סיכום יומי עבור ${currentChild.display_name || ""} בתאריך שנבחר.`);
+    return;
+  }
   const data = await res.json();
   const digests = Array.isArray(data) ? data : (data.digests || [data]);
-  body.innerHTML = digests.map(renderDigest).join("") || `<div class="empty">אין נתונים</div>`;
+  body.innerHTML = digests.map(renderDigest).join("") || emptyState("אין נתונים", "");
+  body.querySelectorAll("[data-flag]").forEach(el =>
+    el.addEventListener("click", () => openDetail(el.dataset.flag)));
 }
 
 function renderDigest(d) {
@@ -359,57 +859,101 @@ function renderDigest(d) {
   const entries = (d.entries || []);
   return `<div class="card" style="margin-top:16px">
     <div class="row" style="justify-content:space-between">
-      <h2 style="margin:0">סיכום ${d.date||""} ${d.child_id?`· ${d.child_id}`:""}</h2>
-      <span class="muted">${fmtTime(d.generated_at)}</span>
+      <h2 style="margin:0;font-size:17px">סיכום ${escapeHtml(d.date || "")} · ${escapeHtml(childName(d.child_id) || "")}</h2>
+      <span class="muted" style="font-size:13px">${fmtTime(d.generated_at)}</span>
     </div>
     <div class="digest-stats">
-      <div class="stat"><div class="n">${d.total_flagged??0}</div><div class="l">סה"כ התראות</div></div>
-      <div class="stat"><div class="n" style="color:var(--review)">${d.review_needed??0}</div><div class="l">ממתינות לבדיקה</div></div>
-      <div class="stat"><div class="n" style="color:var(--crit)">${(sev.critical||0)+(sev.high||0)}</div><div class="l">חומרה גבוהה</div></div>
+      <div class="stat"><div class="n">${d.total_flagged ?? 0}</div><div class="l">סה"כ התראות</div></div>
+      <div class="stat"><div class="n" style="color:var(--review)">${d.review_needed ?? 0}</div><div class="l">ממתינות לבדיקה</div></div>
+      <div class="stat"><div class="n" style="color:var(--crit)">${(sev.critical || 0) + (sev.high || 0)}</div><div class="l">חומרה גבוהה</div></div>
     </div>
     <div class="grid">
-      ${entries.map(e => `<div class="alert" data-flag="${e.flag_id}" style="grid-template-columns:6px 1fr auto">
-        <div class="bar" style="background:var(--${SEV_CLASS[e.severity]||'low'})"></div>
-        <div class="body"><p class="quote">${escapeHtml(e.quote||"")}</p>
-          <div class="sub">${statusChip(e.status)} ${sevChip(e.severity)} <span>${e.app_package||""}</span></div></div>
+      ${entries.map(e => `<div class="alert" data-flag="${escapeHtml(e.flag_id)}" role="button" tabindex="0">
+        <div class="bar" style="background:var(--${SEV_CLASS[e.severity] || 'low'})"></div>
+        <div class="body"><p class="quote">${escapeHtml(e.quote || "")}</p>
+          <div class="sub">${statusChip(e.status)} ${sevChip(e.severity)} <span>${escapeHtml(e.app_package || "")}</span></div></div>
         <div class="meta muted">${fmtTime(e.created_at)}</div>
       </div>`).join("")}
     </div>
   </div>`;
 }
 
-// ---- Tabs / settings ----
-function switchTab(name) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab===name));
-  ["alerts","digest","settings"].forEach(n =>
-    document.getElementById("tab-"+n).style.display = n===name ? "" : "none");
-  if (name==="alerts") loadAlerts();
+/* ============================== settings (advanced base URL) ============================== */
+function openSettings() {
+  $("cfgBase").value = store.baseOverride;
+  $("cfgBase").placeholder = IS_HTTP ? location.origin : "http://localhost:8000";
+  $("cfgEffective").textContent = store.base;
+  $("settingsOverlay").classList.add("show");
+  closeUserMenu();
 }
-document.querySelectorAll(".tab").forEach(t => t.onclick = () => switchTab(t.dataset.tab));
-document.getElementById("applyFilters").onclick = loadAlerts;
-document.getElementById("refreshBtn").onclick = () => {
-  const active = document.querySelector(".tab.active").dataset.tab;
-  if (active==="alerts") loadAlerts(); else if (active==="digest") loadDigest();
-};
-document.getElementById("loadDigest").onclick = loadDigest;
-document.getElementById("saveSettings").onclick = () => {
-  store.base = document.getElementById("sBase").value.trim();
-  store.token = document.getElementById("sToken").value.trim();
-  toast("נשמר ✓"); switchTab("alerts");
-};
-document.getElementById("testConn").onclick = async () => {
-  try { const r = await fetch(store.base + "/health"); toast(r.ok ? "השרת זמין ✓" : "השרת החזיר " + r.status); }
-  catch { toast("אין חיבור לשרת"); }
-};
+function closeSettings() { $("settingsOverlay").classList.remove("show"); }
 
-function escapeHtml(s) { return (s||"").replace(/[&<>"']/g, c =>
-  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+$("cfgSave").addEventListener("click", () => {
+  store.baseOverride = $("cfgBase").value.trim();
+  $("cfgEffective").textContent = store.base;
+  toast("נשמר");
+});
+$("cfgReset").addEventListener("click", () => {
+  store.baseOverride = "";
+  $("cfgBase").value = "";
+  $("cfgEffective").textContent = store.base;
+  toast("אופס לברירת המחדל");
+});
+$("cfgTest").addEventListener("click", async () => {
+  const candidate = $("cfgBase").value.trim().replace(/\/+$/, "") ||
+    (IS_HTTP ? location.origin : "http://localhost:8000");
+  try {
+    const r = await fetch(candidate + "/health");
+    toast(r.ok ? "השרת זמין" : "השרת החזיר " + r.status);
+  } catch { toast("אין חיבור לשרת"); }
+});
+$("cfgClose").addEventListener("click", closeSettings);
+$("settingsOverlay").addEventListener("click", e => { if (e.target.id === "settingsOverlay") closeSettings(); });
 
-// init
-document.getElementById("sBase").value = store.base;
-document.getElementById("sToken").value = store.token;
-document.getElementById("dDate").value = new Date().toISOString().slice(0,10);
-switchTab(store.token ? "alerts" : "settings");
+/* ============================== user menu ============================== */
+function closeUserMenu() {
+  $("userMenu").classList.remove("open");
+  $("userBtn").setAttribute("aria-expanded", "false");
+}
+$("userBtn").addEventListener("click", e => {
+  e.stopPropagation();
+  const menu = $("userMenu");
+  const open = !menu.classList.contains("open");
+  menu.classList.toggle("open", open);
+  $("userBtn").setAttribute("aria-expanded", String(open));
+});
+document.addEventListener("click", e => {
+  if (!e.target.closest("#userMenuWrap")) closeUserMenu();
+});
+$("menuSettings").addEventListener("click", openSettings);
+$("menuLogout").addEventListener("click", () => { closeUserMenu(); logout(); });
+
+/* ============================== wiring ============================== */
+document.querySelectorAll(".tab").forEach(t =>
+  t.addEventListener("click", () => switchTab(t.dataset.tab)));
+$("applyFilters").addEventListener("click", loadAlerts);
+$("loadDigestBtn").addEventListener("click", loadDigest);
+$("refreshBtn").addEventListener("click", () => {
+  if (activeTab === "alerts") loadAlerts(); else loadDigest();
+});
+$("authForm").addEventListener("submit", submitAuth);
+$("loginAdvanced").addEventListener("click", openSettings);
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeModal(); closeSettings(); closeUserMenu(); }
+});
+// keyboard activation for alert rows (role=button)
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.dataset && e.target.dataset.flag) openDetail(e.target.dataset.flag);
+});
+
+/* ============================== init ============================== */
+setRegisterMode(false);
+$("dDate").value = new Date().toISOString().slice(0, 10);
+if (store.token) {
+  enterApp();
+} else {
+  $("view-login").style.display = "";
+}
 </script>
 </body>
 </html>
